@@ -1,6 +1,7 @@
 using RpgEngine.Core.Checks;
 using RpgEngine.Core.Content.Defs;
 using RpgEngine.Core.Dice;
+using RpgEngine.Core.Views;
 
 namespace RpgEngine.Core.Events;
 
@@ -11,6 +12,9 @@ public abstract record GameEvent;
 
 /// <summary>A paragraph of text with a semantic style.</summary>
 public sealed record NarrationEvent(TextStyle Style, string Text) : GameEvent;
+
+/// <summary>The player entered (<see cref="Entered"/>) or looked around a room.</summary>
+public sealed record RoomDescribedEvent(RoomView Room, bool Entered) : GameEvent;
 
 /// <summary>A line spoken by an NPC.</summary>
 public sealed record DialogueLineEvent(string Speaker, string Text) : GameEvent;
