@@ -60,7 +60,7 @@ CLI folders: `Rendering` (theme, bars, tables, dice animation), `Screens` (Title
 ## Coding standards
 
 - C# `latest` on `net10.0`, nullable reference types on, **warnings are errors**. Zero warnings is the bar.
-- File-scoped namespaces. The namespace mirrors the folder. One public type per file, and the file is named after the type.
+- File-scoped namespaces. The namespace mirrors the folder. One public type per file, and the file is named after the type. The one exception is small closed polymorphic families (`ConditionDefs.cs`, `EffectDefs.cs`, `SpellResolutionDefs.cs`), which live together in one file.
 - Classes are `sealed` by default. Immutable content definitions are `sealed record`s in `Content/Defs/`.
 - Public APIs expose `IReadOnlyList<T>` and `IReadOnlyDictionary<K,V>`, not mutable collections.
 - No static mutable state. Services take their dependencies through constructors.
@@ -90,6 +90,8 @@ CLI folders: `Rendering` (theme, bars, tables, dice animation), `Screens` (Title
 - `id`s are `snake_case` and unique per content type. References use these IDs.
 - Properties are camelCase. `//` comments and trailing commas are allowed.
 - **Unknown properties are errors** (`JsonUnmappedMemberHandling.Disallow`), which catches typos.
+- Flags and counters are free-form names. A flag or counter that is **checked but never set by any effect** is a validation error, which catches typos in flag names.
+- File layout: `Rules/` and `World/` use the fixed file names shown below. `Items/`, `Bestiary/`, `Rooms/`, and `Dialogues/` load every `*.json` file directly inside them.
 - Conditions and effects are polymorphic objects with a `"type"` discriminator, which may appear anywhere in the object.
 - **Dice** fields take an expression: `"d20"`, `"2d6+3"`, `"4d6kh3"` (keep highest 3), `"2d20kl1"`, `"1d8+1d6+2"`, or a constant like `"19"`.
 - **Abilities:** `str dex con int wis cha`.
@@ -110,7 +112,8 @@ CLI folders: `Rendering` (theme, bars, tables, dice animation), `Screens` (Title
     "proficiencyBonusByLevel": [2, 2, 2, 2, 3],
     "naturalCritsOnChecks": true,
     "monsterHp": "average",
-    "fleeDc": 12
+    "flee": { "skill": "acrobatics", "dc": 12 },
+    "defendStatus": "defending"
   },
   "epilogues": [
     { "conditions": [ { "type": "flag", "flag": "knight_laid_to_rest" } ], "text": "..." },
@@ -118,7 +121,10 @@ CLI folders: `Rendering` (theme, bars, tables, dice animation), `Screens` (Title
   ]
 }
 ```
-`monsterHp` is `average` or `roll`. The first epilogue whose conditions pass is shown when `endGame` fires.
+- `monsterHp` is `average` (the floor of the hit-dice average) or `roll`.
+- `flee` is the check for escaping combat.
+- `defendStatus` is the status that the Defend action applies.
+- When `endGame` fires, the first epilogue whose conditions pass is shown.
 
 ### `Data/Rules/`
 **`classes.json`**
@@ -151,10 +157,11 @@ CLI folders: `Rendering` (theme, bars, tables, dice animation), `Screens` (Title
 - `cost` is `{ "mana": n }`, `{ "usesPerEncounter": n }`, or `{}` (free). **Per-encounter uses recharge automatically when any combat ends.** Rests are not part of Milestone 1.
 - `resolution.type`:
   - `autoHit`: `damage`, `damageType`
-  - `spellAttack`: d20 + prof + casting mod vs AC, then `damage`, `damageType`
+  - `spellAttack`: d20 + prof + casting mod vs AC, then `damage`, `damageType`, and an optional `status` on a hit
   - `weaponAttack`: normal weapon attack plus `bonusDamage`
-  - `save`: `ability`, `dc`, `damage`, `halfOnSave`
-  - `effects`: `effects[]`
+  - `save`: `ability`, `dc` (default 8 + prof + casting mod), `damage`, `damageType`, `halfOnSave`, and an optional `status` on a failed save
+  - `effects`: `effects[]` run on the caster; `target` must be `self`
+- Every other resolution type needs `target: "enemy"`. The casting ability is the class's `mana.ability`.
 
 **`status_effects.json`**
 ```json
@@ -162,7 +169,8 @@ CLI folders: `Rendering` (theme, bars, tables, dice animation), `Screens` (Title
   "modifiers": { "attackRolls": "disadvantage", "acBonus": 0, "damagePerTurn": null, "skipTurn": false } }
 ```
 - `attackRolls` is `normal`, `advantage`, or `disadvantage`.
-- Effects tick at the start of the affected creature's turn and count down at the end of it.
+- A status lasts for `durationRounds` of the affected creature's own turns. A status applied during the creature's own turn doesn't count that turn.
+- `damagePerTurn` and `skipTurn` trigger at the start of each affected turn.
 
 ### `Data/World/`
 - **`factions.json`**: `{ "id": "ashen_order", "name": "The Ashen Order", "description": "..." }`
@@ -232,9 +240,13 @@ CLI folders: `Rendering` (theme, bars, tables, dice animation), `Screens` (Title
     { "id": "wren", "name": "Sister Wren", "aliases": ["wren", "nun"], "description": "...",
       "dialogue": "wren", "conditions": [ { "type": "notFlag", "flag": "wren_fled" } ] } ],
   "encounter": null,
-  "onEnter": [ { "type": "setQuestStage", "quest": "barrowlight", "stage": 20 } ] }
+  "onFirstEnter": [ { "type": "setQuestStage", "quest": "barrowlight", "stage": 20 } ],
+  "onEnter": [] }
 ```
-**Description order:** `description` on the first visit, then `revisit`, then the text of every passing `variants` entry.
+- **Description order:** `description` on the first visit and for `look`, `revisit` on later visits, then the text of every passing `variants` entry.
+- **Entering a room:** the room is marked visited, then `onFirstEnter` runs (first visit only), then `onEnter` (every visit), then the room's encounter starts if its conditions pass.
+- **Exits:** when an exit's conditions fail, it shows as blocked if it has `blockedText` and is hidden otherwise (a secret passage).
+- **Features:** a feature with failing `conditions` is hidden. Interaction verbs must be one lowercase word. `inspect` shows the description and then runs any `inspect` interaction. Built-in verbs like `take` fall back to a matching interaction when no item matches.
 
 **Interaction resolution:**
 - Interactions sharing the same `(verb, target)` form a **group**.
@@ -245,7 +257,7 @@ CLI folders: `Rendering` (theme, bars, tables, dice animation), `Screens` (Title
 
 **Encounter** (inline in a room, `null` when there is none):
 ```json
-{ "id": "barrow_heart", "trigger": "onEnter",
+{ "id": "barrow_heart",
   "conditions": [ { "type": "notFlag", "flag": "barrow_heart_resolved" } ],
   "intro": "The sarcophagus lid grinds aside...",
   "enemies": [ { "monster": "gravebound_knight", "count": 1 }, { "monster": "barrow_thrall", "count": 1 } ],
@@ -279,8 +291,8 @@ CLI folders: `Rendering` (theme, bars, tables, dice animation), `Screens` (Title
           "successNode": "trusts", "failureNode": "refuses", "retry": false },
         { "text": "Leave.", "end": true } ] } ] }
 ```
-- `entries`: the first entry whose conditions pass picks the starting node.
-- Node `effects` run when the node is entered.
+- `entries`: the first entry whose conditions pass picks the starting node. The last entry must be unconditional.
+- Node `effects` run when the node is entered. A node either has `choices`, continues automatically with `next`, or (with neither) ends the conversation.
 - Choice fields:
   - `conditions`: hides the choice when they fail.
   - `once`: the choice can be picked once.
@@ -320,8 +332,10 @@ CLI folders: `Rendering` (theme, bars, tables, dice animation), `Screens` (Title
 | `giveGold` | `amount` |
 | `grantXp` | `amount` |
 | `heal` / `damage` | `dice`, `damageType?` |
-| `applyStatus` | `status` |
-| `savingThrow` / `skillCheck` | `ability` or `skill`, `dc`, `onSuccess[]`, `onFail[]` |
+| `restoreMana` | `amount` |
+| `savingThrow` | `ability`, `dc`, `onSuccess[]`, `onFail[]` |
+| `skillCheck` | `check` (a check object), `onSuccess[]`, `onFail[]` |
+| `if` | `conditions[]`, `then[]`, `else[]` |
 | `message` | `text`, `style` (`narration` `sensory` `dialogue` `system` `success` `failure` `warning`) |
 | `moveTo` | `room` |
 | `startDialogue` | `dialogue` |
