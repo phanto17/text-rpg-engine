@@ -24,6 +24,9 @@ CLI flags (Milestone 1):
 | `--no-anim` | Skip dice animations |
 | `--data <dir>` | Load content from another folder (default: `Data/` next to the executable) |
 | `--saves <dir>` | Save folder (default: `./Saves`) |
+| `--help` | Print usage |
+
+Exit codes: `0` normal, `1` content failed validation (every error is listed), `2` bad arguments.
 
 The SDK is pinned by `global.json` to 10.0.401 with `rollForward: latestFeature`. Package versions live only in `Directory.Packages.props` (Central Package Management). Shared build settings live in `Directory.Build.props`.
 
@@ -41,7 +44,12 @@ tests/RpgEngine.Tests/     xUnit tests for Core, content validation, and CLI pla
 
 Core folders (namespace = `RpgEngine.Core.<Folder>`): `Dice`, `Characters`, `Checks`, `World`, `Content` (`Defs/` for content records), `Commands`, `Exploration`, `Dialogue`, `Combat`, `Persistence`, `Engine`.
 
-CLI folders: `Rendering` (theme, bars, tables, dice animation), `Screens` (Title, CharacterCreation, Exploration, Dialogue, Combat, GameOver, Epilogue), `Input` (numbered-menu-or-text prompt).
+CLI layout:
+- `CliHost`: argument parsing and content-error reporting.
+- `GameApp`: the title-to-play loop, dispatching on `GameMode`.
+- `Rendering/`: `Theme` (every color), `EventRenderer`, `Bars`, `RollText`, `StatusBar`, `DiceAnimator`.
+- `Screens/`: Title, CharacterCreation, Exploration, Dialogue, Combat, Info (sheet, inventory, journal, help), End.
+- `Input/`: `Prompter`, the line-based numbered menus. There are no arrow-key widgets, so every prompt can be scripted in tests.
 
 ---
 
@@ -76,6 +84,13 @@ CLI folders: `Rendering` (theme, bars, tables, dice animation), `Screens` (Title
 - Test names follow `Method_Scenario_Expected`, e.g. `Roll_WithAdvantage_KeepsHigherDie`.
 - Test folders mirror Core folders: `Dice/`, `Checks/`, `World/`, `Content/`, `Dialogue/`, `Combat/`, `Persistence/`, `Commands/`, `Playthrough/`.
 - Tests are fully deterministic. Use `FixedRandomSource` for exact outcomes and a fixed-seed `Pcg32RandomSource` for statistical tests, so no test can flake.
+  - When scripting dice, count every draw: initiative (player first, then monsters in listed order), checks, damage, weighted attack picks (only for monsters with 2+ attacks), loot rolls, and **one ambient pick each time a room with `ambient` lines is described**.
+  - `LuckyRandomSource` (every roll at maximum) keeps story-path tests robust to number tuning.
+- Test helpers live in `tests/RpgEngine.Tests/TestSupport/`:
+  - `TestContent`: an in-memory JSON content builder.
+  - Fixtures: `ExplorationFixture`, `CombatFixture`, `SessionFixture`.
+  - Harnesses: `TestWorld`, `ExplorationHarness`, `CombatHarness`, `CliHarness`.
+- CLI tests drive the real UI through `Spectre.Console.Testing.TestConsole` with scripted input lines. The CLI exposes internals to the test assembly only.
 - Coverage target: 100% line coverage for `RpgEngine.Core.Dice` and `RpgEngine.Core.Checks`.
 - Every new condition type, effect type, or schema field needs a test, and so does every validator rule.
 
@@ -388,7 +403,7 @@ Saving is allowed only during exploration. Per-encounter uses are never saved, b
 
 ## Roadmap status
 - [x] **Phase 1:** solution scaffold, tooling, docs, Git and GitHub.
-- [ ] **Milestone 1 (vertical slice):**
+- [x] **Milestone 1 (vertical slice):**
   - character creation
   - 3-room starter dungeon "Barrowlight": an NPC dialogue with skill checks and permanent consequences, an inspectable puzzle, and a turn-based combat encounter
   - save and load

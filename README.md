@@ -4,11 +4,11 @@ A narrative-driven, text-based RPG engine for the terminal, written in C# on .NE
 
 The engine is **purely data-driven**. Every room, item, monster, line of dialogue, class, and rule constant is loaded from JSON in [`Data/`](Data/), so new adventures can be written without touching C#.
 
-> **Status:** Phase 1 (scaffold, tooling, docs) is done. **Milestone 1, the vertical slice, is in progress.** The features below describe that milestone's target.
+> **Status:** **Milestone 1 (the vertical slice) is complete.** *Barrowlight* is a short, playable three-room adventure with character creation, a branching NPC conversation with skill checks and permanent consequences, a riddle-and-trap puzzle, and a boss you can fight, flee, or talk down.
 
 ---
 
-## Features (Milestone 1 target)
+## Features
 
 - **Exploration:** rooms connected by exits (north, up, in…), with rich sensory descriptions, inspectable features, hidden secrets, and puzzles.
 - **Choices & consequences:** branching dialogue and event trees that read and write a global `WorldState` (flags, counters, faction reputation, quest stages). Choices permanently change the world.
@@ -18,6 +18,15 @@ The engine is **purely data-driven**. Every room, item, monster, line of dialogu
   - color-coded narration, HP/MP bars, stat tables, and animated dice rolls
   - **hybrid input**: pick numbered options or type classic commands like `look`, `inspect altar`, `press sun`
 - **Save/Load** to JSON in `Saves/`.
+
+## The adventure: *Barrowlight*
+
+Rain, a hilltop barrow, and a lantern that kept the dead asleep until it went dark. Pick a **Fighter**, **Rogue**, or **Wizard**:
+- Win over (or drive off) Sister Wren at **the Lichgate**, and search the graves for anything left behind.
+- Work out the sigil riddle on the bronze door in **the Ossuary Hall**, ideally without losing a hand to the trap.
+- Face what guards **the Barrow Heart**.
+
+What you say to Wren permanently changes the world. It decides what you learn, whether she is still there when you come back, how the final encounter can end, and which of five epilogues you get.
 
 ## Architecture
 
@@ -87,11 +96,16 @@ dotnet test
 dotnet run --project src/RpgEngine.CLI
 ```
 
-Useful flags (after `--`): `--seed <n>` for a reproducible run, `--no-anim` to skip dice animations, `--data <dir>` for an alternate content folder, `--saves <dir>` for an alternate save folder.
+Useful flags (after `--`): `--seed <n>` for a reproducible run, `--no-anim` to skip dice animations, `--data <dir>` for an alternate content folder, `--saves <dir>` for an alternate save folder, `--help` for a summary. If the content in `Data/` has problems, the game lists every one of them and exits with code 1.
 
-## How to play (Milestone 1)
+## How to play
 
-At each prompt, type the **number** of a listed action or a **command**:
+**Character creation:**
+- Choose a name and a class.
+- Set your ability scores with the standard array (auto-assigned for your class, or assigned yourself) or by rolling 4d6 and dropping the lowest die.
+- Pick your trained skills. Rogues also choose two skills for expertise.
+
+**Exploring:** each turn shows your status line and a numbered list of actions. Type the **number** of a listed action, or a **command**:
 
 | Command | Meaning |
 |---|---|
@@ -103,8 +117,18 @@ At each prompt, type the **number** of a listed action or a **command**:
 | `use <item> [on <thing>]`, `equip <item>` | Use or equip items |
 | `talk to <npc>` | Start a conversation |
 | `inventory`, `i` · `stats`, `c` · `journal`, `j` | Character info |
-| `save [slot]` / `load [slot]` | Save or load (exploration only) |
-| `help`, `?` · `quit` | Help or quit |
+| `save [slot]` / `load [slot]` | Save or load (exploration only; default slot `quicksave`) |
+| `help`, `?` · `quit` | Help, or return to the title screen |
+
+**Conversations:** pick a numbered reply. Replies that need a skill check show a badge like `[Persuasion DC 14]`, plus `(advantage)` when something you learned earlier helps. Some checks can be attempted only once, so choose carefully.
+
+**Combat:** combat is turn-based in initiative order. On your turn you can:
+- **Attack**
+- use **Spells and techniques** (mana or per-fight uses)
+- **Use an item**
+- **Defend** (+2 AC)
+- **Parley** (when the foe will listen)
+- **Flee** (`[Acrobatics DC 12]`)
 
 ## Writing content
 
@@ -121,14 +145,20 @@ dotnet test
 dotnet test --collect:"XPlat Code Coverage"
 ```
 
-Tests are deterministic. They use scripted dice (`FixedRandomSource`) for exact outcomes and a fixed-seed PRNG for statistical checks of dice fairness.
+There are about 720 tests, all deterministic:
+- **Unit tests** for every Core system. The dice and skill-check code has 100% line and branch coverage.
+- **Content validation** of the shipped `Data/`, plus fixtures that prove each validator rule catches what it should.
+- **Scenario tests** that play the Barrowlight storylines through the engine with scripted dice (`FixedRandomSource`).
+- **CLI playthroughs** that drive the real terminal UI with scripted keyboard input through Spectre.Console's `TestConsole`.
+
+Dice fairness is checked with fixed-seed chi-square tests.
 
 ## Roadmap
 
 - [x] **Phase 1:** solution scaffold, tooling, documentation, Git and GitHub
-- [ ] **Milestone 1 (vertical slice):**
+- [x] **Milestone 1 (vertical slice):**
   - character creation
-  - a 3-room starter dungeon, *Barrowlight*: an NPC dialogue with skill checks and a permanent consequence, an inspectable puzzle, and a turn-based combat encounter with flee and parley
+  - a 3-room starter dungeon, *Barrowlight*: an NPC dialogue with skill checks and permanent consequences, an inspectable puzzle, and a turn-based combat encounter with flee and parley
   - save and load
   - full test coverage of dice and skill checks
 - [ ] **Later:** leveling and rests, multi-character parties, races and backgrounds, shops, more dungeons, JSON Schema export for editor autocomplete, CI
