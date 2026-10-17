@@ -1,0 +1,38 @@
+[
+  {
+    "id": "longsword",
+    "name": "Longsword",
+    "aliases": ["sword", "blade"],
+    "type": "weapon",
+    "description": "A plain, well-kept longsword with a leather-wrapped grip worn smooth by use.",
+    "value": 15,
+    "weapon": { "damage": "1d8", "damageType": "slashing" }
+  },
+  {
+    "id": "shortsword",
+    "name": "Shortsword",
+    "aliases": ["sword", "blade"],
+    "type": "weapon",
+    "description": "A short, quick blade made for close quarters and the gaps between armor plates.",
+    "value": 10,
+    "weapon": { "damage": "1d6", "damageType": "piercing", "finesse": true }
+  },
+  {
+    "id": "dagger",
+    "name": "Dagger",
+    "aliases": ["knife"],
+    "type": "weapon",
+    "description": "A slim dagger, balanced for the hand rather than for throwing.",
+    "value": 2,
+    "weapon": { "damage": "1d4", "damageType": "piercing", "finesse": true }
+  },
+  {
+    "id": "quarterstaff",
+    "name": "Quarterstaff",
+    "aliases": ["staff"],
+    "type": "weapon",
+    "description": "An ash-wood staff shod in iron at both ends. Scuffed sigils run along its length.",
+    "value": 1,
+    "weapon": { "damage": "1d6", "damageType": "bludgeoning" }
+  }
+]

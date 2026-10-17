@@ -1,0 +1,11 @@
+[
+  {
+    "id": "healing_potion",
+    "name": "Potion of Healing",
+    "aliases": ["potion", "healing potion", "red potion", "vial"],
+    "type": "consumable",
+    "description": "A stoppered vial of red liquid that is faintly warm to the touch. Restores 2d4+2 hit points.",
+    "value": 50,
+    "use": { "inCombat": true, "consume": true, "effects": [ { "type": "heal", "dice": "2d4+2" } ] }
+  }
+]

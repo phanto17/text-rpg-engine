@@ -1,0 +1,40 @@
+[
+  {
+    "id": "gravebound_knight",
+    "name": "Ser Halric",
+    "description": "A knight in rust-red plate, ash pouring from the joints of his armor. Behind the visor there is only darkness and two pinpricks of cold light.",
+    "hp": "3d8+2",
+    "ac": 14,
+    "abilities": { "str": 15, "dex": 10, "con": 13, "int": 10, "wis": 11, "cha": 12 },
+    "attacks": [
+      { "name": "Rusted Longsword", "toHit": 3, "damage": "1d8+1", "damageType": "slashing", "weight": 2 },
+      {
+        "name": "Grave Touch",
+        "toHit": 3,
+        "damage": "1d4",
+        "damageType": "necrotic",
+        "weight": 1,
+        "onHit": { "save": { "ability": "con", "dc": 12 }, "status": "grave_chill" }
+      }
+    ],
+    "resistances": ["necrotic"],
+    "vulnerabilities": ["radiant"],
+    "immunities": ["poison"],
+    "xp": 100,
+    "ai": { "behavior": "aggressive", "fleeBelowHpPercent": 0 }
+  },
+  {
+    "id": "barrow_thrall",
+    "name": "Barrow Thrall",
+    "description": "A thin, grey husk of a thing, more ash than bone, that claws its way up out of the floor at the knight's command.",
+    "hp": "2d6",
+    "ac": 11,
+    "abilities": { "str": 12, "dex": 10, "con": 12, "int": 3, "wis": 8, "cha": 3 },
+    "attacks": [
+      { "name": "Ashen Claw", "toHit": 2, "damage": "1d6", "damageType": "slashing" }
+    ],
+    "vulnerabilities": ["bludgeoning"],
+    "immunities": ["poison"],
+    "xp": 25
+  }
+]

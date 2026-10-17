@@ -1,0 +1,37 @@
+{
+  "title": "Barrowlight",
+  "contentVersion": "0.1.0",
+  "startRoom": "lichgate",
+  "intro": "Rain has followed you for three days across the Greywater moor. The villagers of Hollin's Rest would not say the barrow's name. They only pointed north and made the sign of the ash.\n\nSomewhere beneath that mound lies the Barrowlight, the lantern the Ashen Order kept burning so their dead would sleep. It went dark at the turn of the season. Since then, the graves of Hollin's Rest have not stayed shut.\n\nYou crest the last hill as dusk bleeds out of the sky, and the lichgate rises before you.",
+  "startingGold": 10,
+  "rules": {
+    "standardArray": [15, 14, 13, 12, 10, 8],
+    "proficiencyBonusByLevel": [2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6],
+    "naturalCritsOnChecks": true,
+    "monsterHp": "average",
+    "flee": { "skill": "acrobatics", "dc": 12 },
+    "defendStatus": "defending"
+  },
+  "epilogues": [
+    {
+      "conditions": [ { "type": "flag", "flag": "knight_laid_to_rest" }, { "type": "flag", "flag": "wren_trusts_player" } ],
+      "text": "You climb out of the barrow with the Barrowlight burning in your hands, and Sister Wren is waiting at the lichgate. When she sees the flame she sinks to her knees in the mud and weeps. For the first time in a season, the rain stops.\n\n\"He rests,\" she says. \"Because you told him he could.\"\n\nThe Ashen Order is two people now: a wounded nun and a stranger with a lantern. It is a beginning. The Order will remember the name {player.name}. So will the dead of Hollin's Rest, who sleep soundly tonight."
+    },
+    {
+      "conditions": [ { "type": "flag", "flag": "knight_laid_to_rest" } ],
+      "text": "You climb out of the barrow with the Barrowlight burning in your hands. The lichgate stands empty. Whatever became of Sister Wren, she is not here to see the lantern lit.\n\nStill, the knight's last word follows you down the hill: relieved. Behind you the barrow is silent, and in Hollin's Rest the graves stay shut. You did not need a blade to end it, {player.name}. Not everyone could say the same."
+    },
+    {
+      "conditions": [ { "type": "flag", "flag": "knight_destroyed" }, { "type": "flag", "flag": "wren_trusts_player" } ],
+      "text": "Wren meets you at the lichgate and looks first at the lantern, then at your blooded hands.\n\n\"You had to,\" she says, though her voice says she wishes you hadn't. \"He would not have listened. Maybe no one could have reached him.\" She takes the Barrowlight from you and holds it close, and its glow steadies in her grip.\n\nThe dead of Hollin's Rest will sleep again. Ser Halric will not wake again at all. Wren says a prayer for him on the hillside, and after a moment, {player.name}, you find you are saying it too."
+    },
+    {
+      "conditions": [ { "type": "flag", "flag": "knight_destroyed" }, { "type": "flag", "flag": "wren_fled" } ],
+      "text": "You carry the Barrowlight out over the knight's shattered bones. Its flame burns low and grudging, as if it remembers how you won it.\n\nNo one waits at the lichgate. Wren's bedroll is sodden and abandoned, her grey cloak dropped in the mud where she fled from you. The dead of Hollin's Rest will sleep again, but you walk back to the village alone, {player.name}, and the villagers do not meet your eyes."
+    },
+    {
+      "text": "The Barrowlight flickers awake in your hands as you leave the Barrow Heart behind, and Ser Halric's bones lie scattered on the crypt floor, a guardian who guarded too long.\n\nThe lantern's glow is thin but steady. Hollin's Rest will sleep easier tonight. Whether the Ashen Order would have thanked you for how you won it is a question for another day, {player.name}."
+    }
+  ],
+  "gameOverText": "The cold of the barrow closes over you like deep water. Somewhere far above, rain falls on the lichgate, and the Barrowlight stays dark. Your story ends here, {player.name}."
+}

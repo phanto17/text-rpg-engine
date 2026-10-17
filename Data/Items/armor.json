@@ -1,0 +1,20 @@
+[
+  {
+    "id": "chain_mail",
+    "name": "Chain Mail",
+    "aliases": ["mail", "chain", "armor"],
+    "type": "armor",
+    "description": "A heavy coat of interlocking rings over a padded gambeson. Loud, hot, and reassuring.",
+    "value": 75,
+    "armor": { "baseAc": 16, "maxDexBonus": 0 }
+  },
+  {
+    "id": "leather_armor",
+    "name": "Leather Armor",
+    "aliases": ["leather", "armor"],
+    "type": "armor",
+    "description": "Boiled leather, oiled against the rain and quiet on the move.",
+    "value": 10,
+    "armor": { "baseAc": 11 }
+  }
+]

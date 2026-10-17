@@ -1,0 +1,123 @@
+[
+  {
+    "id": "wren",
+    "speaker": "Sister Wren",
+    "entries": [
+      { "conditions": [ { "type": "flag", "flag": "wren_trusts_player" } ], "node": "friend" },
+      { "conditions": [ { "type": "flag", "flag": "wren_distrusts" } ], "node": "cold" },
+      { "conditions": [ { "type": "flag", "flag": "met_wren" } ], "node": "hub" },
+      { "node": "first_meeting" }
+    ],
+    "nodes": [
+      {
+        "id": "first_meeting",
+        "text": "Her sword comes up as you approach, and the point stays steady despite the blood on her habit.\n\n\"Far enough.\" Her voice is hoarse. \"Another grave-robber come for the Barrowlight? You're the third this month. The other two went down those stairs and didn't come back up.\"",
+        "effects": [ { "type": "setFlag", "flag": "met_wren" } ],
+        "next": "hub"
+      },
+      {
+        "id": "hub",
+        "text": "Sister Wren watches you over the edge of her blade, waiting.",
+        "choices": [
+          { "text": "Who are you?", "once": true, "next": "who" },
+          { "text": "What's down there?", "once": true, "next": "below" },
+          {
+            "text": "You're wounded, and you're afraid of something down there.",
+            "check": { "skill": "insight", "dc": 12 },
+            "successNode": "read_her",
+            "failureNode": "misread",
+            "retry": false
+          },
+          {
+            "text": "I'm not here to rob the dead. I'm here to end whatever is keeping them awake.",
+            "check": { "skill": "persuasion", "dc": 14, "advantageIf": [ { "type": "flag", "flag": "read_wren" } ] },
+            "successNode": "trusts",
+            "failureNode": "refuses",
+            "retry": false
+          },
+          {
+            "text": "Step aside, Sister, or I'll move you myself.",
+            "check": { "skill": "intimidation", "dc": 12 },
+            "successNode": "flees",
+            "failureNode": "scoffs",
+            "retry": false
+          },
+          { "text": "I'll leave you to your watch.", "end": true }
+        ]
+      },
+      {
+        "id": "who",
+        "text": "\"Sister Wren, of the Ashen Order. What's left of it.\" She laughs without any humor in it. \"We kept the barrows of Greywater for three hundred years. Now there's me, a lantern that's gone dark, and a knight who won't lie down.\"",
+        "next": "hub"
+      },
+      {
+        "id": "below",
+        "text": "\"Ser Halric.\" She says the name like a prayer gone sour. \"The last champion of the Order. He swore to guard the Barrowlight until he was relieved of his watch. Then the Order dwindled, no one came to relieve him, and he went on guarding it after he died. Now the light has gone out, and he's still down there keeping his oath to a dead order.\"\n\nShe glances at the stair. \"The door below is sealed with the Order's rite. If you don't know the rite, it bites.\"",
+        "next": "hub"
+      },
+      {
+        "id": "read_her",
+        "text": "You watch the way she favors her side, and the way her eyes keep sliding back to the stair. She isn't guarding the barrow from you. She's guarding you from it, and she is terrified she'll fail at that too.",
+        "effects": [ { "type": "setFlag", "flag": "read_wren" } ],
+        "next": "hub"
+      },
+      {
+        "id": "misread",
+        "text": "Her face gives away nothing but rain and exhaustion.",
+        "next": "hub"
+      },
+      {
+        "id": "trusts",
+        "text": "For a long moment she studies you. Then the point of her sword drops.\n\n\"Gods help me, I believe you.\" She lowers herself onto a stone, wincing. \"Listen. The door below opens to the litany: sun, then moon, then skull. And if you face Halric, don't just fight him. Speak the Rite of Rest. Tell him he is relieved. He was a good man once. He might still hear it.\"\n\nShe teaches you the words, and makes you repeat them until you have them right.",
+        "effects": [
+          { "type": "setFlag", "flag": "wren_trusts_player" },
+          { "type": "setFlag", "flag": "wren_taught_rite" },
+          { "type": "setFlag", "flag": "knows_sigil_order" },
+          { "type": "changeReputation", "faction": "ashen_order", "amount": 10 }
+        ],
+        "choices": [ { "text": "I'll bring the light back.", "end": true } ]
+      },
+      {
+        "id": "refuses",
+        "text": "\"Pretty words.\" Her blade doesn't waver. \"The last two had pretty words too. Go down if you must. I won't help you die.\"",
+        "effects": [
+          { "type": "setFlag", "flag": "wren_distrusts" },
+          { "type": "changeReputation", "faction": "ashen_order", "amount": -5 }
+        ]
+      },
+      {
+        "id": "flees",
+        "text": "Something in your face decides it for her. She backs away with her sword still raised until she reaches the edge of the gate's shadow.\n\n\"Then the dead can have you,\" she spits, and she is gone into the rain.",
+        "effects": [
+          { "type": "setFlag", "flag": "wren_fled" },
+          { "type": "changeReputation", "faction": "ashen_order", "amount": -15 }
+        ]
+      },
+      {
+        "id": "scoffs",
+        "text": "She laughs, low and tired. \"I have stood watch over a dead knight for a month, stranger. You don't frighten me.\" She doesn't lower the sword, and she doesn't say another word to you.",
+        "effects": [
+          { "type": "setFlag", "flag": "wren_distrusts" },
+          { "type": "changeReputation", "faction": "ashen_order", "amount": -5 }
+        ]
+      },
+      {
+        "id": "friend",
+        "text": "\"Still breathing, {player.name}. Good.\" Wren feeds another stick to her little fire. \"Remember: sun, moon, skull. And speak the rite.\"",
+        "choices": [
+          { "text": "Tell me the rite again.", "next": "rite_again" },
+          { "text": "I'll be back with the light.", "end": true }
+        ]
+      },
+      {
+        "id": "rite_again",
+        "text": "She recites it once more, slowly, so you can't mistake it: \"Halric of the Ashen Order, your watch is ended. You are relieved. Rest.\"",
+        "choices": [ { "text": "Thank you, Sister.", "end": true } ]
+      },
+      {
+        "id": "cold",
+        "text": "Wren turns her back on you and stares at the barrow stair. She has nothing more to say to you."
+      }
+    ]
+  }
+]

@@ -1,0 +1,156 @@
+[
+  {
+    "id": "ossuary_hall",
+    "name": "The Ossuary Hall",
+    "description": "The stair ends in a long vault walled with bones. Skulls fill neat niches from floor to ceiling, thousands of them, each marked on the brow with a thumbprint of grey ash. The air is cold and smells of wet stone and old smoke.\n\nAt the far end of the hall, a door of green-black bronze fills an archway. Three sigils stand out from its surface: a sun, a crescent moon, and a grinning skull. Words are cut into the lintel above.",
+    "revisit": "The ash-marked skulls watch you from their niches.",
+    "variants": [
+      {
+        "conditions": [ { "type": "notFlag", "flag": "sigil_door_open" } ],
+        "text": "The bronze door waits at the far end of the hall, its three sigils catching what little light there is."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "sigil_door_open" } ],
+        "text": "The bronze door stands open, breathing cold air from the dark beyond."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "knows_sigil_order" }, { "type": "notFlag", "flag": "sigil_door_open" } ],
+        "text": "You remember the order of the Ashen litany: the sun, then the moon, then the skull."
+      }
+    ],
+    "ambient": [
+      "Water ticks somewhere in the dark.",
+      "A skull shifts in its niche with a dry click. Probably just settling.",
+      "Your breath smokes in the cold air."
+    ],
+    "exits": [
+      { "direction": "up", "target": "lichgate", "description": "Worn steps climb toward grey light." },
+      {
+        "direction": "east",
+        "target": "inner_crypt",
+        "description": "The open bronze door leads deeper into the barrow.",
+        "conditions": [ { "type": "flag", "flag": "sigil_door_open" } ],
+        "blockedText": "The bronze door will not move. Three sigils stare back at you: sun, moon, and skull."
+      }
+    ],
+    "features": [
+      {
+        "id": "bronze_door",
+        "name": "bronze door",
+        "aliases": ["door", "sigils", "sigil", "inscription", "lintel", "words", "riddle"],
+        "description": "The door is a single casting of bronze, gone green-black with age. Three sigils rise from it at the height of your heart: a sun, a crescent moon, and a skull. Each looks as though it could be pressed. There are no handles and no keyholes.",
+        "conditions": [ { "type": "notFlag", "flag": "sigil_door_open" } ],
+        "interactions": [
+          {
+            "verb": "read",
+            "label": "Read the inscription",
+            "text": "The letters are deep and patient:\n\n  FIRST THE LIGHT THAT WAKES THE FIELD,\n  THEN THE LAMP THE NIGHT MUST WIELD,\n  LAST THE FACE ALL FACES YIELD."
+          },
+          {
+            "verb": "study",
+            "label": "Study the inscription",
+            "once": true,
+            "text": "You trace the carved letters and try to remember what you know of the Ashen Order's funeral rites.",
+            "check": { "skill": "religion", "dc": 13 },
+            "success": {
+              "text": "It is the Ashen litany, recited at every burial: dawn, dusk, and death. The sun, then the moon, then the skull.",
+              "effects": [ { "type": "setFlag", "flag": "knows_sigil_order" } ]
+            },
+            "failure": { "text": "The words blur together in the cold. A riddle, clearly, but its meaning slips away from you." }
+          },
+          {
+            "verb": "press",
+            "target": "sun",
+            "label": "Press the sun sigil",
+            "conditions": [ { "type": "counter", "counter": "sigil_seq", "equals": 0 } ],
+            "text": "The sun sigil sinks into the bronze with a deep, satisfied click.",
+            "effects": [ { "type": "addCounter", "counter": "sigil_seq", "amount": 1 } ]
+          },
+          {
+            "verb": "press",
+            "target": "sun",
+            "text": "The sun sigil clicks, then clicks again, wrongly.",
+            "effects": [
+              { "type": "savingThrow", "ability": "dex", "dc": 12,
+                "onSuccess": [ { "type": "message", "text": "A needle of black iron lances out of the bronze, and you snatch your hand back just in time.", "style": "success" } ],
+                "onFail": [ { "type": "message", "text": "A needle of black iron lances out of the bronze and bites deep into your palm.", "style": "failure" }, { "type": "damage", "dice": "1d4", "damageType": "piercing" } ] },
+              { "type": "setCounter", "counter": "sigil_seq", "value": 0 },
+              { "type": "message", "text": "With a grinding sound, all three sigils slide back out to rest.", "style": "sensory" }
+            ]
+          },
+          {
+            "verb": "press",
+            "target": "moon",
+            "label": "Press the moon sigil",
+            "conditions": [ { "type": "counter", "counter": "sigil_seq", "equals": 1 } ],
+            "text": "The moon sigil slides inward. Somewhere inside the door, something heavy shifts.",
+            "effects": [ { "type": "addCounter", "counter": "sigil_seq", "amount": 1 } ]
+          },
+          {
+            "verb": "press",
+            "target": "moon",
+            "text": "The moon sigil clicks, then clicks again, wrongly.",
+            "effects": [
+              { "type": "savingThrow", "ability": "dex", "dc": 12,
+                "onSuccess": [ { "type": "message", "text": "A needle of black iron lances out of the bronze, and you snatch your hand back just in time.", "style": "success" } ],
+                "onFail": [ { "type": "message", "text": "A needle of black iron lances out of the bronze and bites deep into your palm.", "style": "failure" }, { "type": "damage", "dice": "1d4", "damageType": "piercing" } ] },
+              { "type": "setCounter", "counter": "sigil_seq", "value": 0 },
+              { "type": "message", "text": "With a grinding sound, all three sigils slide back out to rest.", "style": "sensory" }
+            ]
+          },
+          {
+            "verb": "press",
+            "target": "skull",
+            "label": "Press the skull sigil",
+            "conditions": [ { "type": "counter", "counter": "sigil_seq", "equals": 2 } ],
+            "text": "The skull sigil sinks home. With a groan like a great beast waking, the bronze door swings inward on hidden hinges, and cold air rolls out of the dark beyond.",
+            "effects": [
+              { "type": "setFlag", "flag": "sigil_door_open" },
+              { "type": "setQuestStage", "quest": "barrowlight", "stage": 30 }
+            ]
+          },
+          {
+            "verb": "press",
+            "target": "skull",
+            "text": "The skull sigil clicks, then clicks again, wrongly.",
+            "effects": [
+              { "type": "savingThrow", "ability": "dex", "dc": 12,
+                "onSuccess": [ { "type": "message", "text": "A needle of black iron lances out of the bronze, and you snatch your hand back just in time.", "style": "success" } ],
+                "onFail": [ { "type": "message", "text": "A needle of black iron lances out of the bronze and bites deep into your palm.", "style": "failure" }, { "type": "damage", "dice": "1d4", "damageType": "piercing" } ] },
+              { "type": "setCounter", "counter": "sigil_seq", "value": 0 },
+              { "type": "message", "text": "With a grinding sound, all three sigils slide back out to rest.", "style": "sensory" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "open_door",
+        "name": "bronze door",
+        "aliases": ["door", "sigils", "inscription"],
+        "description": "The bronze door stands open on hidden hinges. All three sigils are pressed flush with the metal, and the inscription above reads like a promise kept.",
+        "conditions": [ { "type": "flag", "flag": "sigil_door_open" } ]
+      },
+      {
+        "id": "skull_niches",
+        "name": "skull niches",
+        "aliases": ["skulls", "niches", "bones", "walls", "offerings"],
+        "description": "Thousands of skulls, each marked on the brow with a thumbprint of grey ash. Here and there the living have left offerings in the niches: a ring, a dried flower, a child's wooden horse.",
+        "interactions": [
+          {
+            "verb": "search",
+            "label": "Search the skull niches",
+            "once": true,
+            "text": "You run your hands along the cold niches, careful not to disturb the dead more than you must.",
+            "check": { "skill": "investigation", "dc": 11 },
+            "success": {
+              "text": "Behind a skull with a cracked jaw you find a handful of old silver coins, left as an offering for the ferryman. The dead won't miss them. Probably.",
+              "effects": [ { "type": "giveGold", "amount": 12 } ]
+            },
+            "failure": { "text": "Dust and bone. Nothing you would want to keep." }
+          }
+        ]
+      }
+    ],
+    "onFirstEnter": [ { "type": "setQuestStage", "quest": "barrowlight", "stage": 20 } ]
+  }
+]

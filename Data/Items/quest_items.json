@@ -1,0 +1,9 @@
+[
+  {
+    "id": "barrowlight",
+    "name": "the Barrowlight",
+    "aliases": ["barrowlight", "lantern", "light"],
+    "type": "quest",
+    "description": "An iron lantern, plain and heavy, burning with a steady golden flame that gives off no smoke and no heat."
+  }
+]

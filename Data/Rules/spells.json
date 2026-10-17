@@ -1,0 +1,37 @@
+[
+  {
+    "id": "second_wind",
+    "name": "Second Wind",
+    "kind": "technique",
+    "description": "Dig deep and shrug off some of the hurt. Heals 1d10+1, once per fight.",
+    "cost": { "usesPerEncounter": 1 },
+    "target": "self",
+    "resolution": { "type": "effects", "effects": [ { "type": "heal", "dice": "1d10+1" } ] }
+  },
+  {
+    "id": "sneak_attack",
+    "name": "Sneak Attack",
+    "kind": "technique",
+    "description": "Strike where it hurts most. A weapon attack that deals an extra 1d6 damage, twice per fight.",
+    "cost": { "usesPerEncounter": 2 },
+    "target": "enemy",
+    "resolution": { "type": "weaponAttack", "bonusDamage": "1d6" }
+  },
+  {
+    "id": "fire_bolt",
+    "name": "Fire Bolt",
+    "kind": "spell",
+    "description": "Hurl a mote of fire at a foe. A spell attack dealing 1d10 fire damage. Costs nothing.",
+    "target": "enemy",
+    "resolution": { "type": "spellAttack", "damage": "1d10", "damageType": "fire" }
+  },
+  {
+    "id": "magic_missile",
+    "name": "Magic Missile",
+    "kind": "spell",
+    "description": "Three darts of force that never miss, dealing 3d4+3 force damage.",
+    "cost": { "mana": 2 },
+    "target": "enemy",
+    "resolution": { "type": "autoHit", "damage": "3d4+3", "damageType": "force" }
+  }
+]

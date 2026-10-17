@@ -1,0 +1,80 @@
+[
+  {
+    "id": "lichgate",
+    "name": "The Lichgate",
+    "description": "A roofed gate of black timber stands alone on the hilltop, its beams carved with flames that the weather has worn down to ripples. Beyond it, rows of leaning headstones climb toward a long grassy mound: the barrow of the Ashen Order. Rain runs off the gate's shingles in silver threads.\n\nAt the foot of the mound, a stair of wet stone descends into the dark, flanked by two weathered statues whose faces have been chiselled away.",
+    "revisit": "The lichgate drips in the failing light. The barrow stair waits at the foot of the mound.",
+    "variants": [
+      {
+        "conditions": [ { "type": "notFlag", "flag": "met_wren" } ],
+        "text": "Someone is sheltering beneath the lichgate: a woman in a soot-grey habit, one hand pressed to her side, the other resting on a drawn sword."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "wren_trusts_player" } ],
+        "text": "Sister Wren keeps watch beneath the gate, her blade across her knees and a small fire hissing beside her."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "wren_distrusts" }, { "type": "notFlag", "flag": "wren_fled" } ],
+        "text": "Sister Wren sits beneath the gate with her back to you, watching the barrow stair."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "wren_fled" } ],
+        "text": "Wren's bedroll lies abandoned beneath the gate, rain pooling in its folds. Her footprints lead away down the hill and do not come back."
+      }
+    ],
+    "ambient": [
+      "Rain drums on the lichgate's shingles.",
+      "Somewhere below the hill, a dog howls once and falls silent.",
+      "Wind combs through the long grass on the barrow mound.",
+      "A crow watches you from a headstone, then thinks better of it and flaps away."
+    ],
+    "exits": [
+      { "direction": "down", "target": "ossuary_hall", "description": "A stair of wet stone descends into the barrow." }
+    ],
+    "features": [
+      {
+        "id": "lichgate",
+        "name": "lichgate",
+        "aliases": ["gate", "carvings", "flames", "beams"],
+        "description": "The carved flames are the sign of the Ashen Order, which buried its dead with fire and kept their sleep with light. Names have been cut into the crossbeam, hundreds of them, each followed by a small carved flame. The newest is weathered almost smooth."
+      },
+      {
+        "id": "toppled_headstone",
+        "name": "toppled headstone",
+        "aliases": ["headstone", "stone", "grave", "headstones"],
+        "description": "One headstone has fallen face-down in the grass. It is older than the others, and the earth along its edge looks as though someone has disturbed it.",
+        "interactions": [
+          {
+            "verb": "search",
+            "label": "Search under the toppled headstone",
+            "once": true,
+            "text": "You work your fingers under the edge of the stone and heave it up.",
+            "check": { "skill": "perception", "dc": 12 },
+            "success": {
+              "text": "Something glints in the hollow underneath: a stoppered vial wrapped in oilcloth, left by an earlier visitor who never came back for it.",
+              "effects": [ { "type": "giveItem", "item": "healing_potion" } ]
+            },
+            "failure": { "text": "Mud, worms, and the smell of old rain. If anything was hidden here, you can't find it." }
+          }
+        ]
+      },
+      {
+        "id": "statues",
+        "name": "faceless statues",
+        "aliases": ["statues", "statue", "faces", "lanterns"],
+        "description": "Two robed figures flank the barrow stair. Long ago someone took a chisel to their faces, carefully, as if the work mattered. Each statue holds a stone lantern, and both lanterns are empty."
+      }
+    ],
+    "npcs": [
+      {
+        "id": "wren",
+        "name": "Sister Wren",
+        "aliases": ["wren", "sister", "woman", "nun"],
+        "description": "A woman of perhaps forty in the soot-grey habit of the Ashen Order, its hem black with mud. Blood has dried on her side beneath her hand. Her eyes never quite leave the barrow stair.",
+        "dialogue": "wren",
+        "conditions": [ { "type": "notFlag", "flag": "wren_fled" } ]
+      }
+    ],
+    "onFirstEnter": [ { "type": "setQuestStage", "quest": "barrowlight", "stage": 10 } ]
+  }
+]

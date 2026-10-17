@@ -1,0 +1,58 @@
+[
+  {
+    "id": "fighter",
+    "name": "Fighter",
+    "description": "A trained warrior in heavy mail, at home in the press of steel. Hardy, accurate, and very hard to put down. Can catch a second wind once per fight.",
+    "hitDie": 10,
+    "abilityPriority": ["str", "con", "dex", "wis", "cha", "int"],
+    "savingThrows": ["str", "con"],
+    "skillChoices": {
+      "count": 2,
+      "from": ["acrobatics", "animal_handling", "athletics", "history", "insight", "intimidation", "perception", "survival"]
+    },
+    "startingItems": [
+      { "item": "longsword", "equip": true },
+      { "item": "chain_mail", "equip": true },
+      { "item": "healing_potion", "count": 1 }
+    ],
+    "spells": ["second_wind"]
+  },
+  {
+    "id": "rogue",
+    "name": "Rogue",
+    "description": "Quick hands, a quicker tongue, and a talent for finding the soft spot in anything, whether a lock, an argument, or an enemy. Masters two chosen skills.",
+    "hitDie": 8,
+    "abilityPriority": ["dex", "con", "cha", "wis", "int", "str"],
+    "savingThrows": ["dex", "int"],
+    "skillChoices": {
+      "count": 4,
+      "from": ["acrobatics", "athletics", "deception", "insight", "intimidation", "investigation", "perception", "persuasion", "sleight_of_hand", "stealth"]
+    },
+    "expertiseCount": 2,
+    "startingItems": [
+      { "item": "shortsword", "equip": true },
+      { "item": "leather_armor", "equip": true },
+      { "item": "dagger" },
+      { "item": "healing_potion", "count": 1 }
+    ],
+    "spells": ["sneak_attack"]
+  },
+  {
+    "id": "wizard",
+    "name": "Wizard",
+    "description": "A scholar of the arcane who trades armor for spells. Fragile in a brawl, devastating at range, and well read in the old rites of the dead.",
+    "hitDie": 6,
+    "abilityPriority": ["int", "con", "dex", "wis", "cha", "str"],
+    "savingThrows": ["int", "wis"],
+    "skillChoices": {
+      "count": 2,
+      "from": ["arcana", "history", "insight", "investigation", "medicine", "religion"]
+    },
+    "mana": { "base": 4, "ability": "int" },
+    "startingItems": [
+      { "item": "quarterstaff", "equip": true },
+      { "item": "healing_potion", "count": 1 }
+    ],
+    "spells": ["fire_bolt", "magic_missile"]
+  }
+]

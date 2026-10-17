@@ -1,0 +1,13 @@
+[
+  {
+    "id": "barrowlight",
+    "name": "The Barrowlight",
+    "stages": [
+      { "stage": 10, "journal": "The Barrowlight lies somewhere inside the barrow of the Ashen Order. Find a way in." },
+      { "stage": 20, "journal": "A sealed bronze door bars the way deeper into the barrow. Its three sigils (sun, moon, and skull) must hold the key." },
+      { "stage": 30, "journal": "The bronze door stands open. Whatever guards the Barrowlight waits in the Barrow Heart beyond." },
+      { "stage": 40, "journal": "The guardian of the Barrow Heart no longer stands in your way. Claim the Barrowlight." },
+      { "stage": 100, "journal": "You carried the Barrowlight out of the barrow." }
+    ]
+  }
+]

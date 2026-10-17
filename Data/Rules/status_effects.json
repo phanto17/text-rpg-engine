@@ -1,0 +1,16 @@
+[
+  {
+    "id": "defending",
+    "name": "Defending",
+    "description": "Braced behind your guard: +2 AC until the end of your next turn.",
+    "durationRounds": 1,
+    "modifiers": { "acBonus": 2 }
+  },
+  {
+    "id": "grave_chill",
+    "name": "Grave Chill",
+    "description": "The cold of the grave numbs your limbs: disadvantage on attack rolls.",
+    "durationRounds": 1,
+    "modifiers": { "attackRolls": "disadvantage" }
+  }
+]

@@ -1,0 +1,103 @@
+[
+  {
+    "id": "inner_crypt",
+    "name": "The Barrow Heart",
+    "description": "Beyond the door lies a round chamber cut from the living rock, its ceiling lost in shadow. Ash lies ankle-deep on the floor, undisturbed except for a single path of footprints: armored, heavy, walking a slow circle around the room, again and again and again.\n\nAt the center stands a stone sarcophagus carved with a knight at rest, hands folded over a sword. On the lid, where the knight's hands meet, sits an iron lantern with no light in it.",
+    "revisit": "Ash, stone, and silence. The sarcophagus dominates the Barrow Heart.",
+    "variants": [
+      {
+        "conditions": [ { "type": "flag", "flag": "knight_laid_to_rest" } ],
+        "text": "Ser Halric lies on the sarcophagus lid with his gauntlets folded over his sword, as still as his effigy. The circle of footprints in the ash is already beginning to blur."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "knight_destroyed" } ],
+        "text": "Shattered bones and rusted plate lie scattered across the ash where Ser Halric fell."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "barrow_heart_resolved" }, { "type": "lacksItem", "item": "barrowlight" } ],
+        "text": "The Barrowlight waits on the sarcophagus lid."
+      }
+    ],
+    "ambient": [
+      "The ash on the floor stirs, though there is no wind.",
+      "You hear the faint creak of armor that isn't yours.",
+      "The cold here goes all the way to the bone."
+    ],
+    "exits": [
+      { "direction": "west", "target": "ossuary_hall", "description": "The bronze door leads back to the Ossuary Hall." }
+    ],
+    "features": [
+      {
+        "id": "sarcophagus",
+        "name": "sarcophagus",
+        "aliases": ["tomb", "coffin", "effigy", "lid"],
+        "description": "The effigy on the lid wears the flame of the Ashen Order on its shield. An inscription runs around the base: HALRIC OF THE ASHEN ORDER, WHO KEEPS THE LIGHT UNTIL HE IS RELIEVED."
+      },
+      {
+        "id": "barrowlight_lantern",
+        "name": "Barrowlight",
+        "aliases": ["lantern", "light", "iron lantern"],
+        "description": "An iron lantern, plain and heavy, its glass smoked black. When you lean close you feel the faintest warmth, like an ember buried deep in ash.",
+        "conditions": [ { "type": "flag", "flag": "barrow_heart_resolved" }, { "type": "lacksItem", "item": "barrowlight" } ],
+        "interactions": [
+          {
+            "verb": "take",
+            "label": "Take the Barrowlight",
+            "text": "You lift the lantern from the sarcophagus. At your touch the old ember inside it catches, and a steady golden light spills across the Barrow Heart, pushing the shadows back into the stone.",
+            "effects": [
+              { "type": "giveItem", "item": "barrowlight" },
+              { "type": "setQuestStage", "quest": "barrowlight", "stage": 100 },
+              { "type": "endGame" }
+            ]
+          }
+        ]
+      }
+    ],
+    "encounter": {
+      "id": "barrow_heart",
+      "conditions": [ { "type": "notFlag", "flag": "barrow_heart_resolved" } ],
+      "intro": "The lid of the sarcophagus grinds aside. A figure in rust-red plate sits up, then stands, ash pouring from the joints of its armor. Behind it, something thin and hungry claws its way up out of the ash on the floor.\n\n\"Who comes to relieve the watch?\" the knight rasps. \"No one. No one ever comes.\"\n\nIts blade comes up.",
+      "enemies": [
+        { "monster": "gravebound_knight", "count": 1 },
+        { "monster": "barrow_thrall", "count": 1 }
+      ],
+      "canFlee": true,
+      "fleeTo": "ossuary_hall",
+      "parley": {
+        "options": [
+          { "label": "Tell him his watch is over", "check": { "skill": "persuasion", "dc": 15 } },
+          {
+            "label": "Speak the Rite of Rest",
+            "conditions": [ { "type": "flag", "flag": "wren_taught_rite" } ],
+            "check": { "skill": "religion", "dc": 10, "advantage": true }
+          }
+        ],
+        "onSuccess": [
+          {
+            "type": "message",
+            "text": "The knight's sword lowers by inches. \"Relieved,\" it whispers, as if tasting the word. \"At last.\" The thrall slumps back into the ash it came from. Ser Halric climbs onto the sarcophagus, folds his gauntlets over his sword, and is still.",
+            "style": "narration"
+          },
+          { "type": "setFlag", "flag": "knight_laid_to_rest" },
+          { "type": "changeReputation", "faction": "ashen_order", "amount": 10 },
+          { "type": "grantXp", "amount": 100 }
+        ],
+        "onFailure": [
+          { "type": "message", "text": "\"Lies,\" the knight hisses. \"They always lie.\" Its grip tightens on its blade.", "style": "warning" }
+        ]
+      },
+      "onVictory": [
+        {
+          "type": "message",
+          "text": "Ser Halric falls to his knees, then falls apart. His helm rolls across the ash and comes to rest facing the lantern he guarded for so long.",
+          "style": "narration"
+        },
+        { "type": "setFlag", "flag": "knight_destroyed" }
+      ],
+      "onResolved": [
+        { "type": "setFlag", "flag": "barrow_heart_resolved" },
+        { "type": "setQuestStage", "quest": "barrowlight", "stage": 40 }
+      ]
+    }
+  }
+]
