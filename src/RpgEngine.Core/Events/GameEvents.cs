@@ -1,4 +1,5 @@
 using RpgEngine.Core.Checks;
+using RpgEngine.Core.Combat;
 using RpgEngine.Core.Content.Defs;
 using RpgEngine.Core.Dice;
 using RpgEngine.Core.Views;
@@ -49,6 +50,39 @@ public sealed record ManaChangedEvent(int Delta, int Mana, int MaxMana) : GameEv
 public sealed record ReputationChangedEvent(FactionDef Faction, int Delta, int Value) : GameEvent;
 
 public sealed record QuestUpdatedEvent(QuestDef Quest, QuestStageDef Stage) : GameEvent;
+
+public sealed record CombatStartedEvent(string? Intro, IReadOnlyList<CombatantView> Combatants) : GameEvent;
+
+/// <summary>Initiative results, already in turn order.</summary>
+public sealed record InitiativeRolledEvent(IReadOnlyList<InitiativeEntry> Order) : GameEvent;
+
+public sealed record TurnStartedEvent(string Name, bool IsPlayer, int Round) : GameEvent;
+
+public sealed record AttackRolledEvent(
+    string Attacker,
+    string Target,
+    string AttackName,
+    D20Roll Roll,
+    int Bonus,
+    int Total,
+    int TargetArmorClass,
+    bool Hit,
+    bool Critical) : GameEvent;
+
+public sealed record SpellCastEvent(string Caster, string SpellName, SpellKind Kind) : GameEvent;
+
+public sealed record StatusAppliedEvent(string Target, string StatusName) : GameEvent;
+
+public sealed record StatusExpiredEvent(string Target, string StatusName) : GameEvent;
+
+/// <summary>A combatant loses its turn to a status (e.g. stunned).</summary>
+public sealed record TurnSkippedEvent(string Name, string StatusName) : GameEvent;
+
+public sealed record CombatantDefeatedEvent(string Name, bool IsPlayer) : GameEvent;
+
+public sealed record CombatantFledEvent(string Name, bool IsPlayer) : GameEvent;
+
+public sealed record CombatEndedEvent(CombatOutcome Outcome) : GameEvent;
 
 /// <summary>The adventure is over; <see cref="Text"/> is the epilogue chosen by the world state.</summary>
 public sealed record EpilogueEvent(string Text) : GameEvent;
