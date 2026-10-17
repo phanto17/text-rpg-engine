@@ -16,4 +16,7 @@ public sealed record GameManifestDef
     public required RulesDef Rules { get; init; }
 
     public IReadOnlyList<EpilogueDef> Epilogues { get; init; } = [];
+
+    /// <summary>Shown when the player dies.</summary>
+    public string GameOverText { get; init; } = "You have fallen. Your story ends here.";
 }

@@ -105,6 +105,7 @@ public static partial class ContentValidator
             RequireText(context, manifest.Title, "title");
             RequireText(context, manifest.ContentVersion, "contentVersion");
             RequireText(context, manifest.Intro, "intro");
+            RequireText(context, manifest.GameOverText, "gameOverText");
             RequireRoom(context, manifest.StartRoom, "startRoom");
             RequireRange(context, manifest.StartingGold, 0, int.MaxValue, "startingGold");
 

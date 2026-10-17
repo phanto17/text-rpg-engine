@@ -118,7 +118,8 @@ CLI folders: `Rendering` (theme, bars, tables, dice animation), `Screens` (Title
   "epilogues": [
     { "conditions": [ { "type": "flag", "flag": "knight_laid_to_rest" } ], "text": "..." },
     { "text": "Fallback epilogue (last entry should be unconditional)." }
-  ]
+  ],
+  "gameOverText": "Shown when the player dies."
 }
 ```
 - `monsterHp` is `average` (the floor of the hit-dice average) or `roll`.
