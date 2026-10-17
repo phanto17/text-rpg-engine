@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- TargetFramework, Nullable, ImplicitUsings, and warnings-as-errors come from Directory.Build.props. -->
+  <!-- Core must stay UI-agnostic: never reference Spectre.Console or write to the console here. -->
+
+</Project>

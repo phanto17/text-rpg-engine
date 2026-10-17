@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>RpgEngine.CLI</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Spectre.Console" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RpgEngine.Core\RpgEngine.Core.csproj" />
+  </ItemGroup>
+
+  <!-- All game content lives in /Data and is copied next to the executable. -->
+  <ItemGroup>
+    <None Include="..\..\Data\**\*" Exclude="..\..\Data\**\.gitkeep" LinkBase="Data" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>
