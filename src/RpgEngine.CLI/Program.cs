@@ -1,2 +1,13 @@
-﻿// Placeholder entry point. The game loop arrives in Milestone 1.
-Console.WriteLine("RpgEngine scaffold: no game loop yet (see README.md, Roadmap).");
+﻿using RpgEngine.CLI;
+using Spectre.Console;
+
+try
+{
+    Console.OutputEncoding = System.Text.Encoding.UTF8;
+}
+catch (IOException)
+{
+    // Some hosts do not allow changing the encoding; Spectre falls back to ASCII-safe output.
+}
+
+return CliHost.Run(args, AnsiConsole.Console);

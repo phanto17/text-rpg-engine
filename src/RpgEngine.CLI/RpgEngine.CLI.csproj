@@ -13,6 +13,10 @@
     <ProjectReference Include="..\RpgEngine.Core\RpgEngine.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="RpgEngine.Tests" />
+  </ItemGroup>
+
   <!-- All game content lives in /Data and is copied next to the executable. -->
   <ItemGroup>
     <None Include="..\..\Data\**\*" Exclude="..\..\Data\**\.gitkeep" LinkBase="Data" CopyToOutputDirectory="PreserveNewest" />
