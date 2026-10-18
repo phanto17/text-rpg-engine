@@ -249,6 +249,32 @@ public sealed class ContentValidatorTests
         AssertError(errors, fragment);
     }
 
+    private static IReadOnlyList<string> ThrownItemErrors(string use) =>
+        Errors(("Items/thrown.json", $$"""[ { "id": "bomb", "name": "Bomb", "type": "consumable", "description": "Boom.", "use": {{use}} } ]"""));
+
+    [Fact]
+    public void Validate_EnemyTargetedItem_HasNoErrors()
+    {
+        var errors = ThrownItemErrors("""{ "inCombat": true, "target": "enemy", "resolution": { "type": "autoHit", "damage": "2d4", "damageType": "radiant" } }""");
+
+        Assert.Empty(errors);
+    }
+
+    [Theory]
+    [InlineData("""{ "inCombat": true, "effects": [ { "type": "heal", "dice": "1" } ], "resolution": { "type": "autoHit", "damage": "1", "damageType": "fire" } }""", "use.resolution is only allowed when use.target is 'enemy'")]
+    [InlineData("""{ "inCombat": false, "target": "enemy", "resolution": { "type": "autoHit", "damage": "1", "damageType": "fire" } }""", "must set use.inCombat to true")]
+    [InlineData("""{ "inCombat": true, "target": "enemy", "effects": [ { "type": "heal", "dice": "1" } ], "resolution": { "type": "autoHit", "damage": "1", "damageType": "fire" } }""", "use.effects are not allowed when use.target is 'enemy'")]
+    [InlineData("""{ "inCombat": true, "target": "enemy" }""", "use.resolution is required")]
+    [InlineData("""{ "inCombat": true, "target": "enemy", "resolution": { "type": "weaponAttack" } }""", "use.resolution type must be")]
+    [InlineData("""{ "inCombat": true, "target": "enemy", "resolution": { "type": "effects", "effects": [ { "type": "heal", "dice": "1" } ] } }""", "use.resolution type must be")]
+    [InlineData("""{ "inCombat": true, "target": "enemy", "resolution": { "type": "autoHit", "damage": "1d0", "damageType": "fire" } }""", "use.resolution.damage")]
+    [InlineData("""{ "inCombat": true, "target": "enemy", "resolution": { "type": "save", "ability": "dex", "dc": 0, "damage": "1", "damageType": "fire" } }""", "use.resolution.dc")]
+    [InlineData("""{ "inCombat": true, "target": "enemy", "resolution": { "type": "spellAttack", "damage": "1", "damageType": "fire", "status": "dazed" } }""", "unknown status effect 'dazed'")]
+    public void Validate_ItemUseTargets(string use, string fragment)
+    {
+        AssertError(ThrownItemErrors(use), fragment);
+    }
+
     [Theory]
     [InlineData("\"hp\": \"2d6\"", "\"hp\": \"0\"", "hp must always be at least 1")]
     [InlineData("\"hp\": \"2d6\"", "\"hp\": \"lots\"", "hp:")]

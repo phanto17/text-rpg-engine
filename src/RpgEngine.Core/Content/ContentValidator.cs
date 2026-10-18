@@ -235,31 +235,36 @@ public static partial class ContentValidator
                 Error(context, $"target must be '{expectedTarget.ToString().ToLowerInvariant()}' for this resolution type.");
             }
 
-            switch (spell.Resolution)
+            ValidateResolution(context, spell.Resolution, "resolution");
+        }
+
+        private void ValidateResolution(string context, SpellResolutionDef resolution, string field)
+        {
+            switch (resolution)
             {
                 case AutoHitResolutionDef autoHit:
-                    RequireDice(context, autoHit.Damage, "resolution.damage");
+                    RequireDice(context, autoHit.Damage, $"{field}.damage");
                     break;
                 case SpellAttackResolutionDef attack:
-                    RequireDice(context, attack.Damage, "resolution.damage");
+                    RequireDice(context, attack.Damage, $"{field}.damage");
                     RequireOptionalStatus(context, attack.Status);
                     break;
                 case WeaponAttackResolutionDef weapon when weapon.BonusDamage is not null:
-                    RequireDice(context, weapon.BonusDamage, "resolution.bonusDamage");
+                    RequireDice(context, weapon.BonusDamage, $"{field}.bonusDamage");
                     break;
                 case SaveResolutionDef save:
-                    RequireDice(context, save.Damage, "resolution.damage");
+                    RequireDice(context, save.Damage, $"{field}.damage");
                     RequireOptionalStatus(context, save.Status);
                     if (save.Dc is { } dc)
                     {
-                        RequireRange(context, dc, 1, 30, "resolution.dc");
+                        RequireRange(context, dc, 1, 30, $"{field}.dc");
                     }
 
                     break;
                 case EffectsResolutionDef effects:
                     if (effects.Effects.Count == 0)
                     {
-                        Error(context, "resolution.effects must not be empty.");
+                        Error(context, $"{field}.effects must not be empty.");
                     }
 
                     ValidateEffects(context, effects.Effects);
@@ -339,12 +344,50 @@ public static partial class ContentValidator
 
             if (item.Use is { } use)
             {
-                if (use.Effects.Count == 0)
+                if (use.Target == SpellTarget.Enemy)
                 {
-                    Error(context, "use.effects must not be empty.");
+                    ValidateEnemyItemUse(context, use);
                 }
+                else
+                {
+                    if (use.Resolution is not null)
+                    {
+                        Error(context, "use.resolution is only allowed when use.target is 'enemy'; self-targeted items use use.effects.");
+                    }
 
-                ValidateEffects(context, use.Effects);
+                    if (use.Effects.Count == 0)
+                    {
+                        Error(context, "use.effects must not be empty.");
+                    }
+
+                    ValidateEffects(context, use.Effects);
+                }
+            }
+        }
+
+        private void ValidateEnemyItemUse(string context, ItemUseDef use)
+        {
+            if (!use.InCombat)
+            {
+                Error(context, "items with use.target 'enemy' must set use.inCombat to true.");
+            }
+
+            if (use.Effects.Count > 0)
+            {
+                Error(context, "use.effects are not allowed when use.target is 'enemy'; describe the outcome in use.resolution.");
+            }
+
+            switch (use.Resolution)
+            {
+                case null:
+                    Error(context, "use.resolution is required when use.target is 'enemy'.");
+                    break;
+                case AutoHitResolutionDef or SpellAttackResolutionDef or SaveResolutionDef:
+                    ValidateResolution(context, use.Resolution, "use.resolution");
+                    break;
+                default:
+                    Error(context, "use.resolution type must be 'autoHit', 'spellAttack', or 'save'.");
+                    break;
             }
         }
 

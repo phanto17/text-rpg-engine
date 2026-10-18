@@ -63,7 +63,11 @@ internal static class CombatFixture
         [
           { "id": "leather", "name": "Leather Armor", "type": "armor", "description": "Soft.", "armor": { "baseAc": 11 } },
           { "id": "scale", "name": "Scale Mail", "type": "armor", "description": "Scaly.", "armor": { "baseAc": 14, "maxDexBonus": 2 } },
-          { "id": "bow", "name": "Shortbow", "type": "weapon", "description": "Yew.", "weapon": { "damage": "1d6", "damageType": "piercing", "ranged": true } }
+          { "id": "bow", "name": "Shortbow", "type": "weapon", "description": "Yew.", "weapon": { "damage": "1d6", "damageType": "piercing", "ranged": true } },
+          { "id": "firebomb", "name": "Firebomb", "type": "consumable", "description": "Hiss.",
+            "use": { "inCombat": true, "target": "enemy", "resolution": { "type": "autoHit", "damage": "2d4", "damageType": "fire" } } },
+          { "id": "acid", "name": "Acid Flask", "type": "consumable", "description": "Fizz.",
+            "use": { "inCombat": true, "target": "enemy", "resolution": { "type": "spellAttack", "damage": "1d6", "damageType": "acid" } } }
         ]
         """;
 

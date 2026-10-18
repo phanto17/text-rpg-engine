@@ -139,7 +139,18 @@ internal sealed class CombatScreen(UiContext ui)
             .Select(i => $"{Theme.Paint(Theme.Gold, i.Name)} x{session.State.Player.Inventory.CountOf(i.Id)} [{Theme.Muted}]- {Markup.Escape(i.Description)}[/]")
             .ToList();
         var index = ui.Prompter.Choose($"[{Theme.Accent}]Use which item?[/]", labels, allowBack: true);
-        return index < 0 ? null : new UseItemAction(items[index].Id);
+        if (index < 0)
+        {
+            return null;
+        }
+
+        var item = items[index];
+        if (item.Use!.Target == SpellTarget.Self)
+        {
+            return new UseItemAction(item.Id);
+        }
+
+        return ChooseTarget(combat) is { } target ? new UseItemAction(item.Id, target) : null;
     }
 
     private PlayerAction? ChooseParley(CombatSession combat)

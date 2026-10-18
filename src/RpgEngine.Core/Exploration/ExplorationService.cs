@@ -421,6 +421,12 @@ public sealed class ExplorationService
             return;
         }
 
+        if (use.Target == SpellTarget.Enemy)
+        {
+            Say(log, $"Save the {item.Name} for a foe. It can only be used in combat.");
+            return;
+        }
+
         Say(log, $"You use the {item.Name}.");
         _effects.Apply(use.Effects, state, log);
         if (use.Consume)

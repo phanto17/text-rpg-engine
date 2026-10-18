@@ -9,7 +9,8 @@ public sealed record AttackAction(string TargetId) : PlayerAction;
 /// <summary>Cast a spell or use a technique. <see cref="TargetId"/> is ignored for self-targeted ones.</summary>
 public sealed record CastAction(string SpellId, string? TargetId) : PlayerAction;
 
-public sealed record UseItemAction(string ItemId) : PlayerAction;
+/// <summary>Use a carried item. <see cref="TargetId"/> is ignored for self-targeted items.</summary>
+public sealed record UseItemAction(string ItemId, string? TargetId = null) : PlayerAction;
 
 public sealed record DefendAction : PlayerAction;
 

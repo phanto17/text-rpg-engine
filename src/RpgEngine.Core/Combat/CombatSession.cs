@@ -119,7 +119,7 @@ public sealed class CombatSession
                 Cast(cast, log);
                 break;
             case UseItemAction use:
-                UseItem(use.ItemId, log);
+                UseItem(use, log);
                 break;
             case DefendAction:
                 ApplyStatus(Player, _content.StatusEffects[_content.Rules.DefendStatus], log);
@@ -467,17 +467,24 @@ public sealed class CombatSession
         }
 
         log.Add(new SpellCastEvent(Player.Name, spell.Name, spell.Kind));
-        var castingModifier = Player.Abilities.Modifier(CombatRules.CastingAbility(character, _content));
+        Resolve(spell.Name, spell.Resolution, target, log);
+    }
 
-        switch (spell.Resolution)
+    // Shared by spells, techniques, and enemy-targeted items. Attack bonuses and default save DCs
+    // use the player's casting ability, so a thrown flask lands like a spell would.
+    private void Resolve(string name, SpellResolutionDef resolution, Combatant? target, TurnLog log)
+    {
+        var castingModifier = Player.Abilities.Modifier(CombatRules.CastingAbility(Player.Character, _content));
+
+        switch (resolution)
         {
             case AutoHitResolutionDef autoHit:
                 var autoRoll = _dice.Roll(autoHit.Damage);
-                log.Add(new DiceRolledEvent($"{spell.Name} damage", autoRoll));
+                log.Add(new DiceRolledEvent($"{name} damage", autoRoll));
                 DealDamage(target!, autoRoll.Total, autoHit.DamageType, log);
                 break;
             case SpellAttackResolutionDef attack:
-                var hit = ResolveAttack(Player, target!, spell.Name, Player.ProficiencyBonus + castingModifier, DiceExpression.Parse(attack.Damage), attack.DamageType, null, log);
+                var hit = ResolveAttack(Player, target!, name, Player.ProficiencyBonus + castingModifier, DiceExpression.Parse(attack.Damage), attack.DamageType, null, log);
                 if (hit && attack.Status is { } attackStatus && target!.IsAlive)
                 {
                     ApplyStatus(target, _content.StatusEffects[attackStatus], log);
@@ -485,10 +492,10 @@ public sealed class CombatSession
 
                 break;
             case WeaponAttackResolutionDef weapon:
-                WeaponAttack(target!, weapon.BonusDamage is null ? null : DiceExpression.Parse(weapon.BonusDamage), spell.Name, log);
+                WeaponAttack(target!, weapon.BonusDamage is null ? null : DiceExpression.Parse(weapon.BonusDamage), name, log);
                 break;
             case SaveResolutionDef save:
-                ResolveSaveSpell(spell, save, target!, Player.ProficiencyBonus, castingModifier, log);
+                ResolveSave(name, save, target!, Player.ProficiencyBonus, castingModifier, log);
                 break;
             case EffectsResolutionDef effects:
                 _effects.Apply(effects.Effects, _state, log);
@@ -496,14 +503,14 @@ public sealed class CombatSession
         }
     }
 
-    private void ResolveSaveSpell(SpellDef spell, SaveResolutionDef save, Combatant target, int proficiency, int castingModifier, TurnLog log)
+    private void ResolveSave(string name, SaveResolutionDef save, Combatant target, int proficiency, int castingModifier, TurnLog log)
     {
         var dc = save.Dc ?? 8 + proficiency + castingModifier;
         var result = _checks.SavingThrow(target, save.Ability, dc);
         log.Add(new CheckRolledEvent(result));
 
         var roll = _dice.Roll(save.Damage);
-        log.Add(new DiceRolledEvent($"{spell.Name} damage", roll));
+        log.Add(new DiceRolledEvent($"{name} damage", roll));
         var amount = result.Success ? (save.HalfOnSave ? roll.Total / 2 : 0) : roll.Total;
         DealDamage(target, amount, save.DamageType, log);
 
@@ -513,14 +520,25 @@ public sealed class CombatSession
         }
     }
 
-    private void UseItem(string itemId, TurnLog log)
+    private void UseItem(UseItemAction action, TurnLog log)
     {
-        var item = UsableItems().FirstOrDefault(i => i.Id == itemId)
-            ?? throw new ArgumentException($"'{itemId}' cannot be used in combat.", nameof(itemId));
+        var item = UsableItems().FirstOrDefault(i => i.Id == action.ItemId)
+            ?? throw new ArgumentException($"'{action.ItemId}' cannot be used in combat.", nameof(action));
+        var use = item.Use!;
+        var target = use.Target == SpellTarget.Enemy ? RequireEnemy(action.TargetId) : null;
 
-        log.Add(new NarrationEvent(TextStyle.System, $"You use the {item.Name}."));
-        _effects.Apply(item.Use!.Effects, _state, log);
-        if (item.Use.Consume)
+        if (target is null)
+        {
+            log.Add(new NarrationEvent(TextStyle.System, $"You use the {item.Name}."));
+            _effects.Apply(use.Effects, _state, log);
+        }
+        else
+        {
+            log.Add(new NarrationEvent(TextStyle.System, $"You use the {item.Name} on {target.Name}."));
+            Resolve(item.Name, use.Resolution!, target, log);
+        }
+
+        if (use.Consume)
         {
             Player.Character.Inventory.Remove(item.Id);
         }

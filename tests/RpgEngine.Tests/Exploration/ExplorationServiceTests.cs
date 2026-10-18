@@ -361,6 +361,24 @@ public sealed class ExplorationServiceTests
     }
 
     [Fact]
+    public void Use_EnemyTargetedItem_OutsideCombat_RefusesAndKeepsIt()
+    {
+        var content = new TestContent()
+            .With("Items/thrown.json", """
+                [ { "id": "flask", "name": "Holy Water", "type": "consumable", "description": "Blessed.",
+                    "use": { "inCombat": true, "target": "enemy", "resolution": { "type": "autoHit", "damage": "2d4", "damageType": "radiant" } } } ]
+                """)
+            .Load();
+        var game = new ExplorationHarness(content);
+        game.World.Player.Inventory.Add("flask");
+
+        var log = game.Run("use holy water");
+
+        Assert.Equal("Save the Holy Water for a foe. It can only be used in combat.", ExplorationHarness.SystemText(log));
+        Assert.True(game.World.Player.Inventory.Contains("flask"));
+    }
+
+    [Fact]
     public void Use_ItemOnFeature_RunsUseInteraction()
     {
         var game = new ExplorationHarness();

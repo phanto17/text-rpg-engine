@@ -200,11 +200,18 @@ CLI layout:
 { "id": "leather_armor", "name": "Leather Armor", "type": "armor", "description": "...", "value": 10,
   "armor": { "baseAc": 11, "maxDexBonus": null } }
 { "id": "healing_potion", "name": "Potion of Healing", "aliases": ["potion"], "type": "consumable", "description": "...",
-  "value": 50, "stackable": true,
+  "value": 50,
   "use": { "inCombat": true, "consume": true, "effects": [ { "type": "heal", "dice": "2d4+2" } ] } }
+{ "id": "holy_water", "name": "Flask of Holy Water", "aliases": ["holy water", "flask"], "type": "consumable", "description": "...",
+  "value": 25,
+  "use": { "inCombat": true, "consume": true, "target": "enemy",
+           "resolution": { "type": "autoHit", "damage": "2d4", "damageType": "radiant" } } }
 ```
 - `type` is `weapon`, `armor`, `consumable`, `key`, `quest`, or `misc`.
 - AC = `baseAc` + DEX modifier, capped at `maxDexBonus` (`null` means no cap; `0` means heavy armor).
+- `use.target` is `self` (the default) or `enemy`.
+  - **`self`:** `use.effects` (required, non-empty) run on the user, in or out of combat.
+  - **`enemy`:** the item can only be used in combat (`inCombat: true`) and needs a `use.resolution`. The player picks a target, and the resolution works exactly like a spell's: `autoHit`, `spellAttack`, or `save`. Attack bonuses and default save DCs use the player's casting ability. Resistances, vulnerabilities, and immunities apply, so radiant holy water deals double damage to a radiant-vulnerable undead. `use.effects` must be empty.
 
 ### `Data/Bestiary/`
 ```json

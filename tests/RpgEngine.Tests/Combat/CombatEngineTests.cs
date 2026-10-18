@@ -389,6 +389,53 @@ public sealed class CombatEngineTests
     }
 
     [Fact]
+    public void UseItem_EnemyTargeted_DamagesTheTargetAndConsumes()
+    {
+        // Initiative 15 vs 2, then the firebomb's 2d4 rolls 2 + 1; the ghoul is vulnerable to fire.
+        var combat = new CombatHarness(dice: [15, 2, 2, 1]);
+        combat.World.Player.Inventory.Add("firebomb");
+        combat.Begin("ghoul");
+
+        var log = combat.Act(new UseItemAction("firebomb", combat.EnemyId()));
+
+        Assert.Contains(log.Events.OfType<NarrationEvent>(), e => e.Text == "You use the Firebomb on Ghoul.");
+        Assert.Equal("Firebomb damage", log.Events.OfType<DiceRolledEvent>().Single().Label);
+        var damage = log.Events.OfType<DamageTakenEvent>().Single();
+        Assert.Equal(("Ghoul", 6, DamageType.Fire, DamageModifier.Vulnerable), (damage.Target, damage.Amount, damage.DamageType, damage.Modifier));
+        Assert.Equal(4, combat.Session.ActiveEnemies.Single().CurrentHp);
+        Assert.False(combat.World.Player.Inventory.Contains("firebomb"));
+    }
+
+    [Fact]
+    public void UseItem_EnemyTargetedAttack_RollsAgainstArmorClassWithCastingBonus()
+    {
+        // Proficiency +2 and INT 14 (+2): a natural 8 totals 12 and meets the ghoul's AC 12.
+        var combat = new CombatHarness(dice: [15, 2, 8, 4]);
+        combat.World.Player.Inventory.Add("acid");
+        combat.Begin("ghoul");
+
+        var log = combat.Act(new UseItemAction("acid", combat.EnemyId()));
+
+        var attack = log.Events.OfType<AttackRolledEvent>().Single();
+        Assert.Equal(("Acid Flask", 4, 12, true), (attack.AttackName, attack.Bonus, attack.Total, attack.Hit));
+        Assert.Equal(4, log.Events.OfType<DamageTakenEvent>().Single().Amount);
+    }
+
+    [Fact]
+    public void UseItem_EnemyTargetedWithoutValidTarget_ThrowsAndKeepsTheItem()
+    {
+        var combat = new CombatHarness(dice: [15, 2]);
+        combat.World.Player.Inventory.Add("firebomb");
+        combat.Begin("ghoul");
+
+        Assert.Throws<ArgumentException>(() => combat.Act(new UseItemAction("firebomb")));
+        Assert.Throws<ArgumentException>(() => combat.Act(new UseItemAction("firebomb", "nobody")));
+
+        Assert.True(combat.World.Player.Inventory.Contains("firebomb"));
+        Assert.True(combat.Session.IsPlayerTurn);
+    }
+
+    [Fact]
     public void Technique_UsesPerEncounter_RunOut()
     {
         var combat = new CombatHarness(dice: [15, 2, 5, 0, 1]);
