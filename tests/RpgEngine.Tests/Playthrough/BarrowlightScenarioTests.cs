@@ -41,10 +41,11 @@ public sealed class BarrowlightScenarioTests
         Do(session, "talk to wren");
         var choices = session.DialogueChoices();
         var persuade = choices.Single(c => c.CheckLabel == "Persuasion");
-        Assert.Equal(14, persuade.Dc);
+        Assert.Equal(12, persuade.Dc);
 
         var reply = Say(session, "I'm not here to rob the dead");
         Assert.True(reply.OfType<CheckRolledEvent>().Single().Result.Success);
+        Assert.Contains(reply.OfType<ItemGainedEvent>(), e => e.Item.Id == "holy_water");
         Say(session, "I'll bring the light back.");
         Assert.True(session.State.World.HasFlag("wren_trusts_player"));
 

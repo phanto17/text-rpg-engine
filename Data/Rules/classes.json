@@ -13,7 +13,7 @@
     "startingItems": [
       { "item": "longsword", "equip": true },
       { "item": "chain_mail", "equip": true },
-      { "item": "healing_potion", "count": 1 }
+      { "item": "healing_potion", "count": 2 }
     ],
     "spells": ["second_wind"]
   },
@@ -33,7 +33,7 @@
       { "item": "shortsword", "equip": true },
       { "item": "leather_armor", "equip": true },
       { "item": "dagger" },
-      { "item": "healing_potion", "count": 1 }
+      { "item": "healing_potion", "count": 2 }
     ],
     "spells": ["sneak_attack"]
   },
@@ -51,7 +51,7 @@
     "mana": { "base": 4, "ability": "int" },
     "startingItems": [
       { "item": "quarterstaff", "equip": true },
-      { "item": "healing_potion", "count": 1 }
+      { "item": "healing_potion", "count": 2 }
     ],
     "spells": ["fire_bolt", "magic_missile"]
   }

@@ -41,7 +41,20 @@ public sealed class RealDataTests
 
         Assert.Equal(new[] { "insight", "persuasion", "intimidation" }, checks.Select(c => c.Check!.Skill));
         Assert.All(checks, check => Assert.False(check.Retry));
-        Assert.Equal(14, checks[1].Check!.Dc);
+        Assert.Equal(new[] { 10, 12, 12 }, checks.Select(c => c.Check!.Dc));
+    }
+
+    [Fact]
+    public void WrensTrust_GivesHolyWater_ThatExploitsTheKnightsVulnerability()
+    {
+        var content = Content.Value;
+        var trusts = content.Dialogues["wren"].Nodes.Single(n => n.Id == "trusts");
+
+        Assert.Contains(trusts.Effects, e => e is GiveItemEffect { Item: "holy_water" });
+        var use = content.Items["holy_water"].Use!;
+        Assert.Equal(SpellTarget.Enemy, use.Target);
+        var damageType = Assert.IsType<AutoHitResolutionDef>(use.Resolution).DamageType;
+        Assert.Contains(damageType, content.Monsters["gravebound_knight"].Vulnerabilities);
     }
 
     [Fact]

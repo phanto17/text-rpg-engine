@@ -23,14 +23,14 @@
           { "text": "What's down there?", "once": true, "next": "below" },
           {
             "text": "You're wounded, and you're afraid of something down there.",
-            "check": { "skill": "insight", "dc": 12 },
+            "check": { "skill": "insight", "dc": 10 },
             "successNode": "read_her",
             "failureNode": "misread",
             "retry": false
           },
           {
             "text": "I'm not here to rob the dead. I'm here to end whatever is keeping them awake.",
-            "check": { "skill": "persuasion", "dc": 14, "advantageIf": [ { "type": "flag", "flag": "read_wren" } ] },
+            "check": { "skill": "persuasion", "dc": 12, "advantageIf": [ { "type": "flag", "flag": "read_wren" } ] },
             "successNode": "trusts",
             "failureNode": "refuses",
             "retry": false
@@ -68,12 +68,13 @@
       },
       {
         "id": "trusts",
-        "text": "For a long moment she studies you. Then the point of her sword drops.\n\n\"Gods help me, I believe you.\" She lowers herself onto a stone, wincing. \"Listen. The door below opens to the litany: sun, then moon, then skull. And if you face Halric, don't just fight him. Speak the Rite of Rest. Tell him he is relieved. He was a good man once. He might still hear it.\"\n\nShe teaches you the words, and makes you repeat them until you have them right.",
+        "text": "For a long moment she studies you. Then the point of her sword drops.\n\n\"Gods help me, I believe you.\" She lowers herself onto a stone, wincing. \"Listen. The door below opens to the litany: sun, then moon, then skull. And if you face Halric, don't just fight him. Speak the Rite of Rest. Tell him he is relieved. He was a good man once. He might still hear it.\"\n\nShe teaches you the words, and makes you repeat them until you have them right. Then she presses a small wax-sealed flask into your palm.\n\n\"Holy water, from the last blessing the Order ever gave. If the words fail, throw this. The dead cannot abide it, and Halric least of all.\"",
         "effects": [
           { "type": "setFlag", "flag": "wren_trusts_player" },
           { "type": "setFlag", "flag": "wren_taught_rite" },
           { "type": "setFlag", "flag": "knows_sigil_order" },
-          { "type": "changeReputation", "faction": "ashen_order", "amount": 10 }
+          { "type": "changeReputation", "faction": "ashen_order", "amount": 10 },
+          { "type": "giveItem", "item": "holy_water" }
         ],
         "choices": [ { "text": "I'll bring the light back.", "end": true } ]
       },

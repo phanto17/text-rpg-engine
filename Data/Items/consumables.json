@@ -7,5 +7,19 @@
     "description": "A stoppered vial of red liquid that is faintly warm to the touch. Restores 2d4+2 hit points.",
     "value": 50,
     "use": { "inCombat": true, "consume": true, "effects": [ { "type": "heal", "dice": "2d4+2" } ] }
+  },
+  {
+    "id": "holy_water",
+    "name": "Flask of Holy Water",
+    "aliases": ["holy water", "flask", "water"],
+    "type": "consumable",
+    "description": "A small flask sealed with grey wax and stamped with the Ashen Order's sigil. Thrown at a foe in combat, it bursts for 2d4 radiant damage. The restless dead burn in it.",
+    "value": 25,
+    "use": {
+      "inCombat": true,
+      "consume": true,
+      "target": "enemy",
+      "resolution": { "type": "autoHit", "damage": "2d4", "damageType": "radiant" }
+    }
   }
 ]

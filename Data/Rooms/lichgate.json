@@ -49,7 +49,7 @@
             "label": "Search under the toppled headstone",
             "once": true,
             "text": "You work your fingers under the edge of the stone and heave it up.",
-            "check": { "skill": "perception", "dc": 12 },
+            "check": { "skill": "perception", "dc": 10 },
             "success": {
               "text": "Something glints in the hollow underneath: a stoppered vial wrapped in oilcloth, left by an earlier visitor who never came back for it.",
               "effects": [ { "type": "giveItem", "item": "healing_potion" } ]

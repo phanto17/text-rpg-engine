@@ -33,9 +33,9 @@ public sealed class GoldenPathTests
         [
             .. CreateRogue,
             "talk to wren",
-            "4",                    // [Persuasion DC 14] I'm not here to rob the dead...
+            "4",                    // [Persuasion DC 12] I'm not here to rob the dead...
             "1",                    // I'll bring the light back.
-            "search headstone",     // hidden potion (Perception DC 12)
+            "search headstone",     // hidden potion (Perception DC 10)
             .. OpenTheDoor,
             "5",                    // combat: Parley
             "2",                    // [Religion DC 10] (advantage) Speak the Rite of Rest
@@ -48,9 +48,10 @@ public sealed class GoldenPathTests
 
         Assert.Equal(0, exitCode);
         Assert.Contains("Sister Wren", output);
-        Assert.Contains("[Persuasion DC 14] I'm not here to rob the dead.", output);
+        Assert.Contains("[Persuasion DC 12] I'm not here to rob the dead.", output);
         Assert.Contains("CRITICAL SUCCESS", output);
         Assert.Contains("Gods help me, I believe you.", output);
+        Assert.Contains("+ Flask of Holy Water", output);
         Assert.Contains("+ Potion of Healing", output);
         Assert.Contains("the bronze door swings inward on hidden hinges", output);
         Assert.Contains("COMBAT", output);
@@ -59,6 +60,42 @@ public sealed class GoldenPathTests
         Assert.Contains("+ the Barrowlight", output);
         Assert.Contains("You climb out of the barrow with the Barrowlight burning in your hands, and Sister Wren is waiting", output);
         Assert.Contains("THE END", output);
+    }
+
+    [Fact]
+    public void WrensHolyWater_ExploitsTheKnightsRadiantVulnerability()
+    {
+        using var cli = new CliHarness();
+
+        // Lucky dice: everyone rolls 20 for initiative, and the rogue's DEX acts first. The flask's
+        // 2d4 rolls 8, doubled to 16 against Ser Halric's 15 HP. The thrall's critical claw leaves
+        // the rogue on 2 HP, and the rogue's critical strike finishes it.
+        string[] inputs =
+        [
+            .. CreateRogue,
+            "talk to wren",
+            "4",                    // [Persuasion DC 12] earns her trust and the flask
+            "1",                    // I'll bring the light back.
+            .. OpenTheDoor,
+            "3",                    // combat: Use an item
+            "2",                    // Flask of Holy Water (after the potions)
+            "1",                    // target: Ser Halric
+            "1",                    // round 2: attack the last thrall
+            "take lantern",
+            "2",                    // after the epilogue: quit
+        ];
+
+        var exitCode = cli.Run(inputs);
+        var output = cli.Output;
+
+        Assert.Equal(0, exitCode);
+        Assert.Contains("Potion of Healing x2", output);
+        Assert.Contains("Flask of Holy Water x1", output);
+        Assert.Contains("You use the Flask of Holy Water on Ser Halric.", output);
+        Assert.Contains("Ser Halric takes 16 radiant damage (vulnerable!)", output);
+        Assert.Contains("Ser Halric falls!", output);
+        Assert.Contains("VICTORY", output);
+        Assert.Contains("Wren meets you at the lichgate and looks first at the lantern", output);
     }
 
     [Fact]
@@ -92,7 +129,7 @@ public sealed class GoldenPathTests
             .. OpenTheDoor,
             "2",        // Spells and techniques
             "0",        // back
-            "6",        // Flee [Acrobatics DC 12]
+            "6",        // Flee [Acrobatics DC 10]
             "quit", "y",
             "2",        // title: quit
         ];

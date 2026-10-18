@@ -65,7 +65,7 @@
       "fleeTo": "ossuary_hall",
       "parley": {
         "options": [
-          { "label": "Tell him his watch is over", "check": { "skill": "persuasion", "dc": 15 } },
+          { "label": "Tell him his watch is over", "check": { "skill": "persuasion", "dc": 13 } },
           {
             "label": "Speak the Rite of Rest",
             "conditions": [ { "type": "flag", "flag": "wren_taught_rite" } ],
