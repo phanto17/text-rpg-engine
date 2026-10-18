@@ -83,7 +83,7 @@ CLI layout:
 
 - xUnit with plain `Assert`. **No FluentAssertions**, because v8 changed to a commercial license.
 - Test names follow `Method_Scenario_Expected`, e.g. `Roll_WithAdvantage_KeepsHigherDie`.
-- Test folders mirror Core folders: `Dice/`, `Checks/`, `World/`, `Content/`, `Dialogue/`, `Combat/`, `Persistence/`, `Commands/`, `Playthrough/`.
+- Test folders mirror Core folders: `Dice/`, `Checks/`, `World/`, `Content/`, `Dialogue/`, `Combat/`, `Persistence/`, `Commands/`, `Playthrough/`, `Balance/`.
 - Tests are fully deterministic. Use `FixedRandomSource` for exact outcomes and a fixed-seed `Pcg32RandomSource` for statistical tests, so no test can flake.
   - When scripting dice, count every draw: initiative (player first, then monsters in listed order), checks, damage, weighted attack picks (only for monsters with 2+ attacks), loot rolls, and **one ambient pick each time a room with `ambient` lines is described**.
   - `LuckyRandomSource` (every roll at maximum) keeps story-path tests robust to number tuning.
@@ -91,6 +91,9 @@ CLI layout:
   - `TestContent`: an in-memory JSON content builder.
   - Fixtures: `ExplorationFixture`, `CombatFixture`, `SessionFixture`.
   - Harnesses: `TestWorld`, `ExplorationHarness`, `CombatHarness`, `CliHarness`.
+- **Balance check** (`Balance/`): `BarrowHeartBalanceTests` plays the `barrow_heart` boss fight 2,000 times per class, using seeds 1 to 2000, the real `Data/`, the standard array, and the simple documented player in `BalancePolicy`.
+  - Every class plays once without the Flask of Holy Water and once with it. Each class's no-flask win rate must stay inside its band.
+  - After an intended tuning change, run `dotnet test --filter Balance --logger "console;verbosity=detailed"`. Read the printed table (win rate, average rounds, average HP left on wins) and move the bands in the same commit as the data change.
 - CLI tests drive the real UI through `Spectre.Console.Testing.TestConsole` with scripted input lines. The CLI exposes internals to the test assembly only.
 - Coverage target: 100% line coverage for `RpgEngine.Core.Dice` and `RpgEngine.Core.Checks`.
 - Every new condition type, effect type, or schema field needs a test, and so does every validator rule.
