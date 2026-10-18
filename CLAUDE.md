@@ -37,6 +37,7 @@ The SDK is pinned by `global.json` to 10.0.401 with `rollForward: latestFeature`
 ```
 RpgEngine.slnx
 Data/                      ALL game content (JSON). Copied to CLI + test output (PreserveNewest).
+Docs/LORE.md               World, philosophy, and narrative bible. Read it before touching Data/.
 src/RpgEngine.Core/        Engine: models, dice, checks, world state, content loading, combat, saves.
 src/RpgEngine.CLI/         Spectre.Console UI: screens, rendering, hybrid input loop.
 tests/RpgEngine.Tests/     xUnit tests for Core, content validation, and CLI playthroughs.
@@ -378,6 +379,8 @@ Each save holds:
 Saving is allowed only during exploration. Per-encounter uses are never saved, because they are always full outside combat.
 
 ### Adding content
+**Before adding or editing any JSON under `Data/`, read [`Docs/LORE.md`](Docs/LORE.md) to keep prose tone, philosophical themes, faction alignments, and flag/counter names consistent. Whenever a commit adds a new flag, counter, faction, class, or quest, update the registry in `Docs/LORE.md` in the same commit.**
+
 1. Add or edit JSON under `Data/`.
 2. Run `dotnet test`. The content validation test lists every broken reference or typo.
 3. Run `dotnet run --project src/RpgEngine.CLI -- --seed 1` and play through it.
