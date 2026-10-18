@@ -124,11 +124,11 @@ CLI layout:
   "intro": "Rain needles the hillside...",
   "startingGold": 10,
   "rules": {
-    "standardArray": [15, 14, 13, 12, 10, 8],
+    "standardArray": [16, 14, 13, 12, 10, 8],
     "proficiencyBonusByLevel": [2, 2, 2, 2, 3],
     "naturalCritsOnChecks": true,
     "monsterHp": "average",
-    "flee": { "skill": "acrobatics", "dc": 12 },
+    "flee": { "skill": "acrobatics", "dc": 10 },
     "defendStatus": "defending"
   },
   "epilogues": [
@@ -182,7 +182,7 @@ CLI layout:
 
 **`status_effects.json`**
 ```json
-{ "id": "chilled", "name": "Chilled", "description": "...", "durationRounds": 2,
+{ "id": "grave_chill", "name": "Grave Chill", "description": "...", "durationRounds": 1,
   "modifiers": { "attackRolls": "disadvantage", "acBonus": 0, "damagePerTurn": null, "skipTurn": false } }
 ```
 - `attackRolls` is `normal`, `advantage`, or `disadvantage`.
@@ -215,14 +215,14 @@ CLI layout:
 
 ### `Data/Bestiary/`
 ```json
-{ "id": "gravebound_knight", "name": "The Gravebound Knight", "description": "...",
-  "hp": "4d8+4", "ac": 15,
+{ "id": "gravebound_knight", "name": "Ser Halric", "description": "...",
+  "hp": "3d8+2", "ac": 13,
   "abilities": { "str": 15, "dex": 10, "con": 13, "int": 10, "wis": 11, "cha": 12 },
   "attacks": [
-    { "name": "Rusted Longsword", "toHit": 4, "damage": "1d8+2", "damageType": "slashing", "weight": 2 },
-    { "name": "Grave Touch", "toHit": 4, "damage": "1d4", "damageType": "necrotic", "weight": 1,
-      "onHit": { "save": { "ability": "con", "dc": 12 }, "status": "chilled" } } ],
-  "resistances": ["necrotic"], "vulnerabilities": ["radiant"], "immunities": [],
+    { "name": "Rusted Longsword", "toHit": 3, "damage": "1d6+2", "damageType": "slashing", "weight": 2 },
+    { "name": "Grave Touch", "toHit": 3, "damage": "1d4", "damageType": "necrotic", "weight": 1,
+      "onHit": { "save": { "ability": "con", "dc": 11 }, "status": "grave_chill" } } ],
+  "resistances": ["necrotic"], "vulnerabilities": ["radiant"], "immunities": ["poison"],
   "xp": 100,
   "ai": { "behavior": "aggressive", "fleeBelowHpPercent": 0 },
   "loot": [ { "item": "healing_potion", "chance": 0.5 } ] }
@@ -288,7 +288,7 @@ CLI layout:
   "canFlee": true, "fleeTo": "ossuary_hall",
   "parley": {
     "options": [
-      { "label": "Ask what binds him here", "check": { "skill": "persuasion", "dc": 15 } },
+      { "label": "Tell him his watch is over", "check": { "skill": "persuasion", "dc": 13 } },
       { "label": "Speak the Rite of Rest", "conditions": [ { "type": "flag", "flag": "wren_taught_rite" } ],
         "check": { "skill": "religion", "dc": 10, "advantage": true } } ],
     "onSuccess": [ { "type": "setFlag", "flag": "knight_laid_to_rest" } ],
@@ -311,7 +311,7 @@ CLI layout:
       "choices": [
         { "text": "Who are you?", "next": "who", "once": true },
         { "text": "I'm here to end what's below, not loot it.",
-          "check": { "skill": "persuasion", "dc": 14, "advantageIf": [ { "type": "flag", "flag": "read_wren" } ] },
+          "check": { "skill": "persuasion", "dc": 12, "advantageIf": [ { "type": "flag", "flag": "read_wren" } ] },
           "successNode": "trusts", "failureNode": "refuses", "retry": false },
         { "text": "Leave.", "end": true } ] } ] }
 ```

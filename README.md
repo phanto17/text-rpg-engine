@@ -12,7 +12,7 @@ The engine is **purely data-driven**. Every room, item, monster, line of dialogu
 
 - **Exploration:** rooms connected by exits (north, up, in…), with rich sensory descriptions, inspectable features, hidden secrets, and puzzles.
 - **Choices & consequences:** branching dialogue and event trees that read and write a global `WorldState` (flags, counters, faction reputation, quest stages). Choices permanently change the world.
-- **d20 mechanics:** STR/DEX/CON/INT/WIS/CHA, classes, proficiency and expertise, and inventory and equipment. Narrative skill checks show inline, e.g. `[Persuasion DC 14]`, with advantage and disadvantage.
+- **d20 mechanics:** STR/DEX/CON/INT/WIS/CHA, classes, proficiency and expertise, and inventory and equipment. Narrative skill checks show inline, e.g. `[Persuasion DC 12]`, with advantage and disadvantage.
 - **Tactical combat:** initiative, attacks against AC, crits, spells and techniques, status effects, resistances, and **Flee** and **Parley** options.
 - **Retro terminal UI** ([Spectre.Console](https://spectreconsole.net/)):
   - color-coded narration, HP/MP bars, stat tables, and animated dice rolls
@@ -26,7 +26,7 @@ Rain, a hilltop barrow, and a lantern that kept the dead asleep until it went da
 - Work out the sigil riddle on the bronze door in **the Ossuary Hall**, ideally without losing a hand to the trap.
 - Face what guards **the Barrow Heart**.
 
-What you say to Wren permanently changes the world. It decides what you learn, whether she is still there when you come back, how the final encounter can end, and which of five epilogues you get.
+What you say to Wren permanently changes the world. It decides what you learn, what she gives you, whether she is still there when you come back, how the final encounter can end, and which of five epilogues you get.
 
 ## Architecture
 
@@ -121,15 +121,15 @@ Useful flags (after `--`): `--seed <n>` for a reproducible run, `--no-anim` to s
 | `save [slot]` / `load [slot]` | Save or load (exploration only; default slot `quicksave`) |
 | `help`, `?` · `quit` | Help, or return to the title screen |
 
-**Conversations:** pick a numbered reply. Replies that need a skill check show a badge like `[Persuasion DC 14]`, plus `(advantage)` when something you learned earlier helps. Some checks can be attempted only once, so choose carefully.
+**Conversations:** pick a numbered reply. Replies that need a skill check show a badge like `[Persuasion DC 12]`, plus `(advantage)` when something you learned earlier helps. Some checks can be attempted only once, so choose carefully.
 
 **Combat:** combat is turn-based in initiative order. On your turn you can:
 - **Attack**
 - use **Spells and techniques** (mana or per-fight uses)
-- **Use an item**
+- **Use an item** (drink a potion, or throw holy water at a foe)
 - **Defend** (+2 AC)
 - **Parley** (when the foe will listen)
-- **Flee** (`[Acrobatics DC 12]`)
+- **Flee** (`[Acrobatics DC 10]`)
 
 ## Writing content
 
@@ -146,7 +146,7 @@ dotnet test
 dotnet test --collect:"XPlat Code Coverage"
 ```
 
-There are about 720 tests, all deterministic:
+There are about 740 tests, all deterministic:
 - **Unit tests** for every Core system. The dice and skill-check code has 100% line and branch coverage.
 - **Content validation** of the shipped `Data/`, plus fixtures that prove each validator rule catches what it should.
 - **Scenario tests** that play the Barrowlight storylines through the engine with scripted dice (`FixedRandomSource`).
