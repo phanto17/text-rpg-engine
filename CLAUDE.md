@@ -40,6 +40,7 @@ Data/                      ALL game content (JSON). Copied to CLI + test output 
 src/RpgEngine.Core/        Engine: models, dice, checks, world state, content loading, combat, saves.
 src/RpgEngine.CLI/         Spectre.Console UI: screens, rendering, hybrid input loop.
 tests/RpgEngine.Tests/     xUnit tests for Core, content validation, and CLI playthroughs.
+.github/workflows/ci.yml   CI: restore, Release build, and tests on ubuntu-latest and windows-latest.
 ```
 
 Core folders (namespace = `RpgEngine.Core.<Folder>`): `Dice`, `Characters`, `Checks`, `World`, `Content` (`Defs/` for content records), `Commands`, `Exploration`, `Dialogue`, `Combat`, `Persistence`, `Engine`.
@@ -377,7 +378,7 @@ Saving is allowed only during exploration. Per-encounter uses are never saved, b
 ## Git workflow
 
 - **Branch:** `main`. **Remote:** `origin`, the private GitHub repo `text-rpg-engine`. Never rewrite pushed history.
-- **Gate:** create a commit **only after `dotnet build` (0 warnings, 0 errors) and `dotnet test` (all passing) succeed.** Never commit a red build.
+- **Gate:** create a commit **only after `dotnet build` (0 warnings, 0 errors) and `dotnet test` (all passing) succeed.** Never commit a red build. CI runs the same gate (Release configuration, Ubuntu and Windows) on every push and pull request to `main`.
 - **Conventional Commits:** `<type>(<optional scope>): <imperative summary>`. Use lowercase, keep it to 72 characters or fewer, no trailing period. Add a body when the *why* isn't obvious.
 
 | Type | Use for |
@@ -408,4 +409,5 @@ Saving is allowed only during exploration. Per-encounter uses are never saved, b
   - 3-room starter dungeon "Barrowlight": an NPC dialogue with skill checks and permanent consequences, an inspectable puzzle, and a turn-based combat encounter
   - save and load
   - full dice and skill-check test coverage
-- [ ] **Later:** leveling and rests, parties, races and backgrounds, shops, saving mid-combat, JSON Schema export for editor autocomplete, CI.
+- [x] **CI:** GitHub Actions build and test on ubuntu-latest and windows-latest.
+- [ ] **Later:** leveling and rests, parties, races and backgrounds, shops, saving mid-combat, JSON Schema export for editor autocomplete.

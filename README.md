@@ -81,6 +81,7 @@ Data/                   Game content (JSON): Rules/, World/, Rooms/, Dialogues/,
 src/RpgEngine.Core/     Engine: dice, characters, checks, world state, content, combat, persistence
 src/RpgEngine.CLI/      Terminal UI and game loop
 tests/RpgEngine.Tests/  Unit, content-validation, and playthrough tests
+.github/workflows/      CI: build and test on every push and pull request
 CLAUDE.md               Contributor guide: coding standards, JSON schemas, Git workflow
 ```
 
@@ -153,6 +154,8 @@ There are about 720 tests, all deterministic:
 
 Dice fairness is checked with fixed-seed chi-square tests.
 
+**CI:** GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) restores, builds in Release, and runs the full test suite on Ubuntu and Windows for every push and pull request to `main`. Warnings fail the build, so a red check means the same thing it would locally.
+
 ## Roadmap
 
 - [x] **Phase 1:** solution scaffold, tooling, documentation, Git and GitHub
@@ -161,7 +164,8 @@ Dice fairness is checked with fixed-seed chi-square tests.
   - a 3-room starter dungeon, *Barrowlight*: an NPC dialogue with skill checks and permanent consequences, an inspectable puzzle, and a turn-based combat encounter with flee and parley
   - save and load
   - full test coverage of dice and skill checks
-- [ ] **Later:** leveling and rests, multi-character parties, races and backgrounds, shops, more dungeons, JSON Schema export for editor autocomplete, CI
+- [x] **CI:** GitHub Actions build and test on Ubuntu and Windows
+- [ ] **Later:** leveling and rests, multi-character parties, races and backgrounds, shops, more dungeons, JSON Schema export for editor autocomplete
 
 ## Contributing
 
