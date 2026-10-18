@@ -2,9 +2,13 @@
   {
     "id": "inner_crypt",
     "name": "The Barrow Heart",
-    "description": "Beyond the door lies a round chamber cut from the living rock, its ceiling lost in shadow. Ash lies ankle-deep on the floor, undisturbed except for a single path of footprints: armored, heavy, walking a slow circle around the room, again and again and again.\n\nAt the center stands a stone sarcophagus carved with a knight at rest, hands folded over a sword. On the lid, where the knight's hands meet, sits an iron lantern with no light in it.",
+    "description": "Beyond the door lies a round chamber cut from the living rock, its ceiling lost in shadow. Ash lies ankle-deep on the floor, undisturbed except for a single path of footprints: armored, heavy, walking a slow circle around the room, again and again and again.\n\nAt the center stands a stone sarcophagus carved with a knight at rest, hands folded over a sword.",
     "revisit": "Ash, stone, and silence. The sarcophagus dominates the Barrow Heart.",
     "variants": [
+      {
+        "conditions": [ { "type": "notFlag", "flag": "barrow_heart_resolved" } ],
+        "text": "On the lid, where the knight's hands meet, sits an iron lantern with no light in it."
+      },
       {
         "conditions": [ { "type": "flag", "flag": "knight_laid_to_rest" } ],
         "text": "Ser Halric lies on the sarcophagus lid with his gauntlets folded over his sword, as still as his effigy. The circle of footprints in the ash is already beginning to blur."
@@ -16,6 +20,10 @@
       {
         "conditions": [ { "type": "flag", "flag": "barrow_heart_resolved" }, { "type": "lacksItem", "item": "barrowlight" } ],
         "text": "The Barrowlight waits on the sarcophagus lid."
+      },
+      {
+        "conditions": [ { "type": "hasItem", "item": "barrowlight" } ],
+        "text": "Beside the sarcophagus, a spiral stair yawns open in the floor, leading down into the deep earth."
       }
     ],
     "ambient": [
@@ -43,9 +51,37 @@
           {
             "verb": "take",
             "label": "Take the Barrowlight",
-            "text": "You lift the lantern from the sarcophagus. At your touch the old ember inside it catches, and a steady golden light spills across the Barrow Heart, pushing the shadows back into the stone.",
+            "text": "You lift the lantern from the sarcophagus, and at your touch the old ember inside it catches. Light spills across the Barrow Heart, pushing the shadows back into the stone.\n\nThen the floor shudders. Deep beneath the sarcophagus, stone grinds on stone, slow and enormous, like a mechanism that has waited centuries for this weight to leave the lid. The base of the tomb slides aside to reveal a narrow spiral stair cut into the bedrock. Warm air breathes up out of it, smelling of wet earth and spores and lit faintly from somewhere far below, and with it comes the distant chime of a bell.",
             "effects": [
+              {
+                "type": "if",
+                "conditions": [ { "type": "counter", "counter": "lantern_resonance", "min": 1 } ],
+                "then": [ { "type": "message", "text": "In your hand, the Barrowlight's flame settles into a warm, steady gold, as if it remembers the mercy that freed it.", "style": "narration" } ],
+                "else": [ { "type": "message", "text": "In your hand, the Barrowlight's flame settles into a thin, ash-pale glow, as if it remembers the steel that won it.", "style": "narration" } ]
+              },
               { "type": "giveItem", "item": "barrowlight" },
+              { "type": "setQuestStage", "quest": "barrowlight", "stage": 50 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sunken_stair",
+        "name": "spiral stair",
+        "aliases": ["stair", "stairs", "chasm", "threshold", "descent"],
+        "description": "Where the base of the sarcophagus shifted aside, a worn spiral stair winds down into a cavern far deeper than any hilltop barrow has a right to be. Far below, pale lanterns glimmer through a mist of ash and silver moss.",
+        "conditions": [ { "type": "hasItem", "item": "barrowlight" } ],
+        "interactions": [
+          {
+            "verb": "descend",
+            "label": "Descend the spiral stair into the Under-Barrow",
+            "text": "You hold the Barrowlight high. Its flame leans toward the depths like a compass needle pulling home, and you step onto the descending stair.",
+            "effects": [
+              {
+                "type": "if",
+                "conditions": [ { "type": "flag", "flag": "wren_joins_descent" } ],
+                "then": [ { "type": "message", "text": "At every turning you chalk the Ashen flame on the wall. Far above, faint and steady, Sister Wren's footsteps follow you down.", "style": "sensory" } ]
+              },
               { "type": "setQuestStage", "quest": "barrowlight", "stage": 100 },
               { "type": "endGame" }
             ]
@@ -79,6 +115,7 @@
             "style": "narration"
           },
           { "type": "setFlag", "flag": "knight_laid_to_rest" },
+          { "type": "addCounter", "counter": "lantern_resonance", "amount": 1 },
           { "type": "changeReputation", "faction": "ashen_order", "amount": 10 },
           { "type": "grantXp", "amount": 100 }
         ],
@@ -92,7 +129,8 @@
           "text": "Ser Halric falls to his knees, then falls apart. His helm rolls across the ash and comes to rest facing the lantern he guarded for so long.",
           "style": "narration"
         },
-        { "type": "setFlag", "flag": "knight_destroyed" }
+        { "type": "setFlag", "flag": "knight_destroyed" },
+        { "type": "addCounter", "counter": "lantern_resonance", "amount": -1 }
       ],
       "onResolved": [
         { "type": "setFlag", "flag": "barrow_heart_resolved" },

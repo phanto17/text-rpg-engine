@@ -3,6 +3,8 @@
     "id": "wren",
     "speaker": "Sister Wren",
     "entries": [
+      { "conditions": [ { "type": "flag", "flag": "wren_joins_descent" } ], "node": "descent_ready" },
+      { "conditions": [ { "type": "flag", "flag": "wren_trusts_player" }, { "type": "hasItem", "item": "barrowlight" } ], "node": "lantern_returned" },
       { "conditions": [ { "type": "flag", "flag": "wren_trusts_player" } ], "node": "friend" },
       { "conditions": [ { "type": "flag", "flag": "wren_distrusts" } ], "node": "cold" },
       { "conditions": [ { "type": "flag", "flag": "met_wren" } ], "node": "hub" },
@@ -114,6 +116,19 @@
         "id": "rite_again",
         "text": "She recites it once more, slowly, so you can't mistake it: \"Halric of the Ashen Order, your watch is ended. You are relieved. Rest.\"",
         "choices": [ { "text": "Thank you, Sister.", "end": true } ]
+      },
+      {
+        "id": "lantern_returned",
+        "text": "Wren rises when she sees the light in your hand. For a long moment she only stares at the Barrowlight, and something in her face that has been clenched tight for a month finally lets go. \"You lit it,\" she whispers. \"Gods above, you actually lit it.\"\n\nThen the stone beneath your feet hums. A low bell-tone rolls up out of the barrow, so deep you feel it in your teeth more than hear it, and Wren goes very still.\n\n\"The stair beneath the sarcophagus,\" she says slowly. \"The Order's oldest books spoke of it, and we all took it for a parable.\" She looks at the barrow as if she has never seen it before. \"The barrow was never the tomb. It was the seal. Beneath it lies the Under-Barrow, the sunken halls where the first sleepers were laid, long before there was any Order to keep them. And that bell means they know the light is coming.\"\n\nShe tears a strip from her habit, binds her wounded side tight, and takes up her sword. \"Go ahead with the light, {player.name}. Chalk the Order's flame at every turning, and I will follow your trail down into the dark. The Ashen Order does not end at a lichgate in the rain. Not while I can still walk.\"",
+        "effects": [
+          { "type": "setFlag", "flag": "wren_joins_descent" },
+          { "type": "changeReputation", "faction": "ashen_order", "amount": 5 }
+        ],
+        "choices": [ { "text": "Then I'll meet you below, Sister.", "end": true } ]
+      },
+      {
+        "id": "descent_ready",
+        "text": "Wren tests the knot on her bandage and nods toward the barrow. \"Keep the light high and leave me a trail, {player.name}. I'll be right behind you.\""
       },
       {
         "id": "cold",

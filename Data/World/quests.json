@@ -7,7 +7,8 @@
       { "stage": 20, "journal": "A sealed bronze door bars the way deeper into the barrow. Its three sigils (sun, moon, and skull) must hold the key." },
       { "stage": 30, "journal": "The bronze door stands open. Whatever guards the Barrowlight waits in the Barrow Heart beyond." },
       { "stage": 40, "journal": "The guardian of the Barrow Heart no longer stands in your way. Claim the Barrowlight." },
-      { "stage": 100, "journal": "You carried the Barrowlight out of the barrow." }
+      { "stage": 50, "journal": "The Barrowlight burns in your hand, and its waking flame has unsealed a hidden stair beneath the sarcophagus leading deep into the earth." },
+      { "stage": 100, "journal": "You carried the Barrowlight down through the unsealed threshold into the Under-Barrow." }
     ]
   }
 ]

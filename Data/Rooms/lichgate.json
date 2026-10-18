@@ -10,8 +10,12 @@
         "text": "Someone is sheltering beneath the lichgate: a woman in a soot-grey habit, one hand pressed to her side, the other resting on a drawn sword."
       },
       {
-        "conditions": [ { "type": "flag", "flag": "wren_trusts_player" } ],
+        "conditions": [ { "type": "flag", "flag": "wren_trusts_player" }, { "type": "notFlag", "flag": "wren_joins_descent" } ],
         "text": "Sister Wren keeps watch beneath the gate, her blade across her knees and a small fire hissing beside her."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "wren_joins_descent" } ],
+        "text": "Sister Wren stands beneath the gate with her side bound tight and her sword in hand, ready to follow you down into the dark. Her little fire has been kicked out."
       },
       {
         "conditions": [ { "type": "flag", "flag": "wren_distrusts" }, { "type": "notFlag", "flag": "wren_fled" } ],

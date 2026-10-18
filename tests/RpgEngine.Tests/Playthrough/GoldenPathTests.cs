@@ -39,7 +39,8 @@ public sealed class GoldenPathTests
             .. OpenTheDoor,
             "5",                    // combat: Parley
             "2",                    // [Religion DC 10] (advantage) Speak the Rite of Rest
-            "take lantern",
+            "take lantern",         // lights the lantern and opens the stair
+            "descend stair",
             "2",                    // after the epilogue: quit
         ];
 
@@ -58,7 +59,11 @@ public sealed class GoldenPathTests
         Assert.Contains("[Religion DC 10] (advantage) Speak the Rite of Rest", output);
         Assert.Contains("Words won where steel did not.", output);
         Assert.Contains("+ the Barrowlight", output);
-        Assert.Contains("You climb out of the barrow with the Barrowlight burning in your hands, and Sister Wren is waiting", output);
+        Assert.Contains("its waking flame has unsealed a hidden stair beneath the sarcophagus", output);
+        Assert.Contains("Descend the spiral stair into the Under-Barrow", output);
+        Assert.Contains("Its flame leans toward the depths like a compass needle pulling home", output);
+        Assert.Contains("You carried the Barrowlight down through the unsealed threshold into the Under-Barrow.", output);
+        Assert.Contains("Above you, Ser Halric rests at last on his own sarcophagus", output);
         Assert.Contains("THE END", output);
     }
 
@@ -82,6 +87,7 @@ public sealed class GoldenPathTests
             "1",                    // target: Ser Halric
             "1",                    // round 2: attack the last thrall
             "take lantern",
+            "descend",              // the only descend action here, so no target is needed
             "2",                    // after the epilogue: quit
         ];
 
@@ -95,7 +101,8 @@ public sealed class GoldenPathTests
         Assert.Contains("Ser Halric takes 16 radiant damage (vulnerable!)", output);
         Assert.Contains("Ser Halric falls!", output);
         Assert.Contains("VICTORY", output);
-        Assert.Contains("Wren meets you at the lichgate and looks first at the lantern", output);
+        Assert.Contains("the Barrowlight's flame settles into a thin, ash-pale glow", output);
+        Assert.Contains("Ser Halric's shattered armor lies scattered in the ash behind you.", output);
     }
 
     [Fact]

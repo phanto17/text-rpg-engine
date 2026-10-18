@@ -67,13 +67,76 @@ public sealed class BarrowlightScenarioTests
         Assert.True(session.State.World.HasFlag("knight_laid_to_rest"));
         Assert.Equal(GameMode.Exploration, session.Mode);
 
-        var ending = Do(session, "take lantern");
+        // Claiming the lantern no longer ends the game: it opens the stair to the Under-Barrow.
+        var claim = Do(session, "take lantern");
+
+        Assert.Equal(GameMode.Exploration, session.Mode);
+        Assert.Contains(claim.OfType<NarrationEvent>(), e => e.Text.Contains("narrow spiral stair cut into the bedrock", StringComparison.Ordinal));
+        Assert.Contains(claim.OfType<NarrationEvent>(), e => e.Text.StartsWith("In your hand, the Barrowlight's flame settles into a warm, steady gold", StringComparison.Ordinal));
+        Assert.Equal(1, session.State.World.GetCounter("lantern_resonance"));
+        Assert.Equal(50, session.State.World.GetQuestStage("barrowlight"));
+        Assert.Contains(session.ExplorationActions(), a => a.Label == "Descend the spiral stair into the Under-Barrow");
+
+        var ending = Do(session, "descend stair");
 
         Assert.Equal(GameMode.Ended, session.Mode);
-        Assert.StartsWith("You climb out of the barrow with the Barrowlight burning in your hands, and Sister Wren is waiting", session.Epilogue);
+        Assert.DoesNotContain(ending.OfType<NarrationEvent>(), e => e.Text.Contains("Wren's footsteps", StringComparison.Ordinal));
+        Assert.StartsWith("Above you, Ser Halric rests at last on his own sarcophagus", session.Epilogue);
         Assert.Contains("Tamsin", session.Epilogue);
         Assert.IsType<EpilogueEvent>(ending[^1]);
         Assert.Equal(20, session.State.World.GetReputation("ashen_order"));
+        Assert.Equal(100, session.State.World.GetQuestStage("barrowlight"));
+    }
+
+    [Fact]
+    public void ReturnToWrenWithTheLantern_SheJoinsTheDescentOnce()
+    {
+        // As above without DescribeRoom: ambient 0 | persuasion 15 | ossuary 0 | crypt 0 | initiative 15, 1, 1 | rite 15, 10
+        // then west 0 | up 0 | look 0 | down 0 | east 0 (the encounter is resolved, so no initiative)
+        var rogue = Create("rogue", ["persuasion", "insight", "stealth", "perception"], ["persuasion", "stealth"]);
+        var session = GameSession.NewGame(Content, rogue, new FixedRandomSource(0, 15, 0, 0, 15, 1, 1, 15, 10, 0, 0, 0, 0, 0));
+        session.Begin();
+        Do(session, "talk to wren");
+        Say(session, "I'm not here to rob the dead");
+        Say(session, "I'll bring the light back.");
+        Do(session, "down");
+        Do(session, "press sun");
+        Do(session, "press moon");
+        Do(session, "press skull");
+        Do(session, "east");
+        session.CombatAct(new ParleyAction(session.Combat!.ParleyOptions().Single(o => o.Label == "Speak the Rite of Rest").Index));
+        Do(session, "take lantern");
+
+        Do(session, "west");
+        Do(session, "up");
+        var reunion = Do(session, "talk to wren");
+
+        Assert.Contains(reunion.OfType<DialogueLineEvent>(), e => e.Text.Contains("The barrow was never the tomb. It was the seal.", StringComparison.Ordinal));
+        Say(session, "Then I'll meet you below, Sister.");
+        Assert.True(session.State.World.HasFlag("wren_joins_descent"));
+        Assert.Equal(25, session.State.World.GetReputation("ashen_order"));
+
+        // Talking again gets a short farewell; the scene and its reputation gain don't repeat.
+        var farewell = Do(session, "talk to wren");
+        Assert.Contains(farewell.OfType<DialogueLineEvent>(), e => e.Text.Contains("I'll be right behind you.", StringComparison.Ordinal));
+        Assert.Equal(GameMode.Exploration, session.Mode);
+        Assert.Equal(25, session.State.World.GetReputation("ashen_order"));
+
+        var look = Assert.IsType<RoomDescribedEvent>(Do(session, "look").Single()).Room;
+        Assert.Contains(look.Paragraphs, p => p.StartsWith("Sister Wren stands beneath the gate with her side bound tight", StringComparison.Ordinal));
+        Assert.DoesNotContain(look.Paragraphs, p => p.StartsWith("Sister Wren keeps watch", StringComparison.Ordinal));
+
+        Do(session, "down");
+        var crypt = Do(session, "east").OfType<RoomDescribedEvent>().Single().Room;
+        Assert.Equal(GameMode.Exploration, session.Mode);
+        Assert.Contains("Beside the sarcophagus, a spiral stair yawns open in the floor, leading down into the deep earth.", crypt.Paragraphs);
+        Assert.DoesNotContain(crypt.Paragraphs, p => p.Contains("iron lantern", StringComparison.Ordinal) || p.Contains("waits on the sarcophagus", StringComparison.Ordinal));
+        Assert.Contains("spiral stair", crypt.Features);
+        var ending = Do(session, "descend");
+
+        Assert.Contains(ending.OfType<NarrationEvent>(), e => e.Text.Contains("Sister Wren's footsteps follow you down", StringComparison.Ordinal));
+        Assert.Equal(GameMode.Ended, session.Mode);
+        Assert.StartsWith("Above you, Ser Halric rests at last on his own sarcophagus", session.Epilogue);
         Assert.Equal(100, session.State.World.GetQuestStage("barrowlight"));
     }
 
@@ -108,9 +171,14 @@ public sealed class BarrowlightScenarioTests
         Assert.Contains(finale, e => e is XpGainedEvent { Amount: 125 });
         Assert.True(session.State.World.HasFlag("knight_destroyed"));
 
-        Do(session, "take the barrowlight");
+        var claim = Do(session, "take the barrowlight");
 
-        Assert.StartsWith("You carry the Barrowlight out over the knight's shattered bones", session.Epilogue);
+        Assert.Contains(claim.OfType<NarrationEvent>(), e => e.Text.StartsWith("In your hand, the Barrowlight's flame settles into a thin, ash-pale glow", StringComparison.Ordinal));
+        Assert.Equal(-1, session.State.World.GetCounter("lantern_resonance"));
+
+        Do(session, "descend the stair");
+
+        Assert.StartsWith("Above you, the lichgate stands empty", session.Epilogue);
         Assert.Equal(-15, session.State.World.GetReputation("ashen_order"));
     }
 
