@@ -24,9 +24,9 @@ The engine is **purely data-driven**. Every room, item, monster, line of dialogu
 Rain, a hilltop barrow, and a lantern that kept the dead asleep until it went dark. Pick a **Fighter**, **Rogue**, or **Wizard**:
 - Win over (or drive off) Sister Wren at **the Lichgate**, and search the graves for anything left behind.
 - Work out the sigil riddle on the bronze door in **the Ossuary Hall**, ideally without losing a hand to the trap.
-- Face what guards **the Barrow Heart**.
+- Face what guards **the Barrow Heart**, then claim the Barrowlight and find out what its waking flame unseals beneath the sarcophagus.
 
-What you say to Wren permanently changes the world. It decides what you learn, what she gives you, whether she is still there when you come back, how the final encounter can end, and which of five epilogues you get.
+What you say to Wren permanently changes the world. It decides what you learn, what she gives you, whether she is still there when you come back (and whether she follows you down), how the final encounter can end, and which of five epilogues you get. How you win the lantern changes its flame too: mercy lights it gold, and steel leaves it ash-pale. Every ending is a descent into the Under-Barrow, the setting for Act I.
 
 ## Architecture
 
