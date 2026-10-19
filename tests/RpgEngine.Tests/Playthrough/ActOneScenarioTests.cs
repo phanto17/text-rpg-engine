@@ -6,16 +6,15 @@ using RpgEngine.Core.Dice;
 using RpgEngine.Core.Engine;
 using RpgEngine.Core.Events;
 using RpgEngine.Core.Views;
-using RpgEngine.Core.World;
 using RpgEngine.Tests.Content;
-using RpgEngine.Tests.TestSupport;
 
 namespace RpgEngine.Tests.Playthrough;
 
 /// <summary>
 /// Plays Act I through the shipped content with scripted dice: from the Lichgate, down the Weeping
-/// Stair, through Nocturne and its two spoke locations, and across the Drowned Tollbridge, where the
-/// adventure ends. Every room has ambient lines, so each room description consumes one die.
+/// Stair, through Nocturne and its two spoke locations, and across the Drowned Tollbridge into the
+/// Memory Warrens, where Act II begins. Every room has ambient lines, so each room description
+/// consumes one die.
 /// </summary>
 public sealed class ActOneScenarioTests
 {
@@ -43,7 +42,7 @@ public sealed class ActOneScenarioTests
     }
 
     [Fact]
-    public void MercifulRun_FromTheLichgate_RelightsNocturne_AndCrossesTheTollbridge()
+    public void MercifulRun_FromTheLichgate_RelightsNocturne_AndCrossesIntoTheWarrens()
     {
         var dice = new FixedRandomSource(
             0, 15, 0, 0, 15, 1, 1, 15, 10,  // prologue: ambient | persuasion | ossuary | crypt | initiative | rite with advantage
@@ -55,7 +54,8 @@ public sealed class ActOneScenarioTests
             15, 1, 1, 15, 3,                // Miriel: initiative, then [Persuasion DC 13] with advantage
             0, 0,                           // Nocturne, the Drowned Tollbridge
             15, 1, 1, 15, 3,                // Garin: initiative, then [Persuasion DC 13] with advantage
-            0, 0);                          // Nocturne, the Drowned Tollbridge
+            0, 0,                           // Nocturne, the Drowned Tollbridge
+            0);                             // the Gate of the Twin Seals
         var auditor = Create("liminal_auditor", "ash_deserter", ["persuasion", "insight", "stealth", "perception"], ["persuasion", "stealth"]);
         var session = GameSession.NewGame(Content, auditor, dice);
         session.Begin();
@@ -145,15 +145,15 @@ public sealed class ActOneScenarioTests
         Assert.Equal(100, session.State.World.GetQuestStage("nocturne_beacon"));
         Assert.False(session.State.Player.Inventory.Contains("beacon_lens"));
 
-        // Crossing the tollbridge ends Act I.
+        // Crossing the tollbridge ends Act I and opens Act II at the Gate of the Twin Seals.
         Do(session, "west");
-        var ending = Do(session, "cross");
+        var crossing = Do(session, "cross");
 
-        Assert.Contains(ending.OfType<NarrationEvent>(), e => e.Text.StartsWith("Garin wades over and takes the other spoke", StringComparison.Ordinal));
-        Assert.Equal(GameMode.Ended, session.Mode);
-        Assert.IsType<EpilogueEvent>(ending[^1]);
-        Assert.StartsWith("Behind you, the Nocturne Beacon chimes across the sunken cathedral", session.Epilogue);
-        Assert.Contains("Tamsin", session.Epilogue);
+        Assert.Contains(crossing.OfType<NarrationEvent>(), e => e.Text.StartsWith("Garin wades over and takes the other spoke", StringComparison.Ordinal));
+        Assert.Equal(GameMode.Exploration, session.Mode);
+        Assert.Null(session.Epilogue);
+        Assert.Equal("warren_crossroads", session.State.CurrentRoomId);
+        Assert.Equal(10, session.State.World.GetQuestStage("twin_seals"));
         Assert.Equal(6, session.State.World.GetCounter("lantern_resonance"));
         Assert.Equal(3, session.State.Player.Level);
         Assert.Equal(0, dice.Remaining);
@@ -170,7 +170,8 @@ public sealed class ActOneScenarioTests
             20, 8, 8,                       // critical on Garin (2d8+3 = 19 against 17 HP)
             1,                              // the lancer misses
             20, 8, 8,                       // critical on the lancer
-            0);                             // Garin's loot roll: a healing potion
+            0,                              // Garin's loot roll: a healing potion
+            0);                             // the Gate of the Twin Seals
         var oathEater = Create("oath_eater", "moor_bailiff", ["athletics", "intimidation"], []);
         var session = GameSession.NewGame(Content, oathEater, dice);
         session.Begin();
@@ -202,43 +203,16 @@ public sealed class ActOneScenarioTests
         Assert.Contains(session.ExplorationActions(), a => a.Label == "Cross the tollbridge into the deeper warrens");
 
         Do(session, "take lens");
-        var ending = Do(session, "cross");
+        var crossing = Do(session, "cross");
 
-        Assert.DoesNotContain(ending.OfType<NarrationEvent>(), e => e.Text.Contains("Garin wades over", StringComparison.Ordinal));
-        Assert.Equal(GameMode.Ended, session.Mode);
-        Assert.StartsWith("Behind you, Nocturne's beacon is still dark, and the Lantern Market has gone very quiet.", session.Epilogue);
+        Assert.DoesNotContain(crossing.OfType<NarrationEvent>(), e => e.Text.Contains("Garin wades over", StringComparison.Ordinal));
+        Assert.Equal("warren_crossroads", session.State.CurrentRoomId);
+        Assert.Contains(Described(crossing).Paragraphs, p => p.StartsWith("Both sockets in the great bronze floor-gate stand empty", StringComparison.Ordinal));
+
+        // Crossing never marks the beacon quest done: it stays where taking the lens left it.
+        Assert.Equal(30, session.State.World.GetQuestStage("nocturne_beacon"));
         Assert.Equal(-2, session.State.World.GetCounter("lantern_resonance"));
         Assert.Equal(0, dice.Remaining);
     }
 
-    [Theory]
-    [InlineData(true, true, true, 3, "Behind you, the Nocturne Beacon chimes across the sunken cathedral")]
-    [InlineData(true, true, true, 2, "The Nocturne Beacon rings out behind you")]
-    [InlineData(true, true, false, 1, "The Nocturne Beacon rings out behind you")]
-    [InlineData(true, true, true, 0, "The Nocturne Beacon burns again")]
-    [InlineData(true, false, false, 1, "Behind you, the Nocturne Beacon still stands dark.")]
-    [InlineData(false, false, true, 2, "Behind you, the Nocturne Beacon still stands dark.")]
-    [InlineData(true, false, false, -1, "Behind you, Nocturne's beacon is still dark")]
-    [InlineData(false, false, false, 0, "The floodgate grinds open")]
-    public void Epilogue_ReflectsTheChapel_TheBeacon_Wren_AndTheLantern(bool chapelResolved, bool beaconRestored, bool wrenFollowed, int resonance, string expectedStart)
-    {
-        var world = new TestWorld(Content, Create("oath_eater", "moor_bailiff", ["athletics", "intimidation"], []));
-        world.World.SetFlag("tollbridge_resolved");
-        SetFlagIf(world.World, chapelResolved, "echo_chapel_resolved");
-        SetFlagIf(world.World, beaconRestored, "beacon_restored");
-        SetFlagIf(world.World, wrenFollowed, "wren_joins_descent");
-        world.World.SetCounter("lantern_resonance", resonance);
-
-        var epilogue = Content.Manifest.Epilogues.First(e => ConditionEvaluator.AllPass(e.Conditions, world.State));
-
-        Assert.StartsWith(expectedStart, epilogue.Text);
-    }
-
-    private static void SetFlagIf(WorldState world, bool set, string flag)
-    {
-        if (set)
-        {
-            world.SetFlag(flag);
-        }
-    }
 }

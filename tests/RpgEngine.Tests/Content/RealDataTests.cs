@@ -15,6 +15,9 @@ public sealed class RealDataTests
 
     private static readonly string[] ActOneRooms = ["weeping_stair", "nocturne_square", "echo_chapel", "drowned_tollbridge"];
 
+    private static readonly string[] ActTwoRooms =
+        ["warren_crossroads", "whispering_stacks", "tallow_foundry", "vow_sanctum", "scoured_cloister", "lye_cistern", "reliquary_bastion"];
+
     [Fact]
     public void ShippedContent_LoadsWithoutErrors()
     {
@@ -27,7 +30,7 @@ public sealed class RealDataTests
     // Later acts add rooms, factions, and quests, so these check that the shipped story is present
     // rather than that nothing else is.
     [Fact]
-    public void ShippedContent_HasThePrologueAndActOne()
+    public void ShippedContent_HasThePrologueAndActsOneAndTwo()
     {
         var content = Content.Value;
 
@@ -36,13 +39,22 @@ public sealed class RealDataTests
         Assert.All(content.BackgroundList, b => Assert.Equal(ItemType.Quest, content.Items[b.KeepsakeItem].Type));
         Assert.All(content.ClassList.SelectMany(c => c.Spells), id => Assert.True(content.Spells.ContainsKey(id)));
         Assert.Equal(18, content.Skills.Count);
-        Assert.All(PrologueRooms.Concat(ActOneRooms), id => Assert.Contains(id, content.Rooms.Keys));
+        Assert.All(PrologueRooms.Concat(ActOneRooms).Concat(ActTwoRooms), id => Assert.Contains(id, content.Rooms.Keys));
         Assert.All(new[] { "ashen_order", "hollow_choir", "lantern_bearers" }, id => Assert.Contains(id, content.Factions.Keys));
-        Assert.All(new[] { "barrowlight", "nocturne_beacon" }, id => Assert.Contains(id, content.Quests.Keys));
-        Assert.All(new[] { "wren", "orin", "maeve", "peddler", "wren_nocturne", "miriel", "garin" }, id => Assert.Contains(id, content.Dialogues.Keys));
+        Assert.All(new[] { "barrowlight", "nocturne_beacon", "twin_seals" }, id => Assert.Contains(id, content.Quests.Keys));
+        Assert.All(
+            new[] { "wren", "orin", "maeve", "peddler", "wren_nocturne", "miriel", "garin", "caelan", "venn", "vaelen", "silas" },
+            id => Assert.Contains(id, content.Dialogues.Keys));
+        Assert.All(new[] { "prelate_vaelen", "tethered_chorister", "commander_silas", "scoured_halberdier" }, id => Assert.Contains(id, content.Monsters.Keys));
+        Assert.All(
+            new[] { "choir_silks", "lye_salve", "silver_tuning_blade", "scoured_halberd", "moon_triad_seal", "sun_triad_seal" },
+            id => Assert.Contains(id, content.Items.Keys));
+        Assert.All(new[] { "moon_triad_seal", "sun_triad_seal" }, id => Assert.Equal(ItemType.Quest, content.Items[id].Type));
         Assert.Equal("inner_crypt", content.EncounterRooms["barrow_heart"]);
         Assert.Equal("echo_chapel", content.EncounterRooms["echo_chapel_choir"]);
         Assert.Equal("drowned_tollbridge", content.EncounterRooms["drowned_tollbridge_watch"]);
+        Assert.Equal("vow_sanctum", content.EncounterRooms["archive_vaelen_boss"]);
+        Assert.Equal("reliquary_bastion", content.EncounterRooms["reliquary_silas_boss"]);
         Assert.Equal(6, content.Encounters["barrow_heart"].Parley!.Options.Count);
         Assert.All(content.Encounters.Values, e => Assert.NotEmpty(e.Parley!.Options));
     }
@@ -66,23 +78,53 @@ public sealed class RealDataTests
     }
 
     [Fact]
-    public void OnlyCrossingTheTollbridge_EndsTheGame()
+    public void OnlyUnsealingTheTwinSealGate_EndsTheGame()
     {
         var content = Content.Value;
 
         var endings = content.RoomList.Where(room => RoomEffects(content, room).OfType<EndGameEffect>().Any()).Select(room => room.Id);
 
-        Assert.Equal(new[] { "drowned_tollbridge" }, endings);
-        var cross = content.Rooms["drowned_tollbridge"].Features.Single(f => f.Id == "far_arch").Interactions.Single();
+        Assert.Equal(new[] { "warren_crossroads" }, endings);
+        var unseal = content.Rooms["warren_crossroads"].Features.Single(f => f.Id == "twin_seal_gate").Interactions.Single();
+        Assert.Equal("unseal", unseal.Verb);
+        Assert.Contains(unseal.Conditions, c => c is HasItemCondition { Item: "moon_triad_seal" });
+        Assert.Contains(unseal.Conditions, c => c is HasItemCondition { Item: "sun_triad_seal" });
+        Assert.Contains(unseal.Effects, e => e is SetQuestStageEffect { Quest: "twin_seals", Stage: 100 });
+        Assert.Empty(content.Manifest.Epilogues[^1].Conditions);
+    }
+
+    [Fact]
+    public void CrossingTheTollbridge_LeadsIntoActTwo_WithoutCompletingTheBeacon()
+    {
+        var cross = Content.Value.Rooms["drowned_tollbridge"].Features.Single(f => f.Id == "far_arch").Interactions.Single();
+
         Assert.Equal("cross", cross.Verb);
         Assert.Contains(cross.Conditions, c => c is FlagCondition { Flag: "tollbridge_resolved" });
-        Assert.Empty(content.Manifest.Epilogues[^1].Conditions);
+        Assert.Contains(cross.Effects, e => e is MoveToEffect { Room: "warren_crossroads" });
+
+        // The beacon quest's last stage says the beacon was relit, so only relighting it may set that stage.
+        Assert.DoesNotContain(Flatten(cross.Effects), e => e is SetQuestStageEffect { Quest: "nocturne_beacon" });
+    }
+
+    [Fact]
+    public void Epilogues_BranchOnBothActTwoBosses()
+    {
+        var flags = Content.Value.Manifest.Epilogues
+            .SelectMany(e => e.Conditions)
+            .OfType<FlagCondition>()
+            .Select(c => c.Flag)
+            .ToHashSet();
+
+        Assert.Superset(new HashSet<string> { "vaelen_reconciled", "vaelen_destroyed", "silas_relieved", "silas_destroyed", "wren_joins_descent" }, flags);
+        Assert.Contains(Content.Value.Manifest.Epilogues.SelectMany(e => e.Conditions), c => c is CounterCondition { Counter: "lantern_resonance" });
     }
 
     [Theory]
     [InlineData("echo_chapel", "challenged_miriel", "shone_chapel_echo")]
     [InlineData("drowned_tollbridge", "challenged_garin", "shone_bridge_echo")]
-    public void ActOneFights_WaitForTheApproach_SoTheEchoCanBeShoneFirst(string roomId, string challengeFlag, string echoFlag)
+    [InlineData("vow_sanctum", "challenged_vaelen", "shone_sanctum_echo")]
+    [InlineData("reliquary_bastion", "challenged_silas", "shone_bastion_echo")]
+    public void BossFights_WaitForTheApproach_SoTheEchoCanBeShoneFirst(string roomId, string challengeFlag, string echoFlag)
     {
         var content = Content.Value;
         var room = content.Rooms[roomId];

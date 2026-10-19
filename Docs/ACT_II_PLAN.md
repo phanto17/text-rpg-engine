@@ -207,5 +207,5 @@ In Act II, the player's **Calling** (`class`) and **Burden** (`background`) are 
 ### New Bestiary (`Data/Bestiary/memory_warrens.json`)
 - `prelate_vaelen` (*Prelate Vaelen of the Hollow Choir* — Boss, `4d8+4` HP, AC 13, thunder/psychic attacks, vulnerable to `radiant` and `force`).
 - `tethered_chorister` (*Tethered Chorister* — Add, `2d6+2` HP, AC 11, psychic/slashing).
-- `commander_silas` (*Commander Silas, the Unburdened* — Boss, `4d8+6` HP, AC 15, slashing/radiant attacks, vulnerable to `psychic` and `lightning`).
-- `scoured_halberdier` (*Scoured Halberdier* — Add, `2d8+2` HP, AC 13, slashing).
+- `commander_silas` (*Commander Silas, the Unburdened* — Boss, `4d8` HP, AC 14, slashing/radiant attacks, resistant to `necrotic`, vulnerable to `psychic` and `lightning`). Tuned down from `4d8+6` HP, AC 15, a `1d8+3` glaive, and slashing resistance by `MemoryWarrensBalanceTests`: as first written, a level-3 hero of any Calling won only 24–43% of solo fights.
+- `scoured_halberdier` (*Scoured Halberdier* — Add, `2d6+1` HP, AC 13, slashing).

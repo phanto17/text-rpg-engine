@@ -27,7 +27,7 @@ public sealed class GoldenPathTests
     private static readonly string[] OpenTheDoor = ["down", "press sun", "press moon", "press skull", "east"];
 
     [Fact]
-    public void PersuadeWren_ParleyWithEveryWarden_RelightsNocturne_AndCrossesTheTollbridge()
+    public void PersuadeWren_ParleyWithEveryWarden_RelightsNocturne_AndUnsealsTheTwinSealGate()
     {
         using var cli = new CliHarness();
 
@@ -65,7 +65,35 @@ public sealed class GoldenPathTests
             "east",
             "relight beacon",       // "restore" is the parser's synonym for load
             "west",
-            "cross",
+            "cross",                // Act II: the Gate of the Twin Seals
+            "rest",
+            "north",                // the Whispering Stacks
+            "audit index",          // [Investigation DC 12] (advantage)
+            "shine echo",
+            "north",                // the Tallow-Spindle Loom
+            "sabotage loom",        // [Sleight of Hand DC 12]
+            "shine echo",
+            "east",                 // the Nursery of Unkept Vows
+            "shine echo",
+            "approach carillon",
+            "5",                    // combat: Parley
+            "1",                    // [Persuasion DC 14] (advantage) Sing the missing final line of Lira's lullaby
+            "take seal",
+            "west", "south", "south", // back to the gate
+            "south",                // the Scoured Cloister
+            "search grate",         // [Investigation DC 12]
+            "shine echo",
+            "south",                // the Cistern of Lye and Ash
+            "quench cistern",       // [Athletics DC 12]
+            "shine echo",
+            "west",                 // the Bastion of the Unburdened
+            "shine echo",
+            "approach furnace",
+            "5",                    // combat: Parley
+            "1",                    // [Persuasion DC 14] (advantage) Ask him to state his campaign objective
+            "take seal",
+            "east", "north", "north", // back to the gate
+            "unseal gate",
             "2",                    // after the epilogue: quit
         ];
 
@@ -101,7 +129,15 @@ public sealed class GoldenPathTests
         Assert.Contains("+ Smoked-Glass Beacon Lens", output);
         Assert.Contains("You rekindled Nocturne's central beacon.", output);
         Assert.Contains("Garin wades over and takes the other spoke of the wheel", output);
-        Assert.Contains("The Nocturne Beacon rings out behind you", output);
+        Assert.Contains("The Gate of the Twin Seals", output);
+        Assert.Contains("Ascend the dais steps and confront Prelate Vaelen", output);
+        Assert.Contains("[Persuasion DC 14] (advantage) Sing the missing final line of Lira's lullaby", output);
+        Assert.Contains("+ Seal of the Waxing Moon", output);
+        Assert.Contains("Step onto the command dais and face Commander Silas", output);
+        Assert.Contains("+ Seal of the Unclouded Sun", output);
+        Assert.Contains("Level 4!", output);
+        Assert.Contains("You set both Triad Seals into the bronze gate at the crossroads", output);
+        Assert.Contains("Moon and sun turn together in the bronze", output);
         Assert.Contains("THE END", output);
     }
 

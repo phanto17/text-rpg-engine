@@ -1,6 +1,6 @@
 {
   "title": "Barrowlight",
-  "contentVersion": "0.2.0",
+  "contentVersion": "0.3.0",
   "startRoom": "lichgate",
   "intro": "Rain has followed you for three days across the Greywater moor. The villagers of Hollin's Rest would not say the barrow's name. They only pointed north and made the sign of the ash.\n\nSomewhere beneath that mound lies the Barrowlight, the lantern the Ashen Order kept burning so their dead would sleep. It went dark at the turn of the season. Since then, the graves of Hollin's Rest have not stayed shut.\n\nYou crest the last hill as dusk bleeds out of the sky, and the lichgate rises before you.",
   "startingGold": 10,
@@ -16,49 +16,44 @@
   "epilogues": [
     {
       "conditions": [
-        { "type": "flag", "flag": "tollbridge_resolved" },
-        { "type": "flag", "flag": "echo_chapel_resolved" },
-        { "type": "flag", "flag": "beacon_restored" },
+        { "type": "flag", "flag": "vaelen_reconciled" },
+        { "type": "flag", "flag": "silas_relieved" },
         { "type": "flag", "flag": "wren_joins_descent" },
-        { "type": "counter", "counter": "lantern_resonance", "min": 3 }
+        { "type": "counter", "counter": "lantern_resonance", "min": 4 }
       ],
-      "text": "Behind you, the Nocturne Beacon chimes across the sunken cathedral, a low amber note that keeps the waking dead lucid without forcing them back into dreamless sleep. Sister Wren stands at the edge of the Lantern Market with her sleeves rolled to the elbow and salt-flakes on her linen, and the Wayfarers have already chalked her name on the pillar beside yours.\n\nThe floodgate rises on its groaning winch. Beyond the far arch, black water drains away into the Memory Warrens, where the Hollow Choir keeps its archive of vows and the Ashen garrison scrubs its own soldiers clean of fear. The Barrowlight burns warm and gold in your hand. It has learned, as you have, that a watch can be ended without being betrayed.\n\nYou cross the tollbridge with the beacon's chime at your back, {player.name}. For the first time since the lantern died, the dark ahead does not feel like a grave. It feels like a road."
+      "text": "The Seal of the Waxing Moon and the Seal of the Unclouded Sun sink into their sockets with a sound like two bells struck a world apart, and the Bronze Gate of the Twin Seals begins, at last, to grind open.\n\nSister Wren stands at your shoulder with the Barrowlight's gold on her face. Behind you, by the Wayfarers' brazier, Prelate Vaelen sits with Lira's silent carillon in her lap and does not wind it, and Commander Silas is chalking his garrison's names back onto the crossroads wall, one by one, beginning with his brother's. Neither of them is healed. Both of them are still here, and they chose to be.\n\nBelow the gate, a stair older than the Order winds down toward the Cradle of the First Architect, the one who first taught Greywater to fear its dead. The lantern burns steady and warm. \"Whatever waits down there,\" Wren says quietly, \"it has never met anyone who let go and stayed.\" You take the first step together, {player.name}."
     },
     {
       "conditions": [
-        { "type": "flag", "flag": "tollbridge_resolved" },
-        { "type": "flag", "flag": "echo_chapel_resolved" },
-        { "type": "flag", "flag": "beacon_restored" },
-        { "type": "counter", "counter": "lantern_resonance", "min": 1 }
+        { "type": "flag", "flag": "vaelen_reconciled" },
+        { "type": "flag", "flag": "silas_relieved" }
       ],
-      "text": "The Nocturne Beacon rings out behind you as you cross the Drowned Tollbridge, its amber light spilling over the black canal. In the Lantern Market the salt-frost is flaking from the spirits' hands, and Keeper Maeve is reading the remembered names aloud from the pillar, one by one, so that none of them slips out of the ink tonight.\n\nNo one walks beside you, but you do not leave unwitnessed. The Barrowlight burns gold in your grip, steady as a heartbeat, and the echoes in the wet stone seem to lean toward it as you pass.\n\nBeyond the floodgate the warrens wind deeper, toward older griefs and harder choices. Whatever waits there, {player.name}, Nocturne will remember who relit its bell."
+      "text": "Moon and sun turn together in the bronze, and the Gate of the Twin Seals groans open on a stair that breathes cold, ancient air.\n\nYou spared the Prelate and you spared the Commander, and the Memory Warrens are quieter for it. In the Archive, Lira's carillon has finally run down, and Vaelen let it. In the Iron Reliquary, the lye vats stand cold, and Silas says Tomas's name aloud now and then, haltingly, like a man learning to walk again. Neither faction will thank you. Both will remember that someone came down the stair and listened.\n\nThe Barrowlight warms in your hand as you descend toward the Cradle of the First Architect. You go alone, {player.name}, but not unwitnessed."
     },
     {
       "conditions": [
-        { "type": "flag", "flag": "tollbridge_resolved" },
-        { "type": "flag", "flag": "echo_chapel_resolved" },
-        { "type": "flag", "flag": "beacon_restored" }
+        { "type": "flag", "flag": "vaelen_reconciled" },
+        { "type": "flag", "flag": "silas_destroyed" }
       ],
-      "text": "The Nocturne Beacon burns again, but the square went quiet when you carried the tuning-tongue and the lens back through it, still marked by what it cost to take them. The spirits warm their hands at the amber light and do not meet your eyes.\n\nThe Barrowlight's flame is thin and ash-pale as you cross the tollbridge. It gives light, and the light is enough to see by, but it no longer leans toward the deep like a compass needle. It simply burns, the way a lamp burns in an empty room.\n\nYou mended the light the way the Order would have, {player.name}: with iron, and with a trail of the broken behind you. The warrens ahead will ask whether that was ever the same thing as mercy."
+      "text": "The Moon Seal settles into the gate as gently as a child laid down to sleep. The Sun Seal goes in still hot from the Furnace of Remission, and still marked by the fight it took to win it.\n\nIn the Archive, Prelate Vaelen has let her daughter's carillon fall silent at last. In the Iron Reliquary, the garrison stands leaderless around Commander Silas's broken plate, not knowing whether to scour their names again or to remember them. You gave grief room to end, and gave iron nothing but iron. The Barrowlight burns uncertain between gold and ash, as if it cannot decide which of those things you are.\n\nThe Bronze Gate grinds open toward the Cradle of the First Architect. Down there, {player.name}, the one who first chose order over mourning is waiting to ask which of your two answers you meant."
     },
     {
       "conditions": [
-        { "type": "flag", "flag": "tollbridge_resolved" },
-        { "type": "notFlag", "flag": "beacon_restored" },
-        { "type": "counter", "counter": "lantern_resonance", "min": 1 }
+        { "type": "flag", "flag": "vaelen_destroyed" },
+        { "type": "flag", "flag": "silas_relieved" }
       ],
-      "text": "Behind you, the Nocturne Beacon still stands dark. Its bell is silent, and along the colonnade the grey salt-frost keeps creeping across the knuckles of the spirits who waited for it to ring.\n\nStill, the Barrowlight burns gold in your hand. The people you met on the way down, you met as people: a clerk losing his own name, a sister refusing to lose her brother, a soldier who could not keep a promise. The light remembers that, even if the square cannot yet.\n\nThe floodgate groans open onto the warrens, {player.name}. You tell yourself you will come back for Nocturne. The black water closes over the causeway behind you, and the dark does not say whether it believes you."
+      "text": "You set the Sun Seal first, taken from a commander who laid down his glaive and remembered his brother. The Moon Seal goes in second, cold in your hand, pried from a carillon whose keeper you could not reach.\n\nIn the Iron Reliquary, Silas's soldiers are chalking their own names onto their blank iron masks. In the Archive, the Hollow Choir has stopped every music box in mourning for its Prelate, and the silence there is not peace. You could bear the soldier's grief and not the mother's. The Barrowlight burns in two colors at once, warm on one side and frost-pale on the other.\n\nThe Bronze Gate grinds open toward the Cradle of the First Architect, {player.name}. Whatever waits below will know exactly which griefs you were willing to hear."
     },
     {
       "conditions": [
-        { "type": "flag", "flag": "tollbridge_resolved" },
-        { "type": "notFlag", "flag": "beacon_restored" },
+        { "type": "flag", "flag": "vaelen_destroyed" },
+        { "type": "flag", "flag": "silas_destroyed" },
         { "type": "counter", "counter": "lantern_resonance", "max": -1 }
       ],
-      "text": "Behind you, Nocturne's beacon is still dark, and the Lantern Market has gone very quiet. The spirits along the colonnade sit with salt crawling up their wrists, and no one calls a name after you as you go.\n\nThe Barrowlight burns cold as frost in your grip. In its pale glare the echoes in the stone no longer speak. They only watch.\n\nThe floodgate rises on a shriek of rusted iron, and you walk into the warrens alone, {player.name}. The deep has noticed you now. It has not yet decided what you are."
+      "text": "The seals go into the bronze still marked by what it cost to take them, and the Gate of the Twin Seals opens with a shriek like iron being scoured.\n\nBehind you, the Memory Warrens have gone silent. The Choir's music boxes have stopped and the Reliquary's furnace has gone out, and between them no one is left who will say your name kindly. Prelate Vaelen and Commander Silas each held a piece of the old balance, and you took both pieces by force. The Barrowlight burns frost-white in your fist, giving light and no warmth at all.\n\nYou descend toward the Cradle of the First Architect alone, {player.name}. Down there waits the one who first decided that the dead must be made to obey. You may find you have more in common than you would like."
     },
     {
-      "text": "The floodgate grinds open and you cross the Drowned Tollbridge into the dark. The Barrowlight's flame wavers between gold and ash, undecided, much like the Under-Barrow itself.\n\nBehind you, Nocturne's beacon is still dark, and the waking dead of the Lantern Market keep their uneasy watch beneath the broken ribs of the cathedral. Ahead, the Memory Warrens wind down into older griefs.\n\nWhatever you are becoming down here, {player.name}, the next step will decide it."
+      "text": "Moon and sun, the Triad Seals turn in their sockets, and the Bronze Gate of the Twin Seals grinds open on a stair that winds down into older dark.\n\nYou leave the Memory Warrens changed, if not settled. The Archive and the Reliquary will each tell the story of your passing differently, and neither will be entirely wrong. The Barrowlight's flame wavers as you step onto the stair, neither gold nor ash, waiting to be told what it is.\n\nBelow lies the Cradle of the First Architect, {player.name}, and the last question the Under-Barrow has to ask."
     }
   ],
   "gameOverText": "The cold of the barrow closes over you like deep water. Somewhere far above, rain falls on the lichgate, and the Barrowlight stays dark. Your story ends here, {player.name}."
