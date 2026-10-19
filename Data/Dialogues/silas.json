@@ -1,0 +1,28 @@
+[
+  {
+    "id": "silas",
+    "speaker": "Commander Silas",
+    "entries": [
+      { "conditions": [ { "type": "flag", "flag": "silas_gift_given" } ], "node": "watch_relieved" },
+      { "node": "first_after_parley" }
+    ],
+    "nodes": [
+      {
+        "id": "first_after_parley",
+        "text": "Commander Silas sits on the stone steps of the command dais with his lye-bleached helm beside him. In his scarred hands he holds the single unmelted strip of lead foil bearing his brother Tomas's name.\n\n\"I told the company that grief was a weakness the enemy would exploit,\" Silas says, his voice rough and human again. \"So we burned our names into lead ingots, and when I couldn't bear the sight of Tomas's face in the fire, I drank the lye too. We turned ourselves into the very thing we were sent down here to destroy—hollow shells walking a circle in the dark.\"\n\nHe reaches into his belt-pouch and hands you a chalk-white phial of Alkali Clarity Draught, then gestures to the spoked bronze disc gleaming in the furnace grate. \"Take the Seal of the Unclouded Sun, {player.name}. When the road back to Nocturne is clear, I will lead my men up to Sister Wren and Keeper Maeve—to learn if anything of who we were can still be salvaged.\"",
+        "effects": [
+          { "type": "setFlag", "flag": "silas_gift_given" },
+          { "type": "giveItem", "item": "lye_salve" }
+        ],
+        "choices": [
+          { "text": "Sister Wren will welcome your men by the brazier, Commander.", "end": true },
+          { "text": "I'll carry the Sun Seal to the crossroads.", "end": true }
+        ]
+      },
+      {
+        "id": "watch_relieved",
+        "text": "Commander Silas traces the scratched letters of his brother's name on the lead strip. \"Go on to the Gate of the Twin Seals, {player.name}. Our campaign in the dark is over.\""
+      }
+    ]
+  }
+]

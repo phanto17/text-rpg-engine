@@ -1,0 +1,28 @@
+[
+  {
+    "id": "vaelen",
+    "speaker": "Prelate Vaelen",
+    "entries": [
+      { "conditions": [ { "type": "flag", "flag": "vaelen_gift_given" } ], "node": "quiet_sanctum" },
+      { "node": "first_after_parley" }
+    ],
+    "nodes": [
+      {
+        "id": "first_after_parley",
+        "text": "Prelate Vaelen kneels beside the open crystal doors of the gilded carillon. For the first time in years, her raw fingers are not turning the brass key; they rest quietly on the empty velvet cushion where her daughter's spirit lay.\n\n\"Forty-two times I re-cut the wax,\" she whispers, her voice hoarse from weeping. \"I told myself I was keeping her alive, when all I was keeping was my own refusal to say goodbye. Until you sang the last line, I had forgotten how gentle her real voice sounded.\"\n\nShe reaches into her vestments and presses a clear phial of memory-tallow into your hand, then nods toward the crescent disc gleaming in the carillon's mainspring. \"Take the Seal of the Waxing Moon, {player.name}. If you unseal the Cradle of the First Architect below, do not let him trap the world in the same cage I built for my child.\"",
+        "effects": [
+          { "type": "setFlag", "flag": "vaelen_gift_given" },
+          { "type": "giveItem", "item": "tallow_draught" }
+        ],
+        "choices": [
+          { "text": "She rested knowing she was loved, Vaelen.", "end": true },
+          { "text": "I'll carry the Moon Seal to the gate.", "end": true }
+        ]
+      },
+      {
+        "id": "quiet_sanctum",
+        "text": "Prelate Vaelen traces the silent brass comb of the carillon. \"Go with the Wayfarers' blessing, {player.name}. I will begin unsealing the ledgers in the stacks, one soul at a time.\""
+      }
+    ]
+  }
+]

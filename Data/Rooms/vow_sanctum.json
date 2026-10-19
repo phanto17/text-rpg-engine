@@ -1,0 +1,214 @@
+[
+  {
+    "id": "vow_sanctum",
+    "name": "The Nursery of Unkept Vows",
+    "description": "The eastern arch opens into a domed rotunda where hundreds of silver plumb-lines converge from the vaulted ceiling onto a single gilded reliquary at the center of the dais: the Carillon of Lira. Built in the shape of a child's cradle enclosed in crystal and brass, its clockwork comb is powered by a crescent disc of pale silver-bronze—the Seal of the Waxing Moon.\n\nInside the glass carillon, the small, salt-crusted spirit of a young girl turns on a brass gear, singing the first four bars of a winter lullaby before the catch-pin wrenches her back to the opening note.",
+    "revisit": "Silver plumb-lines converge on the gilded Carillon of Lira at the center of the domed sanctum.",
+    "variants": [
+      {
+        "conditions": [ { "type": "notFlag", "flag": "vaelen_resolved" } ],
+        "text": "Beside the gilded cradle stands Prelate Vaelen in silver-threaded vestments, winding the carillon's master key with raw, bleeding fingers while a tethered chorister guards the dais steps."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "vaelen_reconciled" } ],
+        "text": "The gilded carillon stands open and still. Prelate Vaelen kneels beside the empty crystal cradle, her forehead resting against the silent brass comb in quiet grief."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "vaelen_destroyed" } ],
+        "text": "Snapped silver wires and spilled memory-salt litter the dais around the shattered carillon where Prelate Vaelen fell."
+      },
+      {
+        "conditions": [
+          { "type": "flag", "flag": "vaelen_resolved" },
+          { "type": "lacksItem", "item": "moon_triad_seal" }
+        ],
+        "text": "In the open mainspring housing of the carillon gleams the crescent Seal of the Waxing Moon."
+      }
+    ],
+    "ambient": [
+      "The brass comb of the carillon clicks four gentle notes, snaps back with a metallic scrape, and begins again.",
+      "Fine white salt—the residue of a child's eroded memories—drifts down inside the glass cradle.",
+      "Hundreds of silver plumb-lines hum overhead like a harp strung too tight.",
+      "The air smells of dried lavender, warm tallow, and ozone."
+    ],
+    "exits": [
+      { "direction": "west", "target": "tallow_foundry", "description": "The wire-hung archway leads west back into the Tallow-Spindle Loom." }
+    ],
+    "features": [
+      {
+        "id": "lira_carillon",
+        "name": "gilded carillon-cradle",
+        "aliases": ["carillon", "cradle", "box", "music box", "seal", "moon seal"],
+        "description": "A masterwork reliquary of gilded brass and crystal housing the tethered spirit of Prelate Vaelen's daughter, Lira. Set into its mainspring is the crescent Seal of the Waxing Moon.",
+        "interactions": [
+          {
+            "verb": "listen",
+            "label": "Hold the Bell Splinter near the carillon's mainspring",
+            "once": true,
+            "conditions": [
+              { "type": "background", "background": "fever_dreamer" },
+              { "type": "notFlag", "flag": "vaelen_resolved" }
+            ],
+            "text": "As you step near the dais, the Bell Splinter in your pocket hums in counter-phase with the Seal of the Waxing Moon inside the carillon. Through the bronze sliver, you hear the true, unbroken cadence the seal was cast to ring—a harmonic of release, not captivity.",
+            "effects": [
+              { "type": "setFlag", "flag": "heard_seal_harmonic" },
+              { "type": "grantXp", "amount": 25 }
+            ]
+          },
+          {
+            "verb": "approach",
+            "label": "Ascend the dais steps and confront Prelate Vaelen",
+            "conditions": [ { "type": "notFlag", "flag": "vaelen_resolved" } ],
+            "text": "You step out from beneath the silver plumb-lines and climb the dais steps toward the gilded carillon.",
+            "effects": [
+              { "type": "setFlag", "flag": "challenged_vaelen" },
+              { "type": "startCombat", "encounter": "archive_vaelen_boss" }
+            ]
+          },
+          {
+            "verb": "take",
+            "label": "Take the Seal of the Waxing Moon",
+            "conditions": [
+              { "type": "flag", "flag": "vaelen_resolved" },
+              { "type": "lacksItem", "item": "moon_triad_seal" }
+            ],
+            "text": "You lift the crescent Seal of the Waxing Moon from the silent mainspring housing. The pale silver-bronze disc is warm in your hands, humming with the quiet peace of a song finally allowed to end.",
+            "effects": [
+              { "type": "giveItem", "item": "moon_triad_seal" },
+              {
+                "type": "if",
+                "conditions": [ { "type": "hasItem", "item": "sun_triad_seal" } ],
+                "then": [ { "type": "setQuestStage", "quest": "twin_seals", "stage": 30 } ],
+                "else": [ { "type": "setQuestStage", "quest": "twin_seals", "stage": 20 } ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sanctum_memory_echo",
+        "name": "cradle-side memory echo",
+        "aliases": ["echo", "memory", "lullaby", "bedside"],
+        "description": "In the Barrowlight's beam, a warm golden afterimage forms at the foot of the dais: a mother kneeling beside a small cot on a rainy night in Hollin's Rest.",
+        "conditions": [ { "type": "hasItem", "item": "barrowlight" } ],
+        "interactions": [
+          {
+            "verb": "shine",
+            "label": "Shine the Barrowlight on the cradle-side echo",
+            "once": true,
+            "text": "You raise the Barrowlight, and the memory of Lira's last night on the surface unfolds in the quiet air.\n\n\"I'm not afraid of the dark, Mama,\" the child's voice whispers, small and tired. \"Just sing the last line for me—'sleep until the morning field'—and let me close my eyes.\"\n\nAbove her, Vaelen's phantom presses a wax cylinder to the girl's lips, weeping: \"Never the last line, my darling. As long as the verse never finishes, you can never leave me.\"",
+            "effects": [
+              { "type": "setFlag", "flag": "shone_sanctum_echo" },
+              { "type": "grantXp", "amount": 25 }
+            ]
+          }
+        ]
+      }
+    ],
+    "npcs": [
+      {
+        "id": "vaelen",
+        "name": "Prelate Vaelen",
+        "aliases": ["vaelen", "prelate", "mother"],
+        "description": "Prelate Vaelen kneels beside the unsealed glass cradle, holding a single silver winding-key in her bandaged hands.",
+        "dialogue": "vaelen",
+        "conditions": [ { "type": "flag", "flag": "vaelen_reconciled" } ]
+      }
+    ],
+    "encounter": {
+      "id": "archive_vaelen_boss",
+      "conditions": [
+        { "type": "notFlag", "flag": "vaelen_resolved" },
+        { "type": "flag", "flag": "challenged_vaelen" }
+      ],
+      "intro": "As your boot touches the dais, the hundreds of silver plumb-lines overhead shudder with a piercing harmonic chord. Prelate Vaelen turns from the gilded carillon, blood from her raw fingers staining the silver winding-key. Beside the cradle, a tethered chorister lurches forward on taut wires.\n\n\"You come for the Moon Seal in the mainspring,\" Vaelen says, her voice trembling between fury and terror. \"If that seal leaves the cradle, the spring runs down—and when the song stops, Lira is gone forever! I swore on her deathbed that the dark would never have her. I will bind your voice to the stacks before I let that cradle go silent!\"",
+      "enemies": [
+        { "monster": "prelate_vaelen", "count": 1 },
+        { "monster": "tethered_chorister", "count": 1 }
+      ],
+      "canFlee": true,
+      "fleeTo": "tallow_foundry",
+      "parley": {
+        "options": [
+          {
+            "label": "Sing the missing final line of Lira's lullaby—'sleep until the morning field'—so she can rest",
+            "check": {
+              "skill": "persuasion",
+              "dc": 14,
+              "advantageIf": [
+                {
+                  "type": "any",
+                  "conditions": [
+                    { "type": "flag", "flag": "shone_sanctum_echo" },
+                    { "type": "flag", "flag": "shone_foundry_echo" },
+                    { "type": "flag", "flag": "shone_stacks_echo" },
+                    { "type": "flag", "flag": "read_vaelen_ledger" },
+                    { "type": "flag", "flag": "heard_seal_harmonic" },
+                    { "type": "flag", "flag": "slackened_choir_loom" }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "label": "Intone the resolving cadence on the carillon's comb so the loop unbinds without pain",
+            "conditions": [ { "type": "class", "class": "vesper_cantor" } ],
+            "check": { "skill": "performance", "dc": 11, "advantage": true }
+          },
+          {
+            "label": "Invoke the Clause of Fulfilled Custody: a mother's vow is kept by ending her child's pain",
+            "conditions": [ { "type": "class", "class": "liminal_auditor" } ],
+            "check": { "skill": "persuasion", "dc": 12, "advantage": true }
+          },
+          {
+            "label": "Offer as an Oath-Eater to bear the weight of breaking her vow so Lira can sleep",
+            "conditions": [ { "type": "class", "class": "oath_eater" } ],
+            "check": { "skill": "persuasion", "dc": 12, "advantage": true }
+          },
+          {
+            "label": "Let Lira's exhausted spirit speak through the cold ember in your ribs",
+            "conditions": [ { "type": "class", "class": "remnant_vessel" } ],
+            "check": { "skill": "insight", "dc": 11, "advantage": true }
+          },
+          {
+            "label": "Show her the Tarnished Locket and confess what refusing to let go did to your own heart",
+            "conditions": [ { "type": "background", "background": "bereaved_kin" } ],
+            "check": { "skill": "insight", "dc": 11, "advantage": true }
+          }
+        ],
+        "onSuccess": [
+          {
+            "type": "message",
+            "text": "Prelate Vaelen goes rigid. Inside the crystal cradle, the small spirit stops turning against the brass pin and looks up at her mother with clear, salt-wet eyes.\n\n\"Mama,\" Lira whispers—not the recorded groove of the wax, but her own voice at last. \"You sang the rest of the song.\"\n\nWith a sob that seems to tear thirty years of stone from her chest, Vaelen reaches into the carillon and unhooks the silver catch-pin. The four-bar loop resolves into a single, gentle chord. Lira's salt-crust dissolves into warm golden motes that brush her mother's cheek once before rising into peaceful stillness, and the tethered chorister beside the dais sinks quietly into ash.",
+            "style": "narration"
+          },
+          { "type": "setFlag", "flag": "vaelen_reconciled" },
+          { "type": "addCounter", "counter": "lantern_resonance", "amount": 1 },
+          { "type": "changeReputation", "faction": "lantern_bearers", "amount": 15 },
+          { "type": "changeReputation", "faction": "hollow_choir", "amount": -10 },
+          { "type": "grantXp", "amount": 160 }
+        ],
+        "onFailure": [
+          {
+            "type": "message",
+            "text": "\"Don't you dare finish that verse!\" Vaelen screams, wrenching the silver key another turn. \"As long as the song plays, she is still mine!\"",
+            "style": "warning"
+          }
+        ]
+      },
+      "onVictory": [
+        {
+          "type": "message",
+          "text": "Prelate Vaelen falls across the base of the gilded cradle as the tethered chorister shatters into salt. With no hand on the key, the carillon's mainspring unwinds in a shrill, tearing shriek of wire before going cold.",
+          "style": "narration"
+        },
+        { "type": "setFlag", "flag": "vaelen_destroyed" },
+        { "type": "addCounter", "counter": "lantern_resonance", "amount": -1 },
+        { "type": "changeReputation", "faction": "hollow_choir", "amount": -20 }
+      ],
+      "onResolved": [
+        { "type": "setFlag", "flag": "vaelen_resolved" }
+      ]
+    }
+  }
+]

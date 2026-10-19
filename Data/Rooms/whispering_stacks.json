@@ -1,0 +1,104 @@
+[
+  {
+    "id": "whispering_stacks",
+    "name": "The Whispering Stacks",
+    "description": "Towering shelves of dark shale rise from floor to cavern roof, packed with thousands of vellum ledgers and ticking brass wax-cylinders. Hair-thin silver wires stretch from the spines of the books to the translucent wrists of tethered spirits who stand between the aisles, turning the same page forward and back in endless, salt-crusted silence.\n\nThe air is dry and warm, thick with the scent of beeswax, ozone, and old paper. At a desk near the center aisle sits a blind mortal scribe, his fingers raw from winding rows of brass clockwork keys.",
+    "revisit": "Thousands of wax cylinders tick softly along the shale shelves while tethered spirits turn the same pages forever.",
+    "variants": [
+      {
+        "conditions": [ { "type": "flag", "flag": "slackened_choir_loom" } ],
+        "text": "The silver wires overhead hang noticeably slacker now, their harsh metallic whine softened to a low murmur."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "tuned_choir_loom" } ],
+        "text": "The acoustic cones along the shelves hum in clean, tuned alignment, easing the tremor in the spirits' hands."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "vaelen_reconciled" } ],
+        "text": "Several of the oldest wax cylinders have stopped turning altogether, their silver threads hanging loose and empty in the quiet air."
+      }
+    ],
+    "ambient": [
+      "A translucent hand turns a vellum page, pauses for three heartbeats, and turns it back.",
+      "Thousands of brass styluses hiss in unison as they trace grooves in spinning wax.",
+      "White memory-salt sifts down from the upper shelves like dry winter frost.",
+      "A voice from a ledger whispers a wedding vow, catches on the surname, and begins again."
+    ],
+    "exits": [
+      { "direction": "south", "target": "warren_crossroads", "description": "The wire-hung gallery leads back south to the Gate of the Twin Seals." },
+      { "direction": "north", "target": "tallow_foundry", "description": "An archway warm with melted wax leads north into the Tallow-Spindle Loom." }
+    ],
+    "features": [
+      {
+        "id": "bound_ledgers",
+        "name": "shelves of tethered ledgers",
+        "aliases": ["shelves", "ledgers", "books", "cylinders", "index"],
+        "description": "Each ledger is bound in grey calfskin and wired with silver thread to a wax cylinder that records a single memory of a departed soul.",
+        "interactions": [
+          {
+            "verb": "read",
+            "label": "Read an open ledger on the lectern",
+            "text": "The open folio is titled THE REGISTRY OF UNKEPT PROMISES. Each entry lists a spirit's name, the loved one who petitioned the Hollow Choir to keep them awake, and the number of times their wax cylinder has been re-cut as the rest of their mind calcified into salt."
+          },
+          {
+            "verb": "audit",
+            "label": "Audit the Choir's Index of Severance",
+            "once": true,
+            "text": "You cross-reference the Choir's private binding-numbers against the dates of the autumn fever in Hollin's Rest.",
+            "check": {
+              "skill": "investigation",
+              "dc": 12,
+              "advantageIf": [
+                {
+                  "type": "any",
+                  "conditions": [
+                    { "type": "class", "class": "liminal_auditor" },
+                    { "type": "background", "background": "moor_bailiff" }
+                  ]
+                }
+              ]
+            },
+            "success": {
+              "text": "Buried in the margin of the master roll is Prelate Vaelen's own seal: Entry 001 — Lira, age seven. Bound to the silver nursery-carillon in the inner sanctum, powered by the Seal of the Waxing Moon. A note in a trembling hand warns that the cylinder has been re-cut forty-two times, leaving only the first four bars of her winter lullaby intact.",
+              "effects": [
+                { "type": "setFlag", "flag": "read_vaelen_ledger" },
+                { "type": "grantXp", "amount": 25 }
+              ]
+            },
+            "failure": {
+              "text": "The Choir's acoustic cipher and cross-referenced shelf marks blur together before you can isolate the Prelate's personal record."
+            }
+          }
+        ]
+      },
+      {
+        "id": "stacks_memory_echo",
+        "name": "aisle memory echo",
+        "aliases": ["echo", "memory", "aisle", "shimmer"],
+        "description": "In the Barrowlight's glow, two silhouettes stand frozen between the stacks: Prelate Vaelen clutching a tiny wax cylinder, and an elderly archivist barring her way.",
+        "conditions": [ { "type": "hasItem", "item": "barrowlight" } ],
+        "interactions": [
+          {
+            "verb": "shine",
+            "label": "Shine the Barrowlight on the aisle echo",
+            "once": true,
+            "text": "You raise the Barrowlight, and the memory trapped in the wax-dust speaks aloud.\n\n\"Every time you deepen the groove so she won't fade, Prelate, you shave away another year of her life!\" the old archivist pleads. \"Soon little Lira won't remember your face or the sun—only the fever and the first four notes of that song!\"\n\n\"Four notes is better than silence!\" Vaelen's voice answers, fierce and breaking. \"I promised her the dark would never take her!\"",
+            "effects": [
+              { "type": "setFlag", "flag": "shone_stacks_echo" },
+              { "type": "grantXp", "amount": 25 }
+            ]
+          }
+        ]
+      }
+    ],
+    "npcs": [
+      {
+        "id": "caelan",
+        "name": "Archivist Caelan",
+        "aliases": ["caelan", "archivist", "scribe", "clerk"],
+        "description": "A blind mortal archivist in a wax-spotted smock, his raw fingertips moving from cylinder to cylinder to keep the clockwork springs from running down.",
+        "dialogue": "caelan"
+      }
+    ]
+  }
+]

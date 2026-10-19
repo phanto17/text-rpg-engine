@@ -1,0 +1,83 @@
+[
+  {
+    "id": "scoured_cloister",
+    "name": "The Scoured Cloister",
+    "description": "South of the crossroads lies a stark, whitewashed subterranean barracks carved in austere rectilinear bays. Every wall has been scrubbed with boiling lye until the stone is bleached the color of old bone. Along the colonnade, hundreds of identical iron helms hang above narrow sleeping-ledges that hold no letters, no lockets, and no carved names.\n\nNear the armory rack stands an aging Ashen quartermaster in lye-bleached mail, polishing a blank shield with mechanical, unhurried strokes.",
+    "revisit": "Bleached stone bays and nameless iron helms line the Scoured Cloister.",
+    "variants": [
+      {
+        "conditions": [ { "type": "flag", "flag": "quenched_lye_cistern" } ],
+        "text": "The acrid bite of boiling lye in the air has thinned, replaced by the clean chill of canal water from the southern cistern."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "silas_relieved" } ],
+        "text": "Several scoured soldiers sit quietly along the benches with their blank helms in their laps, touching the chiseled stone above their bunks as if trying to trace the letters that used to be there."
+      }
+    ],
+    "ambient": [
+      "The sharp, chemical tang of boiled lye and wet iron stings the back of your throat.",
+      "Somewhere down the hall, two sentries change watch without speaking a word or a name.",
+      "A whetstone scrapes across a glaive in slow, even counts of four.",
+      "Every regimental banner along the nave has been bleached white of its company numerals."
+    ],
+    "exits": [
+      { "direction": "north", "target": "warren_crossroads", "description": "The whitewashed causeway leads north back to the Gate of the Twin Seals." },
+      { "direction": "south", "target": "lye_cistern", "description": "Clouds of bitter alkali steam drift from the southern arch of the Cistern of Lye and Ash." }
+    ],
+    "features": [
+      {
+        "id": "confessional_grate",
+        "name": "iron confessional grate",
+        "aliases": ["grate", "confessional", "drain", "strip", "lead"],
+        "description": "A recessed iron floor-grate beneath a stone kneeling-bench where garrison soldiers surrender their personal memories before undergoing the Rite of the Scoured Brow.",
+        "interactions": [
+          {
+            "verb": "search",
+            "label": "Search beneath the iron confessional grate",
+            "once": true,
+            "text": "You kneel on the bleached stone and work your fingers through the narrow slots of the iron grate.",
+            "check": { "skill": "investigation", "dc": 12 },
+            "success": {
+              "text": "Wedged beneath the iron frame is a single unmelted strip of lead foil dropped before it reached the furnace. Scratched into the soft metal with a dagger-point are the words: TOMAS, NOVICE OF THE THIRD WATCH — MY BROTHER, WHOM I BURNED AT THE MARLEY GRAVE. FORGIVE ME, SILAS.",
+              "effects": [
+                { "type": "setFlag", "flag": "found_silas_lead_strip" },
+                { "type": "grantXp", "amount": 25 }
+              ]
+            },
+            "failure": {
+              "text": "Only gray alkali crust and cooled droplets of nameless lead remain between the bars."
+            }
+          }
+        ]
+      },
+      {
+        "id": "cloister_memory_echo",
+        "name": "kneeling-bench memory echo",
+        "aliases": ["echo", "memory", "bench", "silas"],
+        "description": "In the Barrowlight's glow, a lone armored figure kneels over the iron grate with his helm on the floor beside him, pressing a heated iron brand to his own forearm.",
+        "conditions": [ { "type": "hasItem", "item": "barrowlight" } ],
+        "interactions": [
+          {
+            "verb": "shine",
+            "label": "Shine the Barrowlight on the kneeling-bench echo",
+            "once": true,
+            "text": "You hold the Barrowlight over the grate, and Commander Silas's voice—still raw with human grief before his final scouring—echoes from the stone:\n\n\"Take the boy's face out of my head. If I remember how my brother Tomas looked at me when the pyre caught, I won't be able to give the next order. Scour it all—leave only the drill.\"",
+            "effects": [
+              { "type": "setFlag", "flag": "shone_cloister_echo" },
+              { "type": "grantXp", "amount": 25 }
+            ]
+          }
+        ]
+      }
+    ],
+    "npcs": [
+      {
+        "id": "venn",
+        "name": "Quartermaster Venn",
+        "aliases": ["venn", "quartermaster", "armorer", "soldier"],
+        "description": "An aging Ashen armorer whose brow bears the pale scar of the lye-baptism. He polishes a blank shield with steady, practiced strokes, though his left hand trembles whenever he stops.",
+        "dialogue": "venn"
+      }
+    ]
+  }
+]

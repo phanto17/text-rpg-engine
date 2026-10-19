@@ -1,0 +1,82 @@
+[
+  {
+    "id": "prelate_vaelen",
+    "name": "Prelate Vaelen",
+    "description": "High Prelate of the Hollow Choir, draped in spore-dyed vestments woven with silver resonance-thread. Her fingers are raw from turning the key of her daughter's gilded carillon.",
+    "hp": "4d8+4",
+    "ac": 13,
+    "abilities": { "str": 10, "dex": 13, "con": 13, "int": 15, "wis": 14, "cha": 16 },
+    "attacks": [
+      { "name": "Carillon Shriek", "toHit": 5, "damage": "1d8+2", "damageType": "thunder", "weight": 2 },
+      {
+        "name": "Spindle-Wire Lash",
+        "toHit": 5,
+        "damage": "1d6+1",
+        "damageType": "psychic",
+        "weight": 1,
+        "onHit": { "save": { "ability": "wis", "dc": 12 }, "status": "grave_chill" }
+      }
+    ],
+    "resistances": ["psychic", "necrotic"],
+    "vulnerabilities": ["radiant", "force"],
+    "xp": 150,
+    "ai": { "behavior": "aggressive", "fleeBelowHpPercent": 0 },
+    "loot": [ { "item": "tallow_draught", "chance": 0.8 } ]
+  },
+  {
+    "id": "tethered_chorister",
+    "name": "Tethered Chorister",
+    "description": "An ancient spirit of the Archive whose jaw and wrists are stitched to a brass wax-cylinder by taut silver wires, repeating a single broken bar of music.",
+    "hp": "2d6+2",
+    "ac": 11,
+    "abilities": { "str": 11, "dex": 12, "con": 12, "int": 8, "wis": 10, "cha": 8 },
+    "attacks": [
+      { "name": "Silver-Wire Garrote", "toHit": 4, "damage": "1d6+1", "damageType": "slashing", "weight": 2 },
+      { "name": "Looping Dirge", "toHit": 3, "damage": "1d4+1", "damageType": "psychic", "weight": 1 }
+    ],
+    "resistances": ["necrotic"],
+    "vulnerabilities": ["bludgeoning", "force"],
+    "immunities": ["poison"],
+    "xp": 45
+  },
+  {
+    "id": "commander_silas",
+    "name": "Commander Silas",
+    "description": "Commander of the Iron Reliquary garrison in lye-scoured, ash-white plate. Every heraldic mark has been ground from his armor, and his eyes behind the visor are calm, empty, and merciless.",
+    "hp": "4d8+6",
+    "ac": 15,
+    "abilities": { "str": 16, "dex": 11, "con": 15, "int": 11, "wis": 13, "cha": 12 },
+    "attacks": [
+      { "name": "Unburdened Glaive", "toHit": 5, "damage": "1d8+3", "damageType": "slashing", "weight": 2 },
+      {
+        "name": "Furnace Brand",
+        "toHit": 4,
+        "damage": "1d6+1",
+        "damageType": "radiant",
+        "weight": 1,
+        "onHit": { "save": { "ability": "con", "dc": 12 }, "status": "grave_chill" }
+      }
+    ],
+    "resistances": ["necrotic", "slashing"],
+    "vulnerabilities": ["psychic", "lightning"],
+    "immunities": ["poison"],
+    "xp": 150,
+    "ai": { "behavior": "aggressive", "fleeBelowHpPercent": 0 },
+    "loot": [ { "item": "lye_salve", "chance": 0.8 } ]
+  },
+  {
+    "id": "scoured_halberdier",
+    "name": "Scoured Halberdier",
+    "description": "A garrison soldier who has undergone the Rite of the Scoured Brow until neither fear nor his own name remains behind his blank iron mask.",
+    "hp": "2d8+2",
+    "ac": 13,
+    "abilities": { "str": 14, "dex": 10, "con": 13, "int": 7, "wis": 10, "cha": 6 },
+    "attacks": [
+      { "name": "Regimental Halberd", "toHit": 4, "damage": "1d6+2", "damageType": "slashing" }
+    ],
+    "resistances": ["psychic"],
+    "vulnerabilities": ["lightning", "bludgeoning"],
+    "immunities": ["poison"],
+    "xp": 45
+  }
+]

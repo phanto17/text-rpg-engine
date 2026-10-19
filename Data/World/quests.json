@@ -21,6 +21,17 @@
       { "stage": 40, "journal": "You hold both the Resonant Tuning-Tongue and the Smoked-Glass Beacon Lens. Return to the Lantern Market in Nocturne and restore the central beacon." },
       { "stage": 100, "journal": "You rekindled Nocturne's central beacon. Its warm chime steadies the spirits of the Lantern Market against both the Hollow Choir's tethers and the Ashen patrol's quarantine." }
     ]
+  },
+  {
+    "id": "twin_seals",
+    "name": "The Twin Seals of the Warrens",
+    "stages": [
+      { "stage": 10, "journal": "Beyond the Drowned Tollbridge stands the Gate of the Twin Seals, barring the descent into the Cradle of the First Architect. To open it, you must recover the Seal of the Waxing Moon from the Archive of Unkept Vows to the north and the Seal of the Unclouded Sun from the Iron Reliquary to the south." },
+      { "stage": 20, "journal": "You have claimed one of the two Triad Seals from the factions of the Memory Warrens. The second seal still rests in the opposing stronghold." },
+      { "stage": 30, "journal": "You hold both the Seal of the Waxing Moon and the Seal of the Unclouded Sun. Return to the Gate of the Twin Seals at the crossroads and unseal the descent." },
+      { "stage": 100, "journal": "You set both Triad Seals into the bronze gate at the crossroads, unsealing the way down to the Cradle of the First Architect." }
+    ]
   }
 ]
+
 

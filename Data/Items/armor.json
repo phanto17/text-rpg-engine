@@ -25,6 +25,16 @@
     "description": "A knee-length coat of ash-dyed canvas lined with small bronze plates, muffled with felt so the wearer does not wake echoes in the deep tunnels.",
     "value": 50,
     "armor": { "baseAc": 13, "maxDexBonus": 2 }
+  },
+  {
+    "id": "choir_silks",
+    "name": "Choir-Woven Vestments",
+    "aliases": ["vestments", "silks", "robes", "shawl"],
+    "type": "armor",
+    "description": "Layered robes of spore-dyed silk interwoven with fine silver resonance-thread that deflects incoming blows with a soft harmonic hum.",
+    "value": 60,
+    "armor": { "baseAc": 12 }
   }
 ]
+
 

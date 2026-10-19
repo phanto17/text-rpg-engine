@@ -117,10 +117,12 @@ Once claimed in `inner_crypt` (`item: barrowlight`), the lantern serves as both 
 - **`weeping_stair` (The Weeping Stair):** The spiral descent beneath the Barrow Heart where surface rain gives way to bioluminescent ash-moss and echoing memory fragments.
 - **`nocturne_square` (Nocturne — The Lantern Market):** A subterranean hub settlement built inside a sunken cathedral. Populated by half-remembering revenant merchants, runaway heretics, and Sister Wren's makeshift sanctuary (if `wren_joins_descent`). Offers **Rest / Campfire recovery** and **Merchant bartering**.
 - **`drowned_tollbridge` & `echo_chapel`:** Spoke locations where the player investigates who sabotaged Nocturne's central beacon—uncovering the rivalry between the **Hollow Choir** and an **Ashen Order** expeditionary patrol. Neither fight starts on entry: the player chooses when to `approach` Cantor Miriel or Toll-Warden Garin, so each room's memory echo can be shone first for parley advantage. The beacon is relit with `relight` in the square (`restore` is the parser's synonym for loading a save).
-- **Act I ending:** once the tollbridge is resolved, `cross` at the `far_arch` ends the game. The epilogue (`game.json`) reflects `echo_chapel_resolved`, `beacon_restored`, `wren_joins_descent`, and `lantern_resonance`.
+- **Act I transition:** once the tollbridge is resolved, `cross` at the `far_arch` completes `nocturne_beacon` (`100`) and leads into `warren_crossroads`.
 
-### Act II: *The Memory Warrens* (Future Milestone)
-- **`archive_of_vows` (Hollow Choir Sanctum)** & **`iron_reliquary` (Ashen Garrison):** Recovering the twin Triad Seals while confronting the extremes of pathological grief (tethering a dead child's spirit to a music box) and forced amnesia (soldiers scrubbing their own minds to feel no fear).
+### Act II: *The Memory Warrens* (Milestone 3 — Shipped)
+- **`warren_crossroads` (The Gate of the Twin Seals):** The central subterranean junction beyond the Drowned Tollbridge (`east`), splitting `north` toward the Hollow Choir's **Archive of Unkept Vows** and `south` toward the Ashen Order's **Iron Reliquary**. Features a Wayfarer **Sanctuary Brazier** (`rest`) and the **Twin-Seal Threshold Gate** (`unseal` with both `moon_triad_seal` and `sun_triad_seal` to complete `twin_seals` and trigger the Act II climax).
+- **Northern Spoke — The Archive of Unkept Vows (`whispering_stacks` -> `tallow_foundry` -> `vow_sanctum`):** The Hollow Choir's acoustic scriptorium where fading memories are spun into silver-inlaid vellum and brass cylinders. In `vow_sanctum`, the player chooses when to `approach` **Prelate Vaelen** (`archive_vaelen_boss`), who is keeping her own drowned daughter Lira's spirit tethered inside a grand carillon. Finding Memory Echoes with the `barrowlight` (`shone_stacks_echo`, `shone_foundry_echo`, `shone_sanctum_echo`), reading Vaelen's ledger (`read_vaelen_ledger`), slackening the Great Acoustic Loom (`slackened_choir_loom`), or speaking with **Archivist Caelan** (`knows_vaelen_lullaby`) unlocks and strengthens Parley options to release Lira (`vaelen_reconciled`), enabling retrieval of the `moon_triad_seal`.
+- **Southern Spoke — The Iron Reliquary (`scoured_cloister` -> `lye_cistern` -> `reliquary_bastion`):** An Ashen Order garrison where soldiers submerge confession tablets in boiling lye and inhale whitewash steam to scrub away their own names, fear, and grief. In `reliquary_bastion`, the player chooses when to `approach` **Commander Silas** (`reliquary_silas_boss`), a hollowed zealot guarding the `sun_triad_seal` who has scoured his own mind twelve times and forgotten why he fights. Uncovering Memory Echoes (`shone_cloister_echo`, `shone_cistern_echo`, `shone_bastion_echo`), salvaging his lead strip (`found_silas_lead_strip`), quenching the cistern (`quenched_lye_cistern`), or speaking with **Armorer Venn** (`knows_silas_son`) unlocks and strengthens Parley options to stand him down (`silas_relieved`).
 
 ### Act III: *The Cradle of the First Architect* (Future Milestone)
 - Confronting the immortal First Architect at the Great Brazier and choosing the fate of the Under-Barrow based on your accumulated `WorldState` flags, faction reputations, and `lantern_resonance`.
@@ -178,17 +180,47 @@ Once claimed in `inner_crypt` (`item: barrowlight`), the lantern serves as both 
 | `challenged_garin` | `Rooms/drowned_tollbridge.json` | Stepped up to the toll-line to face Toll-Warden Garin; starts the `drowned_tollbridge_watch` fight, which then resumes whenever the bridge is entered until it is resolved. |
 | `shone_bridge_echo` | `Rooms/drowned_tollbridge.json` | Shone the `barrowlight` on the floodgate echo at the Drowned Tollbridge; grants advantage on Garin's parley. |
 | `garin_gift_given` | `Dialogues/garin.json` | Spoke to relieved Toll-Warden Garin and received `grave_salt_bomb`. |
+| `rested_at_crossroads` | `Rooms/warren_crossroads.json` | Rested by the Wayfarers' sanctuary brazier at the Gate of the Twin Seals. |
+| `read_vaelen_ledger` | `Rooms/whispering_stacks.json` | Passed `[Investigation DC 12]` on the Master Index Desk (`Entry 0: Lira, age seven`); grants advantage on Prelate Vaelen's parley. |
+| `shone_stacks_echo` | `Rooms/whispering_stacks.json` | Shone the `barrowlight` on Vaelen's memory echo in the Whispering Stacks; grants advantage on Prelate Vaelen's parley. |
+| `met_caelan` | `Dialogues/caelan.json` | Spoke to Archivist Caelan in the Whispering Stacks. |
+| `knows_vaelen_lullaby` | `Dialogues/caelan.json` | Learned of Lira's frayed cylinder and lullaby from Archivist Caelan; unlocks and grants advantage on Prelate Vaelen's parley. |
+| `slackened_choir_loom` | `Rooms/tallow_foundry.json` | Slackened the Great Acoustic Loom (+1 `lantern_resonance`, +10 `lantern_bearers` rep, -10 `hollow_choir` rep); grants advantage on Prelate Vaelen's parley. |
+| `tuned_choir_loom` | `Rooms/tallow_foundry.json` | Tuned the Great Acoustic Loom (+10 `hollow_choir` rep, -5 `lantern_bearers` rep, -1 `lantern_resonance`, grants `silver_tuning_blade`). |
+| `shone_foundry_echo` | `Rooms/tallow_foundry.json` | Shone the `barrowlight` on the Wax-Tallow Vat echo in the Tallow Foundry; grants advantage on Prelate Vaelen's parley. |
+| `heard_seal_harmonic` | `Rooms/vow_sanctum.json` | Vesper Cantor listened to the Waxing Moon Reliquary's harmonic; grants advantage on Prelate Vaelen's parley. |
+| `shone_sanctum_echo` | `Rooms/vow_sanctum.json` | Shone the `barrowlight` on Lira's echo in the Sanctum of the Unbroken Note; unlocks `"Repeat Lira's whispered plea"` in Prelate Vaelen's parley. |
+| `challenged_vaelen` | `Rooms/vow_sanctum.json` | Stepped onto the chancel dais (`approach` on `lira_carillon`) to confront Prelate Vaelen; starts `archive_vaelen_boss`. |
+| `vaelen_resolved` | `Rooms/vow_sanctum.json` | Defeated or parleyed with Prelate Vaelen; allows taking `moon_triad_seal`. |
+| `vaelen_reconciled` | `Rooms/vow_sanctum.json` | Parleyed with Prelate Vaelen to release Lira's spirit (+15 `lantern_bearers` rep, +5 `hollow_choir` rep, +175 XP, +1 `lantern_resonance`). |
+| `vaelen_destroyed` | `Rooms/vow_sanctum.json` | Defeated Prelate Vaelen in combat (-15 `hollow_choir` rep, -1 `lantern_resonance`). |
+| `vaelen_gift_given` | `Dialogues/vaelen.json` | Spoke to reconciled Prelate Vaelen and received `choir_silks`. |
+| `found_silas_lead_strip` | `Rooms/scoured_cloister.json` | Passed `[Investigation DC 12]` on the Chiseled Roll-Call Wall to salvage Silas's twelfth lead strip (`Corren — West Gate`); grants advantage on Commander Silas's parley. |
+| `shone_cloister_echo` | `Rooms/scoured_cloister.json` | Shone the `barrowlight` on the Scoured Cloister echo; grants advantage on Commander Silas's parley. |
+| `met_venn` | `Dialogues/venn.json` | Spoke to Armorer Venn in the Cloister of the Scoured Name. |
+| `knows_silas_son` | `Dialogues/venn.json` | Learned of Commander Silas's son Corren and his twelve scourings from Armorer Venn; unlocks and grants advantage on Commander Silas's parley. |
+| `quenched_lye_cistern` | `Rooms/lye_cistern.json` | Quenched the Cistern of White Lye (+1 `lantern_resonance`, +10 `lantern_bearers` rep, -10 `ashen_order` rep); grants advantage on Commander Silas's parley. |
+| `shone_cistern_echo` | `Rooms/lye_cistern.json` | Shone the `barrowlight` on the Immersion Grate echo in the Cistern of White Lye; grants advantage on Commander Silas's parley. |
+| `heard_sun_harmonic` | `Rooms/reliquary_bastion.json` | Vesper Cantor listened to the Unclouded Sun Reliquary's harmonic; grants advantage on Commander Silas's parley. |
+| `shone_bastion_echo` | `Rooms/reliquary_bastion.json` | Shone the `barrowlight` on Silas's echo at the Furnace of Remission; unlocks `"Recite the oath Silas spoke before his twelfth scouring"` in Commander Silas's parley. |
+| `challenged_silas` | `Rooms/reliquary_bastion.json` | Stepped up to the bastion floor (`approach` on `furnace_of_remission`) to face Commander Silas; starts `reliquary_silas_boss`. |
+| `silas_resolved` | `Rooms/reliquary_bastion.json` | Defeated or parleyed with Commander Silas; allows taking `sun_triad_seal`. |
+| `silas_relieved` | `Rooms/reliquary_bastion.json` | Parleyed with Commander Silas to stand him down (+15 `ashen_order` rep, +10 `lantern_bearers` rep, +175 XP, +1 `lantern_resonance`). |
+| `silas_destroyed` | `Rooms/reliquary_bastion.json` | Defeated Commander Silas in combat (-15 `ashen_order` rep, -1 `lantern_resonance`). |
+| `silas_gift_given` | `Dialogues/silas.json` | Spoke to relieved Commander Silas and received `scoured_halberd`. |
 
 ### Counters (`counter`)
 | Counter ID | Used In | Meaning |
 | :--- | :--- | :--- |
 | `sigil_seq` | `Rooms/ossuary_hall.json` | Tracks bronze door progress (`0` = start, `1` = sun pressed, `2` = moon pressed; resets to `0` on trap trigger). |
-| `lantern_resonance` | `Rooms/inner_crypt.json` / Act I rooms / `game.json` | Tracks the moral/philosophical resonance of the Barrowlight (`+` for mercy/release, `-` for destruction). |
+| `lantern_resonance` | `Rooms/inner_crypt.json` / Act I & II rooms / `game.json` | Tracks the moral/philosophical resonance of the Barrowlight (`+` for mercy/release, `-` for destruction). |
 
 ### Quests (`questStage`)
 - `barrowlight`: `10` (Entered Lichgate) -> `20` (Entered Ossuary Hall) -> `30` (Opened bronze door) -> `40` (Resolved Barrow Heart encounter) -> `50` (Claimed the Barrowlight & unsealed the spiral stair) -> `100` (Descended into the Under-Barrow).
-- `nocturne_beacon`: `10` (Descended the Weeping Stair) -> `20` (Reached Nocturne Square and learned of the sabotaged beacon) -> `30` (Recovered the first missing beacon component) -> `40` (Recovered both `choir_tuning_fork` and `beacon_lens`) -> `100` (Restored the Nocturne Beacon).
+- `nocturne_beacon`: `10` (Descended the Weeping Stair) -> `20` (Reached Nocturne Square and learned of the sabotaged beacon) -> `30` (Recovered the first missing beacon component) -> `40` (Recovered both `choir_tuning_fork` and `beacon_lens`) -> `100` (Restored the Nocturne Beacon and crossed the Drowned Tollbridge).
+- `twin_seals`: `10` (Reached the Gate of the Twin Seals at `warren_crossroads`) -> `20` (Recovered the first Triad Seal) -> `30` (Recovered both `moon_triad_seal` and `sun_triad_seal`) -> `100` (Unsealed the Twin-Seal Threshold Gate into the Cradle of the First Architect).
 
 ### Backgrounds (`background`)
 - `bereaved_kin`, `ash_deserter`, `moor_bailiff`, `fever_dreamer` (see section 5). Keepsakes: `tarnished_locket`, `scored_signet`, `elders_writ`, `bell_splinter` (`Items/quest_items.json`).
+
 

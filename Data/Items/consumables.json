@@ -51,6 +51,22 @@
       "target": "enemy",
       "resolution": { "type": "autoHit", "damage": "2d6", "damageType": "force" }
     }
+  },
+  {
+    "id": "lye_salve",
+    "name": "Alkali Clarity Draught",
+    "aliases": ["salve", "alkali", "clarity draught", "white vial"],
+    "type": "consumable",
+    "description": "A bitter, chalk-white draught skimmed from the cooling troughs of the Iron Reliquary and tempered with clean mineral water. Restores 2d4+4 hit points.",
+    "value": 65,
+    "use": {
+      "inCombat": true,
+      "consume": true,
+      "effects": [
+        { "type": "heal", "dice": "2d4+4" }
+      ]
+    }
   }
 ]
+
 

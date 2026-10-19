@@ -1,0 +1,108 @@
+[
+  {
+    "id": "venn",
+    "speaker": "Quartermaster Venn",
+    "entries": [
+      { "conditions": [ { "type": "flag", "flag": "silas_relieved" } ], "node": "after_silas_peace" },
+      { "conditions": [ { "type": "flag", "flag": "silas_destroyed" } ], "node": "after_silas_blood" },
+      { "conditions": [ { "type": "flag", "flag": "met_venn" } ], "node": "hub" },
+      { "node": "first_meeting" }
+    ],
+    "nodes": [
+      {
+        "id": "first_meeting",
+        "text": "The aging armorer lowers his polishing cloth at your approach and snaps to attention. Across his brow runs the chalk-white scar of the lye-baptism, and the shield on his bench has been ground smooth of any crest.\n\n\"State rank and serial designation,\" Quartermaster Venn says in a polite, level monotone. When you give your name instead, he blinks once, his left hand twitching faintly at his belt. \"Irregular designation. The Iron Reliquary remains under standing quarantine orders. All personal histories are to be surrendered at the cistern to the south.\"",
+        "effects": [ { "type": "setFlag", "flag": "met_venn" } ],
+        "next": "hub"
+      },
+      {
+        "id": "hub",
+        "text": "Quartermaster Venn stands beside the rack of nameless shields, his eyes clear and empty while his left hand trembles almost imperceptibly.",
+        "choices": [
+          { "text": "What is the Rite of the Scoured Brow?", "once": true, "next": "ask_scouring" },
+          { "text": "Tell me about Commander Silas and the Furnace of Remission.", "once": true, "next": "ask_silas" },
+          {
+            "text": "Look at the tribunal ash on my mouth, soldier. You don't cure a broken vow with lye.",
+            "conditions": [ { "type": "class", "class": "oath_eater" } ],
+            "once": true,
+            "next": "calling_oath_eater"
+          },
+          {
+            "text": "Your muster-rolls are blank, Quartermaster. An army with no names has no legal chain of command.",
+            "conditions": [ { "type": "class", "class": "liminal_auditor" } ],
+            "once": true,
+            "next": "calling_liminal_auditor"
+          },
+          {
+            "text": "Hum the novice's waking-bell under your breath to see if he still hears it.",
+            "conditions": [ { "type": "class", "class": "vesper_cantor" } ],
+            "once": true,
+            "next": "calling_vesper_cantor"
+          },
+          {
+            "text": "Look at me, Venn. I died and woke, and I still remember my name without iron or lye.",
+            "conditions": [ { "type": "class", "class": "remnant_vessel" } ],
+            "once": true,
+            "next": "calling_remnant_vessel"
+          },
+          {
+            "text": "Touch your Tarnished Locket: 'I would rather ache for the rest of my life than forget their name.'",
+            "conditions": [ { "type": "background", "background": "bereaved_kin" } ],
+            "once": true,
+            "next": "burden_bereaved_kin"
+          },
+          { "text": "At ease, Quartermaster.", "end": true }
+        ]
+      },
+      {
+        "id": "ask_scouring",
+        "text": "\"Fear and grief are vectors of indiscipline,\" Venn recites smoothly. \"When the Third Patrol failed to return from the Drowned Tollbridge, Commander Silas instituted the Rite of the Scoured Brow. Each soldier inscribes their personal attachments onto lead foil, casts the foil into the Furnace of Remission, and washes their brow in boiled lye-ash. Once scoured, a soldier feels neither sorrow nor hesitation.\"\n\nHe looks down at his trembling left hand, frowning slightly. \"My hand still reaches for a pouch that isn't on my belt. I have requested a third scouring to correct the reflex.\"",
+        "next": "hub"
+      },
+      {
+        "id": "ask_silas",
+        "text": "\"Commander Silas holds the Bastion of the Unburdened beyond the southern cistern,\" Venn says. \"The Furnace of Remission is powered by the Seal of the Unclouded Sun. The Commander promised the company that he alone would carry the memory of our orders so we could march unburdened.\" Venn's voice falters for half a beat. \"Though he has not issued a new order in forty-seven days. He only calls the morning drill.\"",
+        "next": "hub"
+      },
+      {
+        "id": "calling_oath_eater",
+        "text": "Venn's gaze locks onto the grey ash-scar at the corner of your mouth. For a brief, startled second, the mask of military regulation slips.\n\n\"An iron-penitent,\" he whispers. \"You swallowed the ash of your vow before the tribunal... and kept walking with the taste in your mouth. Commander Silas told us no one could survive carrying that weight.\"",
+        "next": "hub"
+      },
+      {
+        "id": "calling_liminal_auditor",
+        "text": "Venn glances at the blank slate tablets stacked beside the armory rack. \"No legal chain of command,\" he repeats slowly, as if testing a theorem he once knew. \"If you say that to Commander Silas over his blank dispatch table in the bastion, I do not know how he will answer you.\"",
+        "next": "hub"
+      },
+      {
+        "id": "calling_vesper_cantor",
+        "text": "You hum the three rising notes of the abbey's morning bell. Venn goes completely still. A single tear tracks down through the white lye-scar on his cheek and splashes onto the blank steel shield.\n\nHe touches his wet face in bewilderment. \"Why is there water on my cheek? The roof is dry.\"",
+        "effects": [
+          { "type": "addCounter", "counter": "lantern_resonance", "amount": 1 }
+        ],
+        "next": "hub"
+      },
+      {
+        "id": "calling_remnant_vessel",
+        "text": "Venn stares at the cold ember pulsing faintly beneath your ribs. \"You are dead,\" he states, his regulation cadence wavering. \"Yet you have not calcified, and you have not been scoured. According to garrison doctrine, you cannot exist.\"",
+        "next": "hub"
+      },
+      {
+        "id": "burden_bereaved_kin",
+        "text": "Venn looks at the worn tin locket in your hand—the exact kind of keepsake melted by the hundreds into the bastion's lead ingots.\n\n\"You choose to keep the wound open,\" he says softly. And for a moment, his trembling left hand closes around empty air as if holding a locket of his own.",
+        "effects": [
+          { "type": "addCounter", "counter": "lantern_resonance", "amount": 1 }
+        ],
+        "next": "hub"
+      },
+      {
+        "id": "after_silas_peace",
+        "text": "Quartermaster Venn sits on the armory bench with a piece of white chalk, slowly writing fragments of remembered words onto the blank face of his shield.\n\n\"I had a daughter who liked hawthorn blossoms,\" he tells you quietly. \"I don't have her name back yet, {player.name}. But I have the blossoms.\""
+      },
+      {
+        "id": "after_silas_blood",
+        "text": "Quartermaster Venn stands at rigid attention beside the empty shield-rack, staring at the wall. Without Commander Silas to call the count, the garrison has fallen into a heavy, aimless silence."
+      }
+    ]
+  }
+]
