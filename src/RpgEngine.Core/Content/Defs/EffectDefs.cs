@@ -20,6 +20,7 @@ namespace RpgEngine.Core.Content.Defs;
 [JsonDerivedType(typeof(HealEffect), "heal")]
 [JsonDerivedType(typeof(DamageEffect), "damage")]
 [JsonDerivedType(typeof(RestoreManaEffect), "restoreMana")]
+[JsonDerivedType(typeof(RestEffect), "rest")]
 [JsonDerivedType(typeof(SavingThrowEffect), "savingThrow")]
 [JsonDerivedType(typeof(SkillCheckEffect), "skillCheck")]
 [JsonDerivedType(typeof(MessageEffect), "message")]
@@ -151,6 +152,9 @@ public sealed record StartCombatEffect : EffectDef
 {
     public required string Encounter { get; init; }
 }
+
+/// <summary>A full rest at a sanctuary: restores hit points and mana to their maximums.</summary>
+public sealed record RestEffect : EffectDef;
 
 /// <summary>Ends the adventure and shows the first epilogue whose conditions pass.</summary>
 public sealed record EndGameEffect : EffectDef;

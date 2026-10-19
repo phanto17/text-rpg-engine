@@ -117,6 +117,27 @@ public sealed class EffectApplierTests
     }
 
     [Fact]
+    public void Rest_RestoresHpAndManaToMax()
+    {
+        var player = TestCharacters.Create(maxHp: 12, maxMana: 6);
+        player.TakeDamage(9);
+        player.TrySpendMana(4);
+
+        var (_, log) = Run([new RestEffect()], player);
+
+        Assert.Equal(new RestedEvent(9, 4, 12, 12, 6, 6), Assert.Single(log.Events));
+        Assert.Equal((12, 6), (player.CurrentHp, player.CurrentMana));
+    }
+
+    [Fact]
+    public void Rest_AtFullStrength_RestoresNothing()
+    {
+        var (_, log) = Run([new RestEffect()], TestCharacters.Create(maxHp: 8));
+
+        Assert.Equal(new RestedEvent(0, 0, 8, 8, 0, 0), Assert.Single(log.Events));
+    }
+
+    [Fact]
     public void Heal_RollsDiceAndClampsToMax()
     {
         var player = TestCharacters.Create(maxHp: 10);

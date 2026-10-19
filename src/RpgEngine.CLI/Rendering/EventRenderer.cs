@@ -117,6 +117,10 @@ internal sealed class EventRenderer(IAnsiConsole console, DiceAnimator animator)
             case ManaChangedEvent e:
                 console.MarkupLine($"[{Theme.Mana}]{RollText.Signed(e.Delta)} MP[/]  {Bars.Mana(e.Mana, e.MaxMana, Unicode)}");
                 break;
+            case RestedEvent e:
+                var mana = e.MaxMana > 0 ? $"  {Bars.Mana(e.Mana, e.MaxMana, Unicode)}" : string.Empty;
+                console.MarkupLine($"[{Theme.Success}]Rested.[/] [{Theme.Muted}](+{e.HpRestored} HP{(e.MaxMana > 0 ? $", +{e.ManaRestored} MP" : string.Empty)})[/]  {Bars.Hp(e.Hp, e.MaxHp, Unicode)}{mana}");
+                break;
             case ReputationChangedEvent e:
                 var color = e.Delta >= 0 ? Theme.Success : Theme.Failure;
                 console.MarkupLine($"[{Theme.Muted}]Reputation:[/] {Markup.Escape(e.Faction.Name)} [{color}]{RollText.Signed(e.Delta)}[/] [{Theme.Muted}](now {e.Value})[/]");

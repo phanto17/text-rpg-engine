@@ -47,6 +47,9 @@ public sealed record HealedEvent(string Target, bool IsPlayer, int Amount, int H
 
 public sealed record ManaChangedEvent(int Delta, int Mana, int MaxMana) : GameEvent;
 
+/// <summary>A full rest: what was restored and the resulting hit points and mana.</summary>
+public sealed record RestedEvent(int HpRestored, int ManaRestored, int Hp, int MaxHp, int Mana, int MaxMana) : GameEvent;
+
 public sealed record ReputationChangedEvent(FactionDef Faction, int Delta, int Value) : GameEvent;
 
 public sealed record QuestUpdatedEvent(QuestDef Quest, QuestStageDef Stage) : GameEvent;

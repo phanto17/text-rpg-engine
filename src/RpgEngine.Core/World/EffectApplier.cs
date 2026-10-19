@@ -98,6 +98,11 @@ public sealed class EffectApplier
             case RestoreManaEffect e:
                 log.Add(new ManaChangedEvent(player.RestoreMana(e.Amount), player.CurrentMana, player.MaxMana));
                 break;
+            case RestEffect:
+                var hpRestored = player.Heal(player.MaxHp - player.CurrentHp);
+                var manaRestored = player.RestoreMana(player.MaxMana - player.CurrentMana);
+                log.Add(new RestedEvent(hpRestored, manaRestored, player.CurrentHp, player.MaxHp, player.CurrentMana, player.MaxMana));
+                break;
             case SavingThrowEffect e:
                 var save = _checks.SavingThrow(player, e.Ability, e.Dc);
                 log.Add(new CheckRolledEvent(save));

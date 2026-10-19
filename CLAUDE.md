@@ -185,7 +185,7 @@ CLI layout:
 ```
 - `kind` is `spell` or `technique`.
 - `target` is `enemy`, `self`, or `ally`.
-- `cost` is `{ "mana": n }`, `{ "usesPerEncounter": n }`, or `{}` (free). **Per-encounter uses recharge automatically when any combat ends.** Rests are not part of Milestone 1.
+- `cost` is `{ "mana": n }`, `{ "usesPerEncounter": n }`, or `{}` (free). **Per-encounter uses recharge automatically when any combat ends.** A `rest` effect (for example on a sanctuary brazier) restores HP and mana to their maximums.
 - `resolution.type`:
   - `autoHit`: `damage`, `damageType`
   - `spellAttack`: d20 + prof + casting mod vs AC, then `damage`, `damageType`, and an optional `status` on a hit
@@ -372,6 +372,7 @@ CLI layout:
 | `grantXp` | `amount` |
 | `heal` / `damage` | `dice`, `damageType?` |
 | `restoreMana` | `amount` |
+| `rest` | none; restores HP and mana to their maximums (a sanctuary rest) |
 | `savingThrow` | `ability`, `dc`, `onSuccess[]`, `onFail[]` |
 | `skillCheck` | `check` (a check object), `onSuccess[]`, `onFail[]` |
 | `if` | `conditions[]`, `then[]`, `else[]` |

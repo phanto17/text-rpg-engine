@@ -37,7 +37,7 @@ public sealed class ContentValidatorTests
             "npcs": [ { "id": "sage", "name": "Sage", "aliases": ["old man"], "description": "Old.", "dialogue": "sage",
                         "conditions": [ { "type": "not", "conditions": [ { "type": "flag", "flag": "sage_gone" } ] } ] } ],
             "onFirstEnter": [ { "type": "setQuestStage", "quest": "main", "stage": 10 } ],
-            "onEnter": [ { "type": "setCounter", "counter": "visits", "value": 1 } ] },
+            "onEnter": [ { "type": "setCounter", "counter": "visits", "value": 1 }, { "type": "rest" } ] },
           { "id": "hall", "name": "Hall", "description": "A hall.",
             "exits": [ { "direction": "south", "target": "start" } ],
             "encounter": { "id": "rats", "conditions": [ { "type": "notFlag", "flag": "rats_dead" } ], "intro": "Squeak!",
