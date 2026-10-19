@@ -229,6 +229,7 @@ public sealed class EffectApplierTests
             new MoveToEffect { Room = "hall" },
             new StartDialogueEffect { Dialogue = "sage" },
             new StartCombatEffect { Encounter = "rats" },
+            new StartShopEffect { Shop = "stall" },
             new EndGameEffect(),
         ]);
 
@@ -239,7 +240,7 @@ public sealed class EffectApplierTests
         }
 
         Assert.Equal(
-            new GameTransition[] { new MoveToTransition("hall"), new StartDialogueTransition("sage"), new StartCombatTransition("rats"), new EndGameTransition() },
+            new GameTransition[] { new MoveToTransition("hall"), new StartDialogueTransition("sage"), new StartCombatTransition("rats"), new StartShopTransition("stall"), new EndGameTransition() },
             transitions);
     }
 

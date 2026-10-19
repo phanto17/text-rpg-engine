@@ -44,6 +44,7 @@ public sealed class SaveServiceTests : IDisposable
         world.MarkUsed("interaction:start:stone:0");
         world.RemoveItemFromRoom("start", "potion");
         world.AddItemToRoom("hall", "key");
+        world.SetShopStock("stall", "potion", 1);
 
         return new GameState(player, world, "hall");
     }
@@ -106,6 +107,7 @@ public sealed class SaveServiceTests : IDisposable
         Assert.True(state.World.IsUsed("interaction:start:stone:0"));
         Assert.Equal(new[] { "dagger" }, state.World.ItemsIn("start"));
         Assert.Equal(new[] { "key" }, state.World.ItemsIn("hall"));
+        Assert.Equal(1, state.World.GetShopStock("stall", "potion"));
     }
 
     [Fact]
@@ -165,6 +167,9 @@ public sealed class SaveServiceTests : IDisposable
     [InlineData("\"classId\": \"fighter\"", "\"classId\": \"bard\"", "unknown class 'bard'")]
     [InlineData("\"background\": \"orphan\"", "\"background\": \"noble\"", "unknown background 'noble'")]
     [InlineData("\"currentRoom\": \"hall\"", "\"currentRoom\": \"void\"", "unknown room 'void'")]
+    [InlineData("\"stall\": {", "\"bazaar\": {", "unknown shop 'bazaar'")]
+    [InlineData("\"potion\": 1", "\"dagger\": 1", "shop 'stall' does not stock 'dagger'")]
+    [InlineData("\"potion\": 1", "\"potion\": -1", "shop 'stall' has negative stock of 'potion'")]
     [InlineData("\"itemId\": \"sword\"", "\"itemId\": \"laser\"", "unknown item 'laser'")]
     [InlineData("\"second_wind\"", "\"fireball\"", "unknown spell 'fireball'")]
     [InlineData("\"equippedWeapon\": \"sword\"", "\"equippedWeapon\": \"dagger\"", "equipped weapon")]

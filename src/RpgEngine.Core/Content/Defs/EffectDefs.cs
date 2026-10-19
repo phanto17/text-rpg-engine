@@ -27,6 +27,7 @@ namespace RpgEngine.Core.Content.Defs;
 [JsonDerivedType(typeof(MoveToEffect), "moveTo")]
 [JsonDerivedType(typeof(StartDialogueEffect), "startDialogue")]
 [JsonDerivedType(typeof(StartCombatEffect), "startCombat")]
+[JsonDerivedType(typeof(StartShopEffect), "startShop")]
 [JsonDerivedType(typeof(EndGameEffect), "endGame")]
 [JsonDerivedType(typeof(IfEffect), "if")]
 public abstract record EffectDef;
@@ -151,6 +152,12 @@ public sealed record StartDialogueEffect : EffectDef
 public sealed record StartCombatEffect : EffectDef
 {
     public required string Encounter { get; init; }
+}
+
+/// <summary>Opens a shop's buy and sell screen.</summary>
+public sealed record StartShopEffect : EffectDef
+{
+    public required string Shop { get; init; }
 }
 
 /// <summary>A full rest at a sanctuary: restores hit points and mana to their maximums.</summary>

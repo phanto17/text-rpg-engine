@@ -18,6 +18,7 @@ public sealed class GameApp
     private readonly ExplorationScreen _exploration;
     private readonly DialogueScreen _dialogue;
     private readonly CombatScreen _combat;
+    private readonly ShopScreen _shop;
     private readonly EndScreens _end;
 
     public GameApp(IAnsiConsole console, GameContent content, CliOptions options, Func<ulong, IRandomSource>? randomFactory = null, TimeProvider? time = null)
@@ -33,6 +34,7 @@ public sealed class GameApp
         _exploration = new ExplorationScreen(_ui, new InfoScreens(_ui));
         _dialogue = new DialogueScreen(_ui);
         _combat = new CombatScreen(_ui);
+        _shop = new ShopScreen(_ui);
         _end = new EndScreens(_ui);
     }
 
@@ -73,6 +75,7 @@ public sealed class GameApp
                 GameMode.Exploration => _exploration.Turn(session),
                 GameMode.Dialogue => _dialogue.Turn(session),
                 GameMode.Combat => _combat.Turn(session),
+                GameMode.Shop => _shop.Turn(session),
                 GameMode.GameOver => _end.GameOver(),
                 _ => _end.Ended(),
             };

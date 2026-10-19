@@ -136,6 +136,8 @@ public sealed partial class SaveService
                 RoomItems = world.RoomItems.Where(pair => pair.Value.Count > 0).OrderBy(pair => pair.Key, StringComparer.Ordinal)
                     .ToDictionary(pair => pair.Key, pair => pair.Value, StringComparer.Ordinal),
                 Used = Sorted(world.Used),
+                ShopStock = world.ShopStock.OrderBy(pair => pair.Key, StringComparer.Ordinal)
+                    .ToDictionary(pair => pair.Key, pair => (IReadOnlyDictionary<string, int>)SortedMap(pair.Value), StringComparer.Ordinal),
             },
         };
     }
@@ -157,6 +159,16 @@ public sealed partial class SaveService
         foreach (var spellId in data.Spells)
         {
             Require(content.Spells.ContainsKey(spellId), $"unknown spell '{spellId}'");
+        }
+
+        foreach (var (shopId, stock) in save.World.ShopStock)
+        {
+            Require(content.Shops.TryGetValue(shopId, out var shop), $"unknown shop '{shopId}'");
+            foreach (var (itemId, remaining) in stock)
+            {
+                Require(shop!.Stock.Any(entry => entry.Item == itemId), $"shop '{shopId}' does not stock '{itemId}'");
+                Require(remaining >= 0, $"shop '{shopId}' has negative stock of '{itemId}'");
+            }
         }
 
         Require(data.EquippedWeapon is null || data.Inventory.Any(e => e.ItemId == data.EquippedWeapon), "the equipped weapon is not in the inventory");
@@ -229,6 +241,14 @@ public sealed partial class SaveService
         foreach (var key in w.Used)
         {
             world.MarkUsed(key);
+        }
+
+        foreach (var (shopId, stock) in w.ShopStock)
+        {
+            foreach (var (itemId, remaining) in stock)
+            {
+                world.SetShopStock(shopId, itemId, remaining);
+            }
         }
 
         return new GameState(player, world, save.CurrentRoom);

@@ -43,6 +43,7 @@ public static partial class ContentValidator
             ValidateIds(content.StatusEffectList, "status effect");
             ValidateIds(content.FactionList, "faction");
             ValidateIds(content.QuestList, "quest");
+            ValidateIds(content.ShopList, "shop");
             ValidateIds(content.ItemList, "item");
             ValidateIds(content.MonsterList, "monster");
             ValidateIds(content.RoomList, "room");
@@ -56,6 +57,7 @@ public static partial class ContentValidator
             content.StatusEffectList.ToList().ForEach(ValidateStatus);
             content.FactionList.ToList().ForEach(faction => RequireText($"faction '{faction.Id}'", faction.Name, "name"));
             content.QuestList.ToList().ForEach(ValidateQuest);
+            content.ShopList.ToList().ForEach(ValidateShop);
             content.ItemList.ToList().ForEach(ValidateItem);
             content.MonsterList.ToList().ForEach(ValidateMonster);
             content.RoomList.ToList().ForEach(ValidateRoom);
@@ -269,6 +271,34 @@ public static partial class ContentValidator
                     {
                         Error(context, $"spellsByLevel level {grant.Level}: '{spell}' is already known.");
                     }
+                }
+            }
+        }
+
+        private void ValidateShop(ShopDef shop)
+        {
+            var context = $"shop '{shop.Id}'";
+            RequireText(context, shop.Name, "name");
+            RequireText(context, shop.Keeper, "keeper");
+            RequireText(context, shop.Greeting, "greeting");
+            if (shop.BuybackRate is < 0 or > 1)
+            {
+                Error(context, "buybackRate must be between 0 and 1.");
+            }
+
+            var seen = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var entry in shop.Stock)
+            {
+                RequireItem(context, entry.Item, "stock", out _);
+                RequireRange(context, entry.Price, 0, int.MaxValue, $"stock '{entry.Item}' price");
+                if (entry.Stock is { } count)
+                {
+                    RequireRange(context, count, 1, 999, $"stock '{entry.Item}' stock");
+                }
+
+                if (!seen.Add(entry.Item))
+                {
+                    Error(context, $"stock lists '{entry.Item}' more than once.");
                 }
             }
         }
@@ -981,6 +1011,13 @@ public static partial class ContentValidator
                     if (!content.Encounters.ContainsKey(combat.Encounter))
                     {
                         Error(context, $"startCombat references unknown encounter '{combat.Encounter}'.");
+                    }
+
+                    break;
+                case StartShopEffect shop:
+                    if (!content.Shops.ContainsKey(shop.Shop))
+                    {
+                        Error(context, $"startShop references unknown shop '{shop.Shop}'.");
                     }
 
                     break;

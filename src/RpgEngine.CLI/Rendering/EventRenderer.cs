@@ -105,6 +105,9 @@ internal sealed class EventRenderer(IAnsiConsole console, DiceAnimator animator)
             case GoldGainedEvent e:
                 console.MarkupLine($"[{Theme.Gold}]+{e.Amount} gold[/] [{Theme.Muted}]({e.Total} total)[/]");
                 break;
+            case GoldSpentEvent e:
+                console.MarkupLine($"[{Theme.Gold}]-{e.Amount} gold[/] [{Theme.Muted}]({e.Total} left)[/]");
+                break;
             case XpGainedEvent e:
                 console.MarkupLine($"[{Theme.Accent}]+{e.Amount} XP[/] [{Theme.Muted}]({e.Total} total)[/]");
                 break;

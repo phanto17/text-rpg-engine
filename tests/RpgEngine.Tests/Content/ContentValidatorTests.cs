@@ -63,7 +63,7 @@ public sealed class ContentValidatorTests
                   { "text": "Leave.", "check": { "skill": "persuasion", "dc": 14, "disadvantageIf": [ { "type": "questStage", "quest": "main", "equals": 100 } ] },
                     "successNode": "friend", "failureNode": "gone", "retry": false },
                   { "text": "Bye.", "conditions": [ { "type": "flag", "flag": "met_sage" } ], "effects": [ { "type": "restoreMana", "amount": 1 } ], "end": true } ] },
-              { "id": "friend", "text": "Friend!", "effects": [ { "type": "heal", "dice": "1d4" }, { "type": "startCombat", "encounter": "rats" } ] },
+              { "id": "friend", "text": "Friend!", "effects": [ { "type": "heal", "dice": "1d4" }, { "type": "startCombat", "encounter": "rats" }, { "type": "startShop", "shop": "stall" } ] },
               { "id": "gone", "text": "Begone.", "effects": [ { "type": "setFlag", "flag": "sage_gone" }, { "type": "clearFlag", "flag": "lit" },
                 { "type": "skillCheck", "check": { "skill": "insight", "dc": 10 }, "onSuccess": [ { "type": "moveTo", "room": "hall" } ] },
                 { "type": "startDialogue", "dialogue": "sage" }, { "type": "endGame" } ] }
@@ -272,6 +272,24 @@ public sealed class ContentValidatorTests
         AssertError(Errors(("game.json", manifest), ("Rules/classes.json", classes)), fragment);
     }
 
+    [Theory]
+    [InlineData("\"name\": \"The Stall\"", "\"name\": \"\"", "shop 'stall': name must not be blank")]
+    [InlineData("\"keeper\": \"Mote\"", "\"keeper\": \" \"", "shop 'stall': keeper must not be blank")]
+    [InlineData("\"greeting\": \"Coin first, {player.name}.\"", "\"greeting\": \"\"", "shop 'stall': greeting must not be blank")]
+    [InlineData("\"stock\": [", "\"buybackRate\": 1.5, \"stock\": [", "shop 'stall': buybackRate must be between 0 and 1")]
+    [InlineData("\"stock\": [", "\"buybackRate\": -0.1, \"stock\": [", "shop 'stall': buybackRate must be between 0 and 1")]
+    [InlineData("\"item\": \"sword\"", "\"item\": \"laser\"", "shop 'stall': stock references unknown item 'laser'")]
+    [InlineData("\"price\": 15", "\"price\": -1", "shop 'stall': stock 'sword' price must be at least 0")]
+    [InlineData("\"stock\": 2", "\"stock\": 0", "shop 'stall': stock 'potion' stock must be between 1 and 999")]
+    [InlineData("\"item\": \"sword\"", "\"item\": \"potion\"", "shop 'stall': stock lists 'potion' more than once")]
+    [InlineData("\"id\": \"stall\"", "\"id\": \"Stall\"", "shop 'Stall': id must be snake_case")]
+    public void Validate_Shops(string original, string replacement, string fragment)
+    {
+        var errors = Errors(("World/shops.json", TestContent.Shops.Replace(original, replacement, StringComparison.Ordinal)));
+
+        AssertError(errors, fragment);
+    }
+
     [Fact]
     public void Validate_NoBackgrounds_IsAnError()
     {
@@ -469,6 +487,7 @@ public sealed class ContentValidatorTests
     [InlineData("""{ "type": "setQuestStage", "quest": "main", "stage": 55 }""", "quest 'main' has no stage 55")]
     [InlineData("""{ "type": "setQuestStage", "quest": "side", "stage": 10 }""", "unknown quest 'side'")]
     [InlineData("""{ "type": "giveItem", "item": "gem" }""", "unknown item 'gem'")]
+    [InlineData("""{ "type": "startShop", "shop": "bazaar" }""", "startShop references unknown shop 'bazaar'")]
     [InlineData("""{ "type": "giveItem", "item": "key", "count": 0 }""", "giveItem count")]
     [InlineData("""{ "type": "removeItem", "item": "gem" }""", "unknown item 'gem'")]
     [InlineData("""{ "type": "removeItem", "item": "key", "count": 0 }""", "removeItem count")]

@@ -15,6 +15,7 @@ public sealed class WorldState
     private readonly HashSet<string> _visitedRooms = new(StringComparer.Ordinal);
     private readonly HashSet<string> _used = new(StringComparer.Ordinal);
     private readonly Dictionary<string, List<string>> _roomItems = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, Dictionary<string, int>> _shopStock = new(StringComparer.Ordinal);
 
     public IReadOnlySet<string> Flags => _flags;
 
@@ -30,6 +31,10 @@ public sealed class WorldState
 
     public IReadOnlyDictionary<string, IReadOnlyList<string>> RoomItems =>
         _roomItems.ToDictionary(pair => pair.Key, pair => (IReadOnlyList<string>)pair.Value, StringComparer.Ordinal);
+
+    /// <summary>Remaining stock of each limited item a shop has sold from, by shop then item.</summary>
+    public IReadOnlyDictionary<string, IReadOnlyDictionary<string, int>> ShopStock =>
+        _shopStock.ToDictionary(pair => pair.Key, pair => (IReadOnlyDictionary<string, int>)pair.Value, StringComparer.Ordinal);
 
     /// <summary>Creates the starting world: every room holds the items its definition lists.</summary>
     public static WorldState CreateNew(GameContent content)
@@ -99,6 +104,22 @@ public sealed class WorldState
         }
 
         items.Add(itemId);
+    }
+
+    /// <summary>Remaining stock of a shop item, or null if nothing has been bought yet (use the shop's own stock).</summary>
+    public int? GetShopStock(string shopId, string itemId) =>
+        _shopStock.TryGetValue(shopId, out var items) && items.TryGetValue(itemId, out var count) ? count : null;
+
+    public void SetShopStock(string shopId, string itemId, int remaining)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(remaining);
+        if (!_shopStock.TryGetValue(shopId, out var items))
+        {
+            items = new Dictionary<string, int>(StringComparer.Ordinal);
+            _shopStock[shopId] = items;
+        }
+
+        items[itemId] = remaining;
     }
 
     public bool RemoveItemFromRoom(string roomId, string itemId) =>

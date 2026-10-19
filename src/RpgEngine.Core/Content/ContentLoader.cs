@@ -26,6 +26,7 @@ public static class ContentLoader
         var statusEffects = ReadArray<StatusEffectDef>(files, "Rules/status_effects.json", errors);
         var factions = ReadArray<FactionDef>(files, "World/factions.json", errors);
         var quests = ReadArray<QuestDef>(files, "World/quests.json", errors);
+        var shops = ReadArray<ShopDef>(files, "World/shops.json", errors);
         var items = ReadFolder<ItemDef>(files, "Items", errors);
         var monsters = ReadFolder<MonsterDef>(files, "Bestiary", errors);
         var rooms = ReadFolder<RoomDef>(files, "Rooms", errors);
@@ -36,7 +37,7 @@ public static class ContentLoader
             throw new ContentValidationException(errors);
         }
 
-        var content = new GameContent(manifest, classes, backgrounds, skills, spells, statusEffects, factions, quests, items, monsters, rooms, dialogues);
+        var content = new GameContent(manifest, classes, backgrounds, skills, spells, statusEffects, factions, quests, shops, items, monsters, rooms, dialogues);
 
         var validationErrors = ContentValidator.Validate(content);
         if (validationErrors.Count > 0)

@@ -32,6 +32,8 @@ public sealed record ItemLostEvent(ItemDef Item, int Count) : GameEvent;
 
 public sealed record GoldGainedEvent(int Amount, int Total) : GameEvent;
 
+public sealed record GoldSpentEvent(int Amount, int Total) : GameEvent;
+
 public sealed record XpGainedEvent(int Amount, int Total) : GameEvent;
 
 /// <summary>The player reached <see cref="Level"/>; one event per level gained.</summary>

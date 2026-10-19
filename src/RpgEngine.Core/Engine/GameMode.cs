@@ -6,6 +6,9 @@ public enum GameMode
     Dialogue,
     Combat,
 
+    /// <summary>Buying and selling with a merchant.</summary>
+    Shop,
+
     /// <summary>The player has died.</summary>
     GameOver,
 

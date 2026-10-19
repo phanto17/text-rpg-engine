@@ -16,4 +16,8 @@ public sealed record WorldData
     public required IReadOnlyDictionary<string, IReadOnlyList<string>> RoomItems { get; init; }
 
     public required IReadOnlyList<string> Used { get; init; }
+
+    // Optional so version 2 saves written before shops existed still load.
+    public IReadOnlyDictionary<string, IReadOnlyDictionary<string, int>> ShopStock { get; init; } =
+        new Dictionary<string, IReadOnlyDictionary<string, int>>(StringComparer.Ordinal);
 }

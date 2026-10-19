@@ -27,6 +27,8 @@ public sealed class ContentLoaderTests
         Assert.Equal(Direction.North, content.Rooms["start"].Exits[0].Direction);
         Assert.Single(content.Factions);
         Assert.Single(content.Quests);
+        Assert.Equal(new[] { "potion", "sword" }, content.Shops["stall"].Stock.Select(s => s.Item));
+        Assert.Equal(0.5, content.Shops["stall"].BuybackRate);
         Assert.Empty(content.Dialogues);
         Assert.Empty(content.Encounters);
         Assert.Equal(7, content.ItemList.Count);
@@ -116,12 +118,14 @@ public sealed class ContentLoaderTests
             .Without("Rules/spells.json")
             .Without("World/factions.json")
             .Without("World/quests.json")
+            .Without("World/shops.json")
             .Without("Bestiary/monsters.json")
             .Load();
 
         Assert.Empty(content.Spells);
         Assert.Empty(content.Factions);
         Assert.Empty(content.Quests);
+        Assert.Empty(content.Shops);
         Assert.Empty(content.Monsters);
         Assert.Single(content.Items);
     }
@@ -227,7 +231,7 @@ public sealed class ContentLoaderTests
         try
         {
             var source = new TestContent().Files();
-            foreach (var path in new[] { "game.json", "Rules/classes.json", "Rules/backgrounds.json", "Rules/skills.json", "Rules/spells.json", "Rules/status_effects.json", "World/factions.json", "World/quests.json", "Items/items.json", "Bestiary/monsters.json", "Rooms/rooms.json" })
+            foreach (var path in new[] { "game.json", "Rules/classes.json", "Rules/backgrounds.json", "Rules/skills.json", "Rules/spells.json", "Rules/status_effects.json", "World/factions.json", "World/quests.json", "World/shops.json", "Items/items.json", "Bestiary/monsters.json", "Rooms/rooms.json" })
             {
                 var target = Path.Combine(root, path);
                 Directory.CreateDirectory(Path.GetDirectoryName(target)!);

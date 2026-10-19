@@ -8,13 +8,14 @@ using RpgEngine.Core.Dialogue;
 using RpgEngine.Core.Dice;
 using RpgEngine.Core.Events;
 using RpgEngine.Core.Exploration;
+using RpgEngine.Core.Shop;
 using RpgEngine.Core.Views;
 using RpgEngine.Core.World;
 
 namespace RpgEngine.Core.Engine;
 
 /// <summary>
-/// One playthrough. Routes player input to exploration, dialogue, or combat based on
+/// One playthrough. Routes player input to exploration, dialogue, combat, or a shop based on
 /// <see cref="Mode"/>, carries out queued transitions, and returns the resulting events.
 /// </summary>
 public sealed class GameSession
@@ -49,6 +50,8 @@ public sealed class GameSession
     public DialogueSession? Dialogue { get; private set; }
 
     public CombatSession? Combat { get; private set; }
+
+    public ShopSession? Shop { get; private set; }
 
     public string? Epilogue { get; private set; }
 
@@ -133,6 +136,41 @@ public sealed class GameSession
         return Process(log);
     }
 
+    public IReadOnlyList<ShopOfferView> ShopOffers()
+    {
+        RequireMode(GameMode.Shop);
+        return Shop!.Offers();
+    }
+
+    public IReadOnlyList<ShopSaleView> ShopSellables()
+    {
+        RequireMode(GameMode.Shop);
+        return Shop!.Sellables();
+    }
+
+    public IReadOnlyList<GameEvent> ShopBuy(string itemId)
+    {
+        RequireMode(GameMode.Shop);
+        var log = new TurnLog();
+        Shop!.Buy(itemId, log);
+        return Process(log);
+    }
+
+    public IReadOnlyList<GameEvent> ShopSell(string itemId)
+    {
+        RequireMode(GameMode.Shop);
+        var log = new TurnLog();
+        Shop!.Sell(itemId, log);
+        return Process(log);
+    }
+
+    public IReadOnlyList<GameEvent> ShopLeave()
+    {
+        RequireMode(GameMode.Shop);
+        Shop!.Leave();
+        return Process(new TurnLog());
+    }
+
     public JournalView Journal()
     {
         var quests = Content.QuestList
@@ -168,6 +206,12 @@ public sealed class GameSession
             Mode = GameMode.Exploration;
         }
 
+        if (Mode == GameMode.Shop && Shop!.IsOver)
+        {
+            Shop = null;
+            Mode = GameMode.Exploration;
+        }
+
         while (true)
         {
             if (!State.Player.IsAlive)
@@ -175,6 +219,7 @@ public sealed class GameSession
                 Mode = GameMode.GameOver;
                 Dialogue = null;
                 Combat = null;
+                Shop = null;
                 log.ClearTransitions();
                 log.Add(new PlayerDefeatedEvent(_text.Format(Content.Manifest.GameOverText, State.Player)));
                 break;
@@ -198,12 +243,19 @@ public sealed class GameSession
                     Combat = _combat.Begin(fight.EncounterId, State, log);
                     Mode = GameMode.Combat;
                     break;
+                case StartShopTransition open:
+                    var shop = Content.Shops[open.ShopId];
+                    Shop = new ShopSession(Content, shop, State);
+                    Mode = GameMode.Shop;
+                    log.Add(new DialogueLineEvent(shop.Keeper, _text.Format(shop.Greeting, State.Player)));
+                    break;
                 case EndGameTransition:
                     var epilogue = Content.Manifest.Epilogues.First(e => ConditionEvaluator.AllPass(e.Conditions, State));
                     Epilogue = _text.Format(epilogue.Text, State.Player);
                     Mode = GameMode.Ended;
                     Dialogue = null;
                     Combat = null;
+                    Shop = null;
                     log.ClearTransitions();
                     log.Add(new EpilogueEvent(Epilogue));
                     return log.Events;

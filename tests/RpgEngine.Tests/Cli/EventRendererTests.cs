@@ -27,6 +27,12 @@ public sealed class EventRendererTests
     }
 
     [Fact]
+    public void Render_GoldSpent_ShowsWhatIsLeft()
+    {
+        Assert.Contains("-10 gold (5 left)", Render(new GoldSpentEvent(10, 5)));
+    }
+
+    [Fact]
     public void Render_LeveledUp_ShowsAPanelWithGainsAndNewSpells()
     {
         var spell = new TestContent().Load().Spells["second_wind"];

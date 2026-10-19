@@ -124,6 +124,9 @@ public sealed class EffectApplier
             case StartCombatEffect e:
                 log.Request(new StartCombatTransition(e.Encounter));
                 break;
+            case StartShopEffect e:
+                log.Request(new StartShopTransition(e.Shop));
+                break;
             case EndGameEffect:
                 log.Request(new EndGameTransition());
                 break;

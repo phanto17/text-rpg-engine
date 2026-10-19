@@ -11,4 +11,6 @@ public sealed record StartDialogueTransition(string DialogueId) : GameTransition
 
 public sealed record StartCombatTransition(string EncounterId) : GameTransition;
 
+public sealed record StartShopTransition(string ShopId) : GameTransition;
+
 public sealed record EndGameTransition : GameTransition;

@@ -14,6 +14,7 @@ public sealed class GameContent
         IReadOnlyList<StatusEffectDef> statusEffects,
         IReadOnlyList<FactionDef> factions,
         IReadOnlyList<QuestDef> quests,
+        IReadOnlyList<ShopDef> shops,
         IReadOnlyList<ItemDef> items,
         IReadOnlyList<MonsterDef> monsters,
         IReadOnlyList<RoomDef> rooms,
@@ -28,6 +29,7 @@ public sealed class GameContent
         StatusEffectList = statusEffects;
         FactionList = factions;
         QuestList = quests;
+        ShopList = shops;
         ItemList = items;
         MonsterList = monsters;
         RoomList = rooms;
@@ -40,6 +42,7 @@ public sealed class GameContent
         StatusEffects = ById(statusEffects);
         Factions = ById(factions);
         Quests = ById(quests);
+        Shops = ById(shops);
         Items = ById(items);
         Monsters = ById(monsters);
         Rooms = ById(rooms);
@@ -77,6 +80,8 @@ public sealed class GameContent
 
     public IReadOnlyList<QuestDef> QuestList { get; }
 
+    public IReadOnlyList<ShopDef> ShopList { get; }
+
     public IReadOnlyList<ItemDef> ItemList { get; }
 
     public IReadOnlyList<MonsterDef> MonsterList { get; }
@@ -98,6 +103,8 @@ public sealed class GameContent
     public IReadOnlyDictionary<string, FactionDef> Factions { get; }
 
     public IReadOnlyDictionary<string, QuestDef> Quests { get; }
+
+    public IReadOnlyDictionary<string, ShopDef> Shops { get; }
 
     public IReadOnlyDictionary<string, ItemDef> Items { get; }
 

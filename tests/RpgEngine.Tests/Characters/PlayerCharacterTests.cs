@@ -40,6 +40,18 @@ public sealed class PlayerCharacterTests
     }
 
     [Fact]
+    public void TrySpendGold_SpendsOnlyWhatThePlayerHas()
+    {
+        var hero = TestCharacters.Create();
+        hero.AddGold(10);
+
+        Assert.True(hero.TrySpendGold(7));
+        Assert.False(hero.TrySpendGold(4));
+        Assert.Equal(3, hero.Gold);
+        Assert.Throws<ArgumentOutOfRangeException>(() => hero.TrySpendGold(-1));
+    }
+
+    [Fact]
     public void LevelUp_RaisesMaximumsCurrentValuesAndSpells()
     {
         var hero = TestCharacters.Create(maxHp: 10, maxMana: 4, spells: ["firebolt"]);

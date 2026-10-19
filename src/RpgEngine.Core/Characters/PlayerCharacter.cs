@@ -141,6 +141,19 @@ public sealed class PlayerCharacter : ICheckSubject
         return CurrentMana - before;
     }
 
+    /// <summary>Spends gold if the player has enough; returns whether it was spent.</summary>
+    public bool TrySpendGold(int amount)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(amount);
+        if (Gold < amount)
+        {
+            return false;
+        }
+
+        Gold -= amount;
+        return true;
+    }
+
     public void AddGold(int amount)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(amount);

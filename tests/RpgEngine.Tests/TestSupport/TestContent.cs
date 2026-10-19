@@ -98,6 +98,14 @@ internal sealed class TestContent
         [ { "id": "main", "name": "The Main Quest", "stages": [ { "stage": 10, "journal": "Begin." }, { "stage": 100, "journal": "Done." } ] } ]
         """;
 
+    /// <summary>A stall selling 2 potions at 10 gp and unlimited swords at 15 gp; it buys back at half value.</summary>
+    public const string Shops = """
+        [
+          { "id": "stall", "name": "The Stall", "keeper": "Mote", "greeting": "Coin first, {player.name}.",
+            "stock": [ { "item": "potion", "price": 10, "stock": 2 }, { "item": "sword", "price": 15 } ] }
+        ]
+        """;
+
     public const string Items = """
         [
           { "id": "sword", "name": "Longsword", "aliases": ["blade"], "type": "weapon", "description": "Steel.", "value": 15,
@@ -142,6 +150,7 @@ internal sealed class TestContent
         ["Rules/status_effects.json"] = StatusEffects,
         ["World/factions.json"] = Factions,
         ["World/quests.json"] = Quests,
+        ["World/shops.json"] = Shops,
         ["Items/items.json"] = Items,
         ["Bestiary/monsters.json"] = Monsters,
         ["Rooms/rooms.json"] = Rooms,

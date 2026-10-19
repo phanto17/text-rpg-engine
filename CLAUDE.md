@@ -44,13 +44,13 @@ tests/RpgEngine.Tests/     xUnit tests for Core, content validation, and CLI pla
 .github/workflows/ci.yml   CI: restore, Release build, and tests on ubuntu-latest and windows-latest.
 ```
 
-Core folders (namespace = `RpgEngine.Core.<Folder>`): `Dice`, `Characters`, `Checks`, `World`, `Content` (`Defs/` for content records), `Commands`, `Exploration`, `Dialogue`, `Combat`, `Persistence`, `Engine`.
+Core folders (namespace = `RpgEngine.Core.<Folder>`): `Dice`, `Characters`, `Checks`, `World`, `Content` (`Defs/` for content records), `Commands`, `Exploration`, `Dialogue`, `Combat`, `Shop`, `Persistence`, `Engine`.
 
 CLI layout:
 - `CliHost`: argument parsing and content-error reporting.
 - `GameApp`: the title-to-play loop, dispatching on `GameMode`.
 - `Rendering/`: `Theme` (every color), `EventRenderer`, `Bars`, `RollText`, `StatusBar`, `DiceAnimator`.
-- `Screens/`: Title, CharacterCreation (name, calling, burden, scores, skills, expertise, review), Exploration, Dialogue, Combat, Info (sheet, inventory, journal, help), End.
+- `Screens/`: Title, CharacterCreation (name, calling, burden, scores, skills, expertise, review), Exploration, Dialogue, Combat, Shop (buy, sell, leave), Info (sheet, inventory, journal, help), End.
 - `Input/`: `Prompter`, the line-based numbered menus. There are no arrow-key widgets, so every prompt can be scripted in tests.
 
 ---
@@ -209,6 +209,15 @@ CLI layout:
 ### `Data/World/`
 - **`factions.json`**: `{ "id": "ashen_order", "name": "The Ashen Order", "description": "..." }`
 - **`quests.json`**: `{ "id": "barrowlight", "name": "...", "stages": [ { "stage": 10, "journal": "..." } ] }`. Quest stages only move forward.
+- **`shops.json`** (optional): merchants opened by the `startShop` effect.
+  ```json
+  { "id": "mote_stall", "name": "Mote's Stall", "keeper": "Dunstan Mote", "greeting": "Coin first, {player.name}.",
+    "stock": [ { "item": "healing_potion", "price": 40, "stock": 3 }, { "item": "holy_water", "price": 25 } ],
+    "buybackRate": 0.5 }
+  ```
+  - `stock` is the starting count (1 to 999); leave it out for an item that never runs out. Bought-down stock is saved with the world.
+  - The player sells for `floor(value * buybackRate)` (default `0.5`). Quest items are never bought, and equipped gear sells only while a spare is carried.
+  - The keeper speaks `greeting` when the shop opens. The game is in `Shop` mode (no saving) until the player leaves.
 
 ### `Data/Items/`
 ```json
@@ -383,15 +392,16 @@ CLI layout:
 | `moveTo` | `room` |
 | `startDialogue` | `dialogue` |
 | `startCombat` | `encounter` |
+| `startShop` | `shop` (opens the buy and sell screen) |
 | `endGame` | none; shows the first matching epilogue |
 
 ### Save files (`Saves/<slot>.json`, gitignored)
 Each save holds:
 - `saveVersion` (currently `2`), `contentVersion`, `savedAtUtc`, `currentRoom`
 - `player`: name, class, background, level, XP, abilities, proficient and expertise skills, HP and max HP, mana and max mana, gold, inventory, equipped
-- `world`: flags, counters, reputation, questStages, visitedRooms, roomItems, onceUsed
+- `world`: flags, counters, reputation, questStages, visitedRooms, roomItems, onceUsed, shopStock (optional; remaining limited stock by shop and item)
 
-A save from another format version is refused with a message naming its version (version 2 added `background`). Saving is allowed only during exploration. Per-encounter uses are never saved, because they are always full outside combat.
+A save from another format version is refused with a message naming its version (version 2 added `background`). Saving is allowed only during exploration (not in dialogue, combat, or a shop). Per-encounter uses are never saved, because they are always full outside combat.
 
 ### Adding content
 **Before adding or editing any JSON under `Data/`, read [`Docs/LORE.md`](Docs/LORE.md) to keep prose tone, philosophical themes, faction alignments, and flag/counter names consistent. Whenever a commit adds a new flag, counter, faction, class, or quest, update the registry in `Docs/LORE.md` in the same commit.**
