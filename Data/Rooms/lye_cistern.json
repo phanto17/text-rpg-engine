@@ -1,0 +1,107 @@
+[
+  {
+    "id": "lye_cistern",
+    "name": "The Cistern of Lye and Ash",
+    "description": "A vaulted stone baptistery opens south of the cloister, dominated by a sunken cauldron-cistern of steaming grey lye boiled from cremated bone-ash and iron filings. Narrow stone troughs run from the cistern toward the western command bastion, crusted with white alkali and hardened rivulets of lead melted from the soldiers' memory-scrolls.\n\nAbove the cistern, a sluice-wheel connects to an underground canal pipe that carries cold mountain water past the garrison wall.",
+    "revisit": "Stone troughs crusted with white alkali and cooled lead run beside the garrison's lye-cistern.",
+    "variants": [
+      {
+        "conditions": [ { "type": "notFlag", "flag": "quenched_lye_cistern" } ],
+        "text": "Caustic grey steam rises from the boiling cistern, carrying the flat, metallic stillness of scoured minds."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "quenched_lye_cistern" } ],
+        "text": "Cold canal water pours steadily from the opened sluice, flushing the caustic lye from the baptismal cistern."
+      },
+      {
+        "conditions": [ { "type": "class", "class": "vesper_cantor" } ],
+        "text": "To your Cantor's ear, the lead-lined walls of the baptistery are deadened on purpose: no footstep or spoken name is allowed to cast an echo here."
+      }
+    ],
+    "ambient": [
+      "Grey lye-water bubbles sluggishly in the sunken basin.",
+      "Droplets of cooled lead glint like frozen tears along the stone drainage channel.",
+      "From the western bastion comes the rhythmic thud of a halberd-butt striking the flagstones.",
+      "Condensation drips from the lead-sheathed vault without making a sound."
+    ],
+    "exits": [
+      { "direction": "north", "target": "scoured_cloister", "description": "The bleached archway leads north back to the Scoured Cloister." },
+      { "direction": "west", "target": "reliquary_bastion", "description": "An iron-sheathed portal leads west into the Bastion of the Unburdened." }
+    ],
+    "features": [
+      {
+        "id": "caustic_cistern",
+        "name": "cistern of boiling lye-ash",
+        "aliases": ["cistern", "cauldron", "lye", "sluice", "trough", "basin"],
+        "description": "The ritual basin where soldiers of the Iron Reliquary scrub away their names and grief. An iron sluice-valve above the rim holds back cold groundwater from the subterranean canal.",
+        "interactions": [
+          {
+            "verb": "quench",
+            "label": "Wrench open the canal sluice to flush the lye-cistern",
+            "once": true,
+            "text": "You brace both hands against the rusted iron sluice-wheel above the basin and throw your weight against the valve.",
+            "check": {
+              "skill": "athletics",
+              "dc": 12,
+              "advantageIf": [ { "type": "class", "class": "oath_eater" } ]
+            },
+            "success": {
+              "text": "With a shriek of iron threads, the sluice gives way. Clean, freezing canal water cascades into the cauldron, quenching the boiling lye in a hiss of white steam. Lodged behind the sluice-frame, you claim an Unburdened Glaive left by the cistern guard.",
+              "effects": [
+                { "type": "setFlag", "flag": "quenched_lye_cistern" },
+                { "type": "addCounter", "counter": "lantern_resonance", "amount": 1 },
+                { "type": "changeReputation", "faction": "lantern_bearers", "amount": 10 },
+                { "type": "changeReputation", "faction": "ashen_order", "amount": -5 },
+                { "type": "giveItem", "item": "scoured_halberd" },
+                { "type": "grantXp", "amount": 30 }
+              ]
+            },
+            "failure": {
+              "text": "Scalding lye-spray spits from the basin rim and blisters your wrists before the valve can turn.",
+              "effects": [
+                { "type": "damage", "dice": "1d4", "damageType": "acid" }
+              ]
+            }
+          },
+          {
+            "verb": "salvage",
+            "label": "Skim an Alkali Clarity Draught and holy water from the cooling trough",
+            "once": true,
+            "text": "You examine the stone settling-troughs where mineral water tempers the overflowing ash-salts.",
+            "check": { "skill": "medicine", "dc": 12 },
+            "success": {
+              "text": "Separating the caustic scum from the clear mineral distillate beneath, you fill a chalk-white phial of Alkali Clarity Draught and recover an unbroken Flask of Holy Water.",
+              "effects": [
+                { "type": "giveItem", "item": "lye_salve" },
+                { "type": "giveItem", "item": "holy_water" },
+                { "type": "grantXp", "amount": 25 }
+              ]
+            },
+            "failure": {
+              "text": "The alkali sediment stirs up into the trough, spoiling the distillate."
+            }
+          }
+        ]
+      },
+      {
+        "id": "cistern_memory_echo",
+        "name": "baptistery memory echo",
+        "aliases": ["echo", "memory", "muster", "rings"],
+        "description": "In the Barrowlight's beam, a file of Ashen soldiers stands lined up before the cistern, dropping wedding rings and tin lockets into Commander Silas's outstretched helm.",
+        "conditions": [ { "type": "hasItem", "item": "barrowlight" } ],
+        "interactions": [
+          {
+            "verb": "shine",
+            "label": "Shine the Barrowlight on the baptistery echo",
+            "once": true,
+            "text": "You raise the Barrowlight, and the memory of the garrison's final muster speaks through the steam:\n\n\"Give me your names, your wives, and the graves you left above,\" Commander Silas's voice rings out, steady and solemn. \"An empty heart cannot break in the dark. Drink the lye and be unburdened—I alone will remember why we march, until the campaign is done.\"",
+            "effects": [
+              { "type": "setFlag", "flag": "shone_cistern_echo" },
+              { "type": "grantXp", "amount": 25 }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

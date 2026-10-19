@@ -68,10 +68,14 @@
             "effects": [
               {
                 "type": "if",
-                "conditions": [ { "type": "flag", "flag": "garin_relieved" } ],
+                "conditions": [
+                  { "type": "flag", "flag": "garin_relieved" },
+                  { "type": "not", "conditions": [ { "type": "visited", "room": "warren_crossroads" } ] }
+                ],
                 "then": [ { "type": "message", "text": "Garin wades over and takes the other spoke of the wheel without a word. When the gate is high enough, he plants his halberd upright in the silt and raises a gauntlet to his brow as you pass.", "style": "narration" } ]
               },
-              { "type": "endGame" }
+              { "type": "setQuestStage", "quest": "nocturne_beacon", "stage": 100 },
+              { "type": "moveTo", "room": "warren_crossroads" }
             ]
           }
         ]

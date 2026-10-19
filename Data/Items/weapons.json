@@ -52,6 +52,25 @@
     "description": "A heavy iron mace whose hollow head is pierced like a sanctuary censer, forged by the Ashen Order to crack calcified bone.",
     "value": 40,
     "weapon": { "damage": "1d8+1", "damageType": "bludgeoning" }
+  },
+  {
+    "id": "silver_tuning_blade",
+    "name": "Resonant Stiletto",
+    "aliases": ["stiletto", "tuning blade", "silver blade", "needle"],
+    "type": "weapon",
+    "description": "A slender, three-sided blade of Choir silver forged from a master tuning-fork. Balanced for precise thrusts that vibrate through armor joints.",
+    "value": 55,
+    "weapon": { "damage": "1d6+1", "damageType": "piercing", "finesse": true }
+  },
+  {
+    "id": "scoured_halberd",
+    "name": "Unburdened Glaive",
+    "aliases": ["glaive", "halberd", "polearm"],
+    "type": "weapon",
+    "description": "An ash-white polearm from the Iron Reliquary whose heavy crescent blade has been scoured with lye until every maker's mark is gone.",
+    "value": 65,
+    "weapon": { "damage": "1d10", "damageType": "slashing" }
   }
 ]
+
 

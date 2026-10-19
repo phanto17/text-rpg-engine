@@ -1,0 +1,127 @@
+[
+  {
+    "id": "tallow_foundry",
+    "name": "The Tallow-Spindle Loom",
+    "description": "North of the stacks lies the workshop where the Hollow Choir renders its anchors. Copper vats of pale spore-wax simmer over low blue lamps, filling the chamber with a sweet, suffocating haze. At the center of the floor, a water-driven loom draws hair-thin silver wire through baths of molten memory-tallow and winds it onto hundreds of spinning bobbins.\n\nFrom the loom's upper frame, taut bundles of silver resonance-thread run eastward through an arched doorway toward the inner sanctum, vibrating with the trapped cadence of a child's lullaby.",
+    "revisit": "Copper vats of spore-wax simmer beside the silver-wire loom of the Choir.",
+    "variants": [
+      {
+        "conditions": [ { "type": "flag", "flag": "slackened_choir_loom" } ],
+        "text": "The master tension-weight hangs unhooked beside the waterwheel, leaving the silver wire-bundles slack and quiet."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "tuned_choir_loom" } ],
+        "text": "The bronze acoustic cones above the bobbins hum in a softened, balanced chord that spares the tethered spirits the worst of the friction."
+      },
+      {
+        "conditions": [ { "type": "class", "class": "vesper_cantor" } ],
+        "text": "To your Cantor's ear, the loom is an acoustic abomination: every bobbin is pitched to fold a decaying note back onto itself so a soul can never reach its resolving rest."
+      }
+    ],
+    "ambient": [
+      "The waterwheel creaks in the dark, drawing another yard of silver thread through the hot wax.",
+      "Coarse white memory-salt crusts the rims of the drainage grates like frozen foam.",
+      "A copper vat bubbles softly, exhaling a breath of camphor and old grief.",
+      "Overhead, the silver cables leading east hum the same four notes of a winter cradle-song."
+    ],
+    "exits": [
+      { "direction": "south", "target": "whispering_stacks", "description": "The soot-and-wax archway leads south back into the Whispering Stacks." },
+      { "direction": "east", "target": "vow_sanctum", "description": "Bundles of silver wire converge through an eastern rotunda arch into the Nursery of Unkept Vows." }
+    ],
+    "features": [
+      {
+        "id": "spindle_loom",
+        "name": "silver-wire loom",
+        "aliases": ["loom", "spindle", "bobbins", "wires", "weight", "cones"],
+        "description": "An intricate brass-and-iron loom that keeps every spirit-tether in the Archive under constant acoustic tension. A heavy iron tension-weight governs the main drive, while adjustable bronze cones shape the harmonic resonance.",
+        "interactions": [
+          {
+            "verb": "sabotage",
+            "label": "Unhook the master tension-weight to slacken the Choir's tethers",
+            "once": true,
+            "conditions": [ { "type": "notFlag", "flag": "tuned_choir_loom" } ],
+            "text": "You slip a pry-bar beneath the master tension-pawl and work the iron counterweight free of the drive-chain.",
+            "check": { "skill": "sleight_of_hand", "dc": 12 },
+            "success": {
+              "text": "With a dull clank, the counterweight drops into the wax-trough. Across the foundry and the sanctum beyond, the silver cables slacken with a long, grateful sigh. In a tool-rack behind the wheel, you uncover a Resonant Stiletto.",
+              "effects": [
+                { "type": "setFlag", "flag": "slackened_choir_loom" },
+                { "type": "addCounter", "counter": "lantern_resonance", "amount": 1 },
+                { "type": "changeReputation", "faction": "lantern_bearers", "amount": 5 },
+                { "type": "changeReputation", "faction": "hollow_choir", "amount": -10 },
+                { "type": "giveItem", "item": "silver_tuning_blade" },
+                { "type": "grantXp", "amount": 30 }
+              ]
+            },
+            "failure": {
+              "text": "The taut silver wire snaps back against the pawl, slicing across your knuckles before the gear catches again.",
+              "effects": [
+                { "type": "damage", "dice": "1d4", "damageType": "slashing" }
+              ]
+            }
+          },
+          {
+            "verb": "tune",
+            "label": "Tune the bronze acoustic cones to ease the friction on the tethered spirits",
+            "once": true,
+            "conditions": [ { "type": "notFlag", "flag": "slackened_choir_loom" } ],
+            "text": "You adjust the angles of the bronze resonators above the bobbins, listening for a pitch that cushions the scraping styluses.",
+            "check": {
+              "skill": "performance",
+              "dc": 12,
+              "advantageIf": [ { "type": "class", "class": "vesper_cantor" } ]
+            },
+            "success": {
+              "text": "The harsh metallic whine settles into a warm, rounded hum. Folded neatly inside the resonator cabinet, you find a set of Choir-Woven Vestments.",
+              "effects": [
+                { "type": "setFlag", "flag": "tuned_choir_loom" },
+                { "type": "changeReputation", "faction": "hollow_choir", "amount": 10 },
+                { "type": "giveItem", "item": "choir_silks" },
+                { "type": "grantXp", "amount": 30 }
+              ]
+            },
+            "failure": {
+              "text": "The damp acoustics of the cavern fight your adjustments, and the bobbins slip back into their harsh, scraping drone."
+            }
+          }
+        ]
+      },
+      {
+        "id": "cooling_vat",
+        "name": "vat of refined memory-tallow",
+        "aliases": ["vat", "tallow", "wax", "copper vat"],
+        "description": "A copper settling-pan where newly distilled memory-tallow cools into a clear, luminous blue liquid.",
+        "interactions": [
+          {
+            "verb": "draw",
+            "label": "Draw a phial of refined memory-tallow from the cooling vat",
+            "once": true,
+            "text": "You dip a stoppered glass phial into the clarified surface layer of the copper pan.",
+            "effects": [
+              { "type": "giveItem", "item": "tallow_draught" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "foundry_memory_echo",
+        "name": "loom-side memory echo",
+        "aliases": ["echo", "memory", "child", "lira"],
+        "description": "In the Barrowlight's glow, the mist beside the wire-spools gathers into the small figure of a seven-year-old girl looking down at a silver thread tied around her wrist.",
+        "conditions": [ { "type": "hasItem", "item": "barrowlight" } ],
+        "interactions": [
+          {
+            "verb": "shine",
+            "label": "Shine the Barrowlight on the loom-side echo",
+            "once": true,
+            "text": "You hold the Barrowlight steady, and a child's clear, bewildered voice speaks out of the warm wax-haze:\n\n\"Mama, I know the winter song by heart now. Every time we get to the fourth bar, the silver string pulls my arm back to the start. Why won't the music box let me sing the last line and go to sleep?\"",
+            "effects": [
+              { "type": "setFlag", "flag": "shone_foundry_echo" },
+              { "type": "grantXp", "amount": 25 }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,96 @@
+[
+  {
+    "id": "warren_crossroads",
+    "name": "The Gate of the Twin Seals",
+    "description": "Beyond the floodgate of the Drowned Tollbridge, the canal tunnel opens into a subterranean rotunda where two ancient processional roads divide. To the north, silver wires hum inside a vaulted gallery smelling of warm beeswax and dry vellum—the Archive of Unkept Vows. To the south, a stark whitewashed causeway reeks of boiled lye, wet iron, and scorched lead—the garrison of the Iron Reliquary.\n\nAt the center of the rotunda, a massive circular gate of green-black bronze is set into the floor above the deepest chasm of the Under-Barrow. Two empty sockets—one shaped like a crescent moon, the other like a spoked sun—flank the central skull relief.",
+    "revisit": "Two roads branch from the bronze floor-gate: north toward the Archive's silver wires, south toward the lye-scoured Reliquary.",
+    "variants": [
+      {
+        "conditions": [
+          { "type": "lacksItem", "item": "moon_triad_seal" },
+          { "type": "lacksItem", "item": "sun_triad_seal" }
+        ],
+        "text": "Both sockets in the great bronze floor-gate stand empty, barring the stair to the Cradle of the First Architect below."
+      },
+      {
+        "conditions": [
+          { "type": "hasItem", "item": "moon_triad_seal" },
+          { "type": "lacksItem", "item": "sun_triad_seal" }
+        ],
+        "text": "In your pack, the Seal of the Waxing Moon hums in answer to the gate's left socket. Only the Sun Seal from the southern garrison remains."
+      },
+      {
+        "conditions": [
+          { "type": "lacksItem", "item": "moon_triad_seal" },
+          { "type": "hasItem", "item": "sun_triad_seal" }
+        ],
+        "text": "In your pack, the Seal of the Unclouded Sun warms in answer to the gate's right socket. Only the Moon Seal from the northern archive remains."
+      },
+      {
+        "conditions": [
+          { "type": "hasItem", "item": "moon_triad_seal" },
+          { "type": "hasItem", "item": "sun_triad_seal" }
+        ],
+        "text": "Both the Moon Seal and the Sun Seal resonate against the Barrowlight at your hip, ready to unseal the Twin-Seal Gate."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "rested_at_crossroads" } ],
+        "text": "Beside the eastern arch, the Wayfarers' iron trail-brazier glows with steady peat-embers."
+      }
+    ],
+    "ambient": [
+      "From the northern gallery comes the faint, rhythmic ticking of thousands of clockwork springs.",
+      "From the southern causeway echoes the measured, synchronized tramp of iron-shod boots.",
+      "Cold air breathes up through the seam of the bronze floor-gate, smelling of ancient ash.",
+      "The Barrowlight's flame leans downward toward the sealed chasm beneath your boots."
+    ],
+    "exits": [
+      { "direction": "east", "target": "drowned_tollbridge", "description": "The raised floodgate arch leads back east onto the Drowned Tollbridge." },
+      { "direction": "north", "target": "whispering_stacks", "description": "A gallery hung with silver wires leads north into the Archive of Unkept Vows." },
+      { "direction": "south", "target": "scoured_cloister", "description": "A whitewashed stone causeway leads south into the Iron Reliquary." }
+    ],
+    "features": [
+      {
+        "id": "wayfarer_trail_brazier",
+        "name": "Wayfarer sanctuary brazier",
+        "aliases": ["brazier", "fire", "campfire", "sanctuary", "rest"],
+        "description": "A squat iron trail-brazier left in a sheltered niche by scouts of the Wayfarers of the Threshold, stocked with dry peat-bricks and memory-tallow.",
+        "interactions": [
+          {
+            "verb": "rest",
+            "label": "Rest by the Wayfarer sanctuary brazier",
+            "text": "You rest in the lee of the rotunda wall, warming your hands over the peat-embers until your breath and strength return.",
+            "effects": [
+              { "type": "rest" },
+              { "type": "setFlag", "flag": "rested_at_crossroads" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "twin_seal_gate",
+        "name": "Twin-Seal Threshold Gate",
+        "aliases": ["gate", "floor-gate", "sockets", "threshold", "seals", "chasm"],
+        "description": "A massive circular casting of green-black bronze sealing the vertical shaft to the Cradle of the First Architect. Around its rim runs the oldest form of the Triad litany: SUN TO WAKE, MOON TO REMEMBER, SKULL TO RELEASE. Two deep recesses wait for the Seal of the Waxing Moon and the Seal of the Unclouded Sun.",
+        "interactions": [
+          {
+            "verb": "unseal",
+            "label": "Set both Triad Seals into the gate and descend toward the Cradle",
+            "conditions": [
+              { "type": "hasItem", "item": "moon_triad_seal" },
+              { "type": "hasItem", "item": "sun_triad_seal" }
+            ],
+            "text": "You press the Seal of the Waxing Moon into the left socket and the Seal of the Unclouded Sun into the right, then hold the Barrowlight over the central skull relief.\n\nSilver resonance and golden warmth flow together into the ancient bronze. With a deep, harmonic chord that shakes the dust from the vault overhead, the twin halves of the floor-gate part, revealing the grand stair descending into the Cradle of the First Architect.",
+            "effects": [
+              { "type": "setQuestStage", "quest": "twin_seals", "stage": 100 },
+              { "type": "endGame" }
+            ]
+          }
+        ]
+      }
+    ],
+    "onFirstEnter": [
+      { "type": "setQuestStage", "quest": "twin_seals", "stage": 10 }
+    ]
+  }
+]

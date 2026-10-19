@@ -1,0 +1,219 @@
+[
+  {
+    "id": "reliquary_bastion",
+    "name": "The Bastion of the Unburdened",
+    "description": "Beyond the iron portal lies the command sanctum of the Iron Reliquary. At the center of a raised stone dais stands the Furnace of Remission—a towering iron brazier whose grate is powered by a spoked disc of fire-gilded bronze: the Seal of the Unclouded Sun. Stacked neatly around the base of the furnace like cordwood are ratusan dull grey ingots of melted lead, cast from the liquefied memory-scrolls and keepsakes of the entire garrison.\n\nBefore the furnace stands a blank slate dispatch table without a single map or order left upon it.",
+    "revisit": "Stacks of melted lead ingots surround the Furnace of Remission at the heart of the bastion.",
+    "variants": [
+      {
+        "conditions": [ { "type": "notFlag", "flag": "silas_resolved" } ],
+        "text": "On the dais stands Commander Silas in lye-scoured white plate, barking drill-counts to a scoured halberdier while the Seal of the Unclouded Sun blazes inside the furnace grate."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "silas_relieved" } ],
+        "text": "Commander Silas sits on the edge of the dais with his blank helm resting beside the lead ingots, his head bowed as he whispers the names of his men one by one."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "silas_destroyed" } ],
+        "text": "Dent-marked white plate and a snapped halberd lie across the dais steps before the cooling furnace."
+      },
+      {
+        "conditions": [
+          { "type": "flag", "flag": "silas_resolved" },
+          { "type": "lacksItem", "item": "sun_triad_seal" }
+        ],
+        "text": "In the unlatched grate of the Furnace of Remission gleams the spoked Seal of the Unclouded Sun."
+      }
+    ],
+    "ambient": [
+      "The Furnace of Remission radiates a dry, relentless heat that smells of scorched lead.",
+      "Boots stamp on the stone in a four-count cadence that goes nowhere.",
+      "Light from the gilded Sun Seal throws stark, shadowless glare across the blank dispatch table.",
+      "The stacked lead ingots tick softly as they cool."
+    ],
+    "exits": [
+      { "direction": "east", "target": "lye_cistern", "description": "The iron-sheathed portal leads east back into the Cistern of Lye and Ash." }
+    ],
+    "features": [
+      {
+        "id": "furnace_of_remission",
+        "name": "Furnace of Remission",
+        "aliases": ["furnace", "brazier", "grate", "seal", "sun seal", "ingots"],
+        "description": "A massive iron furnace where the garrison melted their lead memory-strips into nameless ingots. Bolted into the central grate is the spoked Seal of the Unclouded Sun.",
+        "interactions": [
+          {
+            "verb": "resonate",
+            "label": "Hold the Bell Splinter near the Furnace of Remission",
+            "once": true,
+            "conditions": [
+              { "type": "background", "background": "fever_dreamer" },
+              { "type": "notFlag", "flag": "silas_resolved" }
+            ],
+            "text": "As you draw near the furnace, the Bell Splinter in your palm rings out against the Seal of the Unclouded Sun. The bronze sliver vibrates with a waking note that cuts straight through the deadened air of the bastion.",
+            "effects": [
+              { "type": "setFlag", "flag": "heard_sun_harmonic" },
+              { "type": "grantXp", "amount": 25 }
+            ]
+          },
+          {
+            "verb": "approach",
+            "label": "Step onto the command dais and face Commander Silas",
+            "conditions": [ { "type": "notFlag", "flag": "silas_resolved" } ],
+            "text": "You walk past the stacks of nameless lead ingots and mount the steps of the command dais.",
+            "effects": [
+              { "type": "setFlag", "flag": "challenged_silas" },
+              { "type": "startCombat", "encounter": "reliquary_silas_boss" }
+            ]
+          },
+          {
+            "verb": "take",
+            "label": "Take the Seal of the Unclouded Sun",
+            "conditions": [
+              { "type": "flag", "flag": "silas_resolved" },
+              { "type": "lacksItem", "item": "sun_triad_seal" }
+            ],
+            "text": "You unbolt the spoked Seal of the Unclouded Sun from the cooling furnace grate. Cleaned of scorched lead, the fire-gilded bronze warms your palm with a clear, steady light.",
+            "effects": [
+              { "type": "giveItem", "item": "sun_triad_seal" },
+              {
+                "type": "if",
+                "conditions": [ { "type": "hasItem", "item": "moon_triad_seal" } ],
+                "then": [ { "type": "setQuestStage", "quest": "twin_seals", "stage": 30 } ],
+                "else": [ { "type": "setQuestStage", "quest": "twin_seals", "stage": 20 } ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "bastion_memory_echo",
+        "name": "dispatch-table memory echo",
+        "aliases": ["echo", "memory", "table", "dispatch"],
+        "description": "In the Barrowlight's glow, a solitary phantom in white plate stands over the blank slate table, touching the fresh lye-scar on his brow with a trembling gauntlet.",
+        "conditions": [ { "type": "hasItem", "item": "barrowlight" } ],
+        "interactions": [
+          {
+            "verb": "shine",
+            "label": "Shine the Barrowlight on the dispatch-table echo",
+            "once": true,
+            "text": "You hold the Barrowlight over the blank slate, and the stone replays the moment after Commander Silas secretly drank from the lye-cistern himself:\n\n\"The pain is gone,\" Silas's voice whispers in the empty room, before rising into quiet horror. \"The boy's face is gone. ...Why is the Sun Seal in the grate? What were my orders? Who are we marching against? ...Stand to attention. If I never stop calling the drill, the men will never know that no one remembers.\"",
+            "effects": [
+              { "type": "setFlag", "flag": "shone_bastion_echo" },
+              { "type": "grantXp", "amount": 25 }
+            ]
+          }
+        ]
+      }
+    ],
+    "npcs": [
+      {
+        "id": "silas",
+        "name": "Commander Silas",
+        "aliases": ["silas", "commander", "officer"],
+        "description": "Commander Silas sits on the dais steps with his helm removed, pressing a small unmelted strip of lead foil between his scarred palms.",
+        "dialogue": "silas",
+        "conditions": [ { "type": "flag", "flag": "silas_relieved" } ]
+      }
+    ],
+    "encounter": {
+      "id": "reliquary_silas_boss",
+      "conditions": [
+        { "type": "notFlag", "flag": "silas_resolved" },
+        { "type": "flag", "flag": "challenged_silas" }
+      ],
+      "intro": "At the sound of your step on the dais, Commander Silas pivots with clockwork precision, his lye-bleached glaive levelling at your throat in perfect unison with the scoured halberdier beside him. Behind his visor, his eyes are calm, fearless, and utterly blank.\n\n\"Unregistered combatant in the command sanctum,\" Silas intones, his voice flat as an iron bell. \"The Furnace of Remission must remain lit until the campaign objective is secured. All grief is sedition. All memory is rot. Present yourbrow for scouring or be purged.\"",
+      "enemies": [
+        { "monster": "commander_silas", "count": 1 },
+        { "monster": "scoured_halberdier", "count": 1 }
+      ],
+      "canFlee": true,
+      "fleeTo": "lye_cistern",
+      "parley": {
+        "options": [
+          {
+            "label": "Ask him to state his campaign objective—or the name of the brother he scoured his mind to forget",
+            "check": {
+              "skill": "persuasion",
+              "dc": 14,
+              "advantageIf": [
+                {
+                  "type": "any",
+                  "conditions": [
+                    { "type": "flag", "flag": "shone_bastion_echo" },
+                    { "type": "flag", "flag": "shone_cistern_echo" },
+                    { "type": "flag", "flag": "shone_cloister_echo" },
+                    { "type": "flag", "flag": "found_silas_lead_strip" },
+                    { "type": "flag", "flag": "heard_sun_harmonic" },
+                    { "type": "flag", "flag": "quenched_lye_cistern" }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "label": "Show him the tribunal ash on your lips: a real soldier swallows a broken vow instead of erasing his mind",
+            "conditions": [ { "type": "class", "class": "oath_eater" } ],
+            "check": { "skill": "persuasion", "dc": 12, "advantage": true }
+          },
+          {
+            "label": "Audit his blank dispatch table and declare a nameless command legally void",
+            "conditions": [ { "type": "class", "class": "liminal_auditor" } ],
+            "check": { "skill": "investigation", "dc": 12, "advantage": true }
+          },
+          {
+            "label": "Stand before him as a Remnant Vessel—proof that the dead can wake and choose without iron or erasure",
+            "conditions": [ { "type": "class", "class": "remnant_vessel" } ],
+            "check": { "skill": "persuasion", "dc": 12, "advantage": true }
+          },
+          {
+            "label": "Show him the scored signet and speak Novice Tomas's name aloud",
+            "conditions": [ { "type": "background", "background": "ash_deserter" } ],
+            "check": { "skill": "religion", "dc": 11, "advantage": true }
+          },
+          {
+            "label": "Serve him the Elders' Writ from Hollin's Rest as an official surface recall ending the expedition",
+            "conditions": [ { "type": "background", "background": "moor_bailiff" } ],
+            "check": { "skill": "persuasion", "dc": 11, "advantage": true }
+          },
+          {
+            "label": "Speak Sister Wren's remission and the Rite of Rest for the lost garrison",
+            "conditions": [ { "type": "flag", "flag": "wren_taught_rite" } ],
+            "check": { "skill": "religion", "dc": 12, "advantage": true }
+          }
+        ],
+        "onSuccess": [
+          {
+            "type": "message",
+            "text": "Commander Silas opens his mouth to bark the regulation reply—and no sound comes out. His eyes dart to the blank slate dispatch table, then to the stacks of nameless lead ingots around the furnace.\n\n\"The objective is...\" His voice cracks. \"Tomas. His name was Tomas, and he was seventeen, and I promised the men I would remember for them.\" Slowly, the Unburdened Glaive slips from his gauntleted fingers and clatters onto the stone. He raises a hand, ordering the scoured halberdier to stand down, and sinks to one knee beside the furnace grate as thirty years of banished grief finally return to him.",
+            "style": "narration"
+          },
+          { "type": "setFlag", "flag": "silas_relieved" },
+          { "type": "addCounter", "counter": "lantern_resonance", "amount": 1 },
+          { "type": "changeReputation", "faction": "ashen_order", "amount": 15 },
+          { "type": "changeReputation", "faction": "lantern_bearers", "amount": 10 },
+          { "type": "grantXp", "amount": 160 }
+        ],
+        "onFailure": [
+          {
+            "type": "message",
+            "text": "\"Irrelevant query!\" Silas barks, his voice tight as a drawn wire. \"The drill stands! Close ranks and purge!\"",
+            "style": "warning"
+          }
+        ]
+      },
+      "onVictory": [
+        {
+          "type": "message",
+          "text": "Commander Silas drops to the flagstones beside the fallen halberdier, his white plate cracked and blackened, dying in defense of an order whose words he could no longer recall.",
+          "style": "narration"
+        },
+        { "type": "setFlag", "flag": "silas_destroyed" },
+        { "type": "addCounter", "counter": "lantern_resonance", "amount": -1 },
+        { "type": "changeReputation", "faction": "ashen_order", "amount": -15 }
+      ],
+      "onResolved": [
+        { "type": "setFlag", "flag": "silas_resolved" }
+      ]
+    }
+  }
+]

@@ -1,0 +1,97 @@
+[
+  {
+    "id": "caelan",
+    "speaker": "Archivist Caelan",
+    "entries": [
+      { "conditions": [ { "type": "flag", "flag": "vaelen_reconciled" } ], "node": "after_vaelen_peace" },
+      { "conditions": [ { "type": "flag", "flag": "vaelen_destroyed" } ], "node": "after_vaelen_blood" },
+      { "conditions": [ { "type": "flag", "flag": "met_caelan" } ], "node": "hub" },
+      { "node": "first_meeting" }
+    ],
+    "nodes": [
+      {
+        "id": "first_meeting",
+        "text": "The blind scribe does not look up as you approach; his raw, wax-stained fingertips move from one ticking cylinder to the next, counting the turns of each brass key by touch.\n\n\"Step lightly between the aisles, traveler,\" Archivist Caelan murmurs. \"Every silver wire you brush is someone's mother, someone's child, someone's last spoken promise. If I let a single spring run down while Prelate Vaelen tends the inner carillon, a voice goes out forever.\"",
+        "effects": [ { "type": "setFlag", "flag": "met_caelan" } ],
+        "next": "hub"
+      },
+      {
+        "id": "hub",
+        "text": "Archivist Caelan's raw fingers hover over a row of spinning wax cylinders, listening to their faint, repeating clicks.",
+        "choices": [
+          { "text": "How does the Hollow Choir bind spirits to these cylinders?", "once": true, "next": "ask_spindle_binding" },
+          { "text": "Tell me about Prelate Vaelen and the gilded carillon in the sanctum.", "once": true, "next": "ask_vaelen" },
+          {
+            "text": "A vow kept at the cost of the beloved's agony is already broken, Archivist.",
+            "conditions": [ { "type": "class", "class": "oath_eater" } ],
+            "once": true,
+            "next": "calling_oath_eater"
+          },
+          {
+            "text": "The tethered spirits in these aisles are leaning toward the cold ember in my ribs.",
+            "conditions": [ { "type": "class", "class": "remnant_vessel" } ],
+            "once": true,
+            "next": "calling_remnant_vessel"
+          },
+          {
+            "text": "Show him the gouged flame on your Scored Signet.",
+            "conditions": [ { "type": "background", "background": "ash_deserter" } ],
+            "once": true,
+            "next": "burden_ash_deserter"
+          },
+          {
+            "text": "Serve him with the Elders' Writ regarding the stolen heirlooms of Hollin's Rest.",
+            "conditions": [ { "type": "background", "background": "moor_bailiff" } ],
+            "once": true,
+            "next": "burden_moor_bailiff"
+          },
+          { "text": "Leave him to his cylinders.", "end": true }
+        ]
+      },
+      {
+        "id": "ask_spindle_binding",
+        "text": "\"We call it Spindle-Binding,\" Caelan says, a fragile pride warring with exhaustion in his voice. \"When a spirit begins to thin, we cut the vibration of their dearest memory into spore-wax and solder a silver resonance-thread from their ash to the cylinder. As long as the stylus traces the groove, they cannot dissolve into final death.\"\n\nHis hand hesitates over a salt-crusted key. \"The wax only holds a few seconds of sound, it's true. And every year the salt grows thicker on the wire. But four bars of a song is still life, isn't it? My wife's laugh is in one of these rows—even if I can no longer tell which cylinder is hers.\"",
+        "next": "hub"
+      },
+      {
+        "id": "ask_vaelen",
+        "text": "\"Prelate Vaelen built this archive after the autumn fever took her seven-year-old daughter, Lira,\" Caelan whispers. \"She set the Seal of the Waxing Moon into a gilded carillon in the inner sanctum so Lira's winter lullaby would never stop playing. None of us dare tell her that the child's voice has worn down to four notes and a scrape of salt. If you knew the last line of Lira's lullaby, perhaps Vaelen would finally listen.\"",
+        "next": "hub"
+      },
+      {
+        "id": "calling_oath_eater",
+        "text": "Caelan flinches as if your words touched a raw nerve. \"You speak like someone who has tasted tribunal ash. Vaelen swore on Lira's cot that the dark would never take her. If she lets the carillon stop, what becomes of a mother's oath?\"",
+        "next": "hub"
+      },
+      {
+        "id": "calling_remnant_vessel",
+        "text": "Caelan turns his sightless eyes toward your chest, hearing the quiet rustle of pages as the bound spirits lean toward you. \"You died on the night the Barrowlight failed... and yet you walk without a silver wire or a wax groove. If Prelate Vaelen hears Lira speak through an untethered soul like yours, it might break her heart open.\"",
+        "next": "hub"
+      },
+      {
+        "id": "burden_ash_deserter",
+        "text": "Caelan's fingertips brush the iron ring in your palm, stiffening at the Ashen flame—until he feels the deep chisel-gouge cut across it.\n\n\"You deserted Commander Silas's purges,\" he breathes, his shoulders dropping in relief. \"Anyone who walked away from the Iron Reliquary's torches is welcome in these stacks.\"",
+        "effects": [
+          { "type": "changeReputation", "faction": "hollow_choir", "amount": 5 }
+        ],
+        "next": "hub"
+      },
+      {
+        "id": "burden_moor_bailiff",
+        "text": "You press the wax seal of the Elders' Writ against Caelan's knuckles and cite the village's claim on unreturned funerary deposits. Caelan sighs and unlocks a tin strongbox beneath his desk.\n\n\"The Choir has no use for surface silver, bailiff—only the voices attached to it. Take the coin and mark the village's account settled.\"",
+        "effects": [
+          { "type": "giveGold", "amount": 25 }
+        ],
+        "next": "hub"
+      },
+      {
+        "id": "after_vaelen_peace",
+        "text": "Archivist Caelan sits with his hands resting still in his lap, listening to the newfound quiet flowing out of the inner sanctum.\n\n\"She let the child finish the song,\" he whispers, a tear slipping down his wax-stained cheek. \"Maybe one day soon, I will let the stylus reach the end of my wife's cylinder too.\""
+      },
+      {
+        "id": "after_vaelen_blood",
+        "text": "Archivist Caelan cradles a snapped silver wire in his trembling hands. \"The carillon is broken, and the Prelate is gone. Walk on with your seal, stranger—leave us to gather the salt.\""
+      }
+    ]
+  }
+]

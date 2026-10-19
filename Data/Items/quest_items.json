@@ -54,6 +54,21 @@
     "aliases": ["obol", "token", "coin", "ferryman token"],
     "type": "quest",
     "description": "A flat lead token stamped with a three-arched bridge over black water. In the old days of the Under-Barrow, every traveler carried one to prove their passage was lawful."
+  },
+  {
+    "id": "moon_triad_seal",
+    "name": "Seal of the Waxing Moon",
+    "aliases": ["moon seal", "waxing moon", "crescent seal", "silver seal"],
+    "type": "quest",
+    "description": "A heavy crescent disc of pale silver-bronze recovered from the Carillon of Lira. Warm to the touch, it hums with the quiet, resolving cadence of a finished lullaby."
+  },
+  {
+    "id": "sun_triad_seal",
+    "name": "Seal of the Unclouded Sun",
+    "aliases": ["sun seal", "unclouded sun", "solar seal", "gilded seal"],
+    "type": "quest",
+    "description": "A spoked disc of fire-gilded bronze unbolted from the Furnace of Remission. Cleaned of scorched lead, its rays catch the Barrowlight with a steady, unblinking warmth."
   }
 ]
+
 
