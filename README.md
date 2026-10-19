@@ -4,7 +4,7 @@ A narrative-driven, text-based RPG engine for the terminal, written in C# on .NE
 
 The engine is **purely data-driven**. Every room, item, monster, line of dialogue, class, and rule constant is loaded from JSON in [`Data/`](Data/), so new adventures can be written without touching C#.
 
-> **Status:** **Milestone 1 (the vertical slice) is complete, and Milestone 2 is under way.** *Barrowlight* is a short, playable three-room prologue with character creation, a branching NPC conversation with skill checks and permanent consequences, a riddle-and-trap puzzle, and a boss you can fight, flee, or talk down. Milestone 2 has so far replaced the generic classes with four Greywater **Callings**, added **Burdens** (backgrounds) that the prologue reacts to, and built the progression systems Act I needs: **leveling**, **sanctuary rests**, and **shops**.
+> **Status:** **Milestones 1 and 2 are complete.** *Barrowlight* is a playable seven-room adventure. A three-room prologue (character creation, a branching NPC conversation with permanent consequences, a riddle-and-trap puzzle, and a boss you can fight, flee, or talk down) leads into **Act I**, a descent to the underground lantern-town of Nocturne. Milestone 2 replaced the generic classes with four Greywater **Callings**, added **Burdens** (backgrounds) that the story reacts to, built **leveling**, **sanctuary rests**, and **shops**, and shipped Act I.
 
 ---
 
@@ -27,7 +27,13 @@ Rain, a hilltop barrow, and a lantern that kept the dead asleep until it went da
 - Work out the sigil riddle on the bronze door in **the Ossuary Hall**, ideally without losing a hand to the trap.
 - Face what guards **the Barrow Heart**, then claim the Barrowlight and find out what its waking flame unseals beneath the sarcophagus.
 
-Wren and Ser Halric notice who you are: each Calling and Burden opens its own lines with Wren and, for some, a new way to talk the knight down. What you say to Wren permanently changes the world. It decides what you learn, what she gives you, whether she is still there when you come back (and whether she follows you down), how the final encounter can end, and which of five epilogues you get. How you win the lantern changes its flame too: mercy lights it gold, and steel leaves it ash-pale. Every ending is a descent into the Under-Barrow, the setting for Act I.
+Wren and Ser Halric notice who you are: each Calling and Burden opens its own lines with Wren and, for some, a new way to talk the knight down. What you say to Wren permanently changes the world. It decides what you learn, what she gives you, whether she is still there when you come back, and whether she follows you down. How you win the lantern changes its flame too: mercy lights it gold, and steel leaves it ash-pale.
+
+**Act I: Nocturne and the Weeping Stair.** Beneath the sarcophagus, a stair winds down into the Under-Barrow:
+- Help a fading clerk remember his name on **the Weeping Stair**, and read what the stone remembers by the Barrowlight.
+- Rest, trade, and take up the cause of **Nocturne**, a market of the living and the half-remembering dead whose beacon has gone dark.
+- Recover the beacon's two stolen pieces from a grieving cantor in **the Echo Chapel** and a drowned soldier still holding **the Drowned Tollbridge**. Shine the lantern on each room's memory echo before you face them, and you may not need to fight at all.
+- Relight the beacon (or don't), then cross the tollbridge into the deep. Which of six epilogues you get depends on the chapel, the beacon, whether Wren followed you, and the color your choices have given the lantern's flame.
 
 ## Architecture
 
@@ -151,11 +157,12 @@ dotnet test
 dotnet test --collect:"XPlat Code Coverage"
 ```
 
-There are about 810 tests, all deterministic:
+There are about 825 tests, all deterministic:
 - **Unit tests** for every Core system. The dice and skill-check code has 100% line and branch coverage.
 - **Content validation** of the shipped `Data/`, plus fixtures that prove each validator rule catches what it should.
-- **Scenario tests** that play the Barrowlight storylines through the engine with scripted dice (`FixedRandomSource`).
-- **CLI playthroughs** that drive the real terminal UI with scripted keyboard input through Spectre.Console's `TestConsole`.
+- **Scenario tests** that play the prologue and Act I storylines through the engine with scripted dice (`FixedRandomSource`), from the Lichgate to the tollbridge crossing, including which epilogue each world state reaches.
+- **Reachability checks** that every room can be reached from the start and that only the tollbridge crossing ends the game.
+- **CLI playthroughs** that drive the real terminal UI with scripted keyboard input through Spectre.Console's `TestConsole`, including a full run from character creation to the Act I epilogue.
 - **A balance check** that plays the Barrow Heart fight 2,000 times per Calling with a simple scripted player and keeps each win rate inside a band.
 
 Dice fairness is checked with fixed-seed chi-square tests.
@@ -171,10 +178,10 @@ Dice fairness is checked with fixed-seed chi-square tests.
   - save and load
   - full test coverage of dice and skill checks
 - [x] **CI:** GitHub Actions build and test on Ubuntu and Windows
-- [ ] **Milestone 2: the Under-Barrow**
+- [x] **Milestone 2: the Under-Barrow**
   - [x] 2A: four Callings, Burdens (backgrounds) with keepsakes, and prologue reactivity
   - [x] 2B: sanctuary rests, leveling, and shops
-  - [ ] 2C: Act I, the Weeping Stair and Nocturne
+  - [x] 2C: Act I, the Weeping Stair and Nocturne, ending at the Drowned Tollbridge
 - [ ] **Later:** multi-character parties, races, more dungeons, saving mid-combat, JSON Schema export for editor autocomplete
 
 ## Contributing

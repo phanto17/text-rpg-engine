@@ -448,8 +448,8 @@ A save from another format version is refused with a message naming its version 
   - save and load
   - full dice and skill-check test coverage
 - [x] **CI:** GitHub Actions build and test on ubuntu-latest and windows-latest.
-- [ ] **Milestone 2 (the Under-Barrow):**
+- [x] **Milestone 2 (the Under-Barrow):**
   - [x] 2A: four Callings, Burdens (backgrounds) with keepsakes, the `background` condition, save format v2, prologue reactivity
   - [x] 2B: the `rest` effect, XP thresholds with level-ups and `spellsByLevel`, shops (`shops.json`, `startShop`, Shop mode)
-  - [ ] 2C: Act I content (the Weeping Stair and Nocturne)
+  - [x] 2C: Act I content: the Weeping Stair, Nocturne, the Echo Chapel, and the Drowned Tollbridge. The descent no longer ends the game; crossing the tollbridge does, with epilogues keyed to the chapel, the beacon, Wren, and `lantern_resonance`
 - [ ] **Later:** parties, races, saving mid-combat, JSON Schema export for editor autocomplete.
