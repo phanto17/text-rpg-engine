@@ -10,8 +10,9 @@ namespace RpgEngine.Tests.Balance;
 /// The plain, unclever player the balance check assumes. It reads spells by what they do, never by
 /// id, so any class plays the same way. Each turn takes the first rule that applies:
 /// <list type="number">
-/// <item>Heal: the first ready self-targeted spell or technique that heals, below 50% HP; then a
-/// Potion of Healing below 40% HP while any remain.</item>
+/// <item>Heal: below 50% HP, the ready self-targeted spell or technique that heals the most on
+/// average (the first listed on a tie), along with any status it applies; then a Potion of Healing
+/// below 40% HP while any remain.</item>
 /// <item>Target: a minion if one plain attack likely kills it (average damage, after
 /// vulnerabilities, at least its HP); otherwise the boss.</item>
 /// <item>Attack: a carried Flask of Holy Water opens on the boss; then the castable mana spell with
@@ -46,7 +47,13 @@ internal sealed class BalancePolicy
         var player = session.Player.Character;
         var ready = session.SpellOptions().Where(option => option.CanCast).Select(option => option.Spell).ToList();
 
-        var heal = ready.FirstOrDefault(spell => spell.Resolution is EffectsResolutionDef effects && effects.Effects.Any(e => e is HealEffect));
+        var heal = ready
+            .Where(spell => spell.Target == SpellTarget.Self)
+            .Select(spell => (Spell: spell, Average: AverageHealing(spell.Resolution)))
+            .Where(x => x.Average > 0)
+            .OrderByDescending(x => x.Average)
+            .Select(x => x.Spell)
+            .FirstOrDefault();
         if (heal is not null && player.CurrentHp * 2 < player.MaxHp)
         {
             return new CastAction(heal.Id, null);
@@ -92,6 +99,12 @@ internal sealed class BalancePolicy
 
         return plainSpell is not null ? new CastAction(plainSpell.Id, target.Id) : new AttackAction(target.Id);
     }
+
+    // Self-buffs ride along with their healing; a spell that only applies a status never heals here.
+    private static double AverageHealing(SpellResolutionDef resolution) =>
+        resolution is EffectsResolutionDef effects
+            ? effects.Effects.OfType<HealEffect>().Sum(heal => DiceExpression.Parse(heal.Dice).Average)
+            : 0;
 
     // The first free damaging spell the character knows (e.g. a cantrip), otherwise the weapon.
     private (SpellDef? Spell, DiceExpression Damage, DamageType Type) PlainAttack(CombatSession session, IReadOnlyList<SpellDef> ready)

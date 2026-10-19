@@ -16,7 +16,7 @@
       { "item": "healing_potion", "count": 2 }
     ],
     "spells": ["second_wind", "vowbreaker_strike"],
-    "spellsByLevel": [ { "level": 2, "spells": ["ash_brand"] }, { "level": 3, "spells": ["iron_penance"] } ]
+    "spellsByLevel": [ { "level": 2, "spells": ["ash_brand"] }, { "level": 3, "spells": ["iron_penance"] }, { "level": 4, "spells": ["unbroken_vigil"] } ]
   },
   {
     "id": "liminal_auditor",
@@ -37,7 +37,7 @@
       { "item": "healing_potion", "count": 2 }
     ],
     "spells": ["sneak_attack", "grave_salt_feint"],
-    "spellsByLevel": [ { "level": 2, "spells": ["ledger_strike"] }, { "level": 3, "spells": ["writ_of_foreclosure"] } ]
+    "spellsByLevel": [ { "level": 2, "spells": ["ledger_strike"] }, { "level": 3, "spells": ["writ_of_foreclosure"] }, { "level": 4, "spells": ["final_audit"] } ]
   },
   {
     "id": "vesper_cantor",
@@ -56,7 +56,7 @@
       { "item": "healing_potion", "count": 2 }
     ],
     "spells": ["fire_bolt", "magic_missile", "vesper_toll"],
-    "spellsByLevel": [ { "level": 2, "spells": ["dirge_of_tallow"] }, { "level": 3, "spells": ["shattering_cadence"] } ]
+    "spellsByLevel": [ { "level": 2, "spells": ["dirge_of_tallow"] }, { "level": 3, "spells": ["shattering_cadence"] }, { "level": 4, "spells": ["requiem_of_the_triad"] } ]
   },
   {
     "id": "remnant_vessel",
@@ -76,6 +76,6 @@
       { "item": "healing_potion", "count": 2 }
     ],
     "spells": ["hollow_rasp", "borrowed_ember", "shroud_of_ash"],
-    "spellsByLevel": [ { "level": 2, "spells": ["ember_vigil"] }, { "level": 3, "spells": ["death_knell_echo"] } ]
+    "spellsByLevel": [ { "level": 2, "spells": ["ember_vigil"] }, { "level": 3, "spells": ["death_knell_echo"] }, { "level": 4, "spells": ["reclaim_the_ember"] } ]
   }
 ]

@@ -155,18 +155,23 @@ public sealed class RealDataTests
     }
 
     [Theory]
-    [InlineData("oath_eater", "ash_brand", "iron_penance", SpellKind.Technique)]
-    [InlineData("liminal_auditor", "ledger_strike", "writ_of_foreclosure", SpellKind.Technique)]
-    [InlineData("vesper_cantor", "dirge_of_tallow", "shattering_cadence", SpellKind.Spell)]
-    [InlineData("remnant_vessel", "ember_vigil", "death_knell_echo", SpellKind.Spell)]
-    public void EveryCalling_LearnsOneAbilityAtLevelsTwoAndThree(string classId, string levelTwo, string levelThree, SpellKind levelThreeKind)
+    [InlineData("oath_eater", "ash_brand", "iron_penance", SpellKind.Technique, "unbroken_vigil")]
+    [InlineData("liminal_auditor", "ledger_strike", "writ_of_foreclosure", SpellKind.Technique, "final_audit")]
+    [InlineData("vesper_cantor", "dirge_of_tallow", "shattering_cadence", SpellKind.Spell, "requiem_of_the_triad")]
+    [InlineData("remnant_vessel", "ember_vigil", "death_knell_echo", SpellKind.Spell, "reclaim_the_ember")]
+    public void EveryCalling_LearnsOneAbilityAtLevelsTwoThreeAndFour(string classId, string levelTwo, string levelThree, SpellKind levelThreeKind, string capstone)
     {
         var content = Content.Value;
         var cls = content.Classes[classId];
 
-        Assert.Equal(new[] { 2, 3 }, cls.SpellsByLevel.Select(g => g.Level));
+        Assert.Equal(new[] { 2, 3, 4 }, cls.SpellsByLevel.Select(g => g.Level));
         Assert.Equal(levelTwo, Assert.Single(cls.SpellsByLevel[0].Spells));
         Assert.Equal(levelThree, Assert.Single(cls.SpellsByLevel[1].Spells));
+        Assert.Equal(capstone, Assert.Single(cls.SpellsByLevel[2].Spells));
+        Assert.EndsWith("Learned at level 4.", content.Spells[capstone].Description, StringComparison.Ordinal);
+
+        // Martial Callings' capstones are once-per-fight techniques, casters' cost mana.
+        Assert.Equal(cls.Mana is null, content.Spells[capstone].Kind == SpellKind.Technique);
 
         // Level 3 is an attack: martial Callings get a once-per-fight technique, casters a 3 MP spell.
         var spell = content.Spells[levelThree];
@@ -174,6 +179,70 @@ public sealed class RealDataTests
         Assert.Equal(levelThreeKind == SpellKind.Technique ? (0, (int?)1) : (3, (int?)null), (spell.Cost.Mana, spell.Cost.UsesPerEncounter));
         Assert.Equal(cls.Mana is null, levelThreeKind == SpellKind.Technique);
         Assert.EndsWith("Learned at level 3.", spell.Description, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void LevelFourCapstones_HaveTheirSpecifiedResolutions()
+    {
+        var spells = Content.Value.Spells;
+
+        var vigil = spells["unbroken_vigil"];
+        Assert.Equal((SpellTarget.Self, (int?)1), (vigil.Target, vigil.Cost.UsesPerEncounter));
+        var vigilEffects = Assert.IsType<EffectsResolutionDef>(vigil.Resolution).Effects;
+        Assert.Equal("2d8+2", Assert.IsType<HealEffect>(vigilEffects[0]).Dice);
+        Assert.Equal("vigilant", Assert.IsType<ApplyStatusEffect>(vigilEffects[1]).Status);
+
+        var audit = spells["final_audit"];
+        Assert.Equal((SpellTarget.Enemy, (int?)1), (audit.Target, audit.Cost.UsesPerEncounter));
+        Assert.Equal("3d6", Assert.IsType<WeaponAttackResolutionDef>(audit.Resolution).BonusDamage);
+
+        var requiem = spells["requiem_of_the_triad"];
+        Assert.Equal(4, requiem.Cost.Mana);
+        var requiemSave = Assert.IsType<SaveResolutionDef>(requiem.Resolution);
+        Assert.Equal((Ability.Wis, "4d8", DamageType.Radiant, true, "grave_chill"), (requiemSave.Ability, requiemSave.Damage, requiemSave.DamageType, requiemSave.HalfOnSave, requiemSave.Status));
+
+        var ember = spells["reclaim_the_ember"];
+        Assert.Equal(3, ember.Cost.Mana);
+        var emberHit = Assert.IsType<AutoHitResolutionDef>(ember.Resolution);
+        Assert.Equal(("3d6+3", DamageType.Force), (emberHit.Damage, emberHit.DamageType));
+    }
+
+    [Theory]
+    [InlineData("vigilant", "Vigilant", 2, 2, AttackRollModifier.Advantage)]
+    [InlineData("blessed_ward", "Wren's Ward", 3, 2, AttackRollModifier.Normal)]
+    [InlineData("unburdened_focus", "Unburdened Focus", 2, 1, AttackRollModifier.Advantage)]
+    public void BuffStatuses_RaiseArmorClass(string id, string name, int rounds, int acBonus, AttackRollModifier attackRolls)
+    {
+        var status = Content.Value.StatusEffects[id];
+
+        Assert.Equal((name, rounds, acBonus, attackRolls), (status.Name, status.DurationRounds, status.Modifiers.AcBonus, status.Modifiers.AttackRolls));
+        Assert.Null(status.Modifiers.DamagePerTurn);
+        Assert.False(status.Modifiers.SkipTurn);
+    }
+
+    [Theory]
+    [InlineData("wrens_ashen_censer", "2d6+3", "blessed_ward")]
+    [InlineData("silas_iron_standard", "2d4+2", "unburdened_focus")]
+    public void AllyBlessings_HealAndBuffTheUser(string itemId, string heal, string status)
+    {
+        var item = Content.Value.Items[itemId];
+        var use = item.Use!;
+
+        Assert.Equal((ItemType.Consumable, 50, true, true, SpellTarget.Self), (item.Type, item.Value, use.InCombat, use.Consume, use.Target));
+        Assert.Equal(heal, Assert.IsType<HealEffect>(use.Effects[0]).Dice);
+        Assert.Equal(status, Assert.IsType<ApplyStatusEffect>(use.Effects[1]).Status);
+    }
+
+    [Fact]
+    public void VaelensChime_StrikesAnEnemyForForceDamage()
+    {
+        var item = Content.Value.Items["vaelens_silver_chime"];
+        var use = item.Use!;
+
+        Assert.Equal((ItemType.Consumable, 50, true, true, SpellTarget.Enemy), (item.Type, item.Value, use.InCombat, use.Consume, use.Target));
+        var hit = Assert.IsType<AutoHitResolutionDef>(use.Resolution);
+        Assert.Equal(("3d6", DamageType.Force), (hit.Damage, hit.DamageType));
+        Assert.Empty(use.Effects);
     }
 
     [Fact]

@@ -12,5 +12,26 @@
     "description": "The cold of the grave numbs your limbs: disadvantage on attack rolls.",
     "durationRounds": 1,
     "modifiers": { "attackRolls": "disadvantage" }
+  },
+  {
+    "id": "vigilant",
+    "name": "Vigilant",
+    "description": "You stand your watch unbroken and see every blow coming: +2 AC and advantage on attack rolls.",
+    "durationRounds": 2,
+    "modifiers": { "acBonus": 2, "attackRolls": "advantage" }
+  },
+  {
+    "id": "blessed_ward",
+    "name": "Wren's Ward",
+    "description": "Sister Wren's ashen blessing hangs about you like censer smoke: +2 AC.",
+    "durationRounds": 3,
+    "modifiers": { "acBonus": 2 }
+  },
+  {
+    "id": "unburdened_focus",
+    "name": "Unburdened Focus",
+    "description": "The Iron Reliquary's standard steadies your hand and quiets your fear: +1 AC and advantage on attack rolls.",
+    "durationRounds": 2,
+    "modifiers": { "acBonus": 1, "attackRolls": "advantage" }
   }
 ]

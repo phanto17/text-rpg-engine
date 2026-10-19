@@ -158,5 +158,41 @@
     "cost": { "mana": 3 },
     "target": "enemy",
     "resolution": { "type": "spellAttack", "damage": "3d6", "damageType": "lightning", "status": "grave_chill" }
+  },
+  {
+    "id": "unbroken_vigil",
+    "name": "Unbroken Vigil",
+    "kind": "technique",
+    "description": "Plant your feet on the vow you could not keep and refuse, this once, to fall. Heals 2d8+2 and makes you Vigilant (+2 AC and advantage on attack rolls) for your next two turns. Once per fight. Learned at level 4.",
+    "cost": { "usesPerEncounter": 1 },
+    "target": "self",
+    "resolution": { "type": "effects", "effects": [ { "type": "heal", "dice": "2d8+2" }, { "type": "applyStatus", "status": "vigilant" } ] }
+  },
+  {
+    "id": "final_audit",
+    "name": "The Final Audit",
+    "kind": "technique",
+    "description": "Close the ledger on a foe: every debt and every broken promise, collected in a single stroke. A weapon attack that deals an extra 3d6 damage, once per fight. Learned at level 4.",
+    "cost": { "usesPerEncounter": 1 },
+    "target": "enemy",
+    "resolution": { "type": "weaponAttack", "bonusDamage": "3d6" }
+  },
+  {
+    "id": "requiem_of_the_triad",
+    "name": "Requiem of the Triad",
+    "kind": "spell",
+    "description": "Sing all three verses of the Ashen litany at once, sun and moon and skull, until the dead remember how to rest. The foe makes a Wisdom save or takes 4d8 radiant damage and suffers Grave Chill (half damage and no chill on a success). Learned at level 4.",
+    "cost": { "mana": 4 },
+    "target": "enemy",
+    "resolution": { "type": "save", "ability": "wis", "damage": "4d8", "damageType": "radiant", "halfOnSave": true, "status": "grave_chill" }
+  },
+  {
+    "id": "reclaim_the_ember",
+    "name": "Reclaim the Ember",
+    "kind": "spell",
+    "description": "Take back every ember the dark ever borrowed from you and hurl them all at once. Deals 3d6+3 force damage and never misses. Learned at level 4.",
+    "cost": { "mana": 3 },
+    "target": "enemy",
+    "resolution": { "type": "autoHit", "damage": "3d6+3", "damageType": "force" }
   }
 ]

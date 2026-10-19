@@ -66,7 +66,32 @@
         { "type": "heal", "dice": "2d4+4" }
       ]
     }
+  },
+  {
+    "id": "wrens_ashen_censer",
+    "name": "Wren's Ashen Censer",
+    "aliases": ["ashen censer", "wren's censer"],
+    "type": "consumable",
+    "description": "A small iron censer Sister Wren packed with funeral ash and dried moor-thyme, still warm from her hands. Swung in combat, its smoke closes wounds for 2d6+3 and wraps you in Wren's Ward (+2 AC) for your next three turns.",
+    "value": 50,
+    "use": { "inCombat": true, "consume": true, "target": "self", "effects": [ { "type": "heal", "dice": "2d6+3" }, { "type": "applyStatus", "status": "blessed_ward" } ] }
+  },
+  {
+    "id": "vaelens_silver_chime",
+    "name": "Vaelen's Silver Chime",
+    "aliases": ["silver chime", "vaelen's chime"],
+    "type": "consumable",
+    "description": "A single silver tine from a Hollow Choir carillon, tuned to a note meant to let the dead rest. Struck in combat, its pure tone shatters against a foe for 3d6 force damage.",
+    "value": 50,
+    "use": { "inCombat": true, "consume": true, "target": "enemy", "resolution": { "type": "autoHit", "damage": "3d6", "damageType": "force" } }
+  },
+  {
+    "id": "silas_iron_standard",
+    "name": "Silas's Iron Standard",
+    "aliases": ["standard", "iron standard", "silas's standard"],
+    "type": "consumable",
+    "description": "The Iron Reliquary's company standard, its scoured field newly chalked with names. Raised in combat, it heals 2d4+2 and grants Unburdened Focus (+1 AC and advantage on attack rolls) for your next two turns.",
+    "value": 50,
+    "use": { "inCombat": true, "consume": true, "target": "self", "effects": [ { "type": "heal", "dice": "2d4+2" }, { "type": "applyStatus", "status": "unburdened_focus" } ] }
   }
 ]
-
-

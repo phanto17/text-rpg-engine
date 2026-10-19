@@ -112,11 +112,11 @@ public sealed class ProgressionTests
     }
 
     [Theory]
-    [InlineData("oath_eater", "ash_brand", "iron_penance")]
-    [InlineData("liminal_auditor", "ledger_strike", "writ_of_foreclosure")]
-    [InlineData("vesper_cantor", "dirge_of_tallow", "shattering_cadence")]
-    [InlineData("remnant_vessel", "ember_vigil", "death_knell_echo")]
-    public void GrantXp_ShippedCallings_LearnTheirLevelTwoAndThreeAbilities(string classId, string levelTwo, string levelThree)
+    [InlineData("oath_eater", "ash_brand", "iron_penance", "unbroken_vigil")]
+    [InlineData("liminal_auditor", "ledger_strike", "writ_of_foreclosure", "final_audit")]
+    [InlineData("vesper_cantor", "dirge_of_tallow", "shattering_cadence", "requiem_of_the_triad")]
+    [InlineData("remnant_vessel", "ember_vigil", "death_knell_echo", "reclaim_the_ember")]
+    public void GrantXp_ShippedCallings_LearnTheirAbilitiesAtLevelsTwoThreeAndFour(string classId, string levelTwo, string levelThree, string capstone)
     {
         var content = Shipped.Value;
         var player = CreateCalling(content, classId);
@@ -142,8 +142,22 @@ public sealed class ProgressionTests
             Assert.InRange(spell.Cost.Mana, 1, player.MaxMana);
         }
 
-        // Further XP short of level 4 grants nothing new.
+        // Further XP short of level 4 grants nothing new; the last point grants the capstone.
         Assert.Empty(Grant(content, player, 599).Events.OfType<LeveledUpEvent>());
+        var four = Assert.Single(Grant(content, player, 1).Events.OfType<LeveledUpEvent>());
+
+        Assert.Equal((4, capstone), (four.Level, Assert.Single(four.NewSpells).Id));
+        Assert.Equal([.. starting, levelTwo, levelThree, capstone], player.SpellIds);
+        Assert.Equal(2700, Progression.NextLevelXp(player, content));
+        var capstoneSpell = content.Spells[capstone];
+        if (capstoneSpell.Cost.UsesPerEncounter is { } capstoneUses)
+        {
+            Assert.Equal(capstoneUses, CombatRules.EncounterUses(player, content)[capstone]);
+        }
+        else
+        {
+            Assert.InRange(capstoneSpell.Cost.Mana, 1, player.MaxMana);
+        }
     }
 
     private static PlayerCharacter CreateCalling(GameContent content, string classId)
