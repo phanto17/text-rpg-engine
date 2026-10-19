@@ -10,5 +10,17 @@
       { "stage": 50, "journal": "The Barrowlight burns in your hand, and its waking flame has unsealed a hidden stair beneath the sarcophagus leading deep into the earth." },
       { "stage": 100, "journal": "You carried the Barrowlight down through the unsealed threshold into the Under-Barrow." }
     ]
+  },
+  {
+    "id": "nocturne_beacon",
+    "name": "The Quiet Bell of Nocturne",
+    "stages": [
+      { "stage": 10, "journal": "You descended the Weeping Stair into the Under-Barrow. Ahead in the cavernous twilight glimmer the pale lanterns of Nocturne." },
+      { "stage": 20, "journal": "Nocturne's central beacon stands dark in the sunken cathedral square. Its resonant tuning-tongue and smoked-glass lens were carried off toward the Echo Chapel in the east and the Drowned Tollbridge in the west." },
+      { "stage": 30, "journal": "You have recovered one of the two missing pieces of Nocturne's beacon. The other still lies in the dark at the opposite spoke of the cavern." },
+      { "stage": 40, "journal": "You hold both the Resonant Tuning-Tongue and the Smoked-Glass Beacon Lens. Return to the Lantern Market in Nocturne and restore the central beacon." },
+      { "stage": 100, "journal": "You rekindled Nocturne's central beacon. Its warm chime steadies the spirits of the Lantern Market against both the Hollow Choir's tethers and the Ashen patrol's quarantine." }
+    ]
   }
 ]
+

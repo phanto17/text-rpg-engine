@@ -1,0 +1,211 @@
+[
+  {
+    "id": "echo_chapel",
+    "name": "The Echo Chapel",
+    "description": "Beyond the cracked choir-arch lies a side-chapel carved into a thicket of hollow stalactites that reach from floor to vault like the pipes of a cathedral organ. The Hollow Choir has turned the chamber into an acoustic reliquary: dozens of brass music boxes, wax-sealed spirit-jars, and silver wires hang between the stone columns, humming with trapped voices that are never permitted to fall silent.\n\nAt the raised pulpit stands a bone-pipe organ crusted in white memory-salt, its bellows wheezing in the damp air.",
+    "revisit": "Silver wires and reliquary jars glisten among the hollow stalactites of the Echo Chapel.",
+    "variants": [
+      {
+        "conditions": [ { "type": "notFlag", "flag": "echo_chapel_resolved" } ],
+        "text": "At the pulpit, Cantor Miriel's fingers blur across the reliquary organ wired to the stolen beacon-tongue, while a calcified mournling sways in time to the scraping chord."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "miriel_reconciled" } ],
+        "text": "The dissonant organ sits silent. Cantor Miriel kneels beside an unsealed reliquary jar at the pulpit, her head bowed in quiet, honest grief."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "miriel_defeated" } ],
+        "text": "Shattered music boxes and spilled grave-salt litter the chapel steps where Cantor Miriel fell."
+      },
+      {
+        "conditions": [
+          { "type": "flag", "flag": "echo_chapel_resolved" },
+          { "type": "lacksItem", "item": "choir_tuning_fork" },
+          { "type": "notFlag", "flag": "beacon_restored" }
+        ],
+        "text": "The Resonant Tuning-Tongue gleams where it hangs on the silent organ lectern."
+      }
+    ],
+    "ambient": [
+      "A brass music box hanging from a wire clicks three notes of a lullaby, sticks, and clicks them again.",
+      "The hollow stalactites overhead hum with a thin, aching vibration you feel behind your eyes.",
+      "Fine white salt—the dust of calcified memories—drifts down from the choir loft.",
+      "From a stoppered glass jar on the altar comes the faint sound of someone whispering a name over and over."
+    ],
+    "exits": [
+      { "direction": "west", "target": "nocturne_square", "description": "The cracked choir-arch leads back west to the Lantern Market of Nocturne." }
+    ],
+    "features": [
+      {
+        "id": "reliquary_organ",
+        "name": "bone-pipe reliquary organ",
+        "aliases": ["organ", "pulpit", "lectern", "pipes", "tongue", "fork"],
+        "description": "An organ built from hollowed stalactites and brass reliquary tubes. When its keys are pressed, air is forced through glass jars containing the tethered echoes of the dead.",
+        "interactions": [
+          {
+            "verb": "take",
+            "label": "Take the Resonant Tuning-Tongue",
+            "conditions": [
+              { "type": "flag", "flag": "echo_chapel_resolved" },
+              { "type": "lacksItem", "item": "choir_tuning_fork" },
+              { "type": "notFlag", "flag": "beacon_restored" }
+            ],
+            "text": "You unhook the Resonant Tuning-Tongue from the organ's throat. The heavy bronze bar warms in your palm, humming in quiet sympathy with the Barrowlight.",
+            "effects": [
+              { "type": "giveItem", "item": "choir_tuning_fork" },
+              {
+                "type": "if",
+                "conditions": [ { "type": "hasItem", "item": "beacon_lens" } ],
+                "then": [ { "type": "setQuestStage", "quest": "nocturne_beacon", "stage": 40 } ],
+                "else": [ { "type": "setQuestStage", "quest": "nocturne_beacon", "stage": 30 } ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "hanging_music_boxes",
+        "name": "tethered music boxes",
+        "aliases": ["boxes", "music boxes", "jars", "wires", "reliquaries"],
+        "description": "Dozens of brass music boxes and wax-sealed jars hang from silver wires. Inside each, a tiny pale spark beats against the metal like a moth trapped in a lantern.",
+        "interactions": [
+          {
+            "verb": "release",
+            "label": "Unseal the tethered spirit-jars and speak the Rite of Rest",
+            "once": true,
+            "conditions": [ { "type": "notFlag", "flag": "preserved_choir_jars" } ],
+            "text": "One by one, you open the wax seals and whisper the words of release. The trapped sparks rise toward the vaulted roof like reverse rain, chiming softly before they fade into quiet.",
+            "effects": [
+              { "type": "setFlag", "flag": "released_choir_jars" },
+              { "type": "addCounter", "counter": "lantern_resonance", "amount": 1 },
+              { "type": "changeReputation", "faction": "lantern_bearers", "amount": 5 },
+              { "type": "changeReputation", "faction": "hollow_choir", "amount": -10 },
+              { "type": "grantXp", "amount": 25 }
+            ]
+          },
+          {
+            "verb": "wind",
+            "label": "Wind the brass music boxes to preserve their anchors",
+            "once": true,
+            "conditions": [ { "type": "notFlag", "flag": "released_choir_jars" } ],
+            "text": "You turn the small brass keys, steadying the fragile melodies so the spirits bound inside will not fade into the dark today. Behind the altar-cloth, a Choir cache slides open to reveal a slender bronze-alloyed blade.",
+            "effects": [
+              { "type": "setFlag", "flag": "preserved_choir_jars" },
+              { "type": "changeReputation", "faction": "hollow_choir", "amount": 10 },
+              { "type": "changeReputation", "faction": "ashen_order", "amount": -5 },
+              { "type": "giveItem", "item": "vesper_bell_blade" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "chapel_memory_echo",
+        "name": "organ-loft memory echo",
+        "aliases": ["echo", "memory", "loft", "jonas"],
+        "description": "In the Barrowlight's glow, a faint golden afterimage lingers beside the organ bench: a young boy sitting wrapped in a blanket, trying to hum a tune while his sister weeps over his hands.",
+        "conditions": [ { "type": "hasItem", "item": "barrowlight" } ],
+        "interactions": [
+          {
+            "verb": "shine",
+            "label": "Shine the Barrowlight on the organ-loft echo",
+            "once": true,
+            "text": "The Barrowlight illuminates the memory left in the wax. A boy's thin voice speaks out of the empty air: \"Miriel, stop winding the key. My hands are turning to salt, and I can't remember what the sun looked like. Please—let me go to sleep.\"",
+            "effects": [
+              { "type": "setFlag", "flag": "shone_chapel_echo" },
+              { "type": "grantXp", "amount": 25 }
+            ]
+          }
+        ]
+      }
+    ],
+    "npcs": [
+      {
+        "id": "miriel",
+        "name": "Cantor Miriel",
+        "aliases": ["miriel", "cantor", "singer"],
+        "description": "Cantor Miriel kneels beside the silent organ, holding an open glass reliquary jar that smells faintly of autumn rain and extinguished tallow.",
+        "dialogue": "miriel",
+        "conditions": [ { "type": "flag", "flag": "miriel_reconciled" } ]
+      }
+    ],
+    "encounter": {
+      "id": "echo_chapel_choir",
+      "conditions": [ { "type": "notFlag", "flag": "echo_chapel_resolved" } ],
+      "intro": "As you step beneath the choir-arch, the bone-pipe organ shudders with a chord so sharp it tastes like copper. At the pulpit stands a woman in the silver-threaded shawl of the Hollow Choir, her knuckles white on the keys. Above her, wired into the organ's throat, hangs the bronze tuning-tongue stolen from Nocturne's beacon. Beside the steps, a spirit crusted in grey salt lurches to block your path.\n\n\"Stay back!\" Cantor Miriel cries, her voice cracking over the hum of the pipes. \"If you take the tongue back to the square, the chord breaks—and if the chord breaks, my brother Jonas goes dark forever! I won't let you murder what's left of him!\"",
+      "enemies": [
+        { "monster": "choir_cantor_miriel", "count": 1 },
+        { "monster": "calcified_mournling", "count": 1 }
+      ],
+      "canFlee": true,
+      "fleeTo": "nocturne_square",
+      "parley": {
+        "options": [
+          {
+            "label": "Show her that the forced chord is calcifying Jonas into salt, not saving him",
+            "check": {
+              "skill": "persuasion",
+              "dc": 13,
+              "advantageIf": [
+                {
+                  "type": "any",
+                  "conditions": [
+                    { "type": "flag", "flag": "saw_stair_echo" },
+                    { "type": "flag", "flag": "knows_miriel_grief" },
+                    { "type": "flag", "flag": "shone_chapel_echo" }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "label": "Pluck the counter-harmonic that lets a tethered voice rest without breaking",
+            "conditions": [ { "type": "class", "class": "vesper_cantor" } ],
+            "check": { "skill": "performance", "dc": 11, "advantage": true }
+          },
+          {
+            "label": "Show her the Tarnished Locket and speak of the one you had to let go",
+            "conditions": [ { "type": "background", "background": "bereaved_kin" } ],
+            "check": { "skill": "insight", "dc": 11, "advantage": true }
+          },
+          {
+            "label": "Speak the Rite of Rest for Jonas so he can sleep unchained",
+            "conditions": [ { "type": "flag", "flag": "wren_taught_rite" } ],
+            "check": { "skill": "religion", "dc": 11, "advantage": true }
+          }
+        ],
+        "onSuccess": [
+          {
+            "type": "message",
+            "text": "Miriel's hands freeze above the keys. She looks up at the reliquary jar above the organ, where grey salt has crept halfway up the glass, and a single breath breaks in her chest.\n\n\"He isn't singing,\" she whispers. \"It's only the wire pulling his throat.\" Slowly, with trembling fingers, she releases the keys. The scraping chord fades into a single, clear note—and from the unsealed reliquary comes a quiet sigh of relief before the mist dissolves. Beside the pulpit, the calcified mournling sinks peacefully to its knees and crumbles into harmless ash.",
+            "style": "narration"
+          },
+          { "type": "setFlag", "flag": "miriel_reconciled" },
+          { "type": "addCounter", "counter": "lantern_resonance", "amount": 1 },
+          { "type": "changeReputation", "faction": "lantern_bearers", "amount": 10 },
+          { "type": "changeReputation", "faction": "hollow_choir", "amount": -5 },
+          { "type": "grantXp", "amount": 135 }
+        ],
+        "onFailure": [
+          {
+            "type": "message",
+            "text": "\"You sound just like the Ashen priests!\" Miriel sobs, slamming her palms down on the keys. \"Everything that ends is stolen!\"",
+            "style": "warning"
+          }
+        ]
+      },
+      "onVictory": [
+        {
+          "type": "message",
+          "text": "Cantor Miriel collapses against the silent organ, blood and grey salt staining her silver shawl, while the mournling shatters across the steps. Above the pulpit, the stolen tuning-tongue swings loose on its wire.",
+          "style": "narration"
+        },
+        { "type": "setFlag", "flag": "miriel_defeated" },
+        { "type": "addCounter", "counter": "lantern_resonance", "amount": -1 },
+        { "type": "changeReputation", "faction": "hollow_choir", "amount": -15 }
+      ],
+      "onResolved": [
+        { "type": "setFlag", "flag": "echo_chapel_resolved" }
+      ]
+    }
+  }
+]

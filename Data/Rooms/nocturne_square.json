@@ -1,0 +1,146 @@
+[
+  {
+    "id": "nocturne_square",
+    "name": "Nocturne — The Lantern Market",
+    "description": "The stair opens into the nave of a sunken cathedral whose roof collapsed ages ago into the vast vault of the Under-Barrow. Fluted columns rise like broken ribs around a flagged square where runaway heretics, tomb-auditors, and half-remembering spirits have built a quiet market of salvaged timber and oilcloth stalls, lit by clusters of pale fungal lamps.\n\nAt the center of the square stands the Nocturne Beacon—a twelve-foot housing of green-black bronze built to chime and shine across the cavern so the waking dead neither calcify nor fall into forced stasis.",
+    "revisit": "Pale fungal lanterns glimmer across the sunken cathedral square of Nocturne.",
+    "variants": [
+      {
+        "conditions": [ { "type": "notFlag", "flag": "beacon_restored" } ],
+        "text": "The Nocturne Beacon at the center of the square stands dark and silent, its lens-frame wrenched open and its bronze tuning-tongue missing. Along the colonnade, several spirits sit motionless with grey salt-frost creeping over their knuckles."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "beacon_restored" } ],
+        "text": "The Nocturne Beacon burns with a steady amber flame, its bronze tongue chiming a low, comforting harmonic that washes across the square and flakes the salt-frost from the spirits' hands."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "wren_joins_descent" } ],
+        "text": "Beneath a broken side-altar, Sister Wren has kindled a small sanctuary fire and laid out clean linen beside the Wayfarers' cots."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "rested_in_nocturne" } ],
+        "text": "The peat-and-tallow brazier by the sanctuary cots radiates a steady, welcoming warmth."
+      }
+    ],
+    "ambient": [
+      "A fungal lantern hisses softly above a stall of salvaged bronze and grave-wax.",
+      "Somewhere under the sunken flagstones, dark water laps against ancient pilings.",
+      "A spirit merchant whispers a price in coins that have not been minted for two hundred years.",
+      "High in the cavern roof, silver spores drift down like slow, dry snow."
+    ],
+    "exits": [
+      { "direction": "up", "target": "weeping_stair", "description": "The spiral steps of the Weeping Stair climb back toward the upper barrow." },
+      { "direction": "east", "target": "echo_chapel", "description": "A cracked choir-arch leads east toward the Echo Chapel, where a dissonant organ-hum vibrates through the stone." },
+      { "direction": "west", "target": "drowned_tollbridge", "description": "A flooded causeway leads west toward the Drowned Tollbridge and the black subterranean canal." }
+    ],
+    "features": [
+      {
+        "id": "sanctuary_brazier",
+        "name": "sanctuary brazier",
+        "aliases": ["brazier", "campfire", "fire", "cot", "sanctuary"],
+        "description": "An iron brazier packed with slow-burning peat and memory-tallow, tended by the Wayfarers of the Threshold so travelers and weary spirits alike can warm their hands and recover their strength.",
+        "interactions": [
+          {
+            "verb": "rest",
+            "label": "Rest by the sanctuary brazier",
+            "text": "You sit beside the warm iron brazier and breathe in the clean smoke of peat and memory-tallow. The ache in your limbs eases, and your focus returns.",
+            "effects": [
+              { "type": "heal", "dice": "20" },
+              { "type": "restoreMana", "amount": 20 },
+              { "type": "setFlag", "flag": "rested_in_nocturne" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "central_beacon",
+        "name": "Nocturne Beacon",
+        "aliases": ["beacon", "bell", "housing", "tower"],
+        "description": "A twelve-foot housing of green-black bronze shaped like a lantern suspended inside a bell-frame. It was engineered to project a harmonic warmth across the sunken cathedral—keeping waking spirits lucid without forcing them into dreamless sleep.",
+        "interactions": [
+          {
+            "verb": "study",
+            "label": "Inspect the sabotaged beacon",
+            "once": true,
+            "conditions": [ { "type": "notFlag", "flag": "beacon_restored" } ],
+            "text": "You examine the wrenched bronze frame and the severed hanger inside the bell-housing.",
+            "check": { "skill": "investigation", "dc": 11 },
+            "success": {
+              "text": "You find two distinct sets of marks on the metal: fine acoustic pliers dusted with pale chapel-spores where the tuning-tongue was unhooked, and the heavy iron pry-bar of an Ashen Order patrol where the smoked-glass lens was wrenched free.",
+              "effects": [
+                { "type": "setFlag", "flag": "inspected_beacon" },
+                { "type": "setQuestStage", "quest": "nocturne_beacon", "stage": 20 },
+                { "type": "grantXp", "amount": 25 }
+              ]
+            },
+            "failure": {
+              "text": "Both the lens and the bell-tongue are gone, carried off in opposite directions from the square.",
+              "effects": [
+                { "type": "setQuestStage", "quest": "nocturne_beacon", "stage": 20 }
+              ]
+            }
+          },
+          {
+            "verb": "restore",
+            "label": "Restore the Nocturne Beacon",
+            "conditions": [
+              { "type": "hasItem", "item": "choir_tuning_fork" },
+              { "type": "hasItem", "item": "beacon_lens" },
+              { "type": "notFlag", "flag": "beacon_restored" }
+            ],
+            "text": "You fit the Smoked-Glass Beacon Lens back into its bronze frame and hang the Resonant Tuning-Tongue from the crossbeam. Then you raise the Barrowlight to the central wick.\n\nThe flame catches with a deep, clear bell-note that ripples outward through the sunken cathedral. Warm amber light washes across the market stalls and up the fluted pillars. Around the square, half-calcified spirits draw in long, wondering breaths as the salt-frost flakes from their hands.",
+            "effects": [
+              { "type": "removeItem", "item": "choir_tuning_fork" },
+              { "type": "removeItem", "item": "beacon_lens" },
+              { "type": "setFlag", "flag": "beacon_restored" },
+              { "type": "addCounter", "counter": "lantern_resonance", "amount": 1 },
+              { "type": "changeReputation", "faction": "lantern_bearers", "amount": 15 },
+              { "type": "grantXp", "amount": 150 },
+              { "type": "setQuestStage", "quest": "nocturne_beacon", "stage": 100 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "pillar_of_names",
+        "name": "pillar of names",
+        "aliases": ["pillar", "names", "notices", "chalk", "column"],
+        "description": "A cracked cathedral column where the Wayfarers chalk the names of those still lucid alongside warnings for travelers. Two fresh notices stand out: one warns that Cantor Miriel has sealed the Echo Chapel to the east; the other warns that Toll-Warden Garin's patrol has barred the Drowned Tollbridge to the west.",
+        "interactions": [
+          {
+            "verb": "read",
+            "label": "Read the chalked notices on the pillar",
+            "text": "Beneath a list of remembered names, Keeper Maeve's steady hand has written:\n\n  EAST ARCH — Cantor Miriel of the Hollow Choir has wired the beacon's tongue into the Echo Chapel organ to keep her brother's voice from fading. Do not let the chord calcify your mind.\n  WEST CAUSEWAY — Toll-Warden Garin of the Ashen Third Patrol holds the Drowned Tollbridge with the beacon's lens. He does not know his watch has ended."
+          }
+        ]
+      }
+    ],
+    "npcs": [
+      {
+        "id": "maeve",
+        "name": "Keeper Maeve",
+        "aliases": ["maeve", "keeper", "wayfarer", "woman"],
+        "description": "A tall, grey-haired woman in a patched canvas coat bearing the three-ringed badge of the Wayfarers of the Threshold. She tends a kettle of broth beside the dark beacon, speaking softly to the spirits who still remember their names.",
+        "dialogue": "maeve"
+      },
+      {
+        "id": "peddler",
+        "name": "Sallow the Peddler",
+        "aliases": ["sallow", "peddler", "merchant", "trader", "vendor"],
+        "description": "A gaunt revenant merchant sitting beneath a shelf of luminous fungus, weighing phials of memory-tallow, grave-salt censers, and salvaged blades on a brass balance.",
+        "dialogue": "peddler"
+      },
+      {
+        "id": "wren_nocturne",
+        "name": "Sister Wren",
+        "aliases": ["wren", "sister", "nun"],
+        "description": "Sister Wren kneels beside the sanctuary cots in her soot-grey habit, binding the salt-cracked hands of a weary spirit with strips of clean linen.",
+        "dialogue": "wren_nocturne",
+        "conditions": [ { "type": "flag", "flag": "wren_joins_descent" } ]
+      }
+    ],
+    "onFirstEnter": [
+      { "type": "setQuestStage", "quest": "nocturne_beacon", "stage": 20 }
+    ]
+  }
+]

@@ -21,5 +21,36 @@
       "target": "enemy",
       "resolution": { "type": "autoHit", "damage": "2d4", "damageType": "radiant" }
     }
+  },
+  {
+    "id": "tallow_draught",
+    "name": "Vial of Memory-Tallow",
+    "aliases": ["tallow", "draught", "memory tallow", "blue vial"],
+    "type": "consumable",
+    "description": "Distilled from the luminous spore-wax that gathers in the Under-Barrow. Drinking it steadies the mind and restores 2 mana and 1d4+1 hit points.",
+    "value": 40,
+    "use": {
+      "inCombat": true,
+      "consume": true,
+      "effects": [
+        { "type": "restoreMana", "amount": 2 },
+        { "type": "heal", "dice": "1d4+1" }
+      ]
+    }
+  },
+  {
+    "id": "grave_salt_bomb",
+    "name": "Censer of Grave-Salt",
+    "aliases": ["censer", "salt", "grave salt", "pot"],
+    "type": "consumable",
+    "description": "A clay pot packed with coarse grey salt and iron filings used by tomb-auditors to shatter calcified shells. Thrown in combat, it bursts for 2d6 force damage.",
+    "value": 35,
+    "use": {
+      "inCombat": true,
+      "consume": true,
+      "target": "enemy",
+      "resolution": { "type": "autoHit", "damage": "2d6", "damageType": "force" }
+    }
   }
 ]
+

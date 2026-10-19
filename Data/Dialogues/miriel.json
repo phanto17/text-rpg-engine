@@ -1,0 +1,28 @@
+[
+  {
+    "id": "miriel",
+    "speaker": "Cantor Miriel",
+    "entries": [
+      { "conditions": [ { "type": "flag", "flag": "miriel_gift_given" } ], "node": "quiet_vigil" },
+      { "node": "first_after_parley" }
+    ],
+    "nodes": [
+      {
+        "id": "first_after_parley",
+        "text": "Cantor Miriel sits on the steps of the silent organ, holding the empty glass jar in her lap. The frantic tension has gone out of her shoulders, leaving only a deep, quiet exhaustion.\n\n\"When the wire came off the pipe, I heard him clearly for the first time in a month,\" she whispers. \"Not the three notes I kept forcing through the bellows—just Jonas, thanking me, and saying goodnight.\"\n\nShe reaches into her shawl and offers you a stoppered blue phial of memory-tallow. \"The elders of the Hollow Choir deeper in the Archive of Vows told me that letting go was a betrayal. They were lying to themselves, and I lied to myself too. Take the tuning-tongue on the lectern, {player.name}, and give Nocturne back its bell.\"",
+        "effects": [
+          { "type": "setFlag", "flag": "miriel_gift_given" },
+          { "type": "giveItem", "item": "tallow_draught" }
+        ],
+        "choices": [
+          { "text": "Keeper Maeve said there is a place for you by the Wayfarers' fire.", "end": true },
+          { "text": "May Jonas rest in peace, Miriel.", "end": true }
+        ]
+      },
+      {
+        "id": "quiet_vigil",
+        "text": "Cantor Miriel traces the rim of the empty reliquary jar. \"I'll come back to the square soon, {player.name}. I only want to sit in the quiet a little longer—real quiet, with no wires in it.\""
+      }
+    ]
+  }
+]

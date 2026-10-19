@@ -146,15 +146,46 @@ Once claimed in `inner_crypt` (`item: barrowlight`), the lantern serves as both 
 | `barrow_heart_resolved` | `Rooms/inner_crypt.json` | Defeated or parleyed with Ser Halric; reveals `barrowlight_lantern` feature. |
 | `knight_laid_to_rest` | `Rooms/inner_crypt.json` | Parleyed with Ser Halric (+10 `ashen_order` rep, +100 XP, +1 `lantern_resonance`). |
 | `knight_destroyed` | `Rooms/inner_crypt.json` | Defeated Ser Halric in combat (-1 `lantern_resonance`). |
+| `read_stair_relief` | `Rooms/weeping_stair.json` | Passed `[History DC 11]` on the pre-Order relief; grants advantage on steadying Brother Orin. |
+| `saw_stair_echo` | `Rooms/weeping_stair.json` | Shone the `barrowlight` on the Weeping Stair echo; grants advantage on Cantor Miriel's parley. |
+| `met_orin` | `Dialogues/orin.json` | Spoke to Brother Orin on the Weeping Stair. |
+| `steadied_orin` | `Dialogues/orin.json` | Passed `[Insight DC 11]` to help Brother Orin recall his own name (grants `toll_token`, +5 `lantern_bearers` rep, +1 `lantern_resonance`). |
+| `orin_slipped` | `Dialogues/orin.json` | Failed `[Insight DC 11]` with Brother Orin; his fingers calcify further. |
+| `rested_in_nocturne` | `Rooms/nocturne_square.json` | Rested by the Wayfarers' sanctuary brazier; grants advantage when asking Keeper Maeve to confide. |
+| `inspected_beacon` | `Rooms/nocturne_square.json` | Passed `[Investigation DC 11]` on the sabotaged Nocturne Beacon. |
+| `beacon_restored` | `Rooms/nocturne_square.json` | Restored the Nocturne Beacon with `choir_tuning_fork` and `beacon_lens` (+15 `lantern_bearers` rep, +150 XP, +1 `lantern_resonance`). |
+| `met_maeve` | `Dialogues/maeve.json` | Spoke to Keeper Maeve in Nocturne Square. |
+| `knows_miriel_grief` | `Dialogues/maeve.json` | Learned of Cantor Miriel's brother Jonas from Keeper Maeve; grants advantage on Miriel's parley. |
+| `knows_garin_guilt` | `Dialogues/maeve.json` | Learned of Toll-Warden Garin's drowned patrol from Keeper Maeve; grants advantage on Garin's parley. |
+| `maeve_rewarded` | `Dialogues/maeve.json` | Claimed Keeper Maeve's reward after restoring the Nocturne Beacon (+50 gold, `tallow_draught`, +10 `lantern_bearers` rep). |
+| `met_peddler` | `Dialogues/peddler.json` | Spoke to Sallow the Peddler in Nocturne Square. |
+| `audited_peddler` | `Dialogues/peddler.json` | Passed `[Investigation DC 11]` on Sallow's ledger (grants `grave_salt_bomb` and 10 gold). |
+| `traded_with_peddler` | `Dialogues/peddler.json` | Bartered a `healing_potion` with Sallow for `wayfarer_brigandine` and `grave_salt_bomb`. |
+| `met_wren_nocturne` | `Dialogues/wren_nocturne.json` | Reunited with Sister Wren in Nocturne Square (+5 `lantern_bearers` rep). |
+| `knows_garin_oath` | `Dialogues/wren_nocturne.json` | Learned Toll-Warden Garin's history from Sister Wren; grants advantage on Garin's parley. |
+| `echo_chapel_resolved` | `Rooms/echo_chapel.json` | Defeated or parleyed with Cantor Miriel; allows taking `choir_tuning_fork`. |
+| `miriel_reconciled` | `Rooms/echo_chapel.json` | Parleyed with Cantor Miriel (+10 `lantern_bearers` rep, -5 `hollow_choir` rep, +135 XP, +1 `lantern_resonance`). |
+| `miriel_defeated` | `Rooms/echo_chapel.json` | Defeated Cantor Miriel in combat (-15 `hollow_choir` rep, -1 `lantern_resonance`). |
+| `shone_chapel_echo` | `Rooms/echo_chapel.json` | Shone the `barrowlight` on Jonas's echo in the Echo Chapel; grants advantage on Miriel's parley. |
+| `released_choir_jars` | `Rooms/echo_chapel.json` | Unsealed the tethered spirit-jars in the Echo Chapel (+1 `lantern_resonance`, +5 `lantern_bearers` rep, -10 `hollow_choir` rep). |
+| `preserved_choir_jars` | `Rooms/echo_chapel.json` | Wound the Hollow Choir's brass music boxes (+10 `hollow_choir` rep, -5 `ashen_order` rep, grants `vesper_bell_blade`). |
+| `miriel_gift_given` | `Dialogues/miriel.json` | Spoke to reconciled Cantor Miriel and received `tallow_draught`. |
+| `tollbridge_resolved` | `Rooms/drowned_tollbridge.json` | Defeated or parleyed with Toll-Warden Garin; allows taking `beacon_lens`. |
+| `garin_relieved` | `Rooms/drowned_tollbridge.json` | Parleyed with Toll-Warden Garin (+10 `ashen_order` rep, +10 `lantern_bearers` rep, +130 XP, +1 `lantern_resonance`). |
+| `garin_destroyed` | `Rooms/drowned_tollbridge.json` | Defeated Toll-Warden Garin in combat (-10 `ashen_order` rep, -1 `lantern_resonance`). |
+| `shone_bridge_echo` | `Rooms/drowned_tollbridge.json` | Shone the `barrowlight` on the floodgate echo at the Drowned Tollbridge; grants advantage on Garin's parley. |
+| `garin_gift_given` | `Dialogues/garin.json` | Spoke to relieved Toll-Warden Garin and received `grave_salt_bomb`. |
 
 ### Counters (`counter`)
 | Counter ID | Used In | Meaning |
 | :--- | :--- | :--- |
 | `sigil_seq` | `Rooms/ossuary_hall.json` | Tracks bronze door progress (`0` = start, `1` = sun pressed, `2` = moon pressed; resets to `0` on trap trigger). |
-| `lantern_resonance` | `Rooms/inner_crypt.json` / `game.json` | Tracks the moral/philosophical resonance of the Barrowlight (`+` for mercy/release, `-` for destruction). |
+| `lantern_resonance` | `Rooms/inner_crypt.json` / Act I rooms / `game.json` | Tracks the moral/philosophical resonance of the Barrowlight (`+` for mercy/release, `-` for destruction). |
 
 ### Quests (`questStage`)
 - `barrowlight`: `10` (Entered Lichgate) -> `20` (Entered Ossuary Hall) -> `30` (Opened bronze door) -> `40` (Resolved Barrow Heart encounter) -> `50` (Claimed the Barrowlight & unsealed the spiral stair) -> `100` (Descended into the Under-Barrow).
+- `nocturne_beacon`: `10` (Descended the Weeping Stair) -> `20` (Reached Nocturne Square and learned of the sabotaged beacon) -> `30` (Recovered the first missing beacon component) -> `40` (Recovered both `choir_tuning_fork` and `beacon_lens`) -> `100` (Restored the Nocturne Beacon).
 
 ### Backgrounds (`background`)
 - `bereaved_kin`, `ash_deserter`, `moor_bailiff`, `fever_dreamer` (see section 5). Keepsakes: `tarnished_locket`, `scored_signet`, `elders_writ`, `bell_splinter` (`Items/quest_items.json`).
+

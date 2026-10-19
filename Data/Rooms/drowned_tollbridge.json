@@ -1,0 +1,206 @@
+[
+  {
+    "id": "drowned_tollbridge",
+    "name": "The Drowned Tollbridge",
+    "description": "West of the square, the cathedral causeway drops to a three-arched bridge of black basalt spanning a subterranean river. The water has risen over the lower embankments, flooding the toll-plaza ankle-deep in slow, ink-black current. Heavy quarantine chains and a dropped iron floodgate bar the far arch toward the deeper warrens.\n\nBeside the central toll-post stands a flooded stone guardhouse, its lintel stamped with the iron flame of the Ashen Order's Third Expeditionary Patrol.",
+    "revisit": "Black canal water eddies ankle-deep across the basalt flagstones of the Drowned Tollbridge.",
+    "variants": [
+      {
+        "conditions": [ { "type": "notFlag", "flag": "tollbridge_resolved" } ],
+        "text": "At the center of the flooded span stands Toll-Warden Garin in waterlogged plate, his halberd barred across the arch and the stolen beacon-lens locked inside an iron cage on the toll-post."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "garin_relieved" } ],
+        "text": "Toll-Warden Garin rests against the basalt parapet with his visor raised and his halberd planted upright beside the floodgate, his quarantine watch finally ended."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "garin_destroyed" } ],
+        "text": "Rusted plate and broken pike-shafts lie half-submerged in the black water across the bridge."
+      },
+      {
+        "conditions": [
+          { "type": "flag", "flag": "tollbridge_resolved" },
+          { "type": "lacksItem", "item": "beacon_lens" },
+          { "type": "notFlag", "flag": "beacon_restored" }
+        ],
+        "text": "The Smoked-Glass Beacon Lens waits inside the unlatched iron cage on the toll-post."
+      }
+    ],
+    "ambient": [
+      "Black water eddies around the basalt piers with a cold, hollow gurgle.",
+      "A rusted quarantine chain swings beneath the arch, clinking softly against wet stone.",
+      "The smell of river-silt, wet iron, and old lamp-oil hangs heavy under the bridge vault.",
+      "Ripples catch your light and throw pale, shivering rings across the underside of the arches."
+    ],
+    "exits": [
+      { "direction": "east", "target": "nocturne_square", "description": "The flooded causeway climbs back east toward the Lantern Market of Nocturne." }
+    ],
+    "features": [
+      {
+        "id": "toll_post_cage",
+        "name": "iron lens-cage",
+        "aliases": ["cage", "lens", "post", "toll-post", "glass"],
+        "description": "An iron quarantine cage bolted to the stone toll-post. Inside rests the curved Smoked-Glass Beacon Lens pried from Nocturne's central beacon.",
+        "interactions": [
+          {
+            "verb": "take",
+            "label": "Take the Smoked-Glass Beacon Lens",
+            "conditions": [
+              { "type": "flag", "flag": "tollbridge_resolved" },
+              { "type": "lacksItem", "item": "beacon_lens" },
+              { "type": "notFlag", "flag": "beacon_restored" }
+            ],
+            "text": "You lift the Smoked-Glass Beacon Lens from the open iron cage. Through its curved dark crystal, the Barrowlight's flame splits into three steady rings: sun, moon, and skull.",
+            "effects": [
+              { "type": "giveItem", "item": "beacon_lens" },
+              {
+                "type": "if",
+                "conditions": [ { "type": "hasItem", "item": "choir_tuning_fork" } ],
+                "then": [ { "type": "setQuestStage", "quest": "nocturne_beacon", "stage": 40 } ],
+                "else": [ { "type": "setQuestStage", "quest": "nocturne_beacon", "stage": 30 } ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "flooded_guardhouse",
+        "name": "sunken guardhouse",
+        "aliases": ["guardhouse", "grate", "floodgate", "chest", "lockbox"],
+        "description": "The lower guardhouse beside the bridge is half-swallowed by black canal water. Behind the rusted floodgate winch, an iron patrol chest sits wedged between two stone steps.",
+        "interactions": [
+          {
+            "verb": "search",
+            "label": "Haul up the patrol chest from the sunken guardhouse",
+            "once": true,
+            "text": "You wade into the freezing black water of the guardhouse and brace your boot against the stone step to heave at the wedged iron chest.",
+            "check": { "skill": "athletics", "dc": 11 },
+            "success": {
+              "text": "With a sucking groan of river-silt, the chest comes free. Inside, wrapped in oiled leather against the damp, lies an Ashen Censer-Mace and twenty silver coins from the patrol's pay-box.",
+              "effects": [
+                { "type": "giveItem", "item": "ashen_mace" },
+                { "type": "giveGold", "amount": 20 }
+              ]
+            },
+            "failure": {
+              "text": "The iron chest is wedged fast in the freezing silt, and the black water numbs your hands before you can work it loose."
+            }
+          }
+        ]
+      },
+      {
+        "id": "bridge_memory_echo",
+        "name": "floodgate memory echo",
+        "aliases": ["echo", "memory", "wheel", "winch", "chain"],
+        "description": "In the Barrowlight's beam, the mist over the floodgate winches thickens into the phantom of an armored captain straining at the iron wheel while fists hammer from the flooded tunnel beyond.",
+        "conditions": [ { "type": "hasItem", "item": "barrowlight" } ],
+        "interactions": [
+          {
+            "verb": "shine",
+            "label": "Shine the Barrowlight on the floodgate echo",
+            "once": true,
+            "text": "You hold the Barrowlight toward the winch, and the wet stone replays the night the river rose.\n\n\"Garin, open the grate!\" voices shout from the dark behind the iron bars, choking on black water. \"We're still alive in here!\"\n\nThe phantom of Toll-Warden Garin clings to the wheel, trembling. \"I can't! If the flood breaks through, the whole square drowns! I'll bring a lantern back for you—I swear on the ash I'll come back!\"",
+            "effects": [
+              { "type": "setFlag", "flag": "shone_bridge_echo" },
+              { "type": "grantXp", "amount": 25 }
+            ]
+          }
+        ]
+      }
+    ],
+    "npcs": [
+      {
+        "id": "garin",
+        "name": "Toll-Warden Garin",
+        "aliases": ["garin", "warden", "captain", "soldier"],
+        "description": "Toll-Warden Garin leans against the basalt parapet with his visor raised, his hollow eyes fixed on the calm black water beyond the floodgate.",
+        "dialogue": "garin",
+        "conditions": [ { "type": "flag", "flag": "garin_relieved" } ]
+      }
+    ],
+    "encounter": {
+      "id": "drowned_tollbridge_watch",
+      "conditions": [ { "type": "notFlag", "flag": "tollbridge_resolved" } ],
+      "intro": "Water splashes beneath heavy boots as a figure in mud-blackened Ashen plate steps out from the toll-arch, levelling a rusted halberd at your chest. Beside the bridge pilings, a drowned lancer drags itself up out of the canal, black water pouring from its gorget.\n\n\"Halt at the line!\" Toll-Warden Garin barks, his voice echoing hollowly inside his helm as though he has shouted the same words a thousand times to an empty bridge. On the post behind him glints the curved smoked-glass lens pried from Nocturne's beacon. \"By order of the Ashen Tribunal, this crossing is under quarantine! No light passes! No waking thing crosses the water!\"",
+      "enemies": [
+        { "monster": "tollbridge_warden_garin", "count": 1 },
+        { "monster": "drowned_lancer", "count": 1 }
+      ],
+      "canFlee": true,
+      "fleeTo": "nocturne_square",
+      "parley": {
+        "options": [
+          {
+            "label": "Tell him the flood has passed and forgive the promise he could not keep to his patrol",
+            "check": {
+              "skill": "persuasion",
+              "dc": 13,
+              "advantageIf": [
+                {
+                  "type": "any",
+                  "conditions": [
+                    { "type": "flag", "flag": "knows_garin_oath" },
+                    { "type": "flag", "flag": "knows_garin_guilt" },
+                    { "type": "flag", "flag": "shone_bridge_echo" }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "label": "Present the Ferryman's Obol and claim lawful passage across the threshold",
+            "conditions": [ { "type": "hasItem", "item": "toll_token" } ],
+            "check": { "skill": "persuasion", "dc": 10, "advantage": true }
+          },
+          {
+            "label": "Speak as an Oath-Eater who knows when a tribunal's order has become a lie",
+            "conditions": [ { "type": "class", "class": "oath_eater" } ],
+            "check": { "skill": "intimidation", "dc": 11, "advantage": true }
+          },
+          {
+            "label": "Show him the Elders' Writ and formally discharge the Third Patrol's arrears",
+            "conditions": [ { "type": "background", "background": "moor_bailiff" } ],
+            "check": { "skill": "persuasion", "dc": 11, "advantage": true }
+          },
+          {
+            "label": "Show him the scored signet and relieve his watch in the name of the fallen",
+            "conditions": [ { "type": "background", "background": "ash_deserter" } ],
+            "check": { "skill": "religion", "dc": 11, "advantage": true }
+          }
+        ],
+        "onSuccess": [
+          {
+            "type": "message",
+            "text": "Garin flinches as though struck. Slowly, he reaches up and lifts his rusted visor. Beneath it, his face is grey with river-silt and old tears.\n\n\"I dropped the grate so the flood wouldn't take the square,\" he whispers, looking down at the lancer in the water beside him. \"I told them I'd come back with a lantern to open it. And then the tribunal's orders came in my head, over and over, until I forgot why I took the lens at all.\" He lowers his halberd and unlatches the iron cage on the post. Beside the pier, the drowned lancer sinks quietly back beneath the black water. \"Take the lens. Let them have the light I owed them.\"",
+            "style": "narration"
+          },
+          { "type": "setFlag", "flag": "garin_relieved" },
+          { "type": "addCounter", "counter": "lantern_resonance", "amount": 1 },
+          { "type": "changeReputation", "faction": "ashen_order", "amount": 10 },
+          { "type": "changeReputation", "faction": "lantern_bearers", "amount": 10 },
+          { "type": "grantXp", "amount": 130 }
+        ],
+        "onFailure": [
+          {
+            "type": "message",
+            "text": "\"No exceptions!\" Garin roars, his voice scraping like iron on stone. \"The contagion stays below the grate!\"",
+            "style": "warning"
+          }
+        ]
+      },
+      "onVictory": [
+        {
+          "type": "message",
+          "text": "Toll-Warden Garin crashes to his knees in the black water, his halberd snapping against the flagstones as the drowned lancer slips lifelessly beneath the current. On the toll-post, the iron cage holding the stolen lens swings open.",
+          "style": "narration"
+        },
+        { "type": "setFlag", "flag": "garin_destroyed" },
+        { "type": "addCounter", "counter": "lantern_resonance", "amount": -1 },
+        { "type": "changeReputation", "faction": "ashen_order", "amount": -10 }
+      ],
+      "onResolved": [
+        { "type": "setFlag", "flag": "tollbridge_resolved" }
+      ]
+    }
+  }
+]

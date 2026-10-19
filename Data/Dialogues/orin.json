@@ -1,0 +1,97 @@
+[
+  {
+    "id": "orin",
+    "speaker": "Brother Orin",
+    "entries": [
+      { "conditions": [ { "type": "flag", "flag": "steadied_orin" } ], "node": "steadied_greeting" },
+      { "conditions": [ { "type": "flag", "flag": "orin_slipped" } ], "node": "slipped_greeting" },
+      { "conditions": [ { "type": "flag", "flag": "met_orin" } ], "node": "hub" },
+      { "node": "first_meeting" }
+    ],
+    "nodes": [
+      {
+        "id": "first_meeting",
+        "text": "The translucent clerk looks up from his ledger as your light falls across the landing. His left hand, crusted in grey salt to the wrist, rests like a paperweight on the open page.\n\n\"One more down the stair,\" he murmurs, dipping a dry quill into an inkwell that isn't there. \"Name and burden, traveler? Before the salt takes my fingers and I lose the line. Ever since the square's beacon went dark three nights ago, the names have been slipping out of the ink.\"",
+        "effects": [ { "type": "setFlag", "flag": "met_orin" } ],
+        "next": "hub"
+      },
+      {
+        "id": "hub",
+        "text": "Brother Orin taps his dry quill against the margin of his ledger, trying to keep his salt-stiffened fingers moving.",
+        "choices": [
+          { "text": "What is this place below the barrow?", "once": true, "next": "ask_nocturne" },
+          { "text": "What happened to the beacon in the square?", "once": true, "next": "ask_beacon" },
+          {
+            "text": "I read the relief on the landing. You keep the threshold the First Architects built.",
+            "conditions": [ { "type": "flag", "flag": "read_stair_relief" } ],
+            "once": true,
+            "next": "discuss_relief"
+          },
+          {
+            "text": "Read the first line of your ledger back to me, Orin. Whose name did you write first?",
+            "check": {
+              "skill": "insight",
+              "dc": 11,
+              "advantageIf": [
+                {
+                  "type": "any",
+                  "conditions": [
+                    { "type": "class", "class": "liminal_auditor" },
+                    { "type": "background", "background": "moor_bailiff" },
+                    { "type": "flag", "flag": "knight_laid_to_rest" },
+                    { "type": "flag", "flag": "read_stair_relief" }
+                  ]
+                }
+              ]
+            },
+            "successNode": "steadied",
+            "failureNode": "slipped",
+            "retry": false
+          },
+          { "text": "Keep your ledger well, Brother.", "end": true }
+        ]
+      },
+      {
+        "id": "ask_nocturne",
+        "text": "\"The Under-Barrow. Though the folk around the cathedral lamps call our corner of it Nocturne.\" A faint, wistful smile crosses his grey face. \"Up in Hollin's Rest they think the hilltop tomb is the whole of the house, when it was only ever the lock on the front door. Down here live the waking dead who still remember who we were, alongside the runaways and heretics who came down to hide from the sun.\"",
+        "next": "hub"
+      },
+      {
+        "id": "ask_beacon",
+        "text": "\"Torn in two by people who think they're saving us.\" Orin glances down toward the sunken nave. \"The Ashen Order's patrol pried out the smoked-glass lens to blind the square and starve us into sleep. And Cantor Miriel of the Hollow Choir stole the bronze tuning-tongue to wire her dead brother's voice into the Echo Chapel organ. Without the beacon's chime, we calcify—losing every memory except one, repeating it until we're nothing but salt and spite.\"",
+        "next": "hub"
+      },
+      {
+        "id": "discuss_relief",
+        "text": "Orin's eyes brighten a fraction. \"Then you saw it. Before the First Architects grew terrified of dying and turned the Barrowlights into cages of dreamless stasis, this stair was a place of honest parting. The Wayfarers in the square below still try to keep that old balance.\"",
+        "next": "hub"
+      },
+      {
+        "id": "steadied",
+        "text": "Orin blinks down at the top of the first page. His lips move without sound, and then his breath catches.\n\n\"Orin of Greywater,\" he whispers. \"Clerk of the Third Arches. I came down in the year of the black frost to look for my apprentice, and I stayed to keep the roll.\" As he speaks his own name aloud, a crust of grey salt flakes off his wrist and patters harmlessly onto the step. He reaches into his apron and presses a flat lead token into your palm.\n\n\"Thank you, {player.name}. Take this Ferryman's Obol. If Toll-Warden Garin bars your way at the Drowned Tollbridge, even a calcified soldier remembers the mark of lawful passage.\"",
+        "effects": [
+          { "type": "setFlag", "flag": "steadied_orin" },
+          { "type": "giveItem", "item": "toll_token" },
+          { "type": "addCounter", "counter": "lantern_resonance", "amount": 1 },
+          { "type": "changeReputation", "faction": "lantern_bearers", "amount": 5 },
+          { "type": "grantXp", "amount": 35 }
+        ],
+        "choices": [ { "text": "I'll see the beacon relit, Brother Orin.", "end": true } ]
+      },
+      {
+        "id": "slipped",
+        "text": "Orin stares at the top of the page, his brow furrowing as the salt creeps another hair's breadth across his knuckles.\n\n\"It's smudged,\" he whispers, his voice flattening into a dry rasp. \"Name and burden, traveler? Before the salt takes my fingers and I lose the line...\"",
+        "effects": [ { "type": "setFlag", "flag": "orin_slipped" } ],
+        "choices": [ { "text": "Step away quietly.", "end": true } ]
+      },
+      {
+        "id": "steadied_greeting",
+        "text": "Brother Orin flexes his freed wrist and nods warmly as you pass. \"The ink holds, {player.name}. Speak with Keeper Maeve in the square below—she will know how to mend the beacon.\""
+      },
+      {
+        "id": "slipped_greeting",
+        "text": "\"Name and burden, traveler?\" Brother Orin murmurs without looking up, tracing the same dry line across his ledger again and again."
+      }
+    ]
+  }
+]

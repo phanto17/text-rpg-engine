@@ -1,0 +1,82 @@
+[
+  {
+    "id": "choir_cantor_miriel",
+    "name": "Cantor Miriel",
+    "description": "A former funeral singer wrapped in the silver-threaded shawl of the Hollow Choir, her fingers stained with spore-wax and her eyes bright with sleepless grief.",
+    "hp": "3d8+3",
+    "ac": 12,
+    "abilities": { "str": 9, "dex": 13, "con": 12, "int": 14, "wis": 13, "cha": 15 },
+    "attacks": [
+      { "name": "Dissonant Chord", "toHit": 4, "damage": "1d6+1", "damageType": "thunder", "weight": 2 },
+      {
+        "name": "Tether of Unending Grief",
+        "toHit": 4,
+        "damage": "1d4+1",
+        "damageType": "psychic",
+        "weight": 1,
+        "onHit": { "save": { "ability": "wis", "dc": 11 }, "status": "grave_chill" }
+      }
+    ],
+    "resistances": ["psychic", "necrotic"],
+    "vulnerabilities": ["radiant", "force"],
+    "xp": 100,
+    "ai": { "behavior": "aggressive", "fleeBelowHpPercent": 0 },
+    "loot": [ { "item": "tallow_draught", "chance": 0.75 } ]
+  },
+  {
+    "id": "calcified_mournling",
+    "name": "Calcified Mournling",
+    "description": "A weeping spirit whose tethered memories have hardened into a brittle crust of grey salt and bone-ash across its face and hands.",
+    "hp": "2d6+2",
+    "ac": 11,
+    "abilities": { "str": 11, "dex": 12, "con": 12, "int": 6, "wis": 9, "cha": 6 },
+    "attacks": [
+      { "name": "Salt-Crusted Nails", "toHit": 3, "damage": "1d4+1", "damageType": "slashing", "weight": 2 },
+      { "name": "Weeping Keening", "toHit": 2, "damage": "1d4", "damageType": "psychic", "weight": 1 }
+    ],
+    "resistances": ["necrotic"],
+    "vulnerabilities": ["bludgeoning", "force"],
+    "immunities": ["poison"],
+    "xp": 35
+  },
+  {
+    "id": "tollbridge_warden_garin",
+    "name": "Toll-Warden Garin",
+    "description": "Commander of the lost Ashen expeditionary patrol, standing knee-deep in black canal water in silt-stained plate, his visor rusted shut over an unending quarantine watch.",
+    "hp": "3d8+4",
+    "ac": 14,
+    "abilities": { "str": 15, "dex": 10, "con": 14, "int": 10, "wis": 12, "cha": 11 },
+    "attacks": [
+      { "name": "Quarantine Halberd", "toHit": 4, "damage": "1d6+2", "damageType": "slashing", "weight": 2 },
+      {
+        "name": "Censer Sweep",
+        "toHit": 3,
+        "damage": "1d4+1",
+        "damageType": "bludgeoning",
+        "weight": 1,
+        "onHit": { "save": { "ability": "con", "dc": 11 }, "status": "grave_chill" }
+      }
+    ],
+    "resistances": ["necrotic", "piercing"],
+    "vulnerabilities": ["radiant", "lightning"],
+    "immunities": ["poison"],
+    "xp": 100,
+    "ai": { "behavior": "aggressive", "fleeBelowHpPercent": 0 },
+    "loot": [ { "item": "healing_potion", "chance": 0.75 } ]
+  },
+  {
+    "id": "drowned_lancer",
+    "name": "Drowned Ashen Lancer",
+    "description": "A waterlogged soldier of the Third Patrol who drowned behind the tollbridge floodgate and still rises at the Warden's whistle.",
+    "hp": "1d8+1",
+    "ac": 11,
+    "abilities": { "str": 12, "dex": 9, "con": 12, "int": 4, "wis": 8, "cha": 4 },
+    "attacks": [
+      { "name": "Waterlogged Pike", "toHit": 3, "damage": "1d4+1", "damageType": "piercing" }
+    ],
+    "resistances": ["cold"],
+    "vulnerabilities": ["radiant", "bludgeoning"],
+    "immunities": ["poison"],
+    "xp": 30
+  }
+]

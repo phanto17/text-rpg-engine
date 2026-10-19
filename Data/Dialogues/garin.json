@@ -1,0 +1,27 @@
+[
+  {
+    "id": "garin",
+    "speaker": "Toll-Warden Garin",
+    "entries": [
+      { "conditions": [ { "type": "flag", "flag": "garin_gift_given" } ], "node": "watch_ended" },
+      { "node": "first_after_parley" }
+    ],
+    "nodes": [
+      {
+        "id": "first_after_parley",
+        "text": "Toll-Warden Garin rests one gauntleted hand on the basalt parapet, looking out over the still black water of the canal. With his visor raised, the hollow ring in his voice has faded into a tired soldier's baritone.\n\n\"You don't notice when the loop takes you,\" he says quietly. \"One day you're mourning the men behind the floodgate, and the next day all that's left in your skull is the quarantine order, repeating like a drumbeat in the dark.\"\n\nHe unhooks a heavy clay Censer of Grave-Salt from his belt and hands it to you. \"Take the lens from the cage on the post, {player.name}. If you march deeper into the Memory Warrens one day, watch yourself around the Iron Reliquary. The garrison commanders down there scrubbed their own memories out with ash so they wouldn't feel fear—and they left nothing human behind.\"",
+        "effects": [
+          { "type": "setFlag", "flag": "garin_gift_given" },
+          { "type": "giveItem", "item": "grave_salt_bomb" }
+        ],
+        "choices": [
+          { "text": "Your watch is over, Warden. Rest easy.", "end": true }
+        ]
+      },
+      {
+        "id": "watch_ended",
+        "text": "Toll-Warden Garin nods to you from the parapet, his halberd planted upright beside the open lens-cage. \"The bridge is clear, {player.name}. Carry the light back to the square.\""
+      }
+    ]
+  }
+]
