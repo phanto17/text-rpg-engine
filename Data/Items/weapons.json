@@ -34,5 +34,24 @@
     "description": "An ash-wood staff shod in iron at both ends. Scuffed sigils run along its length.",
     "value": 1,
     "weapon": { "damage": "1d6", "damageType": "bludgeoning" }
+  },
+  {
+    "id": "vesper_bell_blade",
+    "name": "Bell-Bronze Rapier",
+    "aliases": ["rapier", "bell blade", "bronze blade"],
+    "type": "weapon",
+    "description": "A slender blade forged from a cracked sanctuary bell. A narrow fuller runs down the bronze-alloyed steel so that every parry rings with a clear, steady pitch.",
+    "value": 45,
+    "weapon": { "damage": "1d8", "damageType": "piercing", "finesse": true }
+  },
+  {
+    "id": "ashen_mace",
+    "name": "Ashen Censer-Mace",
+    "aliases": ["mace", "censer mace", "flanged mace"],
+    "type": "weapon",
+    "description": "A heavy iron mace whose hollow head is pierced like a sanctuary censer, forged by the Ashen Order to crack calcified bone.",
+    "value": 40,
+    "weapon": { "damage": "1d8+1", "damageType": "bludgeoning" }
   }
 ]
+

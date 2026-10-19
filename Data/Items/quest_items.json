@@ -33,5 +33,27 @@
     "aliases": ["splinter", "bell", "shard"],
     "type": "quest",
     "description": "A curved sliver of green-black bronze that you found clenched in your own fist on the night the Barrowlight died. Hold it to your ear and you can almost hear the ringing."
+  },
+  {
+    "id": "choir_tuning_fork",
+    "name": "Resonant Tuning-Tongue",
+    "aliases": ["tongue", "fork", "tuning fork", "chime", "bell-tongue"],
+    "type": "quest",
+    "description": "The bronze clapper and tuning-tongue taken from Nocturne's central beacon by the Hollow Choir. Warm to the touch, it hums with a low, mournful pitch whenever held near the dead."
+  },
+  {
+    "id": "beacon_lens",
+    "name": "Smoked-Glass Beacon Lens",
+    "aliases": ["lens", "glass", "beacon lens", "prism"],
+    "type": "quest",
+    "description": "A curved pane of heavy ash-smoked crystal pried from Nocturne's central lantern by the Ashen patrol. Etched along its rim are the three marks of the Triad."
+  },
+  {
+    "id": "toll_token",
+    "name": "Ferryman's Obol",
+    "aliases": ["obol", "token", "coin", "ferryman token"],
+    "type": "quest",
+    "description": "A flat lead token stamped with a three-arched bridge over black water. In the old days of the Under-Barrow, every traveler carried one to prove their passage was lawful."
   }
 ]
+

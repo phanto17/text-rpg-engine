@@ -1,0 +1,86 @@
+[
+  {
+    "id": "peddler",
+    "speaker": "Sallow the Peddler",
+    "entries": [
+      { "conditions": [ { "type": "flag", "flag": "met_peddler" } ], "node": "hub" },
+      { "node": "first_meeting" }
+    ],
+    "nodes": [
+      {
+        "id": "first_meeting",
+        "text": "Beneath a canopy of glowing shelf-fungus, a gaunt revenant in a moth-eaten counting-coat weighs a pinch of grave-salt against a brass weight. His eyes are milky, yet they track the glint of your gear with professional precision.\n\n\"Living breath at my stall,\" Sallow rasps, tapping his brass scales. \"Don't mind the cough—been dead since the second flooding, and the damp still gets in my ribs. If you've come to barter or audit the unclaimed stock, speak plain.\"",
+        "effects": [ { "type": "setFlag", "flag": "met_peddler" } ],
+        "next": "hub"
+      },
+      {
+        "id": "hub",
+        "text": "Sallow rests his bony fingers on the beam of his brass balance, waiting to see what you offer.",
+        "choices": [
+          { "text": "What kind of goods do you trade down here?", "once": true, "next": "ask_wares" },
+          {
+            "text": "Audit his ledger of unclaimed salvage for discrepancies.",
+            "conditions": [ { "type": "notFlag", "flag": "audited_peddler" } ],
+            "check": {
+              "skill": "investigation",
+              "dc": 11,
+              "advantageIf": [
+                {
+                  "type": "any",
+                  "conditions": [
+                    { "type": "class", "class": "liminal_auditor" },
+                    { "type": "background", "background": "moor_bailiff" }
+                  ]
+                }
+              ]
+            },
+            "successNode": "audit_success",
+            "failureNode": "audit_failure",
+            "retry": false
+          },
+          {
+            "text": "Barter a Potion of Healing for a Wayfarer's Brigandine and a Censer of Grave-Salt.",
+            "conditions": [
+              { "type": "hasItem", "item": "healing_potion" },
+              { "type": "notFlag", "flag": "traded_with_peddler" }
+            ],
+            "next": "trade_complete"
+          },
+          { "text": "Nothing for now, Sallow.", "end": true }
+        ]
+      },
+      {
+        "id": "ask_wares",
+        "text": "\"Whatever the currents wash up and the dead no longer need,\" Sallow says. \"Felt-muffled brigandines for walking past calcified ears, grave-salt censers for cracking salt-shells, and red surface potions whenever a traveler brings one down the stair. Red potions don't do my ribs any good, mind, but the mortal runaways pay dearly for them.\"",
+        "next": "hub"
+      },
+      {
+        "id": "audit_success",
+        "text": "You run your finger down Sallow's water-stained ledger and point out three consignments from Hollin's Rest whose forfeiture clauses expired forty years ago.\n\nSallow peers at the entry, then lets out a dry, rattling chuckle. \"Well now. A proper auditor in the dark. Fair is fair—the bailiff's tenth is yours by custom.\" He slides a clay Censer of Grave-Salt and ten silver coins across the counter.",
+        "effects": [
+          { "type": "setFlag", "flag": "audited_peddler" },
+          { "type": "giveItem", "item": "grave_salt_bomb" },
+          { "type": "giveGold", "amount": 10 },
+          { "type": "grantXp", "amount": 25 }
+        ],
+        "next": "hub"
+      },
+      {
+        "id": "audit_failure",
+        "text": "The cramped funerary shorthand and water-blurred margins swim together before you can prove a single discrepancy. Sallow snaps the ledger shut with a toothy grin.",
+        "next": "hub"
+      },
+      {
+        "id": "trade_complete",
+        "text": "Sallow holds your red vial up to the fungal light, admiring the warm glow of the surface draught, then lifts a felt-lined Wayfarer's Brigandine and a Censer of Grave-Salt from beneath his counter.\n\n\"Done and sealed, {player.name}. May the bronze plates keep thepike-points off your ribs.\"",
+        "effects": [
+          { "type": "removeItem", "item": "healing_potion" },
+          { "type": "giveItem", "item": "wayfarer_brigandine" },
+          { "type": "giveItem", "item": "grave_salt_bomb" },
+          { "type": "setFlag", "flag": "traded_with_peddler" }
+        ],
+        "next": "hub"
+      }
+    ]
+  }
+]

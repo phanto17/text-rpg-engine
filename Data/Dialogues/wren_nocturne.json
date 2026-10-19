@@ -1,0 +1,69 @@
+[
+  {
+    "id": "wren_nocturne",
+    "speaker": "Sister Wren",
+    "entries": [
+      { "conditions": [ { "type": "flag", "flag": "beacon_restored" } ], "node": "beacon_restored_hub" },
+      { "conditions": [ { "type": "flag", "flag": "met_wren_nocturne" } ], "node": "hub" },
+      { "node": "first_meeting" }
+    ],
+    "nodes": [
+      {
+        "id": "first_meeting",
+        "text": "Sister Wren looks up from the spirit whose salt-cracked hands she is binding. In the pale fungal light of the sunken cathedral, her soot-grey habit looks less like a uniform and more like a mourner's cloak.\n\n\"I followed your chalk-marks down the stair, {player.name},\" she says quietly. \"For twenty years the Order taught me that anything waking beneath the barrows was a mindless abomination. Then I walked into this square, and a dead baker from Hollin's Rest offered me a cup of warm broth and asked if the hawthorn tree still grew by the lichgate.\"\n\nShe swallows hard. \"We were wrong. Gods forgive us, the whole Order was wrong.\"",
+        "effects": [
+          { "type": "setFlag", "flag": "met_wren_nocturne" },
+          { "type": "changeReputation", "faction": "lantern_bearers", "amount": 5 }
+        ],
+        "next": "hub"
+      },
+      {
+        "id": "hub",
+        "text": "Sister Wren adjusts the linen bandage at her side, watching the darkened beacon at the center of the square.",
+        "choices": [
+          { "text": "Did you know Toll-Warden Garin before his patrol came down?", "once": true, "next": "ask_garin" },
+          { "text": "What do you make of the Hollow Choir in the Echo Chapel?", "once": true, "next": "ask_choir" },
+          {
+            "text": "I relieved Toll-Warden Garin of his watch at the bridge.",
+            "conditions": [ { "type": "flag", "flag": "garin_relieved" } ],
+            "once": true,
+            "next": "garin_peace"
+          },
+          {
+            "text": "Garin wouldn't lower his halberd. He fell at the tollbridge.",
+            "conditions": [ { "type": "flag", "flag": "garin_destroyed" } ],
+            "once": true,
+            "next": "garin_fell"
+          },
+          { "text": "Rest your side, Sister. I'll see the beacon lit.", "end": true }
+        ]
+      },
+      {
+        "id": "ask_garin",
+        "text": "\"I stood novice-watch under Garin at the abbey before the tribunal sent his Third Patrol into the deep,\" Wren says, pain tightening her voice. \"He wasn't a cruel man, {player.name}—he was terrified of failing the people behind him. When the river rose, he must have dropped the floodgate to save this very square, even though it meant locking his own lancers in the dark.\"\n\nShe touches the Ashen flame at her collar. \"If you face him at the Drowned Tollbridge, tell him the flood has passed, and forgive the promise he couldn't keep to his men. That is the real Rite of Rest he needs.\"",
+        "effects": [ { "type": "setFlag", "flag": "knows_garin_oath" } ],
+        "next": "hub"
+      },
+      {
+        "id": "ask_choir",
+        "text": "\"They breaks my heart in a different way,\" Wren admits. \"The Order tried to cure grief by burning away memory. The Hollow Choir tries to cure grief by refusing to let anything end—even when the spirit inside the jar is begging for sleep. Keeper Maeve's Wayfarers are the only ones down here who understand the whole of the litany: sun, moon, and skull together.\"",
+        "next": "hub"
+      },
+      {
+        "id": "garin_peace",
+        "text": "Wren closes her eyes and lets out a long, shaky breath. \"Thank you, {player.name}. First Halric, and now Garin. Perhaps that is what the Ashen Order was meant to be all along—not jailers for the dead, but the ones who finally tell the watchmen they may go home.\"",
+        "effects": [ { "type": "changeReputation", "faction": "ashen_order", "amount": 5 } ],
+        "next": "hub"
+      },
+      {
+        "id": "garin_fell",
+        "text": "Wren looks down at her scarred hands. \"The tribunal trained us to hold a line even after our minds were gone. I wish he could have heard you before the end.\"",
+        "next": "hub"
+      },
+      {
+        "id": "beacon_restored_hub",
+        "text": "Sister Wren stands beside Keeper Maeve's sanctuary brazier, her face lit by the warm amber glow of the restored Nocturne Beacon. She wears the three-ringed cloth badge of the Wayfarers pinned over her soot-grey habit.\n\n\"Look at them, {player.name},\" she says softly. \"The salt is falling away from their hands. Whatever waits deeper in the Memory Warrens, Nocturne has a light worth defending now.\""
+      }
+    ]
+  }
+]

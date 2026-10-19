@@ -1,0 +1,155 @@
+[
+  {
+    "id": "maeve",
+    "speaker": "Keeper Maeve",
+    "entries": [
+      { "conditions": [ { "type": "flag", "flag": "maeve_rewarded" } ], "node": "after_reward" },
+      { "conditions": [ { "type": "flag", "flag": "beacon_restored" } ], "node": "beacon_lit_reward" },
+      { "conditions": [ { "type": "flag", "flag": "met_maeve" } ], "node": "hub" },
+      { "node": "first_meeting" }
+    ],
+    "nodes": [
+      {
+        "id": "first_meeting",
+        "text": "Keeper Maeve lowers her ladle and studies the iron lantern at your hip. Around the dark beacon behind her, half-remembering spirits turn their faces toward your light like plants toward a window.\n\n\"So the Upper Threshold is unsealed at last,\" she says, her voice low and weathered as bog-oak. \"I am Maeve, Keeper for the Wayfarers of the Threshold. You bring a waking Barrowlight into Nocturne on the very week our own central beacon was gutted. Sit by the brazier if you need warmth, {player.name}—and then tell me whether you came to help us live, or to finish tearing this cavern apart.\"",
+        "effects": [
+          { "type": "setFlag", "flag": "met_maeve" },
+          { "type": "setQuestStage", "quest": "nocturne_beacon", "stage": 20 }
+        ],
+        "next": "hub"
+      },
+      {
+        "id": "hub",
+        "text": "Keeper Maeve stands beside the darkened bronze housing of the Nocturne Beacon, her hands tucked into her patched coat.",
+        "choices": [
+          { "text": "Who sabotaged the Nocturne Beacon?", "once": true, "next": "ask_sabotage" },
+          { "text": "Tell me about Cantor Miriel and the Echo Chapel to the east.", "once": true, "next": "ask_choir" },
+          { "text": "Tell me about Toll-Warden Garin and the Drowned Tollbridge to the west.", "once": true, "next": "ask_patrol" },
+          {
+            "text": "What do the Wayfarers of the Threshold believe?",
+            "once": true,
+            "next": "ask_wayfarers"
+          },
+          {
+            "text": "I inspected the tool-marks on the beacon housing. Both factions took a piece.",
+            "conditions": [ { "type": "flag", "flag": "inspected_beacon" } ],
+            "once": true,
+            "next": "discuss_inspection"
+          },
+          {
+            "text": "I saw the memory-echo on the Weeping Stair. Miriel and Garin were fleeing each other.",
+            "conditions": [ { "type": "flag", "flag": "saw_stair_echo" } ],
+            "once": true,
+            "next": "discuss_stair_echo"
+          },
+          {
+            "text": "You're carrying a grief of your own, Maeve. Why did you come down to Nocturne?",
+            "check": {
+              "skill": "persuasion",
+              "dc": 12,
+              "advantageIf": [
+                {
+                  "type": "any",
+                  "conditions": [
+                    { "type": "background", "background": "bereaved_kin" },
+                    { "type": "class", "class": "remnant_vessel" },
+                    { "type": "flag", "flag": "rested_in_nocturne" }
+                  ]
+                }
+              ]
+            },
+            "successNode": "maeve_confides",
+            "failureNode": "maeve_guarded",
+            "retry": false
+          },
+          { "text": "I'll recover the missing pieces of the beacon.", "end": true }
+        ]
+      },
+      {
+        "id": "ask_sabotage",
+        "text": "\"Two zealots who cannot see that they are mirror images of the same fear,\" Maeve says quietly. \"Three nights ago, Toll-Warden Garin's Ashen patrol marched up from the west canal and wrenched the Smoked-Glass Beacon Lens from its frame to blind our square. Before the dust had settled, Cantor Miriel of the Hollow Choir crept in from the east and cut down the Resonant Tuning-Tongue so the beacon could never chime a spirit to rest.\"",
+        "next": "hub"
+      },
+      {
+        "id": "ask_choir",
+        "text": "\"Miriel was a funeral cantor in Hollin's Rest until the autumn fever took her younger brother, Jonas.\" Maeve looks toward the eastern arch, where the faint organ-drone vibrates through the stone. \"The Hollow Choir convinced her that letting a spirit pass into final sleep is murder. She wired the beacon's tongue into the Echo Chapel organ to hold Jonas's voice in a glass jar—refusing to see that the forced resonance is turning the boy's spirit into brittle salt.\"",
+        "effects": [ { "type": "setFlag", "flag": "knows_miriel_grief" } ],
+        "next": "hub"
+      },
+      {
+        "id": "ask_patrol",
+        "text": "\"Garin led the Ashen Order's Third Patrol down here months ago to quarantine the Under-Barrow.\" Maeve's mouth tightens with reluctant pity. \"When the underground river rose, Garin dropped the iron floodgate at the Drowned Tollbridge to keep the black water from flooding this square—and trapped half his own patrol on the far side to drown. He died at the winch, and his guilt calcified around the only thing he had left: his quarantine orders.\"",
+        "effects": [ { "type": "setFlag", "flag": "knows_garin_guilt" } ],
+        "next": "hub"
+      },
+      {
+        "id": "ask_wayfarers",
+        "text": "\"The Ashen Order thinks memory is a plague to be burned out with iron and stasis. The Hollow Choir thinks death is a thief to be cheated with wires and wax.\" Maeve touches the three-ringed badge on her coat. \"We Wayfarers stand between them. We believe the dead deserve to be heard while they have words left to speak—and released with love when their time comes to rest.\"",
+        "next": "hub"
+      },
+      {
+        "id": "discuss_inspection",
+        "text": "Maeve nods grimly. \"You have a sharp eye. Neither the Choir nor the Patrol could bear a light that leaves spirits free to choose. Bring back both the lens and the tuning-tongue, and use your Barrowlight to rekindle the housing.\"",
+        "next": "hub"
+      },
+      {
+        "id": "discuss_stair_echo",
+        "text": "\"So the Barrowlight still wakes the memories left in the ash,\" Maeve murmurs. \"Use that gift in the Echo Chapel and at the Tollbridge, {player.name}. If you shine that lantern on the places where Miriel and Garin broke, you may find the words to reach them without bloodshed.\"",
+        "next": "hub"
+      },
+      {
+        "id": "maeve_confides",
+        "text": "Maeve looks at you for a long time, then reaches into her coat and touches a small wooden comb worn smooth by decades of handling.\n\n\"Twenty years ago my daughter Mara woke in her barrow above the moor. I came down to keep her company until she was ready to let go. It took three winters of sitting beside this beacon before she finally smiled, told me she wasn't afraid anymore, and went to sleep.\" She presses a Vial of Memory-Tallow into your hand. \"Don't let Nocturne lose the light that gave us those three winters, {player.name}.\"",
+        "effects": [
+          { "type": "giveItem", "item": "tallow_draught" },
+          { "type": "changeReputation", "faction": "lantern_bearers", "amount": 5 }
+        ],
+        "next": "hub"
+      },
+      {
+        "id": "maeve_guarded",
+        "text": "\"Every one of us in Nocturne came down here for someone, {player.name},\" Maeve says evenly. \"Right now, it is the living and the waking who need our care.\"",
+        "next": "hub"
+      },
+      {
+        "id": "beacon_lit_reward",
+        "text": "Keeper Maeve stands in the warm amber wash of the restored Nocturne Beacon, listening as its deep bronze chime rolls through the cathedral nave. Across the square, spirits lift their heads and speak to one another in clear, unhurried voices.\n\n\"Listen to that,\" Maeve whispers. \"Not the silence of a cage, and not the screaming of a wire. Just a bell that lets us remember who we are.\" She clasps your forearm and presses a heavy pouch of silver and a fresh vial of memory-tallow into your palm.\n\n\"You have given Nocturne back its breath, {player.name}. Whenever the road into the deeper Memory Warrens opens, the Wayfarers of the Threshold will walk it beside you.\"",
+        "effects": [
+          { "type": "setFlag", "flag": "maeve_rewarded" },
+          { "type": "giveGold", "amount": 50 },
+          { "type": "giveItem", "item": "tallow_draught" },
+          { "type": "changeReputation", "faction": "lantern_bearers", "amount": 10 }
+        ],
+        "choices": [
+          {
+            "text": "Miriel let her brother go in peace.",
+            "conditions": [ { "type": "flag", "flag": "miriel_reconciled" } ],
+            "once": true,
+            "next": "note_miriel_peace"
+          },
+          {
+            "text": "Cantor Miriel wouldn't listen. I had to cut her down.",
+            "conditions": [ { "type": "flag", "flag": "miriel_defeated" } ],
+            "once": true,
+            "next": "note_miriel_blood"
+          },
+          { "text": "Stay safe in the light, Keeper Maeve.", "end": true }
+        ]
+      },
+      {
+        "id": "note_miriel_peace",
+        "text": "\"Then you saved two souls in that chapel, not one,\" Maeve says softly. \"When she is ready to leave the pulpit, there will be a place for her by our fire.\"",
+        "choices": [ { "text": "Thank you, Maeve.", "end": true } ]
+      },
+      {
+        "id": "note_miriel_blood",
+        "text": "Maeve bows her head for a quiet breath. \"Grief makes fortress walls out of glass. I am sorry it came to steel, {player.name}, though I am grateful the square breathes again.\"",
+        "choices": [ { "text": "It had to be done.", "end": true } ]
+      },
+      {
+        "id": "after_reward",
+        "text": "Keeper Maeve warms her hands in the amber glow of the Nocturne Beacon. \"The square holds steady because of you, {player.name}. Rest by the brazier whenever you have need.\""
+      }
+    ]
+  }
+]

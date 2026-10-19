@@ -16,5 +16,15 @@
     "description": "Boiled leather, oiled against the rain and quiet on the move.",
     "value": 10,
     "armor": { "baseAc": 11 }
+  },
+  {
+    "id": "wayfarer_brigandine",
+    "name": "Wayfarer's Brigandine",
+    "aliases": ["brigandine", "coat", "plates"],
+    "type": "armor",
+    "description": "A knee-length coat of ash-dyed canvas lined with small bronze plates, muffled with felt so the wearer does not wake echoes in the deep tunnels.",
+    "value": 50,
+    "armor": { "baseAc": 13, "maxDexBonus": 2 }
   }
 ]
+

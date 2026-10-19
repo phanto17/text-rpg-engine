@@ -3,5 +3,16 @@
     "id": "ashen_order",
     "name": "The Ashen Order",
     "description": "Keepers of the Greywater barrows for three hundred years, now dwindled to almost nothing."
+  },
+  {
+    "id": "hollow_choir",
+    "name": "The Hollow Choir",
+    "description": "A subterranean conclave of grieving mortals and ancient spirits who view final death as an atrocity, binding fading souls to music boxes and reliquaries so nothing is ever lost."
+  },
+  {
+    "id": "lantern_bearers",
+    "name": "The Wayfarers of the Threshold",
+    "description": "A sanctuary movement in Nocturne who witness the grief of the waking dead, sheltering conscious spirits while guiding calcifying souls toward peaceful release."
   }
 ]
+

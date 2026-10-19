@@ -1,0 +1,116 @@
+[
+  {
+    "id": "weeping_stair",
+    "name": "The Weeping Stair",
+    "description": "The spiral stair cuts through veins of black shale where groundwater seeps continually through the rock, mixing with old funeral ash until the walls appear to weep. As you descend, the bone-dry chill of the upper crypt gives way to a damp, mineral warmth lit by cushions of bioluminescent silver moss clinging to the risers.\n\nHalfway down, the stairwell opens onto a semicircular landing carved with pre-Order reliefs. Far below, the cavern roof falls away into a vast subterranean twilight where pale lanterns glimmer among sunken arches.",
+    "revisit": "Water and silver moss glimmer along the curving steps between the upper barrow and Nocturne.",
+    "variants": [
+      {
+        "conditions": [ { "type": "flag", "flag": "wren_joins_descent" } ],
+        "text": "Fresh chalk-marks of the Ashen flame gleam on the wet stone at shoulder height, marking the trail you left for Sister Wren."
+      },
+      {
+        "conditions": [ { "type": "counter", "counter": "lantern_resonance", "min": 1 } ],
+        "text": "As you pass, the Barrowlight's warm golden glow wakes tiny answering sparks in the silver moss along the steps."
+      },
+      {
+        "conditions": [ { "type": "counter", "counter": "lantern_resonance", "max": -1 } ],
+        "text": "The Barrowlight's frost-pale light casts sharp, brittle shadows across the wet steps."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "steadied_orin" } ],
+        "text": "On the landing, Brother Orin writes steadily in his ledger, the grey salt-frost receding from his wrist."
+      }
+    ],
+    "ambient": [
+      "Drops of cold water fall from the vaulted dark above, counting out a slow, uneven rhythm.",
+      "Bioluminescent moss clings to the risers, glowing a faint, bruised silver under your boots.",
+      "From far below comes the low, drowned hum of voices and the creak of wet timber.",
+      "A draft breathes up the stairwell, smelling of peat-water, tallow wax, and old incense."
+    ],
+    "exits": [
+      { "direction": "up", "target": "inner_crypt", "description": "The narrow spiral stair climbs back toward the Barrow Heart above." },
+      { "direction": "down", "target": "nocturne_square", "description": "The steps widen onto the sunken cathedral plaza of Nocturne." }
+    ],
+    "features": [
+      {
+        "id": "weeping_wall",
+        "name": "weeping shale wall",
+        "aliases": ["wall", "moss", "shale", "veins", "water", "spores"],
+        "description": "Threads of dark moor-water trickle down the shale, feeding thick beds of luminous ash-moss and pale waxen spore-caps that smell faintly of camphor.",
+        "interactions": [
+          {
+            "verb": "harvest",
+            "label": "Harvest tallow-moss from the seepage",
+            "once": true,
+            "text": "You reach carefully between the slick shale ledges to gather the waxen spore-caps before they burst.",
+            "check": { "skill": "medicine", "dc": 11 },
+            "success": {
+              "text": "You press the luminous wax into an empty phial left on the ledge, distilling a clean draught of memory-tallow.",
+              "effects": [ { "type": "giveItem", "item": "tallow_draught" } ]
+            },
+            "failure": {
+              "text": "The fragile spore-caps dissolve into cold grey water between your fingers."
+            }
+          }
+        ]
+      },
+      {
+        "id": "threshold_relief",
+        "name": "carved threshold relief",
+        "aliases": ["relief", "carving", "inscription", "triad", "markers"],
+        "description": "An ancient bas-relief predating the Ashen Order shows a procession of mourners and spirits meeting beneath a great bronze bell, holding up three symbols in equal measure: sun, moon, and skull.",
+        "interactions": [
+          {
+            "verb": "study",
+            "label": "Study the pre-Order relief",
+            "once": true,
+            "text": "You brush the wet moss from the lower register of the carving and trace the archaic lettering.",
+            "check": { "skill": "history", "dc": 11 },
+            "success": {
+              "text": "The inscription records the founding of Nocturne as a threshold-hall where the living and the newly dead could speak their last truths before parting—long before the First Architects grew terrified of death and sealed the barrow above.",
+              "effects": [
+                { "type": "setFlag", "flag": "read_stair_relief" },
+                { "type": "grantXp", "amount": 25 }
+              ]
+            },
+            "failure": {
+              "text": "Centuries of mineral seepage have blurred the lower glyphs beyond your ability to piece together."
+            }
+          }
+        ]
+      },
+      {
+        "id": "stair_memory_echo",
+        "name": "shimmering ash-echo",
+        "aliases": ["echo", "memory", "shimmer", "apparition", "footprints"],
+        "description": "In the Barrowlight's beam, the mist clinging to the landing curdles into two overlapping silhouettes: a woman clutching a brass tuning-tongue as she hurries downward, and an armored patrolman marching after her with an iron halberd.",
+        "conditions": [ { "type": "hasItem", "item": "barrowlight" } ],
+        "interactions": [
+          {
+            "verb": "shine",
+            "label": "Shine the Barrowlight on the ash-echo",
+            "once": true,
+            "text": "You raise the Barrowlight. Its flame catches the residual memory trapped in the damp ash, and two voices speak out of the stone—days old, yet sharp as broken glass.\n\n\"If you relight that beacon, the old souls will go to sleep and never wake!\" a woman's voice cries, ragged with grief. \"My brother Jonas is almost whole again in the Echo Chapel—I only need the beacon's tongue to hold his voice together!\"\n\nBelow her, heavy boots ring on stone. \"Heresy and rot,\" a man's voice snaps through a rusted visor. \"Take the lens to the tollbridge, drop the floodgate, and let the dark finish what the Order started.\"",
+            "effects": [
+              { "type": "setFlag", "flag": "saw_stair_echo" },
+              { "type": "grantXp", "amount": 25 }
+            ]
+          }
+        ]
+      }
+    ],
+    "npcs": [
+      {
+        "id": "orin",
+        "name": "Brother Orin",
+        "aliases": ["orin", "brother", "scribe", "clerk", "spirit", "ghost"],
+        "description": "A translucent figure in the tattered apron of a threshold-clerk sits on a broken step, counting lead tokens into a leather ledger. Where his left hand should be, grey salt-crystals have crept over his wrist.",
+        "dialogue": "orin"
+      }
+    ],
+    "onFirstEnter": [
+      { "type": "setQuestStage", "quest": "nocturne_beacon", "stage": 10 }
+    ]
+  }
+]
