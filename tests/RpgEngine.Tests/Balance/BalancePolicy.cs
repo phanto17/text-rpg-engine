@@ -2,32 +2,33 @@ using RpgEngine.Core.Combat;
 using RpgEngine.Core.Content;
 using RpgEngine.Core.Content.Defs;
 using RpgEngine.Core.Dice;
+using RpgEngine.Core.World;
 
 namespace RpgEngine.Tests.Balance;
 
 /// <summary>
-/// The plain, unclever player the balance check assumes. Each turn takes the first rule that applies:
+/// The plain, unclever player the balance check assumes. It reads spells by what they do, never by
+/// id, so any class plays the same way. Each turn takes the first rule that applies:
 /// <list type="number">
-/// <item>Heal: Second Wind below 50% HP while unused, then a Potion of Healing below 40% HP while any remain.</item>
-/// <item>Target: the thrall if one plain hit likely kills it (average damage, after vulnerabilities, at
-/// least its HP); otherwise the knight.</item>
-/// <item>Attack: a carried Flask of Holy Water opens on the knight; then Magic Missile while MP allows;
-/// Sneak Attack while charges remain, unless a plain hit is already sure to kill (its minimum damage
-/// covers the target's HP); otherwise the plain attack.</item>
+/// <item>Heal: the first ready self-targeted spell or technique that heals, below 50% HP; then a
+/// Potion of Healing below 40% HP while any remain.</item>
+/// <item>Target: the thrall if one plain attack likely kills it (average damage, after
+/// vulnerabilities, at least its HP); otherwise the knight.</item>
+/// <item>Attack: a carried Flask of Holy Water opens on the knight; then the castable mana spell with
+/// the highest average damage against the target (after resistances and vulnerabilities; hit and
+/// save odds are ignored); then the first ready per-fight technique aimed at an enemy, unless a plain
+/// attack is already sure to kill (its minimum damage covers the target's HP); otherwise the plain
+/// attack.</item>
 /// </list>
-/// The plain attack is Fire Bolt when known, otherwise the equipped weapon. The flask waits for the
-/// thrall to fall because throwing it first hands the thrall an extra round against a fragile wizard.
-/// The policy never defends, parleys, or flees.
+/// The plain attack is the first free damaging spell the character knows, otherwise the equipped
+/// weapon. The flask waits for the thrall to fall because throwing it first hands the thrall an extra
+/// round against a fragile caster. The policy never defends, parleys, or flees.
 /// </summary>
 internal sealed class BalancePolicy
 {
     public const string Knight = "gravebound_knight";
     public const string Flask = "holy_water";
     private const string Potion = "healing_potion";
-    private const string SecondWind = "second_wind";
-    private const string SneakAttack = "sneak_attack";
-    private const string MagicMissile = "magic_missile";
-    private const string FireBolt = "fire_bolt";
 
     private readonly GameContent _content;
 
@@ -41,10 +42,12 @@ internal sealed class BalancePolicy
     {
         ArgumentNullException.ThrowIfNull(session);
         var player = session.Player.Character;
+        var ready = session.SpellOptions().Where(option => option.CanCast).Select(option => option.Spell).ToList();
 
-        if (CanCast(session, SecondWind) && player.CurrentHp * 2 < player.MaxHp)
+        var heal = ready.FirstOrDefault(spell => spell.Resolution is EffectsResolutionDef effects && effects.Effects.Any(e => e is HealEffect));
+        if (heal is not null && player.CurrentHp * 2 < player.MaxHp)
         {
-            return new CastAction(SecondWind, null);
+            return new CastAction(heal.Id, null);
         }
 
         if (player.Inventory.Contains(Potion) && player.CurrentHp * 5 < player.MaxHp * 2)
@@ -54,9 +57,9 @@ internal sealed class BalancePolicy
 
         var enemies = session.ActiveEnemies;
         var knight = enemies.OfType<MonsterCombatant>().FirstOrDefault(m => m.Definition.Id == Knight);
-        var (damage, damageType) = PlainAttack(session);
+        var (plainSpell, plainDamage, plainType) = PlainAttack(session, ready);
         var target = enemies
-            .Where(e => e != knight && Adjusted(damage.Average, damageType, e) >= e.CurrentHp)
+            .Where(e => e != knight && Adjusted(plainDamage.Average, plainType, e) >= e.CurrentHp)
             .OrderBy(e => e.CurrentHp)
             .FirstOrDefault()
             ?? knight
@@ -67,31 +70,56 @@ internal sealed class BalancePolicy
             return new UseItemAction(Flask, target.Id);
         }
 
-        if (CanCast(session, MagicMissile))
+        var manaSpell = ready
+            .Where(spell => spell.Target == SpellTarget.Enemy && spell.Cost.Mana > 0)
+            .Select(spell => (Spell: spell, Damage: Damage(spell.Resolution, session)))
+            .Where(x => x.Damage is not null)
+            .OrderByDescending(x => Adjusted(x.Damage!.Value.Expression.Average, x.Damage.Value.Type, target))
+            .Select(x => x.Spell)
+            .FirstOrDefault();
+        if (manaSpell is not null)
         {
-            return new CastAction(MagicMissile, target.Id);
+            return new CastAction(manaSpell.Id, target.Id);
         }
 
-        if (CanCast(session, SneakAttack) && Adjusted(damage.Min, damageType, target) < target.CurrentHp)
+        var technique = ready.FirstOrDefault(spell => spell.Target == SpellTarget.Enemy && spell.Cost.UsesPerEncounter is not null);
+        if (technique is not null && Adjusted(plainDamage.Min, plainType, target) < target.CurrentHp)
         {
-            return new CastAction(SneakAttack, target.Id);
+            return new CastAction(technique.Id, target.Id);
         }
 
-        return CanCast(session, FireBolt) ? new CastAction(FireBolt, target.Id) : new AttackAction(target.Id);
+        return plainSpell is not null ? new CastAction(plainSpell.Id, target.Id) : new AttackAction(target.Id);
     }
 
-    private static bool CanCast(CombatSession session, string spellId) =>
-        session.SpellOptions().Any(option => option.Spell.Id == spellId && option.CanCast);
-
-    private (DiceExpression Damage, DamageType Type) PlainAttack(CombatSession session)
+    // The first free damaging spell the character knows (e.g. a cantrip), otherwise the weapon.
+    private (SpellDef? Spell, DiceExpression Damage, DamageType Type) PlainAttack(CombatSession session, IReadOnlyList<SpellDef> ready)
     {
-        if (CanCast(session, FireBolt) && _content.Spells[FireBolt].Resolution is SpellAttackResolutionDef bolt)
+        foreach (var spell in ready.Where(s => s.Target == SpellTarget.Enemy && s.Cost.Mana == 0 && s.Cost.UsesPerEncounter is null))
         {
-            return (DiceExpression.Parse(bolt.Damage), bolt.DamageType);
+            if (Damage(spell.Resolution, session) is { } damage)
+            {
+                return (spell, damage.Expression, damage.Type);
+            }
         }
 
         var weapon = CombatRules.Weapon(session.Player.Character, _content);
-        return (weapon.Damage, weapon.DamageType);
+        return (null, weapon.Damage, weapon.DamageType);
+    }
+
+    private (DiceExpression Expression, DamageType Type)? Damage(SpellResolutionDef resolution, CombatSession session) => resolution switch
+    {
+        AutoHitResolutionDef autoHit => (DiceExpression.Parse(autoHit.Damage), autoHit.DamageType),
+        SpellAttackResolutionDef attack => (DiceExpression.Parse(attack.Damage), attack.DamageType),
+        SaveResolutionDef save => (DiceExpression.Parse(save.Damage), save.DamageType),
+        WeaponAttackResolutionDef weaponAttack => WeaponDamage(weaponAttack, session),
+        _ => null,
+    };
+
+    private (DiceExpression Expression, DamageType Type) WeaponDamage(WeaponAttackResolutionDef resolution, CombatSession session)
+    {
+        var weapon = CombatRules.Weapon(session.Player.Character, _content);
+        var damage = resolution.BonusDamage is { } bonus ? weapon.Damage.Plus(DiceExpression.Parse(bonus)) : weapon.Damage;
+        return (damage, weapon.DamageType);
     }
 
     // Mirrors the engine's damage adjustment: immunity, else resistance (halved, rounded down), else vulnerability.
