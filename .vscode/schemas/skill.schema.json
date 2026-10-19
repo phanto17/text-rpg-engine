@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RpgEngine content: skill definitions",
+  "allowComments": true,
+  "allowTrailingCommas": true,
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "ability": {
+        "enum": [
+          "str",
+          "dex",
+          "con",
+          "int",
+          "wis",
+          "cha"
+        ]
+      }
+    },
+    "required": [
+      "id",
+      "name",
+      "ability"
+    ],
+    "additionalProperties": false
+  }
+}

@@ -1,0 +1,1215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RpgEngine content: room definitions",
+  "allowComments": true,
+  "allowTrailingCommas": true,
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "revisit": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "variants": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "conditions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "type"
+                ],
+                "anyOf": [
+                  {
+                    "properties": {
+                      "type": {
+                        "const": "flag"
+                      },
+                      "flag": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "flag"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "properties": {
+                      "type": {
+                        "const": "notFlag"
+                      },
+                      "flag": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "flag"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "properties": {
+                      "type": {
+                        "const": "hasItem"
+                      },
+                      "item": {
+                        "type": "string"
+                      },
+                      "count": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "item"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "properties": {
+                      "type": {
+                        "const": "lacksItem"
+                      },
+                      "item": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "item"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "properties": {
+                      "type": {
+                        "const": "counter"
+                      },
+                      "counter": {
+                        "type": "string"
+                      },
+                      "min": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "max": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "equals": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "counter"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "properties": {
+                      "type": {
+                        "const": "reputation"
+                      },
+                      "faction": {
+                        "type": "string"
+                      },
+                      "min": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "max": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "faction"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "properties": {
+                      "type": {
+                        "const": "questStage"
+                      },
+                      "quest": {
+                        "type": "string"
+                      },
+                      "min": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "max": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "equals": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "quest"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "properties": {
+                      "type": {
+                        "const": "class"
+                      },
+                      "class": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "class"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "properties": {
+                      "type": {
+                        "const": "background"
+                      },
+                      "background": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "background"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "properties": {
+                      "type": {
+                        "const": "abilityScore"
+                      },
+                      "ability": {
+                        "enum": [
+                          "str",
+                          "dex",
+                          "con",
+                          "int",
+                          "wis",
+                          "cha"
+                        ]
+                      },
+                      "min": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "ability",
+                      "min"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "properties": {
+                      "type": {
+                        "const": "visited"
+                      },
+                      "room": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "room"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "properties": {
+                      "type": {
+                        "const": "all"
+                      },
+                      "conditions": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/items/properties/variants/items/properties/conditions/items"
+                        }
+                      }
+                    },
+                    "required": [
+                      "conditions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "properties": {
+                      "type": {
+                        "const": "any"
+                      },
+                      "conditions": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/items/properties/variants/items/properties/conditions/items"
+                        }
+                      }
+                    },
+                    "required": [
+                      "conditions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "properties": {
+                      "type": {
+                        "const": "not"
+                      },
+                      "conditions": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/items/properties/variants/items/properties/conditions/items"
+                        }
+                      }
+                    },
+                    "required": [
+                      "conditions"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "text"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "ambient": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "exits": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "direction": {
+              "enum": [
+                "north",
+                "south",
+                "east",
+                "west",
+                "up",
+                "down",
+                "in",
+                "out"
+              ]
+            },
+            "target": {
+              "type": "string"
+            },
+            "description": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "conditions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/items/properties/variants/items/properties/conditions/items"
+              }
+            },
+            "blockedText": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "direction",
+            "target"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "features": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "aliases": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": {
+              "type": "string"
+            },
+            "conditions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/items/properties/variants/items/properties/conditions/items"
+              }
+            },
+            "interactions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "verb": {
+                    "type": "string"
+                  },
+                  "target": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "label": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "conditions": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/items/properties/variants/items/properties/conditions/items"
+                    }
+                  },
+                  "once": {
+                    "type": "boolean"
+                  },
+                  "text": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "effects": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "type"
+                      ],
+                      "anyOf": [
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "setFlag"
+                            },
+                            "flag": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "flag"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "clearFlag"
+                            },
+                            "flag": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "flag"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "setCounter"
+                            },
+                            "counter": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "counter",
+                            "value"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "addCounter"
+                            },
+                            "counter": {
+                              "type": "string"
+                            },
+                            "amount": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "counter",
+                            "amount"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "changeReputation"
+                            },
+                            "faction": {
+                              "type": "string"
+                            },
+                            "amount": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "faction",
+                            "amount"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "setQuestStage"
+                            },
+                            "quest": {
+                              "type": "string"
+                            },
+                            "stage": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "quest",
+                            "stage"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "giveItem"
+                            },
+                            "item": {
+                              "type": "string"
+                            },
+                            "count": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "item"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "removeItem"
+                            },
+                            "item": {
+                              "type": "string"
+                            },
+                            "count": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "item"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "giveGold"
+                            },
+                            "amount": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "amount"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "grantXp"
+                            },
+                            "amount": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "amount"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "heal"
+                            },
+                            "dice": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "dice"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "damage"
+                            },
+                            "dice": {
+                              "type": "string"
+                            },
+                            "damageType": {
+                              "enum": [
+                                "acid",
+                                "bludgeoning",
+                                "cold",
+                                "fire",
+                                "force",
+                                "lightning",
+                                "necrotic",
+                                "piercing",
+                                "poison",
+                                "psychic",
+                                "radiant",
+                                "slashing",
+                                "thunder",
+                                null
+                              ]
+                            }
+                          },
+                          "required": [
+                            "dice"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "restoreMana"
+                            },
+                            "amount": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "amount"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "rest"
+                            }
+                          },
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "savingThrow"
+                            },
+                            "ability": {
+                              "enum": [
+                                "str",
+                                "dex",
+                                "con",
+                                "int",
+                                "wis",
+                                "cha"
+                              ]
+                            },
+                            "dc": {
+                              "type": "integer"
+                            },
+                            "onSuccess": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items"
+                              }
+                            },
+                            "onFail": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items"
+                              }
+                            }
+                          },
+                          "required": [
+                            "ability",
+                            "dc"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "skillCheck"
+                            },
+                            "check": {
+                              "type": "object",
+                              "properties": {
+                                "skill": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "ability": {
+                                  "enum": [
+                                    "str",
+                                    "dex",
+                                    "con",
+                                    "int",
+                                    "wis",
+                                    "cha",
+                                    null
+                                  ]
+                                },
+                                "dc": {
+                                  "type": "integer"
+                                },
+                                "advantage": {
+                                  "type": "boolean"
+                                },
+                                "disadvantage": {
+                                  "type": "boolean"
+                                },
+                                "advantageIf": {
+                                  "type": "array",
+                                  "items": {
+                                    "$ref": "#/items/properties/variants/items/properties/conditions/items"
+                                  }
+                                },
+                                "disadvantageIf": {
+                                  "type": "array",
+                                  "items": {
+                                    "$ref": "#/items/properties/variants/items/properties/conditions/items"
+                                  }
+                                }
+                              },
+                              "required": [
+                                "dc"
+                              ],
+                              "additionalProperties": false
+                            },
+                            "onSuccess": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items"
+                              }
+                            },
+                            "onFail": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items"
+                              }
+                            }
+                          },
+                          "required": [
+                            "check"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "message"
+                            },
+                            "text": {
+                              "type": "string"
+                            },
+                            "style": {
+                              "enum": [
+                                "narration",
+                                "sensory",
+                                "dialogue",
+                                "system",
+                                "success",
+                                "failure",
+                                "warning"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "text"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "moveTo"
+                            },
+                            "room": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "room"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "startDialogue"
+                            },
+                            "dialogue": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "dialogue"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "startCombat"
+                            },
+                            "encounter": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "encounter"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "startShop"
+                            },
+                            "shop": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "shop"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "endGame"
+                            }
+                          },
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
+                              "const": "if"
+                            },
+                            "conditions": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/items/properties/variants/items/properties/conditions/items"
+                              }
+                            },
+                            "then": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items"
+                              }
+                            },
+                            "else": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items"
+                              }
+                            }
+                          },
+                          "required": [
+                            "conditions"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  },
+                  "check": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "skill": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "ability": {
+                        "enum": [
+                          "str",
+                          "dex",
+                          "con",
+                          "int",
+                          "wis",
+                          "cha",
+                          null
+                        ]
+                      },
+                      "dc": {
+                        "type": "integer"
+                      },
+                      "advantage": {
+                        "type": "boolean"
+                      },
+                      "disadvantage": {
+                        "type": "boolean"
+                      },
+                      "advantageIf": {
+                        "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items/anyOf/15/properties/check/properties/advantageIf"
+                      },
+                      "disadvantageIf": {
+                        "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items/anyOf/15/properties/check/properties/disadvantageIf"
+                      }
+                    },
+                    "required": [
+                      "dc"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "success": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "text": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "effects": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items"
+                        }
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "failure": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "properties": {
+                      "text": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "effects": {
+                        "$ref": "#/items/properties/features/items/properties/interactions/items/properties/success/properties/effects"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "verb"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "description"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "npcs": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "aliases": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "description": {
+              "type": "string"
+            },
+            "dialogue": {
+              "type": "string"
+            },
+            "conditions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/items/properties/variants/items/properties/conditions/items"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "description",
+            "dialogue"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "encounter": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/items/properties/variants/items/properties/conditions/items"
+            }
+          },
+          "intro": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "enemies": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "monster": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "monster"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "canFlee": {
+            "type": "boolean"
+          },
+          "fleeTo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "parley": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "options": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string"
+                    },
+                    "conditions": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/items/properties/variants/items/properties/conditions/items"
+                      }
+                    },
+                    "check": {
+                      "type": "object",
+                      "properties": {
+                        "skill": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "ability": {
+                          "enum": [
+                            "str",
+                            "dex",
+                            "con",
+                            "int",
+                            "wis",
+                            "cha",
+                            null
+                          ]
+                        },
+                        "dc": {
+                          "type": "integer"
+                        },
+                        "advantage": {
+                          "type": "boolean"
+                        },
+                        "disadvantage": {
+                          "type": "boolean"
+                        },
+                        "advantageIf": {
+                          "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items/anyOf/15/properties/check/properties/advantageIf"
+                        },
+                        "disadvantageIf": {
+                          "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items/anyOf/15/properties/check/properties/disadvantageIf"
+                        }
+                      },
+                      "required": [
+                        "dc"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "label",
+                    "check"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "onSuccess": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items"
+                }
+              },
+              "onFailure": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items"
+                }
+              }
+            },
+            "required": [
+              "options"
+            ],
+            "additionalProperties": false
+          },
+          "onVictory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items"
+            }
+          },
+          "onResolved": {
+            "type": "array",
+            "items": {
+              "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "enemies"
+        ],
+        "additionalProperties": false
+      },
+      "onFirstEnter": {
+        "type": "array",
+        "items": {
+          "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items"
+        }
+      },
+      "onEnter": {
+        "type": "array",
+        "items": {
+          "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items"
+        }
+      }
+    },
+    "required": [
+      "id",
+      "name",
+      "description"
+    ],
+    "additionalProperties": false
+  }
+}

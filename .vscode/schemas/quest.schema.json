@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RpgEngine content: quest definitions",
+  "allowComments": true,
+  "allowTrailingCommas": true,
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "stages": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "stage": {
+              "type": "integer"
+            },
+            "journal": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "stage",
+            "journal"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "id",
+      "name",
+      "stages"
+    ],
+    "additionalProperties": false
+  }
+}

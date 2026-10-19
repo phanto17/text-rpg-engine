@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RpgEngine content: shop definitions",
+  "allowComments": true,
+  "allowTrailingCommas": true,
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "keeper": {
+        "type": "string"
+      },
+      "greeting": {
+        "type": "string"
+      },
+      "stock": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "item": {
+              "type": "string"
+            },
+            "price": {
+              "type": "integer"
+            },
+            "stock": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "item",
+            "price"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "buybackRate": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "id",
+      "name",
+      "keeper",
+      "greeting"
+    ],
+    "additionalProperties": false
+  }
+}

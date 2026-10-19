@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RpgEngine content: monster definitions",
+  "allowComments": true,
+  "allowTrailingCommas": true,
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "hp": {
+        "type": "string"
+      },
+      "ac": {
+        "type": "integer"
+      },
+      "abilities": {
+        "type": "object",
+        "properties": {
+          "str": {
+            "type": "integer"
+          },
+          "dex": {
+            "type": "integer"
+          },
+          "con": {
+            "type": "integer"
+          },
+          "int": {
+            "type": "integer"
+          },
+          "wis": {
+            "type": "integer"
+          },
+          "cha": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "str",
+          "dex",
+          "con",
+          "int",
+          "wis",
+          "cha"
+        ],
+        "additionalProperties": false
+      },
+      "attacks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "toHit": {
+              "type": "integer"
+            },
+            "damage": {
+              "type": "string"
+            },
+            "damageType": {
+              "enum": [
+                "acid",
+                "bludgeoning",
+                "cold",
+                "fire",
+                "force",
+                "lightning",
+                "necrotic",
+                "piercing",
+                "poison",
+                "psychic",
+                "radiant",
+                "slashing",
+                "thunder"
+              ]
+            },
+            "weight": {
+              "type": "integer"
+            },
+            "onHit": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "save": {
+                  "type": [
+                    "object",
+                    "null"
+                  ],
+                  "properties": {
+                    "ability": {
+                      "enum": [
+                        "str",
+                        "dex",
+                        "con",
+                        "int",
+                        "wis",
+                        "cha"
+                      ]
+                    },
+                    "dc": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "ability",
+                    "dc"
+                  ],
+                  "additionalProperties": false
+                },
+                "status": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "status"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "name",
+            "toHit",
+            "damage",
+            "damageType"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "resistances": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "acid",
+            "bludgeoning",
+            "cold",
+            "fire",
+            "force",
+            "lightning",
+            "necrotic",
+            "piercing",
+            "poison",
+            "psychic",
+            "radiant",
+            "slashing",
+            "thunder"
+          ]
+        }
+      },
+      "vulnerabilities": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "acid",
+            "bludgeoning",
+            "cold",
+            "fire",
+            "force",
+            "lightning",
+            "necrotic",
+            "piercing",
+            "poison",
+            "psychic",
+            "radiant",
+            "slashing",
+            "thunder"
+          ]
+        }
+      },
+      "immunities": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "acid",
+            "bludgeoning",
+            "cold",
+            "fire",
+            "force",
+            "lightning",
+            "necrotic",
+            "piercing",
+            "poison",
+            "psychic",
+            "radiant",
+            "slashing",
+            "thunder"
+          ]
+        }
+      },
+      "xp": {
+        "type": "integer"
+      },
+      "ai": {
+        "type": "object",
+        "properties": {
+          "behavior": {
+            "enum": [
+              "aggressive"
+            ]
+          },
+          "fleeBelowHpPercent": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
+      "loot": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "item": {
+              "type": "string"
+            },
+            "chance": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "item",
+            "chance"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "id",
+      "name",
+      "description",
+      "hp",
+      "ac",
+      "abilities",
+      "attacks"
+    ],
+    "additionalProperties": false
+  }
+}

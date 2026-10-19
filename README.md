@@ -146,7 +146,7 @@ Useful flags (after `--`): `--seed <n>` for a reproducible run, `--no-anim` to s
 
 Everything lives in `Data/`. To add a room, an item, or a whole dialogue tree:
 
-1. Add JSON following the schemas in [CLAUDE.md](CLAUDE.md#content-json-reference).
+1. Add JSON following the schemas in [CLAUDE.md](CLAUDE.md#content-json-reference). In VS Code, the generated JSON Schemas in `.vscode/schemas/` give you autocomplete and flag unknown properties as you type.
 2. Run `dotnet test`. Content validation reports every broken reference or typo.
 3. Play it with `dotnet run --project src/RpgEngine.CLI -- --seed 1`.
 
@@ -182,7 +182,8 @@ Dice fairness is checked with fixed-seed chi-square tests.
   - [x] 2A: four Callings, Burdens (backgrounds) with keepsakes, and prologue reactivity
   - [x] 2B: sanctuary rests, leveling, and shops
   - [x] 2C: Act I, the Weeping Stair and Nocturne, ending at the Drowned Tollbridge
-- [ ] **Later:** multi-character parties, races, more dungeons, saving mid-combat, JSON Schema export for editor autocomplete
+- [x] **Tooling:** JSON Schema export for editor autocomplete in VS Code
+- [ ] **Later:** multi-character parties, races, more dungeons, saving mid-combat
 
 ## Contributing
 

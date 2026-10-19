@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RpgEngine content: status-effect definitions",
+  "allowComments": true,
+  "allowTrailingCommas": true,
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "durationRounds": {
+        "type": "integer"
+      },
+      "modifiers": {
+        "type": "object",
+        "properties": {
+          "attackRolls": {
+            "enum": [
+              "normal",
+              "advantage",
+              "disadvantage"
+            ]
+          },
+          "acBonus": {
+            "type": "integer"
+          },
+          "damagePerTurn": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "skipTurn": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "id",
+      "name",
+      "description",
+      "durationRounds"
+    ],
+    "additionalProperties": false
+  }
+}

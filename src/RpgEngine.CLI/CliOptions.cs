@@ -2,7 +2,10 @@ using System.Globalization;
 
 namespace RpgEngine.CLI;
 
-/// <summary>Command-line options: <c>--seed &lt;n&gt;</c>, <c>--no-anim</c>, <c>--data &lt;dir&gt;</c>, <c>--saves &lt;dir&gt;</c>, <c>--help</c>.</summary>
+/// <summary>
+/// Command-line options: <c>--seed &lt;n&gt;</c>, <c>--no-anim</c>, <c>--data &lt;dir&gt;</c>, <c>--saves &lt;dir&gt;</c>, <c>--help</c>,
+/// and the contributor-only <c>--export-schemas [dir]</c>, which is left out of the player-facing usage text.
+/// </summary>
 public sealed record CliOptions
 {
     public ulong? Seed { get; init; }
@@ -14,6 +17,9 @@ public sealed record CliOptions
     public string SavesDirectory { get; init; } = Path.Combine(Environment.CurrentDirectory, "Saves");
 
     public bool ShowHelp { get; init; }
+
+    /// <summary>Workspace root to write the content JSON Schemas under, or null to play.</summary>
+    public string? ExportSchemasRoot { get; init; }
 
     public const string Usage = """
         Usage: RpgEngine.CLI [options]
@@ -65,6 +71,9 @@ public sealed record CliOptions
                     }
 
                     options = options with { SavesDirectory = saves };
+                    break;
+                case "--export-schemas":
+                    options = options with { ExportSchemasRoot = TryValue(args, ref i, out var root) ? root : Environment.CurrentDirectory };
                     break;
                 case "--help" or "-h" or "-?":
                     options = options with { ShowHelp = true };

@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RpgEngine content: class definitions",
+  "allowComments": true,
+  "allowTrailingCommas": true,
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "hitDie": {
+        "type": "integer"
+      },
+      "abilityPriority": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "str",
+            "dex",
+            "con",
+            "int",
+            "wis",
+            "cha"
+          ]
+        }
+      },
+      "savingThrows": {
+        "type": "array",
+        "items": {
+          "enum": [
+            "str",
+            "dex",
+            "con",
+            "int",
+            "wis",
+            "cha"
+          ]
+        }
+      },
+      "skillChoices": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer"
+          },
+          "from": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "count",
+          "from"
+        ],
+        "additionalProperties": false
+      },
+      "expertiseCount": {
+        "type": "integer"
+      },
+      "mana": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "base": {
+            "type": "integer"
+          },
+          "ability": {
+            "enum": [
+              "str",
+              "dex",
+              "con",
+              "int",
+              "wis",
+              "cha"
+            ]
+          }
+        },
+        "required": [
+          "base",
+          "ability"
+        ],
+        "additionalProperties": false
+      },
+      "startingItems": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "item": {
+              "type": "string"
+            },
+            "count": {
+              "type": "integer"
+            },
+            "equip": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "item"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "spells": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "spellsByLevel": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "level": {
+              "type": "integer"
+            },
+            "spells": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "level",
+            "spells"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "id",
+      "name",
+      "description",
+      "hitDie",
+      "abilityPriority",
+      "skillChoices"
+    ],
+    "additionalProperties": false
+  }
+}

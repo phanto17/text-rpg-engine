@@ -1,0 +1,82 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "/Data/game.json"
+      ],
+      "url": "./.vscode/schemas/game.schema.json"
+    },
+    {
+      "fileMatch": [
+        "/Data/Rules/classes.json"
+      ],
+      "url": "./.vscode/schemas/class.schema.json"
+    },
+    {
+      "fileMatch": [
+        "/Data/Rules/backgrounds.json"
+      ],
+      "url": "./.vscode/schemas/background.schema.json"
+    },
+    {
+      "fileMatch": [
+        "/Data/Rules/skills.json"
+      ],
+      "url": "./.vscode/schemas/skill.schema.json"
+    },
+    {
+      "fileMatch": [
+        "/Data/Rules/spells.json"
+      ],
+      "url": "./.vscode/schemas/spell.schema.json"
+    },
+    {
+      "fileMatch": [
+        "/Data/Rules/status_effects.json"
+      ],
+      "url": "./.vscode/schemas/status-effect.schema.json"
+    },
+    {
+      "fileMatch": [
+        "/Data/World/factions.json"
+      ],
+      "url": "./.vscode/schemas/faction.schema.json"
+    },
+    {
+      "fileMatch": [
+        "/Data/World/quests.json"
+      ],
+      "url": "./.vscode/schemas/quest.schema.json"
+    },
+    {
+      "fileMatch": [
+        "/Data/World/shops.json"
+      ],
+      "url": "./.vscode/schemas/shop.schema.json"
+    },
+    {
+      "fileMatch": [
+        "/Data/Items/*.json"
+      ],
+      "url": "./.vscode/schemas/item.schema.json"
+    },
+    {
+      "fileMatch": [
+        "/Data/Bestiary/*.json"
+      ],
+      "url": "./.vscode/schemas/monster.schema.json"
+    },
+    {
+      "fileMatch": [
+        "/Data/Rooms/*.json"
+      ],
+      "url": "./.vscode/schemas/room.schema.json"
+    },
+    {
+      "fileMatch": [
+        "/Data/Dialogues/*.json"
+      ],
+      "url": "./.vscode/schemas/dialogue.schema.json"
+    }
+  ]
+}

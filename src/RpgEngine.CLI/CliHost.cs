@@ -31,6 +31,11 @@ public static class CliHost
             return ExitOk;
         }
 
+        if (options.ExportSchemasRoot is { } root)
+        {
+            return ExportSchemas(root, console);
+        }
+
         GameContent content;
         try
         {
@@ -51,5 +56,27 @@ public static class CliHost
         }
 
         return new GameApp(console, content, options, randomFactory, time).Run();
+    }
+
+    private static int ExportSchemas(string root, IAnsiConsole console)
+    {
+        IReadOnlyList<string> written;
+        try
+        {
+            written = SchemaExporter.Export(root);
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or InvalidDataException or System.Text.Json.JsonException)
+        {
+            console.MarkupLine(Theme.Paint(Theme.Failure, $"Could not export the schemas: {ex.Message}"));
+            return ExitUsageError;
+        }
+
+        console.MarkupLine(Theme.Paint(Theme.Success, $"Wrote {written.Count} files under {Path.GetFullPath(root)}:"));
+        foreach (var path in written)
+        {
+            console.WriteLine("  " + Path.GetRelativePath(root, path));
+        }
+
+        return ExitOk;
     }
 }

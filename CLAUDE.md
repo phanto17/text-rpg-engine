@@ -14,6 +14,7 @@ dotnet test                                    # must be all green
 dotnet run --project src/RpgEngine.CLI         # play
 dotnet run --project src/RpgEngine.CLI -- --seed 42 --no-anim   # deterministic run, no dice animation
 dotnet test --collect:"XPlat Code Coverage"    # Cobertura report under tests/RpgEngine.Tests/TestResults/
+dotnet run --project src/RpgEngine.CLI -- --export-schemas   # regenerate .vscode/schemas/ and .vscode/settings.json
 ```
 
 CLI flags (Milestone 1):
@@ -25,6 +26,7 @@ CLI flags (Milestone 1):
 | `--data <dir>` | Load content from another folder (default: `Data/` next to the executable) |
 | `--saves <dir>` | Save folder (default: `./Saves`) |
 | `--help` | Print usage |
+| `--export-schemas [dir]` | Contributor tool, not listed in `--help`: write the content JSON Schemas under `dir` (default: the current folder) and exit without loading content. See [Editor schemas](#editor-schemas-vscodeschemas). |
 
 Exit codes: `0` normal, `1` content failed validation (every error is listed), `2` bad arguments.
 
@@ -38,6 +40,8 @@ The SDK is pinned by `global.json` to 10.0.401 with `rollForward: latestFeature`
 RpgEngine.slnx
 Data/                      ALL game content (JSON). Copied to CLI + test output (PreserveNewest).
 Docs/LORE.md               World, philosophy, and narrative bible. Read it before touching Data/.
+.vscode/schemas/           Generated JSON Schemas for every Data/ file (see Editor schemas). Never edit by hand.
+.vscode/settings.json      Maps the schemas onto Data/ for VS Code (generated "json.schemas" entries).
 src/RpgEngine.Core/        Engine: models, dice, checks, world state, content loading, combat, saves.
 src/RpgEngine.CLI/         Spectre.Console UI: screens, rendering, hybrid input loop.
 tests/RpgEngine.Tests/     xUnit tests for Core, content validation, and CLI playthroughs.
@@ -403,6 +407,18 @@ Each save holds:
 
 A save from another format version is refused with a message naming its version (version 2 added `background`). Saving is allowed only during exploration (not in dialogue, combat, or a shop). Per-encounter uses are never saved, because they are always full outside combat.
 
+### Editor schemas (`.vscode/schemas/`)
+VS Code autocompletes and validates every file in `Data/` against a JSON Schema generated from the content records:
+- `ContentSchemas` (Core) runs .NET's `JsonSchemaExporter` with the loader's own `ContentJson.Options`, so each schema matches exactly what `ContentLoader` accepts: camelCase names, enum values, `required` fields, nullability, polymorphic `type` discriminators (`anyOf` branches), and `additionalProperties: false`. Cross-references (unknown IDs, unset flags) and dice syntax are still checked only by `ContentValidator`.
+- `ContentSchemas.All` lists one schema per file kind (`room.schema.json` for `Data/Rooms/*.json`, `game.schema.json` for `Data/game.json`, and so on). A new content folder or file needs an entry there.
+- `--export-schemas` writes the schemas and replaces the generated `json.schemas` entries in `.vscode/settings.json`, keeping every other setting (comments in that file are not kept).
+
+**Whenever you change a record in `Content/Defs/`** (add, rename, or remove a property, change a type or enum, add a condition or effect), regenerate and commit the output in the same commit:
+```bash
+dotnet run --project src/RpgEngine.CLI -- --export-schemas
+```
+`ContentSchemasTests.CommittedSchemas_MatchTheContentRecords` fails until the committed schemas match the records, and another test fails if any `Data/` file has no schema.
+
 ### Adding content
 **Before adding or editing any JSON under `Data/`, read [`Docs/LORE.md`](Docs/LORE.md) to keep prose tone, philosophical themes, faction alignments, and flag/counter names consistent. Whenever a commit adds a new flag, counter, faction, class, or quest, update the registry in `Docs/LORE.md` in the same commit.**
 
@@ -452,4 +468,5 @@ A save from another format version is refused with a message naming its version 
   - [x] 2A: four Callings, Burdens (backgrounds) with keepsakes, the `background` condition, save format v2, prologue reactivity
   - [x] 2B: the `rest` effect, XP thresholds with level-ups and `spellsByLevel`, shops (`shops.json`, `startShop`, Shop mode)
   - [x] 2C: Act I content: the Weeping Stair, Nocturne, the Echo Chapel, and the Drowned Tollbridge. The descent no longer ends the game; crossing the tollbridge does, with epilogues keyed to the chapel, the beacon, Wren, and `lantern_resonance`
-- [ ] **Later:** parties, races, saving mid-combat, JSON Schema export for editor autocomplete.
+- [x] **Tooling:** JSON Schema export for editor autocomplete (`--export-schemas`, `.vscode/schemas/`).
+- [ ] **Later:** parties, races, saving mid-combat.
