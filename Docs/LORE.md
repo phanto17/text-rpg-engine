@@ -77,6 +77,17 @@ To ground the protagonist in Greywater's world, character classes represent **Ca
 
 *(Note: During transition, existing test fixtures referencing `fighter`, `rogue`, and `wizard` must either be updated in lockstep with `classes.json` or supported via aliases/expanded class definitions.)*
 
+### Burdens (`Data/Rules/backgrounds.json`)
+
+After choosing a Calling, the protagonist chooses a **Burden**: the grief, debt, or vow that brought them up the hill. Each grants one bonus skill, a keepsake (`type: quest`, so it can't be dropped), and sometimes coin. Dialogue and parley options can react to it with `{ "type": "background", "background": "<id>" }`.
+
+| Burden ID | Name | Bonus Skill | Keepsake | Hook |
+| :--- | :--- | :--- | :--- | :--- |
+| `bereaved_kin` | Bereaved Kin | `insight` | `tarnished_locket` | Someone they loved was buried at Hollin's Rest and no longer stays in the grave. Understands grief from the inside; the Moon pillar made personal. |
+| `ash_deserter` | Ash Deserter | `religion` | `scored_signet` | Walked out of the Ashen Order the night it burned a grave with the mourners beside it. Knows the litanies; the Order's hardliners know their face. |
+| `moor_bailiff` | Moor Bailiff (+10 gold) | `persuasion` | `elders_writ` | Hired by the elders of Hollin's Rest to settle the barrow's "arrears". Treats the dead as parties to a contract, which is sometimes exactly what they need. |
+| `fever_dreamer` | Fever Dreamer | `perception` | `bell_splinter` | Has heard a bell beneath the moor every night since the Barrowlight died. The Under-Barrow is already calling them by name. |
+
 ---
 
 ## 6. The Barrowlight Lantern Mechanics
@@ -112,7 +123,7 @@ Once claimed in `inner_crypt` (`item: barrowlight`), the lantern serves as both 
 
 ## 8. Canonical `WorldState` Registry
 
-*Update this table in the same commit whenever a JSON file introduces a new flag, counter, faction, or quest.*
+*Update this table in the same commit whenever a JSON file introduces a new flag, counter, faction, class, background, or quest.*
 
 ### Flags (`flag` / `notFlag`)
 | Flag ID | Set In | Meaning & Downstream Effects |
@@ -138,3 +149,6 @@ Once claimed in `inner_crypt` (`item: barrowlight`), the lantern serves as both 
 
 ### Quests (`questStage`)
 - `barrowlight`: `10` (Entered Lichgate) -> `20` (Entered Ossuary Hall) -> `30` (Opened bronze door) -> `40` (Resolved Barrow Heart encounter) -> `50` (Claimed the Barrowlight & unsealed the spiral stair) -> `100` (Descended into the Under-Barrow).
+
+### Backgrounds (`background`)
+- `bereaved_kin`, `ash_deserter`, `moor_bailiff`, `fever_dreamer` (see section 5). Keepsakes: `tarnished_locket`, `scored_signet`, `elders_writ`, `bell_splinter` (`Items/quest_items.json`).

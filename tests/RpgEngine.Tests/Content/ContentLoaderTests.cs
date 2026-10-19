@@ -15,6 +15,9 @@ public sealed class ContentLoaderTests
         Assert.Equal("Test Adventure", content.Manifest.Title);
         Assert.Equal(12, content.Rules.Flee.Dc);
         Assert.Equal(new[] { "fighter", "wizard" }, content.ClassList.Select(c => c.Id));
+        Assert.Equal(new[] { "orphan", "bailiff" }, content.BackgroundList.Select(b => b.Id));
+        Assert.Equal(10, content.Backgrounds["bailiff"].BonusGold);
+        Assert.Equal(0, content.Backgrounds["orphan"].BonusGold);
         Assert.Equal(Ability.Cha, content.Skills["persuasion"].Ability);
         Assert.IsType<AutoHitResolutionDef>(content.Spells["missile"].Resolution);
         Assert.Equal(2, content.StatusEffects["defending"].Modifiers.AcBonus);
@@ -89,9 +92,10 @@ public sealed class ContentLoaderTests
     [Fact]
     public void Load_MissingRequiredRuleFiles_ReportsEach()
     {
-        var errors = new TestContent().Without("Rules/classes.json").Without("Rules/skills.json").Errors();
+        var errors = new TestContent().Without("Rules/classes.json").Without("Rules/backgrounds.json").Without("Rules/skills.json").Errors();
 
         Assert.Contains(errors, e => e.StartsWith("Rules/classes.json", StringComparison.Ordinal));
+        Assert.Contains(errors, e => e.StartsWith("Rules/backgrounds.json", StringComparison.Ordinal));
         Assert.Contains(errors, e => e.StartsWith("Rules/skills.json", StringComparison.Ordinal));
     }
 
@@ -104,15 +108,22 @@ public sealed class ContentLoaderTests
                     "abilityPriority": ["str", "con", "dex", "wis", "cha", "int"],
                     "skillChoices": { "count": 0, "from": [] } } ]
                 """)
+            // Burdens always carry a keepsake, so the only item left is the one they reference.
+            .With("Rules/backgrounds.json", """
+                [ { "id": "orphan", "name": "Orphan", "description": "X", "bonusSkill": "stealth", "keepsakeItem": "relic" } ]
+                """)
+            .With("Items/items.json", """[ { "id": "relic", "name": "Relic", "type": "quest", "description": "Ancient." } ]""")
             .Without("Rules/spells.json")
             .Without("World/factions.json")
             .Without("World/quests.json")
-            .Without("Items/items.json")
             .Without("Bestiary/monsters.json")
             .Load();
 
         Assert.Empty(content.Spells);
-        Assert.Empty(content.Items);
+        Assert.Empty(content.Factions);
+        Assert.Empty(content.Quests);
+        Assert.Empty(content.Monsters);
+        Assert.Single(content.Items);
     }
 
     [Fact]
@@ -216,7 +227,7 @@ public sealed class ContentLoaderTests
         try
         {
             var source = new TestContent().Files();
-            foreach (var path in new[] { "game.json", "Rules/classes.json", "Rules/skills.json", "Rules/spells.json", "Rules/status_effects.json", "World/factions.json", "World/quests.json", "Items/items.json", "Bestiary/monsters.json", "Rooms/rooms.json" })
+            foreach (var path in new[] { "game.json", "Rules/classes.json", "Rules/backgrounds.json", "Rules/skills.json", "Rules/spells.json", "Rules/status_effects.json", "World/factions.json", "World/quests.json", "Items/items.json", "Bestiary/monsters.json", "Rooms/rooms.json" })
             {
                 var target = Path.Combine(root, path);
                 Directory.CreateDirectory(Path.GetDirectoryName(target)!);

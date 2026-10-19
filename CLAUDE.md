@@ -162,6 +162,15 @@ CLI layout:
 - `abilityPriority` drives auto-assignment of the standard array.
 - `mana` is `{ "base": 4, "ability": "int" }` or `null`. Max mana = base + ability modifier.
 
+**`backgrounds.json`** (required, at least one): the protagonist's burden, chosen after the class.
+```json
+{ "id": "moor_bailiff", "name": "Moor Bailiff", "description": "...",
+  "bonusSkill": "persuasion", "bonusGold": 10, "keepsakeItem": "elders_writ" }
+```
+- `bonusSkill` is granted on top of the class picks and is removed from the class skill picker. Every class must still have at least `skillChoices.count` skills left after any background's bonus skill is removed.
+- `bonusGold` (default `0`) is added to `startingGold`.
+- `keepsakeItem` starts in the inventory. Make keepsakes `type: quest` so they can't be dropped.
+
 **`skills.json`**: `{ "id": "persuasion", "name": "Persuasion", "ability": "cha" }`. All 18 SRD skills are listed; checks may only reference skills defined here.
 
 **`spells.json`**: spells and martial techniques share one schema.

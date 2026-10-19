@@ -5,5 +5,33 @@
     "aliases": ["barrowlight", "lantern", "light"],
     "type": "quest",
     "description": "An iron lantern, plain and heavy, burning with a steady golden flame that gives off no smoke and no heat."
+  },
+  {
+    "id": "tarnished_locket",
+    "name": "Tarnished Locket",
+    "aliases": ["locket"],
+    "type": "quest",
+    "description": "A cheap tin locket gone black at the hinge. Inside is a lock of hair tied with grave-thread, and a name scratched so many times it has worn through the metal."
+  },
+  {
+    "id": "scored_signet",
+    "name": "Scored Signet",
+    "aliases": ["signet", "ring"],
+    "type": "quest",
+    "description": "An iron signet bearing the Ashen Order's flame, with a deep gouge cut across it: the mark a deserter makes so the ring can never seal an order again."
+  },
+  {
+    "id": "elders_writ",
+    "name": "Elders' Writ",
+    "aliases": ["writ", "warrant", "letter"],
+    "type": "quest",
+    "description": "A folded writ under the wax of the elders of Hollin's Rest, naming you bailiff to the barrow's unsettled accounts. The ink has run in the rain, but the seal holds."
+  },
+  {
+    "id": "bell_splinter",
+    "name": "Bell Splinter",
+    "aliases": ["splinter", "bell", "shard"],
+    "type": "quest",
+    "description": "A curved sliver of green-black bronze that you found clenched in your own fist on the night the Barrowlight died. Hold it to your ear and you can almost hear the ringing."
   }
 ]

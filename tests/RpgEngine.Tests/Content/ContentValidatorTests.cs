@@ -232,6 +232,38 @@ public sealed class ContentValidatorTests
     }
 
     [Theory]
+    [InlineData("\"bonusSkill\": \"stealth\"", "\"bonusSkill\": \"juggling\"", "background 'orphan': bonusSkill references unknown skill 'juggling'")]
+    [InlineData("\"keepsakeItem\": \"relic\"", "\"keepsakeItem\": \"gem\"", "background 'orphan': keepsakeItem references unknown item 'gem'")]
+    [InlineData("\"bonusGold\": 10", "\"bonusGold\": -1", "background 'bailiff': bonusGold must be at least 0")]
+    [InlineData("\"name\": \"Orphan\"", "\"name\": \" \"", "background 'orphan': name must not be blank")]
+    [InlineData("\"description\": \"Raised by no one.\"", "\"description\": \"\"", "background 'orphan': description must not be blank")]
+    [InlineData("\"id\": \"bailiff\"", "\"id\": \"orphan\"", "background 'orphan': duplicate id")]
+    [InlineData("\"id\": \"bailiff\"", "\"id\": \"Bailiff\"", "background 'Bailiff': id must be snake_case")]
+    public void Validate_Backgrounds(string original, string replacement, string fragment)
+    {
+        var errors = Errors(("Rules/backgrounds.json", TestContent.Backgrounds.Replace(original, replacement, StringComparison.Ordinal)));
+
+        AssertError(errors, fragment);
+    }
+
+    [Fact]
+    public void Validate_NoBackgrounds_IsAnError()
+    {
+        AssertError(Errors(("Rules/backgrounds.json", "[]")), "Rules/backgrounds.json: at least one background is required.");
+    }
+
+    [Fact]
+    public void Validate_BackgroundSkillThatStarvesAClassPicker_IsAnError()
+    {
+        // The wizard picks 2 of [religion, insight, perception]; a burden granting insight leaves only 2, which is fine,
+        // but shrinking the list to 2 skills leaves 1 after the burden's skill is removed.
+        var classes = TestContent.Classes.Replace("[\"religion\", \"insight\", \"perception\"]", "[\"religion\", \"insight\"]", StringComparison.Ordinal);
+        var backgrounds = TestContent.Backgrounds.Replace("\"bonusSkill\": \"stealth\"", "\"bonusSkill\": \"insight\"", StringComparison.Ordinal);
+
+        AssertError(Errors(("Rules/classes.json", classes), ("Rules/backgrounds.json", backgrounds)), "class 'wizard': background 'orphan' leaves fewer than skillChoices.count skills to pick from.");
+    }
+
+    [Theory]
     [InlineData("\"type\": \"weapon\", \"description\": \"Steel.\"", "\"type\": \"misc\", \"description\": \"Steel.\"", "'weapon' block")]
     [InlineData("\"type\": \"armor\"", "\"type\": \"misc\"", "'armor' block")]
     [InlineData("\"type\": \"key\", \"description\": \"Cold iron.\"", "\"type\": \"consumable\", \"description\": \"Cold iron.\"", "must have a 'use' block")]

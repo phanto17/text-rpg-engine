@@ -50,6 +50,14 @@ internal sealed class TestContent
         ]
         """;
 
+    /// <summary>Burdens: <c>orphan</c> grants stealth (in neither class's list), <c>bailiff</c> grants persuasion and 10 gold.</summary>
+    public const string Backgrounds = """
+        [
+          { "id": "orphan", "name": "Orphan", "description": "Raised by no one.", "bonusSkill": "stealth", "keepsakeItem": "relic" },
+          { "id": "bailiff", "name": "Bailiff", "description": "Collects debts.", "bonusSkill": "persuasion", "bonusGold": 10, "keepsakeItem": "key" }
+        ]
+        """;
+
     public const string Skills = """
         [
           { "id": "athletics", "name": "Athletics", "ability": "str" },
@@ -128,6 +136,7 @@ internal sealed class TestContent
     {
         ["game.json"] = Manifest,
         ["Rules/classes.json"] = Classes,
+        ["Rules/backgrounds.json"] = Backgrounds,
         ["Rules/skills.json"] = Skills,
         ["Rules/spells.json"] = Spells,
         ["Rules/status_effects.json"] = StatusEffects,

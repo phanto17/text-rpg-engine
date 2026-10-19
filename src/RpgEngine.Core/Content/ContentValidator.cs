@@ -37,6 +37,7 @@ public static partial class ContentValidator
         public IReadOnlyList<string> Execute()
         {
             ValidateIds(content.ClassList, "class");
+            ValidateIds(content.BackgroundList, "background");
             ValidateIds(content.SkillList, "skill");
             ValidateIds(content.SpellList, "spell");
             ValidateIds(content.StatusEffectList, "status effect");
@@ -49,6 +50,7 @@ public static partial class ContentValidator
 
             ValidateManifest();
             content.ClassList.ToList().ForEach(ValidateClass);
+            content.BackgroundList.ToList().ForEach(ValidateBackground);
             content.SkillList.ToList().ForEach(skill => RequireText($"skill '{skill.Id}'", skill.Name, "name"));
             content.SpellList.ToList().ForEach(ValidateSpell);
             content.StatusEffectList.ToList().ForEach(ValidateStatus);
@@ -63,6 +65,11 @@ public static partial class ContentValidator
             if (content.ClassList.Count == 0)
             {
                 _errors.Add("Rules/classes.json: at least one class is required.");
+            }
+
+            if (content.BackgroundList.Count == 0)
+            {
+                _errors.Add("Rules/backgrounds.json: at least one background is required.");
             }
 
             foreach (var (flag, context) in _flagsRead.Where(pair => !_flagsSet.Contains(pair.Key)))
@@ -185,6 +192,16 @@ public static partial class ContentValidator
 
             RequireRange(context, cls.ExpertiseCount, 0, choices.Count, "expertiseCount");
 
+            // A background's bonus skill is removed from the class picker, so every pairing must
+            // still leave enough skills to choose from.
+            foreach (var background in content.BackgroundList)
+            {
+                if (choices.From.Count(skill => skill != background.BonusSkill) < choices.Count)
+                {
+                    Error(context, $"background '{background.Id}' leaves fewer than skillChoices.count skills to pick from.");
+                }
+            }
+
             if (cls.Mana is { } mana)
             {
                 RequireRange(context, mana.Base, 0, 100, "mana.base");
@@ -211,6 +228,16 @@ public static partial class ContentValidator
                     Error(context, $"spells references unknown spell '{spell}'.");
                 }
             }
+        }
+
+        private void ValidateBackground(BackgroundDef background)
+        {
+            var context = $"background '{background.Id}'";
+            RequireText(context, background.Name, "name");
+            RequireText(context, background.Description, "description");
+            RequireSkill(context, background.BonusSkill, "bonusSkill");
+            RequireRange(context, background.BonusGold, 0, int.MaxValue, "bonusGold");
+            RequireItem(context, background.KeepsakeItem, "keepsakeItem", out _);
         }
 
         private void ValidateSpell(SpellDef spell)

@@ -8,6 +8,7 @@ public sealed class GameContent
     public GameContent(
         GameManifestDef manifest,
         IReadOnlyList<ClassDef> classes,
+        IReadOnlyList<BackgroundDef> backgrounds,
         IReadOnlyList<SkillDef> skills,
         IReadOnlyList<SpellDef> spells,
         IReadOnlyList<StatusEffectDef> statusEffects,
@@ -21,6 +22,7 @@ public sealed class GameContent
         ArgumentNullException.ThrowIfNull(manifest);
         Manifest = manifest;
         ClassList = classes;
+        BackgroundList = backgrounds;
         SkillList = skills;
         SpellList = spells;
         StatusEffectList = statusEffects;
@@ -32,6 +34,7 @@ public sealed class GameContent
         DialogueList = dialogues;
 
         Classes = ById(classes);
+        Backgrounds = ById(backgrounds);
         Skills = ById(skills);
         Spells = ById(spells);
         StatusEffects = ById(statusEffects);
@@ -62,6 +65,8 @@ public sealed class GameContent
 
     public IReadOnlyList<ClassDef> ClassList { get; }
 
+    public IReadOnlyList<BackgroundDef> BackgroundList { get; }
+
     public IReadOnlyList<SkillDef> SkillList { get; }
 
     public IReadOnlyList<SpellDef> SpellList { get; }
@@ -81,6 +86,8 @@ public sealed class GameContent
     public IReadOnlyList<DialogueDef> DialogueList { get; }
 
     public IReadOnlyDictionary<string, ClassDef> Classes { get; }
+
+    public IReadOnlyDictionary<string, BackgroundDef> Backgrounds { get; }
 
     public IReadOnlyDictionary<string, SkillDef> Skills { get; }
 

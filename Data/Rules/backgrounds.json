@@ -1,0 +1,31 @@
+[
+  {
+    "id": "bereaved_kin",
+    "name": "Bereaved Kin",
+    "description": "Someone you loved was buried at Hollin's Rest, and when the Barrowlight failed, their grave did not stay shut. You have come to find out what walks in their name, and whether anything of them is left to say goodbye to.",
+    "bonusSkill": "insight",
+    "keepsakeItem": "tarnished_locket"
+  },
+  {
+    "id": "ash_deserter",
+    "name": "Ash Deserter",
+    "description": "You wore the soot-grey of the Ashen Order once, and you walked away from it on the night they ordered a grave burned with the mourners still standing beside it. You still know the litanies. You still dream of the smoke.",
+    "bonusSkill": "religion",
+    "keepsakeItem": "scored_signet"
+  },
+  {
+    "id": "moor_bailiff",
+    "name": "Moor Bailiff",
+    "description": "The elders of Hollin's Rest pay you to settle what the dead leave behind: debts, deeds, heirlooms, and grudges. Your writ says the barrow is in arrears. Nobody in the village was willing to deliver that news in person.",
+    "bonusSkill": "persuasion",
+    "bonusGold": 10,
+    "keepsakeItem": "elders_writ"
+  },
+  {
+    "id": "fever_dreamer",
+    "name": "Fever Dreamer",
+    "description": "Since the night the Barrowlight went out, you have heard a bell ringing underneath the moor every time you close your eyes. The village wise-woman said it would stop if you found where it was ringing. You are not sure you believe her.",
+    "bonusSkill": "perception",
+    "keepsakeItem": "bell_splinter"
+  }
+]

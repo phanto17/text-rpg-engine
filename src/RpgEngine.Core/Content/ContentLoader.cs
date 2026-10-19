@@ -20,6 +20,7 @@ public static class ContentLoader
 
         var manifest = ReadObject<GameManifestDef>(files, ManifestFile, errors);
         var classes = ReadArray<ClassDef>(files, "Rules/classes.json", errors, required: true);
+        var backgrounds = ReadArray<BackgroundDef>(files, "Rules/backgrounds.json", errors, required: true);
         var skills = ReadArray<SkillDef>(files, "Rules/skills.json", errors, required: true);
         var spells = ReadArray<SpellDef>(files, "Rules/spells.json", errors);
         var statusEffects = ReadArray<StatusEffectDef>(files, "Rules/status_effects.json", errors);
@@ -35,7 +36,7 @@ public static class ContentLoader
             throw new ContentValidationException(errors);
         }
 
-        var content = new GameContent(manifest, classes, skills, spells, statusEffects, factions, quests, items, monsters, rooms, dialogues);
+        var content = new GameContent(manifest, classes, backgrounds, skills, spells, statusEffects, factions, quests, items, monsters, rooms, dialogues);
 
         var validationErrors = ContentValidator.Validate(content);
         if (validationErrors.Count > 0)

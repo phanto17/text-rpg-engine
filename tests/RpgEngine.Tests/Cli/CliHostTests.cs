@@ -71,7 +71,7 @@ public sealed class CliHostTests
             var exit = CliHost.Run(["--data", directory], console);
 
             Assert.Equal(CliHost.ExitContentError, exit);
-            Assert.Contains("3 problem(s)", console.Output);
+            Assert.Contains("4 problem(s)", console.Output);
             Assert.Contains("game.json: required file is missing.", console.Output);
         }
         finally
