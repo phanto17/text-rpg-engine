@@ -296,7 +296,7 @@ CLI layout:
 - **Description order:** `description` on the first visit and for `look`, `revisit` on later visits, then the text of every passing `variants` entry.
 - **Entering a room:** the room is marked visited, then `onFirstEnter` runs (first visit only), then `onEnter` (every visit), then the room's encounter starts if its conditions pass.
 - **Exits:** when an exit's conditions fail, it shows as blocked if it has `blockedText` and is hidden otherwise (a secret passage).
-- **Features:** a feature with failing `conditions` is hidden. Interaction verbs must be one lowercase word. `inspect` shows the description and then runs any `inspect` interaction. Built-in verbs like `take` fall back to a matching interaction when no item matches.
+- **Features:** a feature with failing `conditions` is hidden. Interaction verbs must be one lowercase word. `inspect` shows the description and then runs any `inspect` interaction. Only `take`, `use`, and `inspect` fall back to a matching interaction (for `take` and `use`, when no item matches). Any other word the command parser claims (`restore`, `save`, `look`, `go`, `drop`, `talk`, `get`, `examine`, the direction words, and so on) is a validation error as an interaction verb, because typing it runs the built-in command instead.
 
 **Interaction resolution:**
 - Interactions sharing the same `(verb, target)` form a **group**.

@@ -398,6 +398,23 @@ public sealed class ContentValidatorTests
     }
 
     [Theory]
+    [InlineData("restore", true)]
+    [InlineData("save", true)]
+    [InlineData("north", true)]
+    [InlineData("examine", true)]
+    [InlineData("take", false)]
+    [InlineData("use", false)]
+    [InlineData("inspect", false)]
+    [InlineData("relight", false)]
+    public void Validate_InteractionVerb_RejectsBuiltInCommandsButNotFallbacks(string verb, bool rejected)
+    {
+        var errors = RoomErrors($$"""[ { "id": "start", "name": "S", "description": "D", "features": [ { "id": "beacon", "name": "beacon", "description": "Cold.", "interactions": [ { "verb": "{{verb}}" } ] } ] } ]""");
+
+        var expected = $"room 'start' feature 'beacon' interaction '{verb}': verb '{verb}' is a built-in command";
+        Assert.Equal(rejected, errors.Any(e => e.Contains(expected, StringComparison.Ordinal)));
+    }
+
+    [Theory]
     [InlineData("""[ { "id": "sage", "name": "Sage", "description": "Old.", "dialogue": "nobody" } ]""", "unknown dialogue 'nobody'")]
     [InlineData("""[ { "id": "sage", "name": "Sage", "description": "Old.", "dialogue": "nobody" }, { "id": "sage", "name": "Sage", "description": "Old.", "dialogue": "nobody" } ]""", "duplicate npc id")]
     [InlineData("""[ { "id": "sage", "name": "", "description": "Old.", "dialogue": "nobody" } ]""", "name must not be blank")]

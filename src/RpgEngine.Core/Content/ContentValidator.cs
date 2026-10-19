@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using RpgEngine.Core.Characters;
+using RpgEngine.Core.Commands;
 using RpgEngine.Core.Content.Defs;
 using RpgEngine.Core.Dice;
 
@@ -12,13 +13,20 @@ namespace RpgEngine.Core.Content;
 public static partial class ContentValidator
 {
     private static readonly HashSet<int> HitDice = [6, 8, 10, 12];
-    private static readonly HashSet<string> ReservedVerbs = new(StringComparer.Ordinal) { "go", "inventory", "stats", "journal", "save", "load", "help", "quit" };
+
+    // The only built-in commands that ExplorationService hands back to a same-named interaction.
+    // Their aliases ("get", "examine") still look up "take"/"inspect", so those stay reserved.
+    private static readonly HashSet<string> FallbackVerbs = new(StringComparer.Ordinal) { "take", "use", "inspect" };
 
     public static IReadOnlyList<string> Validate(GameContent content)
     {
         ArgumentNullException.ThrowIfNull(content);
         return new Run(content).Execute();
     }
+
+    // Asks the parser itself, so a new command word can never silently swallow an interaction verb.
+    private static bool ShadowsBuiltInCommand(string verb) =>
+        CommandParser.Parse(verb).Verb != CommandVerb.Interact && !FallbackVerbs.Contains(verb);
 
     [GeneratedRegex("^[a-z0-9]+(_[a-z0-9]+)*$", RegexOptions.CultureInvariant)]
     private static partial Regex SnakeCase();
@@ -635,9 +643,9 @@ public static partial class ContentValidator
                 {
                     Error(interactionContext, "verb must be a single lowercase word.");
                 }
-                else if (ReservedVerbs.Contains(interaction.Verb))
+                else if (ShadowsBuiltInCommand(interaction.Verb))
                 {
-                    Error(interactionContext, $"verb '{interaction.Verb}' is a built-in command and can never be reached.");
+                    Error(interactionContext, $"verb '{interaction.Verb}' is a built-in command, so typing it never reaches the interaction.");
                 }
 
                 if (interaction.Target is { } target && string.IsNullOrWhiteSpace(target))
