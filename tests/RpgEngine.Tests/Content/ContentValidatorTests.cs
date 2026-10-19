@@ -63,7 +63,7 @@ public sealed class ContentValidatorTests
                   { "text": "Leave.", "check": { "skill": "persuasion", "dc": 14, "disadvantageIf": [ { "type": "questStage", "quest": "main", "equals": 100 } ] },
                     "successNode": "friend", "failureNode": "gone", "retry": false },
                   { "text": "Bye.", "conditions": [ { "type": "flag", "flag": "met_sage" } ], "effects": [ { "type": "restoreMana", "amount": 1 } ], "end": true } ] },
-              { "id": "friend", "text": "Friend!", "effects": [ { "type": "heal", "dice": "1d4" }, { "type": "startCombat", "encounter": "rats" }, { "type": "startShop", "shop": "stall" } ] },
+              { "id": "friend", "text": "Friend!", "effects": [ { "type": "heal", "dice": "1d4" }, { "type": "startCombat", "encounter": "rats" }, { "type": "startShop", "shop": "stall" }, { "type": "applyStatus", "status": "defending" } ] },
               { "id": "gone", "text": "Begone.", "effects": [ { "type": "setFlag", "flag": "sage_gone" }, { "type": "clearFlag", "flag": "lit" },
                 { "type": "skillCheck", "check": { "skill": "insight", "dc": 10 }, "onSuccess": [ { "type": "moveTo", "room": "hall" } ] },
                 { "type": "startDialogue", "dialogue": "sage" }, { "type": "endGame" } ] }
@@ -505,6 +505,7 @@ public sealed class ContentValidatorTests
     [InlineData("""{ "type": "setQuestStage", "quest": "side", "stage": 10 }""", "unknown quest 'side'")]
     [InlineData("""{ "type": "giveItem", "item": "gem" }""", "unknown item 'gem'")]
     [InlineData("""{ "type": "startShop", "shop": "bazaar" }""", "startShop references unknown shop 'bazaar'")]
+    [InlineData("""{ "type": "applyStatus", "status": "hexed" }""", "applyStatus references unknown status effect 'hexed'")]
     [InlineData("""{ "type": "giveItem", "item": "key", "count": 0 }""", "giveItem count")]
     [InlineData("""{ "type": "removeItem", "item": "gem" }""", "unknown item 'gem'")]
     [InlineData("""{ "type": "removeItem", "item": "key", "count": 0 }""", "removeItem count")]

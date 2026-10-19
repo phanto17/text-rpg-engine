@@ -35,7 +35,8 @@ internal static class CombatFixture
           { "id": "chilled", "name": "Chilled", "description": "Numb.", "durationRounds": 2, "modifiers": { "attackRolls": "disadvantage" } },
           { "id": "burning", "name": "Burning", "description": "On fire.", "durationRounds": 2, "modifiers": { "damagePerTurn": "1d4" } },
           { "id": "stunned", "name": "Stunned", "description": "Dazed.", "durationRounds": 1, "modifiers": { "skipTurn": true } },
-          { "id": "inspired", "name": "Inspired", "description": "Bold.", "durationRounds": 1, "modifiers": { "attackRolls": "advantage" } }
+          { "id": "inspired", "name": "Inspired", "description": "Bold.", "durationRounds": 1, "modifiers": { "attackRolls": "advantage" } },
+          { "id": "warded", "name": "Warded", "description": "Shielded.", "durationRounds": 2, "modifiers": { "acBonus": 2 } }
         ]
         """;
 
@@ -55,7 +56,9 @@ internal static class CombatFixture
           { "id": "daze", "name": "Daze", "kind": "spell", "description": "Stun.", "target": "enemy",
             "resolution": { "type": "spellAttack", "damage": "1", "damageType": "psychic", "status": "stunned" } },
           { "id": "blast", "name": "Blast", "kind": "spell", "description": "Boom.", "target": "enemy",
-            "resolution": { "type": "save", "ability": "con", "dc": 12, "damage": "2d6", "damageType": "thunder" } }
+            "resolution": { "type": "save", "ability": "con", "dc": 12, "damage": "2d6", "damageType": "thunder" } },
+          { "id": "rally", "name": "Rally", "kind": "technique", "description": "Steady.", "cost": { "usesPerEncounter": 1 }, "target": "self",
+            "resolution": { "type": "effects", "effects": [ { "type": "heal", "dice": "3" }, { "type": "applyStatus", "status": "warded" } ] } }
         ]
         """;
 
@@ -67,7 +70,9 @@ internal static class CombatFixture
           { "id": "firebomb", "name": "Firebomb", "type": "consumable", "description": "Hiss.",
             "use": { "inCombat": true, "target": "enemy", "resolution": { "type": "autoHit", "damage": "2d4", "damageType": "fire" } } },
           { "id": "acid", "name": "Acid Flask", "type": "consumable", "description": "Fizz.",
-            "use": { "inCombat": true, "target": "enemy", "resolution": { "type": "spellAttack", "damage": "1d6", "damageType": "acid" } } }
+            "use": { "inCombat": true, "target": "enemy", "resolution": { "type": "spellAttack", "damage": "1d6", "damageType": "acid" } } },
+          { "id": "banner", "name": "War Banner", "type": "consumable", "description": "Snap.",
+            "use": { "inCombat": true, "consume": true, "effects": [ { "type": "applyStatus", "status": "inspired" } ] } }
         ]
         """;
 
@@ -104,13 +109,13 @@ internal static class CombatFixture
     public static GameContent Load() => Content().Load();
 
     /// <summary>STR 16, DEX 12, CON 14, INT 14, CHA 10; longsword (+5, 1d8+3) and chain mail (AC 16); 20 HP, 6 MP.</summary>
-    public static PlayerCharacter Hero(int maxHp = 20, int maxMana = 6, AbilityScores? abilities = null)
+    public static PlayerCharacter Hero(int maxHp = 20, int maxMana = 6, AbilityScores? abilities = null, IReadOnlyList<string>? spells = null)
     {
         var hero = TestCharacters.Create(
             abilities: abilities ?? TestCharacters.Scores(str: 16, dex: 12, con: 14, @int: 14),
             skills: ["persuasion"],
             saves: [Ability.Str, Ability.Con],
-            spells: ["second_wind", "sneak", "firebolt", "missile", "frost", "daze", "blast"],
+            spells: spells ?? ["second_wind", "sneak", "firebolt", "missile", "frost", "daze", "blast"],
             maxHp: maxHp,
             maxMana: maxMana,
             classId: "wizard");

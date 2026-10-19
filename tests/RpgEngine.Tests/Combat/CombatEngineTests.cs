@@ -233,6 +233,38 @@ public sealed class CombatEngineTests
     }
 
     [Fact]
+    public void Cast_SelfBuffTechnique_HealsAndAppliesItsStatusToThePlayer()
+    {
+        // init 15, 2 | rally (heal 3, no die) | brute: attack pick 0 (Slam), d20 12 (17 vs AC 18 = miss)
+        var combat = new CombatHarness(CombatFixture.Hero(spells: ["rally"]), dice: [15, 2, 0, 12]);
+        combat.World.Player.TakeDamage(5);
+        combat.Begin("brute");
+
+        var log = combat.Act(new CastAction("rally", null));
+
+        Assert.Contains(log.Events, e => e is HealedEvent { Amount: 3 });
+        Assert.Contains(new StatusAppliedEvent("Tester", "Warded"), log.Events);
+        Assert.Equal(18, combat.Session.Player.ArmorClass);
+        var slam = Assert.IsType<AttackRolledEvent>(combat.EnemyTurn().Events[0]);
+        Assert.Equal((17, 18, false), (slam.Total, slam.TargetArmorClass, slam.Hit));
+        Assert.Equal(18, combat.Session.Player.ArmorClass);
+    }
+
+    [Fact]
+    public void UseItem_SelfBuffConsumable_AppliesItsStatusAndIsConsumed()
+    {
+        var combat = new CombatHarness(dice: [15, 2]);
+        combat.World.Player.Inventory.Add("banner");
+        combat.Begin("brute");
+
+        var log = combat.Act(new UseItemAction("banner"));
+
+        Assert.Contains(new StatusAppliedEvent("Tester", "Inspired"), log.Events);
+        Assert.Equal(RollMode.Advantage, combat.Session.Player.AttackRollMode);
+        Assert.False(combat.World.Player.Inventory.Contains("banner"));
+    }
+
+    [Fact]
     public void SkipTurnStatus_SkipsTheMonstersTurnAndExpires()
     {
         var combat = new CombatHarness(dice: [15, 2, 15]);

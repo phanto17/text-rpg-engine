@@ -28,6 +28,7 @@ namespace RpgEngine.Core.Content.Defs;
 [JsonDerivedType(typeof(StartDialogueEffect), "startDialogue")]
 [JsonDerivedType(typeof(StartCombatEffect), "startCombat")]
 [JsonDerivedType(typeof(StartShopEffect), "startShop")]
+[JsonDerivedType(typeof(ApplyStatusEffect), "applyStatus")]
 [JsonDerivedType(typeof(EndGameEffect), "endGame")]
 [JsonDerivedType(typeof(IfEffect), "if")]
 public abstract record EffectDef;
@@ -158,6 +159,15 @@ public sealed record StartCombatEffect : EffectDef
 public sealed record StartShopEffect : EffectDef
 {
     public required string Shop { get; init; }
+}
+
+/// <summary>
+/// Puts a status effect on the player, such as a self-buff from a technique or a combat consumable.
+/// Statuses exist only in combat, so outside a fight this does nothing.
+/// </summary>
+public sealed record ApplyStatusEffect : EffectDef
+{
+    public required string Status { get; init; }
 }
 
 /// <summary>A full rest at a sanctuary: restores hit points and mana to their maximums.</summary>

@@ -17,6 +17,30 @@ public sealed class EffectApplierTests
     }
 
     [Fact]
+    public void ApplyStatus_OutsideCombat_DoesNothing()
+    {
+        var (game, log) = Run([new ApplyStatusEffect { Status = "defending" }]);
+
+        Assert.Empty(log.Events);
+        Assert.Empty(game.World.Flags);
+    }
+
+    [Fact]
+    public void ApplyStatus_WithAStatusTarget_ReachesItThroughNestedEffects()
+    {
+        var game = new TestWorld();
+        var applied = new List<string>();
+
+        game.Effects.Apply(
+            [new IfEffect { Conditions = [new NotFlagCondition { Flag = "x" }], Then = [new ApplyStatusEffect { Status = "chilled" }] }],
+            game.State,
+            new TurnLog(),
+            status => applied.Add(status.Id));
+
+        Assert.Equal(new[] { "chilled" }, applied);
+    }
+
+    [Fact]
     public void FlagsAndCounters_ChangeWorldState()
     {
         var (game, log) = Run(

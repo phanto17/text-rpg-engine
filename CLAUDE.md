@@ -200,7 +200,7 @@ CLI layout:
   - `spellAttack`: d20 + prof + casting mod vs AC, then `damage`, `damageType`, and an optional `status` on a hit
   - `weaponAttack`: normal weapon attack plus `bonusDamage`
   - `save`: `ability`, `dc` (default 8 + prof + casting mod), `damage`, `damageType`, `halfOnSave`, and an optional `status` on a failed save
-  - `effects`: `effects[]` run on the caster; `target` must be `self`
+  - `effects`: `effects[]` run on the caster; `target` must be `self`. An `applyStatus` effect here makes a self-buff, e.g. `[ { "type": "heal", "dice": "2d8+2" }, { "type": "applyStatus", "status": "vigilant" } ]`.
 - Every other resolution type needs `target: "enemy"`. The casting ability is the class's `mana.ability`.
 
 **`status_effects.json`**
@@ -242,7 +242,7 @@ CLI layout:
 - `type` is `weapon`, `armor`, `consumable`, `key`, `quest`, or `misc`.
 - AC = `baseAc` + DEX modifier, capped at `maxDexBonus` (`null` means no cap; `0` means heavy armor).
 - `use.target` is `self` (the default) or `enemy`.
-  - **`self`:** `use.effects` (required, non-empty) run on the user, in or out of combat.
+  - **`self`:** `use.effects` (required, non-empty) run on the user, in or out of combat. An `applyStatus` effect takes hold only in combat; used outside a fight, the item's other effects still run.
   - **`enemy`:** the item can only be used in combat (`inCombat: true`) and needs a `use.resolution`. The player picks a target, and the resolution works exactly like a spell's: `autoHit`, `spellAttack`, or `save`. Attack bonuses and default save DCs use the player's casting ability. Resistances, vulnerabilities, and immunities apply, so radiant holy water deals double damage to a radiant-vulnerable undead. `use.effects` must be empty.
 
 ### `Data/Bestiary/`
@@ -399,6 +399,7 @@ CLI layout:
 | `startDialogue` | `dialogue` |
 | `startCombat` | `encounter` |
 | `startShop` | `shop` (opens the buy and sell screen) |
+| `applyStatus` | `status` (a `status_effects.json` id); puts the status on the player. Statuses exist only in combat, so outside a fight it does nothing. Use it in self-targeted spell `effects` and self-targeted consumables. |
 | `endGame` | none; shows the first matching epilogue |
 
 ### Save files (`Saves/<slot>.json`, gitignored)

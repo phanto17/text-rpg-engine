@@ -52,6 +52,8 @@ public sealed class ContentSchemasTests
         var branches = effect["anyOf"]!.AsArray().Select(b => b!.AsObject()).ToList();
         Assert.Contains(branches, b => (string?)b["properties"]!["type"]!["const"] == "setFlag" && !(bool)b["additionalProperties"]!);
         Assert.Contains(branches, b => (string?)b["properties"]!["type"]!["const"] == "startShop");
+        var applyStatus = branches.Single(b => (string?)b["properties"]!["type"]!["const"] == "applyStatus");
+        Assert.Contains("status", applyStatus["required"]!.AsArray().Select(n => (string?)n));
     }
 
     [Fact]

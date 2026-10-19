@@ -498,7 +498,7 @@ public sealed class CombatSession
                 ResolveSave(name, save, target!, Player.ProficiencyBonus, castingModifier, log);
                 break;
             case EffectsResolutionDef effects:
-                _effects.Apply(effects.Effects, _state, log);
+                _effects.Apply(effects.Effects, _state, log, status => ApplyStatus(Player, status, log));
                 break;
         }
     }
@@ -530,7 +530,7 @@ public sealed class CombatSession
         if (target is null)
         {
             log.Add(new NarrationEvent(TextStyle.System, $"You use the {item.Name}."));
-            _effects.Apply(use.Effects, _state, log);
+            _effects.Apply(use.Effects, _state, log, status => ApplyStatus(Player, status, log));
         }
         else
         {

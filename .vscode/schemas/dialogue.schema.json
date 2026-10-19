@@ -746,6 +746,20 @@
                   {
                     "properties": {
                       "type": {
+                        "const": "applyStatus"
+                      },
+                      "status": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "status"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "properties": {
+                      "type": {
                         "const": "endGame"
                       }
                     },

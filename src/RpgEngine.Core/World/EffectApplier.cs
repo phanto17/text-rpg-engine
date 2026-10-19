@@ -28,7 +28,11 @@ public sealed class EffectApplier
         _text = text;
     }
 
-    public void Apply(IReadOnlyList<EffectDef> effects, GameState state, TurnLog log)
+    /// <summary>
+    /// Runs the effects in order. <paramref name="applyStatus"/> puts a status on the player; combat
+    /// supplies it, because statuses live on combatants. Without it, <c>applyStatus</c> does nothing.
+    /// </summary>
+    public void Apply(IReadOnlyList<EffectDef> effects, GameState state, TurnLog log, Action<StatusEffectDef>? applyStatus = null)
     {
         ArgumentNullException.ThrowIfNull(effects);
         ArgumentNullException.ThrowIfNull(state);
@@ -36,11 +40,11 @@ public sealed class EffectApplier
 
         foreach (var effect in effects)
         {
-            Apply(effect, state, log);
+            Apply(effect, state, log, applyStatus);
         }
     }
 
-    private void Apply(EffectDef effect, GameState state, TurnLog log)
+    private void Apply(EffectDef effect, GameState state, TurnLog log, Action<StatusEffectDef>? applyStatus)
     {
         var world = state.World;
         var player = state.Player;
@@ -105,12 +109,12 @@ public sealed class EffectApplier
             case SavingThrowEffect e:
                 var save = _checks.SavingThrow(player, e.Ability, e.Dc);
                 log.Add(new CheckRolledEvent(save));
-                Apply(save.Success ? e.OnSuccess : e.OnFail, state, log);
+                Apply(save.Success ? e.OnSuccess : e.OnFail, state, log, applyStatus);
                 break;
             case SkillCheckEffect e:
                 var check = _checks.Run(e.Check, state);
                 log.Add(new CheckRolledEvent(check));
-                Apply(check.Success ? e.OnSuccess : e.OnFail, state, log);
+                Apply(check.Success ? e.OnSuccess : e.OnFail, state, log, applyStatus);
                 break;
             case MessageEffect e:
                 log.Add(new NarrationEvent(e.Style, _text.Format(e.Text, player)));
@@ -127,11 +131,14 @@ public sealed class EffectApplier
             case StartShopEffect e:
                 log.Request(new StartShopTransition(e.Shop));
                 break;
+            case ApplyStatusEffect e:
+                applyStatus?.Invoke(_content.StatusEffects[e.Status]);
+                break;
             case EndGameEffect:
                 log.Request(new EndGameTransition());
                 break;
             case IfEffect e:
-                Apply(ConditionEvaluator.AllPass(e.Conditions, state) ? e.Then : e.Else, state, log);
+                Apply(ConditionEvaluator.AllPass(e.Conditions, state) ? e.Then : e.Else, state, log, applyStatus);
                 break;
             default:
                 throw new NotSupportedException($"Unsupported effect type '{effect.GetType().Name}'.");

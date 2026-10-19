@@ -1029,6 +1029,9 @@ public static partial class ContentValidator
                     }
 
                     break;
+                case ApplyStatusEffect status:
+                    RequireStatus(context, status.Status, "applyStatus");
+                    break;
                 case IfEffect ifEffect:
                     if (ifEffect.Conditions.Count == 0)
                     {
