@@ -86,5 +86,41 @@
     "cost": { "usesPerEncounter": 1 },
     "target": "self",
     "resolution": { "type": "effects", "effects": [ { "type": "heal", "dice": "1d8+1" } ] }
+  },
+  {
+    "id": "ash_brand",
+    "name": "Ash Brand",
+    "kind": "technique",
+    "description": "Drag your blade through the ash of your old vow until it smoulders, then bring it down. A weapon attack that deals an extra 1d8 damage, once per fight. Learned at level 2.",
+    "cost": { "usesPerEncounter": 1 },
+    "target": "enemy",
+    "resolution": { "type": "weaponAttack", "bonusDamage": "1d8" }
+  },
+  {
+    "id": "ledger_strike",
+    "name": "Ledger Strike",
+    "kind": "technique",
+    "description": "Read the whole account of a foe in one glance and collect it all at once. A weapon attack that deals an extra 2d6 damage, once per fight. Learned at level 2.",
+    "cost": { "usesPerEncounter": 1 },
+    "target": "enemy",
+    "resolution": { "type": "weaponAttack", "bonusDamage": "2d6" }
+  },
+  {
+    "id": "dirge_of_tallow",
+    "name": "Dirge of Tallow",
+    "kind": "spell",
+    "description": "Sing the long note that melts a candle down to its wick. The foe makes a Constitution save or takes 3d6 fire damage (half on a success). Learned at level 2.",
+    "cost": { "mana": 3 },
+    "target": "enemy",
+    "resolution": { "type": "save", "ability": "con", "damage": "3d6", "damageType": "fire", "halfOnSave": true }
+  },
+  {
+    "id": "ember_vigil",
+    "name": "Ember Vigil",
+    "kind": "spell",
+    "description": "Feed the cold ember in your ribs a little of your borrowed warmth and keep watch over your own heartbeat. Heals 1d6+2. Learned at level 2.",
+    "cost": { "mana": 1 },
+    "target": "self",
+    "resolution": { "type": "effects", "effects": [ { "type": "heal", "dice": "1d6+2" } ] }
   }
 ]

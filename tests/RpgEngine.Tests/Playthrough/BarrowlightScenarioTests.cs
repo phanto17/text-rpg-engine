@@ -65,6 +65,10 @@ public sealed class BarrowlightScenarioTests
 
         Assert.Contains(new CombatEndedEvent(CombatOutcome.Parleyed), parley);
         Assert.True(session.State.World.HasFlag("knight_laid_to_rest"));
+        var levelUp = Assert.Single(parley.OfType<LeveledUpEvent>());
+        Assert.Equal(2, levelUp.Level);
+        Assert.Equal("ledger_strike", Assert.Single(levelUp.NewSpells).Id);
+        Assert.Contains("ledger_strike", session.State.Player.SpellIds);
         Assert.Equal(GameMode.Exploration, session.Mode);
 
         // Claiming the lantern no longer ends the game: it opens the stair to the Under-Barrow.
@@ -169,6 +173,8 @@ public sealed class BarrowlightScenarioTests
 
         Assert.Contains(new CombatEndedEvent(CombatOutcome.Victory), finale);
         Assert.Contains(finale, e => e is XpGainedEvent { Amount: 125 });
+        Assert.Contains(finale, e => e is LeveledUpEvent { Level: 2 });
+        Assert.Equal((2, 20), (session.State.Player.Level, session.State.Player.MaxHp));
         Assert.True(session.State.World.HasFlag("knight_destroyed"));
 
         var claim = Do(session, "take the barrowlight");

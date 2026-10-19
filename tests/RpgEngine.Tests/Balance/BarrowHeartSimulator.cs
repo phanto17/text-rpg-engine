@@ -42,20 +42,22 @@ internal sealed class BarrowHeartSimulator
 
         for (var seed = 1; seed <= fights; seed++)
         {
-            var (won, fightRounds, player) = Fight(classId, withFlask, (ulong)seed);
+            var (won, fightRounds, startMaxHp, hpAtEnd) = Fight(classId, withFlask, (ulong)seed);
             rounds += fightRounds;
-            maxHp = player.MaxHp;
+            maxHp = startMaxHp;
             if (won)
             {
                 wins++;
-                hpLeft += player.CurrentHp;
+                hpLeft += hpAtEnd;
             }
         }
 
         return new BalanceRow(classId, withFlask, maxHp, fights, wins, rounds, hpLeft);
     }
 
-    private (bool Won, int Rounds, PlayerCharacter Player) Fight(string classId, bool withFlask, ulong seed)
+    // Returns the HP left as the fight ended: the victory XP may level the character up, and the
+    // hit points that level adds are not something the fight left behind.
+    private (bool Won, int Rounds, int StartMaxHp, int HpLeft) Fight(string classId, bool withFlask, ulong seed)
     {
         var dice = new DiceRoller(new Pcg32RandomSource(seed));
         var checks = new CheckRunner(_content, new CheckResolver(dice, _content.Rules.NaturalCritsOnChecks));
@@ -63,6 +65,7 @@ internal sealed class BarrowHeartSimulator
         var effects = new EffectApplier(_content, dice, checks, text);
 
         var player = CreatePlayer(classId);
+        var startMaxHp = player.MaxHp;
         if (withFlask)
         {
             player.Inventory.Add(BalancePolicy.Flask);
@@ -89,7 +92,7 @@ internal sealed class BarrowHeartSimulator
             }
         }
 
-        return (session.Outcome == CombatOutcome.Victory, session.Round, player);
+        return (session.Outcome == CombatOutcome.Victory, session.Round, startMaxHp, player.CurrentHp - (player.MaxHp - startMaxHp));
     }
 
     // Standard array by class priority, the first background, and the first listed skill choices it

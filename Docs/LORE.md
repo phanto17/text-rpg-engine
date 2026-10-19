@@ -76,6 +76,8 @@ To ground the protagonist in Greywater's world, character classes represent **Ca
    - *Lore:* A traveler who died on the night the Barrowlight went out and woke with a cold ember in their ribs. Walks the razor's edge between mortal agency and ghostly calcification. `shortsword` and `leather_armor`; *Hollow Rasp* (`hollow_rasp`, free 1d8 cold), *Borrowed Ember* (`borrowed_ember`, 2 MP, DEX save, 2d6 radiant, half on a save), and *Shroud of Ash* (`shroud_of_ash`, per-fight self-heal 1d8+1).
    - *Narrative Hook:* The dead recognize one of their own; the living are never quite sure.
 
+**Level 2 abilities** (`spellsByLevel`; both ways through the Barrow Heart reach level 2 at 100 XP): the Oath-Eater learns *Ash Brand* (`ash_brand`, weapon attack +1d8 once per fight), the Liminal Auditor *Ledger Strike* (`ledger_strike`, weapon attack +2d6 once per fight), the Vesper Cantor *Dirge of Tallow* (`dirge_of_tallow`, 3 MP, CON save, 3d6 fire, half on a save), and the Remnant Vessel *Ember Vigil* (`ember_vigil`, 1 MP self-heal 1d6+2). XP thresholds are `[0, 100, 300, 900, 2700]`.
+
 Every Calling starts with two `healing_potion`s. The balance check (`tests/RpgEngine.Tests/Balance/`) keeps each Calling's solo win rate against the Barrow Heart inside a band (about 55-80% without the holy water).
 
 ### Burdens (`Data/Rules/backgrounds.json`)

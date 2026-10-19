@@ -60,6 +60,8 @@ public sealed class GoldenPathTests
         Assert.Contains("COMBAT", output);
         Assert.Contains("[Religion DC 10] (advantage) Speak the Rite of Rest", output);
         Assert.Contains("Words won where steel did not.", output);
+        Assert.Contains("Level 2!", output);
+        Assert.Contains("Ledger Strike", output);
         Assert.Contains("+ the Barrowlight", output);
         Assert.Contains("its waking flame has unsealed a hidden stair beneath the sarcophagus", output);
         Assert.Contains("Descend the spiral stair into the Under-Barrow", output);
@@ -103,6 +105,7 @@ public sealed class GoldenPathTests
         Assert.Contains("Ser Halric takes 16 radiant damage (vulnerable!)", output);
         Assert.Contains("Ser Halric falls!", output);
         Assert.Contains("VICTORY", output);
+        Assert.Contains("Level 2!", output);
         Assert.Contains("the Barrowlight's flame settles into a thin, ash-pale glow", output);
         Assert.Contains("Ser Halric's shattered armor lies scattered in the ash behind you.", output);
     }

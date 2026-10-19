@@ -36,6 +36,18 @@ public sealed class RealDataTests
     }
 
     [Fact]
+    public void EveryCalling_LearnsOneAbilityAtLevelTwo()
+    {
+        var content = Content.Value;
+
+        Assert.Equal(new[] { 0, 100, 300, 900, 2700 }, content.Rules.XpThresholdsByLevel);
+        Assert.All(content.ClassList, cls => Assert.Single(Assert.Single(cls.SpellsByLevel, grant => grant.Level == 2).Spells));
+
+        // Both ways through the Barrow Heart (100 XP for a parley, 125 for a victory) reach level 2.
+        Assert.True(content.Monsters["gravebound_knight"].Xp >= content.Rules.XpThresholdsByLevel[1]);
+    }
+
+    [Fact]
     public void WrenAndHalric_AcknowledgeEveryCallingAndBurden()
     {
         var content = Content.Value;

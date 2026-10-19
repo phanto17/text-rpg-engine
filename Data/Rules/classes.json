@@ -15,7 +15,8 @@
       { "item": "chain_mail", "equip": true },
       { "item": "healing_potion", "count": 2 }
     ],
-    "spells": ["second_wind", "vowbreaker_strike"]
+    "spells": ["second_wind", "vowbreaker_strike"],
+    "spellsByLevel": [ { "level": 2, "spells": ["ash_brand"] } ]
   },
   {
     "id": "liminal_auditor",
@@ -35,7 +36,8 @@
       { "item": "dagger" },
       { "item": "healing_potion", "count": 2 }
     ],
-    "spells": ["sneak_attack", "grave_salt_feint"]
+    "spells": ["sneak_attack", "grave_salt_feint"],
+    "spellsByLevel": [ { "level": 2, "spells": ["ledger_strike"] } ]
   },
   {
     "id": "vesper_cantor",
@@ -53,7 +55,8 @@
       { "item": "quarterstaff", "equip": true },
       { "item": "healing_potion", "count": 2 }
     ],
-    "spells": ["fire_bolt", "magic_missile", "vesper_toll"]
+    "spells": ["fire_bolt", "magic_missile", "vesper_toll"],
+    "spellsByLevel": [ { "level": 2, "spells": ["dirge_of_tallow"] } ]
   },
   {
     "id": "remnant_vessel",
@@ -72,6 +75,7 @@
       { "item": "leather_armor", "equip": true },
       { "item": "healing_potion", "count": 2 }
     ],
-    "spells": ["hollow_rasp", "borrowed_ember", "shroud_of_ash"]
+    "spells": ["hollow_rasp", "borrowed_ember", "shroud_of_ash"],
+    "spellsByLevel": [ { "level": 2, "spells": ["ember_vigil"] } ]
   }
 ]
