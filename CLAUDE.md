@@ -450,6 +450,6 @@ A save from another format version is refused with a message naming its version 
 - [x] **CI:** GitHub Actions build and test on ubuntu-latest and windows-latest.
 - [ ] **Milestone 2 (the Under-Barrow):**
   - [x] 2A: four Callings, Burdens (backgrounds) with keepsakes, the `background` condition, save format v2, prologue reactivity
-  - [ ] 2B: sanctuary rests, leveling, shops
+  - [x] 2B: the `rest` effect, XP thresholds with level-ups and `spellsByLevel`, shops (`shops.json`, `startShop`, Shop mode)
   - [ ] 2C: Act I content (the Weeping Stair and Nocturne)
 - [ ] **Later:** parties, races, saving mid-combat, JSON Schema export for editor autocomplete.

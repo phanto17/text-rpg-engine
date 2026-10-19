@@ -4,7 +4,7 @@ A narrative-driven, text-based RPG engine for the terminal, written in C# on .NE
 
 The engine is **purely data-driven**. Every room, item, monster, line of dialogue, class, and rule constant is loaded from JSON in [`Data/`](Data/), so new adventures can be written without touching C#.
 
-> **Status:** **Milestone 1 (the vertical slice) is complete, and Milestone 2 is under way.** *Barrowlight* is a short, playable three-room prologue with character creation, a branching NPC conversation with skill checks and permanent consequences, a riddle-and-trap puzzle, and a boss you can fight, flee, or talk down. Milestone 2's first phase replaced the generic classes with four Greywater **Callings** and added **Burdens** (backgrounds) that the prologue reacts to.
+> **Status:** **Milestone 1 (the vertical slice) is complete, and Milestone 2 is under way.** *Barrowlight* is a short, playable three-room prologue with character creation, a branching NPC conversation with skill checks and permanent consequences, a riddle-and-trap puzzle, and a boss you can fight, flee, or talk down. Milestone 2 has so far replaced the generic classes with four Greywater **Callings**, added **Burdens** (backgrounds) that the prologue reacts to, and built the progression systems Act I needs: **leveling**, **sanctuary rests**, and **shops**.
 
 ---
 
@@ -14,6 +14,7 @@ The engine is **purely data-driven**. Every room, item, monster, line of dialogu
 - **Choices & consequences:** branching dialogue and event trees that read and write a global `WorldState` (flags, counters, faction reputation, quest stages). Choices permanently change the world.
 - **d20 mechanics:** STR/DEX/CON/INT/WIS/CHA, Callings (classes) and Burdens (backgrounds), proficiency and expertise, and inventory and equipment. Narrative skill checks show inline, e.g. `[Persuasion DC 12]`, with advantage and disadvantage.
 - **Tactical combat:** initiative, attacks against AC, crits, spells and techniques, status effects, resistances, and **Flee** and **Parley** options.
+- **Progression:** XP thresholds with automatic level-ups (more HP and mana, a better proficiency bonus, and new techniques), full rests at sanctuaries, and merchants who buy and sell with limited stock.
 - **Retro terminal UI** ([Spectre.Console](https://spectreconsole.net/)):
   - color-coded narration, HP/MP bars, stat tables, and animated dice rolls
   - **hybrid input**: pick numbered options or type classic commands like `look`, `inspect altar`, `press sun`
@@ -131,6 +132,10 @@ Useful flags (after `--`): `--seed <n>` for a reproducible run, `--no-anim` to s
 - **Parley** (when the foe will listen)
 - **Flee** (`[Acrobatics DC 10]`)
 
+**Leveling:** XP from victories and story moments levels you up automatically (at 100, 300, 900, and 2700 XP), with more HP, more mana for casters, and a new technique at level 2. `stats` shows how far the next level is.
+
+**Rest and trade:** a sanctuary (such as a brazier) restores your HP and mana in full. Merchants open a shop where you buy with gold and sell for half an item's value; quest items and the gear you're wearing stay with you.
+
 ## Writing content
 
 Everything lives in `Data/`. To add a room, an item, or a whole dialogue tree:
@@ -146,7 +151,7 @@ dotnet test
 dotnet test --collect:"XPlat Code Coverage"
 ```
 
-There are about 760 tests, all deterministic:
+There are about 810 tests, all deterministic:
 - **Unit tests** for every Core system. The dice and skill-check code has 100% line and branch coverage.
 - **Content validation** of the shipped `Data/`, plus fixtures that prove each validator rule catches what it should.
 - **Scenario tests** that play the Barrowlight storylines through the engine with scripted dice (`FixedRandomSource`).
@@ -168,7 +173,7 @@ Dice fairness is checked with fixed-seed chi-square tests.
 - [x] **CI:** GitHub Actions build and test on Ubuntu and Windows
 - [ ] **Milestone 2: the Under-Barrow**
   - [x] 2A: four Callings, Burdens (backgrounds) with keepsakes, and prologue reactivity
-  - [ ] 2B: sanctuary rests, leveling, and shops
+  - [x] 2B: sanctuary rests, leveling, and shops
   - [ ] 2C: Act I, the Weeping Stair and Nocturne
 - [ ] **Later:** multi-character parties, races, more dungeons, saving mid-combat, JSON Schema export for editor autocomplete
 
