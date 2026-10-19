@@ -8,6 +8,10 @@ public sealed record PlayerData
 
     public required string ClassId { get; init; }
 
+    // Optional only so an older save still deserializes and reaches the friendly version check;
+    // Restore rejects a save without one.
+    public string? Background { get; init; }
+
     public required int Level { get; init; }
 
     public required int Xp { get; init; }

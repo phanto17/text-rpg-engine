@@ -109,6 +109,7 @@ public sealed partial class SaveService
             {
                 Name = player.Name,
                 ClassId = player.ClassId,
+                Background = player.BackgroundId,
                 Level = player.Level,
                 Xp = player.Xp,
                 Abilities = player.Abilities,
@@ -146,6 +147,7 @@ public sealed partial class SaveService
         var data = save.Player;
 
         Require(content.Classes.ContainsKey(data.ClassId), $"unknown class '{data.ClassId}'");
+        Require(data.Background is not null && content.Backgrounds.ContainsKey(data.Background), $"unknown background '{data.Background ?? "(none)"}'");
         Require(content.Rooms.ContainsKey(save.CurrentRoom), $"unknown room '{save.CurrentRoom}'");
         foreach (var itemId in data.Inventory.Select(e => e.ItemId).Concat(save.World.RoomItems.Values.SelectMany(items => items)))
         {
@@ -166,6 +168,7 @@ public sealed partial class SaveService
             player = new PlayerCharacter(
                 data.Name,
                 data.ClassId,
+                data.Background!,
                 data.Abilities,
                 data.MaxHp,
                 data.MaxMana,

@@ -13,6 +13,7 @@ public sealed class GoldenPathTests
         "1",            // title: new game
         "Tamsin",       // name
         "2",            // class: rogue
+        "2",            // burden: Ash Deserter (religion, outside the rogue's list)
         "1",            // standard array
         "1",            // keep suggested scores
         "8 4 7 10",     // persuasion, insight, perception, stealth
@@ -20,7 +21,8 @@ public sealed class GoldenPathTests
         "y",            // begin
     ];
 
-    private static readonly string[] CreateFighter = ["1", "Bram", "1", "1", "1", "3 6", "y"];
+    // Fighter with the Moor Bailiff burden (persuasion, outside the fighter's list).
+    private static readonly string[] CreateFighter = ["1", "Bram", "1", "3", "1", "1", "3 6", "y"];
 
     private static readonly string[] OpenTheDoor = ["down", "press sun", "press moon", "press skull", "east"];
 
@@ -132,7 +134,7 @@ public sealed class GoldenPathTests
 
         string[] inputs =
         [
-            "1", "Ilse", "3", "1", "1", "6 1", "y",
+            "1", "Ilse", "3", "4", "1", "1", "6 1", "y",
             .. OpenTheDoor,
             "2",        // Spells and techniques
             "0",        // back
@@ -177,6 +179,8 @@ public sealed class GoldenPathTests
         Assert.Contains("Loaded 'test-slot'.", output);
         Assert.Contains("replay with --seed 7", output);
         Assert.Contains("Chain Mail", output);
+        Assert.Contains("Burden Moor Bailiff", output);
+        Assert.Contains("Keepsake Elders' Writ", output);
         Assert.Contains("Commands", output);
         Assert.Contains("The Barrowlight lies somewhere inside the barrow", output);
         Assert.Contains("A woman of perhaps forty", output);
@@ -196,6 +200,7 @@ public sealed class GoldenPathTests
             "Wren's Cousin",
             "bard",                     // unknown class name is ignored
             "Rogue",                    // class by name
+            "Ash Deserter",             // burden by name
             "2",                        // roll 4d6 drop lowest (lucky: all 18s)
             "2",                        // assign manually
             "1", "1", "1", "1", "1", "1",
@@ -203,7 +208,7 @@ public sealed class GoldenPathTests
             "1 2 3 4",
             "1 2",
             "n",                        // start over
-            "Tamsin", "1", "1", "1", "1 2", "y",
+            "Tamsin", "1", "3", "1", "1", "1 2", "y",
             "quit", "y",
             "2",
         ];

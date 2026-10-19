@@ -12,6 +12,7 @@ public sealed class PlayerCharacter : ICheckSubject
     public PlayerCharacter(
         string name,
         string classId,
+        string backgroundId,
         AbilityScores abilities,
         int maxHp,
         int maxMana,
@@ -23,6 +24,7 @@ public sealed class PlayerCharacter : ICheckSubject
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentException.ThrowIfNullOrWhiteSpace(classId);
+        ArgumentException.ThrowIfNullOrWhiteSpace(backgroundId);
         ArgumentNullException.ThrowIfNull(abilities);
         ArgumentOutOfRangeException.ThrowIfLessThan(maxHp, 1);
         ArgumentOutOfRangeException.ThrowIfNegative(maxMana);
@@ -34,6 +36,7 @@ public sealed class PlayerCharacter : ICheckSubject
 
         Name = name.Trim();
         ClassId = classId;
+        BackgroundId = backgroundId;
         Abilities = abilities;
         MaxHp = maxHp;
         CurrentHp = maxHp;
@@ -54,6 +57,9 @@ public sealed class PlayerCharacter : ICheckSubject
     public string Name { get; }
 
     public string ClassId { get; }
+
+    /// <summary>The protagonist's burden (background), chosen after the class.</summary>
+    public string BackgroundId { get; }
 
     public int Level { get; private set; } = 1;
 

@@ -18,10 +18,12 @@ internal static class TestCharacters
         int maxHp = 10,
         int maxMana = 0,
         string classId = "fighter",
-        string name = "Tester") =>
+        string name = "Tester",
+        string backgroundId = "orphan") =>
         new(
             name,
             classId,
+            backgroundId,
             abilities ?? Scores(),
             maxHp,
             maxMana,

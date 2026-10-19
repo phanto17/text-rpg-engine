@@ -57,7 +57,11 @@ public sealed class CharacterFactory
         return cls.Mana is { } mana ? Math.Max(0, mana.Base + scores.Modifier(mana.Ability)) : 0;
     }
 
-    public PlayerCharacter Create(string name, string classId, AbilityScores scores, IReadOnlyCollection<string> skills, IReadOnlyCollection<string> expertise)
+    /// <summary>
+    /// Builds a level 1 character. <paramref name="skills"/> are the class picks only: the
+    /// background's bonus skill is granted on top and may not be picked again.
+    /// </summary>
+    public PlayerCharacter Create(string name, string classId, string backgroundId, AbilityScores scores, IReadOnlyCollection<string> skills, IReadOnlyCollection<string> expertise)
     {
         ArgumentNullException.ThrowIfNull(scores);
         ArgumentNullException.ThrowIfNull(skills);
@@ -74,10 +78,20 @@ public sealed class CharacterFactory
             throw new ArgumentException($"Unknown class '{classId}'.", nameof(classId));
         }
 
+        if (!_content.Backgrounds.TryGetValue(backgroundId ?? string.Empty, out var background))
+        {
+            throw new ArgumentException($"Unknown background '{backgroundId}'.", nameof(backgroundId));
+        }
+
         var choices = cls.SkillChoices;
         if (skills.Count != choices.Count || skills.Distinct(StringComparer.Ordinal).Count() != skills.Count || !skills.All(choices.From.Contains))
         {
             throw new ArgumentException($"Choose exactly {choices.Count} different skills from the {cls.Name} list.", nameof(skills));
+        }
+
+        if (skills.Contains(background.BonusSkill))
+        {
+            throw new ArgumentException($"Your {background.Name} background already grants that skill; choose another.", nameof(skills));
         }
 
         if (expertise.Count != cls.ExpertiseCount || expertise.Distinct(StringComparer.Ordinal).Count() != expertise.Count || !expertise.All(skills.Contains))
@@ -88,16 +102,17 @@ public sealed class CharacterFactory
         var player = new PlayerCharacter(
             trimmed,
             cls.Id,
+            background.Id,
             scores,
             MaxHp(cls, scores),
             MaxMana(cls, scores),
-            skills,
+            skills.Append(background.BonusSkill),
             expertise,
             cls.SavingThrows,
             cls.Spells,
             _content.Rules.ProficiencyBonusByLevel);
 
-        player.AddGold(_content.Manifest.StartingGold);
+        player.AddGold(_content.Manifest.StartingGold + background.BonusGold);
         foreach (var starting in cls.StartingItems)
         {
             player.Inventory.Add(starting.Item, starting.Count);
@@ -115,6 +130,8 @@ public sealed class CharacterFactory
             }
         }
 
+        // Last, so combat item menus keep listing the class's consumables first.
+        player.Inventory.Add(background.KeepsakeItem);
         return player;
     }
 }

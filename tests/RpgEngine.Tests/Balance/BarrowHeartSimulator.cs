@@ -92,14 +92,16 @@ internal sealed class BarrowHeartSimulator
         return (session.Outcome == CombatOutcome.Victory, session.Round, player);
     }
 
-    // Standard array by class priority; the first listed skill choices (and the first of those for
-    // expertise). Skills never come into play because the policy neither parleys nor flees.
+    // Standard array by class priority, the first background, and the first listed skill choices it
+    // leaves (and the first of those for expertise). Backgrounds only add a skill, gold, and a
+    // keepsake, and skills never come into play because the policy neither parleys nor flees.
     private PlayerCharacter CreatePlayer(string classId)
     {
         var cls = _content.Classes[classId];
+        var background = _content.BackgroundList[0];
         var scores = CharacterFactory.AssignByPriority(_content.Rules.StandardArray, cls);
-        var skills = cls.SkillChoices.From.Take(cls.SkillChoices.Count).ToList();
+        var skills = cls.SkillChoices.From.Where(skill => skill != background.BonusSkill).Take(cls.SkillChoices.Count).ToList();
         var expertise = skills.Take(cls.ExpertiseCount).ToList();
-        return new CharacterFactory(_content).Create("Tester", classId, scores, skills, expertise);
+        return new CharacterFactory(_content).Create("Tester", classId, background.Id, scores, skills, expertise);
     }
 }

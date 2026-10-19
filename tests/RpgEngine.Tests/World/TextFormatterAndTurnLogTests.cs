@@ -14,15 +14,17 @@ public sealed class TextFormatterAndTurnLogTests
         var hero = TestCharacters.Create(name: "Bram", classId: "fighter");
 
         Assert.Equal("Bram the Fighter waits.", formatter.Format("{player.name} the {player.class} waits.", hero));
+        Assert.Equal("Once an Orphan.", formatter.Format("Once an {player.background}.", hero));
     }
 
     [Fact]
-    public void Format_UnknownClass_FallsBackToId()
+    public void Format_UnknownClassOrBackground_FallsBackToId()
     {
         var formatter = new TextFormatter(new TestContent().Load());
-        var hero = TestCharacters.Create(classId: "bard");
+        var hero = TestCharacters.Create(classId: "bard", backgroundId: "noble");
 
         Assert.Equal("A bard.", formatter.Format("A {player.class}.", hero));
+        Assert.Equal("A noble.", formatter.Format("A {player.background}.", hero));
     }
 
     [Fact]

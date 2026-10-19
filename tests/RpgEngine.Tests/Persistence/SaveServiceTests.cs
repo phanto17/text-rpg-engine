@@ -75,6 +75,7 @@ public sealed class SaveServiceTests : IDisposable
         var state = service.Load("slot1", _content).State;
 
         Assert.Equal(("Aria", 7, 3, 17, 40), (state.Player.Name, state.Player.CurrentHp, state.Player.CurrentMana, state.Player.Gold, state.Player.Xp));
+        Assert.Equal("orphan", state.Player.BackgroundId);
         Assert.Equal(Core.Characters.ProficiencyLevel.Expertise, state.Player.GetSkillProficiency("stealth"));
         Assert.Equal("sword", state.Player.EquippedWeaponId);
         Assert.Equal(2, state.Player.Inventory.CountOf("potion"));
@@ -107,14 +108,43 @@ public sealed class SaveServiceTests : IDisposable
     {
         var service = Service();
         var path = service.Save(BusyState(), _content, "slot1");
-        File.WriteAllText(path, File.ReadAllText(path).Replace("\"saveVersion\": 1", "\"saveVersion\": 99", StringComparison.Ordinal));
+        File.WriteAllText(path, File.ReadAllText(path).Replace("\"saveVersion\": 2", "\"saveVersion\": 99", StringComparison.Ordinal));
 
         var exception = Assert.Throws<SaveGameException>(() => service.Load("slot1", _content));
         Assert.Contains("version 99", exception.Message);
     }
 
+    [Fact]
+    public void Load_VersionOneSaveWithoutBackground_ReportsTheFormatVersion()
+    {
+        // A version 1 save has no background. It must still parse, so the player is told the save
+        // is from an older format rather than that the file is unreadable.
+        var service = Service();
+        var path = service.Save(BusyState(), _content, "slot1");
+        var json = File.ReadAllText(path)
+            .Replace("\"saveVersion\": 2", "\"saveVersion\": 1", StringComparison.Ordinal)
+            .Replace("\"background\": \"orphan\",", string.Empty, StringComparison.Ordinal);
+        Assert.DoesNotContain("background", json);
+        File.WriteAllText(path, json);
+
+        var exception = Assert.Throws<SaveGameException>(() => service.Load("slot1", _content));
+        Assert.Contains("version 1", exception.Message);
+        Assert.DoesNotContain("could not be read", exception.Message);
+    }
+
+    [Fact]
+    public void Restore_SaveWithoutBackground_Throws()
+    {
+        var save = SaveService.Capture(BusyState(), _content, Noon);
+        var withoutBackground = save with { Player = save.Player with { Background = null } };
+
+        var exception = Assert.Throws<SaveGameException>(() => SaveService.Restore(withoutBackground, _content));
+        Assert.Contains("unknown background '(none)'", exception.Message);
+    }
+
     [Theory]
     [InlineData("\"classId\": \"fighter\"", "\"classId\": \"bard\"", "unknown class 'bard'")]
+    [InlineData("\"background\": \"orphan\"", "\"background\": \"noble\"", "unknown background 'noble'")]
     [InlineData("\"currentRoom\": \"hall\"", "\"currentRoom\": \"void\"", "unknown room 'void'")]
     [InlineData("\"itemId\": \"sword\"", "\"itemId\": \"laser\"", "unknown item 'laser'")]
     [InlineData("\"second_wind\"", "\"fireball\"", "unknown spell 'fireball'")]

@@ -45,6 +45,7 @@ public sealed class PlayerCharacterTests
         Assert.Throws<ArgumentOutOfRangeException>(() => TestCharacters.Create(maxHp: 0));
         Assert.Throws<ArgumentOutOfRangeException>(() => TestCharacters.Create(maxMana: -1));
         Assert.Throws<ArgumentException>(() => TestCharacters.Create(name: " "));
+        Assert.Throws<ArgumentException>(() => TestCharacters.Create(backgroundId: " "));
     }
 
     [Fact]

@@ -51,7 +51,7 @@ internal static class SessionFixture
 
     public static PlayerCharacter Hero(GameContent content, int? hp = null)
     {
-        var hero = new CharacterFactory(content).Create("Tester", "fighter", TestCharacters.Scores(str: 16, dex: 12, con: 14), ["athletics", "persuasion"], []);
+        var hero = new CharacterFactory(content).Create("Tester", "fighter", "orphan", TestCharacters.Scores(str: 16, dex: 12, con: 14), ["athletics", "persuasion"], []);
         if (hp is { } target)
         {
             hero.TakeDamage(hero.MaxHp - target);

@@ -815,6 +815,13 @@ public static partial class ContentValidator
                     }
 
                     break;
+                case BackgroundCondition background:
+                    if (!content.Backgrounds.ContainsKey(background.BackgroundId))
+                    {
+                        Error(context, $"condition references unknown background '{background.BackgroundId}'.");
+                    }
+
+                    break;
                 case AbilityScoreCondition ability:
                     RequireRange(context, ability.Min, AbilityScores.MinScore, AbilityScores.MaxScore, "abilityScore min");
                     break;

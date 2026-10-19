@@ -15,6 +15,7 @@ namespace RpgEngine.Core.Content.Defs;
 [JsonDerivedType(typeof(ReputationCondition), "reputation")]
 [JsonDerivedType(typeof(QuestStageCondition), "questStage")]
 [JsonDerivedType(typeof(ClassCondition), "class")]
+[JsonDerivedType(typeof(BackgroundCondition), "background")]
 [JsonDerivedType(typeof(AbilityScoreCondition), "abilityScore")]
 [JsonDerivedType(typeof(VisitedCondition), "visited")]
 [JsonDerivedType(typeof(AllCondition), "all")]
@@ -83,6 +84,12 @@ public sealed record ClassCondition : ConditionDef
 {
     [JsonPropertyName("class")]
     public required string ClassId { get; init; }
+}
+
+public sealed record BackgroundCondition : ConditionDef
+{
+    [JsonPropertyName("background")]
+    public required string BackgroundId { get; init; }
 }
 
 public sealed record AbilityScoreCondition : ConditionDef

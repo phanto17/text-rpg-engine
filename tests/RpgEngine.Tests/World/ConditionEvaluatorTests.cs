@@ -81,6 +81,8 @@ public sealed class ConditionEvaluatorTests
     {
         Assert.True(Passes(new ClassCondition { ClassId = "fighter" }));
         Assert.False(Passes(new ClassCondition { ClassId = "wizard" }));
+        Assert.True(Passes(new BackgroundCondition { BackgroundId = "orphan" }));
+        Assert.False(Passes(new BackgroundCondition { BackgroundId = "bailiff" }));
         Assert.True(Passes(new AbilityScoreCondition { Ability = Ability.Str, Min = 16 }));
         Assert.False(Passes(new AbilityScoreCondition { Ability = Ability.Str, Min = 17 }));
     }

@@ -70,10 +70,12 @@ public sealed class CharacterFactoryTests
     {
         var scores = TestCharacters.Scores(str: 15, con: 14, dex: 13);
 
-        var hero = Factory.Create("  Bram  ", "fighter", scores, ["athletics", "persuasion"], []);
+        var hero = Factory.Create("  Bram  ", "fighter", "orphan", scores, ["athletics", "persuasion"], []);
 
-        Assert.Equal(("Bram", "fighter", 1, 12, 0, 5), (hero.Name, hero.ClassId, hero.Level, hero.MaxHp, hero.MaxMana, hero.Gold));
+        Assert.Equal(("Bram", "fighter", "orphan", 1, 12, 0, 5), (hero.Name, hero.ClassId, hero.BackgroundId, hero.Level, hero.MaxHp, hero.MaxMana, hero.Gold));
         Assert.Equal(ProficiencyLevel.Proficient, hero.GetSkillProficiency("athletics"));
+        Assert.Equal(ProficiencyLevel.Proficient, hero.GetSkillProficiency("stealth"));
+        Assert.Equal(new[] { "sword", "mail", "potion", "relic" }, hero.Inventory.Entries.Select(e => e.ItemId));
         Assert.True(hero.IsProficientInSave(Ability.Con));
         Assert.Equal(("sword", "mail"), (hero.EquippedWeaponId, hero.EquippedArmorId));
         Assert.Equal(2, hero.Inventory.CountOf("potion"));
@@ -83,7 +85,7 @@ public sealed class CharacterFactoryTests
     [Fact]
     public void Create_WizardWithExpertise()
     {
-        var hero = Factory.Create("Ilse", "wizard", TestCharacters.Scores(@int: 15), ["religion", "insight"], ["religion"]);
+        var hero = Factory.Create("Ilse", "wizard", "orphan", TestCharacters.Scores(@int: 15), ["religion", "insight"], ["religion"]);
 
         Assert.Equal(ProficiencyLevel.Expertise, hero.GetSkillProficiency("religion"));
         Assert.Equal(6, hero.MaxMana);
@@ -91,19 +93,31 @@ public sealed class CharacterFactoryTests
         Assert.Null(hero.EquippedArmorId);
     }
 
-    [Theory]
-    [InlineData("", "fighter", new[] { "athletics", "persuasion" }, new string[0], "name")]
-    [InlineData("A name that is far too long to fit", "fighter", new[] { "athletics", "persuasion" }, new string[0], "name")]
-    [InlineData("Bram", "bard", new[] { "athletics", "persuasion" }, new string[0], "classId")]
-    [InlineData("Bram", "fighter", new[] { "athletics" }, new string[0], "skills")]
-    [InlineData("Bram", "fighter", new[] { "athletics", "athletics" }, new string[0], "skills")]
-    [InlineData("Bram", "fighter", new[] { "athletics", "stealth" }, new string[0], "skills")]
-    [InlineData("Bram", "fighter", new[] { "athletics", "persuasion" }, new[] { "athletics" }, "expertise")]
-    [InlineData("Ilse", "wizard", new[] { "religion", "insight" }, new string[0], "expertise")]
-    [InlineData("Ilse", "wizard", new[] { "religion", "insight" }, new[] { "perception" }, "expertise")]
-    public void Create_InvalidChoices_Throw(string name, string classId, string[] skills, string[] expertise, string parameter)
+    [Fact]
+    public void Create_BurdenAddsItsSkillGoldAndKeepsake()
     {
-        var exception = Assert.Throws<ArgumentException>(() => Factory.Create(name, classId, TestCharacters.Scores(), skills, expertise));
+        var hero = Factory.Create("Mara", "fighter", "bailiff", TestCharacters.Scores(), ["athletics", "intimidation"], []);
+
+        Assert.Equal(15, hero.Gold);
+        Assert.Equal(new[] { "athletics", "intimidation", "persuasion" }, hero.ProficientSkills.Order(StringComparer.Ordinal));
+        Assert.True(hero.Inventory.Contains("key"));
+    }
+
+    [Theory]
+    [InlineData("", "fighter", "orphan", new[] { "athletics", "persuasion" }, new string[0], "name")]
+    [InlineData("A name that is far too long to fit", "fighter", "orphan", new[] { "athletics", "persuasion" }, new string[0], "name")]
+    [InlineData("Bram", "bard", "orphan", new[] { "athletics", "persuasion" }, new string[0], "classId")]
+    [InlineData("Bram", "fighter", "orphan", new[] { "athletics" }, new string[0], "skills")]
+    [InlineData("Bram", "fighter", "orphan", new[] { "athletics", "athletics" }, new string[0], "skills")]
+    [InlineData("Bram", "fighter", "orphan", new[] { "athletics", "stealth" }, new string[0], "skills")]
+    [InlineData("Bram", "fighter", "orphan", new[] { "athletics", "persuasion" }, new[] { "athletics" }, "expertise")]
+    [InlineData("Ilse", "wizard", "orphan", new[] { "religion", "insight" }, new string[0], "expertise")]
+    [InlineData("Ilse", "wizard", "orphan", new[] { "religion", "insight" }, new[] { "perception" }, "expertise")]
+    [InlineData("Bram", "fighter", "noble", new[] { "athletics", "persuasion" }, new string[0], "backgroundId")]
+    [InlineData("Bram", "fighter", "bailiff", new[] { "athletics", "persuasion" }, new string[0], "skills")]
+    public void Create_InvalidChoices_Throw(string name, string classId, string backgroundId, string[] skills, string[] expertise, string parameter)
+    {
+        var exception = Assert.Throws<ArgumentException>(() => Factory.Create(name, classId, backgroundId, TestCharacters.Scores(), skills, expertise));
 
         Assert.Equal(parameter, exception.ParamName);
     }
@@ -112,9 +126,9 @@ public sealed class CharacterFactoryTests
     public void Create_NullArguments_Throw()
     {
         Assert.Throws<ArgumentNullException>(() => new CharacterFactory(null!));
-        Assert.Throws<ArgumentNullException>(() => Factory.Create("x", "fighter", null!, [], []));
-        Assert.Throws<ArgumentNullException>(() => Factory.Create("x", "fighter", TestCharacters.Scores(), null!, []));
-        Assert.Throws<ArgumentNullException>(() => Factory.Create("x", "fighter", TestCharacters.Scores(), [], null!));
-        Assert.Throws<ArgumentException>(() => Factory.Create(null!, "fighter", TestCharacters.Scores(), ["athletics", "persuasion"], []));
+        Assert.Throws<ArgumentNullException>(() => Factory.Create("x", "fighter", "orphan", null!, [], []));
+        Assert.Throws<ArgumentNullException>(() => Factory.Create("x", "fighter", "orphan", TestCharacters.Scores(), null!, []));
+        Assert.Throws<ArgumentNullException>(() => Factory.Create("x", "fighter", "orphan", TestCharacters.Scores(), [], null!));
+        Assert.Throws<ArgumentException>(() => Factory.Create(null!, "fighter", "orphan", TestCharacters.Scores(), ["athletics", "persuasion"], []));
     }
 }

@@ -17,6 +17,13 @@ internal sealed class InfoScreens(UiContext ui)
         var weapon = CombatRules.Weapon(player, content);
 
         var vitals = new Grid().AddColumn().AddColumn();
+        if (content.Backgrounds.TryGetValue(player.BackgroundId, out var background))
+        {
+            var keepsake = content.Items[background.KeepsakeItem];
+            vitals.AddRow($"[{Theme.Muted}]Burden[/]", Markup.Escape(background.Name));
+            vitals.AddRow($"[{Theme.Muted}]Keepsake[/]", player.Inventory.Contains(keepsake.Id) ? Markup.Escape(keepsake.Name) : $"[{Theme.Muted}]{Markup.Escape(keepsake.Name)} (lost)[/]");
+        }
+
         vitals.AddRow($"[{Theme.Muted}]Hit points[/]", Bars.Hp(player.CurrentHp, player.MaxHp, ui.Unicode));
         if (player.MaxMana > 0)
         {

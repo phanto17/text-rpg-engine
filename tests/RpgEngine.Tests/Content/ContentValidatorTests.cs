@@ -24,7 +24,7 @@ public sealed class ContentValidatorTests
                 "interactions": [
                   { "verb": "open", "conditions": [ { "type": "hasItem", "item": "key" } ], "text": "Click.",
                     "effects": [ { "type": "setFlag", "flag": "door_open" }, { "type": "removeItem", "item": "key" } ] },
-                  { "verb": "search", "once": true, "check": { "skill": "perception", "dc": 12, "advantageIf": [ { "type": "class", "class": "fighter" } ] },
+                  { "verb": "search", "once": true, "check": { "skill": "perception", "dc": 12, "advantageIf": [ { "type": "any", "conditions": [ { "type": "class", "class": "fighter" }, { "type": "background", "background": "orphan" } ] } ] },
                     "success": { "text": "A key!", "effects": [ { "type": "giveItem", "item": "key" } ] },
                     "failure": { "text": "Nothing." } },
                   { "verb": "pull", "target": "lever", "effects": [ { "type": "addCounter", "counter": "levers", "amount": 1 } ] } ] },
@@ -424,6 +424,7 @@ public sealed class ContentValidatorTests
     [InlineData("""{ "type": "questStage", "quest": "side", "min": 1 }""", "unknown quest 'side'")]
     [InlineData("""{ "type": "questStage", "quest": "main" }""", "needs at least one of min, max, or equals")]
     [InlineData("""{ "type": "class", "class": "bard" }""", "unknown class 'bard'")]
+    [InlineData("""{ "type": "background", "background": "noble" }""", "unknown background 'noble'")]
     [InlineData("""{ "type": "abilityScore", "ability": "str", "min": 0 }""", "abilityScore min")]
     [InlineData("""{ "type": "visited", "room": "void" }""", "unknown room 'void'")]
     [InlineData("""{ "type": "all", "conditions": [] }""", "'all' condition needs at least one")]

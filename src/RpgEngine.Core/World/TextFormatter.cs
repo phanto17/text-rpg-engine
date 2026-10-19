@@ -3,7 +3,7 @@ using RpgEngine.Core.Content;
 
 namespace RpgEngine.Core.World;
 
-/// <summary>Fills content text tokens: <c>{player.name}</c> and <c>{player.class}</c>.</summary>
+/// <summary>Fills content text tokens: <c>{player.name}</c>, <c>{player.class}</c>, and <c>{player.background}</c>.</summary>
 public sealed class TextFormatter
 {
     private readonly GameContent _content;
@@ -20,8 +20,10 @@ public sealed class TextFormatter
         ArgumentNullException.ThrowIfNull(player);
 
         var className = _content.Classes.TryGetValue(player.ClassId, out var cls) ? cls.Name : player.ClassId;
+        var backgroundName = _content.Backgrounds.TryGetValue(player.BackgroundId, out var background) ? background.Name : player.BackgroundId;
         return text
             .Replace("{player.name}", player.Name, StringComparison.Ordinal)
-            .Replace("{player.class}", className, StringComparison.Ordinal);
+            .Replace("{player.class}", className, StringComparison.Ordinal)
+            .Replace("{player.background}", backgroundName, StringComparison.Ordinal);
     }
 }

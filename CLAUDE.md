@@ -117,7 +117,7 @@ CLI layout:
 - **Abilities:** `str dex con int wis cha`.
 - **Directions:** `north south east west up down in out`.
 - **Damage types (SRD):** `acid bludgeoning cold fire force lightning necrotic piercing poison psychic radiant slashing thunder`.
-- **Text:** plain strings, with paragraphs separated by `\n\n`. Supported tokens are `{player.name}` and `{player.class}`.
+- **Text:** plain strings, with paragraphs separated by `\n\n`. Supported tokens are `{player.name}`, `{player.class}`, and `{player.background}`.
 
 ### `Data/game.json`: manifest and rule constants
 ```json
@@ -354,6 +354,7 @@ CLI layout:
 | `reputation` | `faction`, `min?`, `max?` |
 | `questStage` | `quest`, `min?`, `max?`, `equals?` |
 | `class` | `class` |
+| `background` | `background` |
 | `abilityScore` | `ability`, `min` |
 | `visited` | `room` |
 | `all` / `any` / `not` | `conditions` |
@@ -381,11 +382,11 @@ CLI layout:
 
 ### Save files (`Saves/<slot>.json`, gitignored)
 Each save holds:
-- `saveVersion`, `contentVersion`, `savedAtUtc`, `currentRoom`
-- `player`: name, class, level, XP, abilities, proficient and expertise skills, HP and max HP, mana and max mana, gold, inventory, equipped
+- `saveVersion` (currently `2`), `contentVersion`, `savedAtUtc`, `currentRoom`
+- `player`: name, class, background, level, XP, abilities, proficient and expertise skills, HP and max HP, mana and max mana, gold, inventory, equipped
 - `world`: flags, counters, reputation, questStages, visitedRooms, roomItems, onceUsed
 
-Saving is allowed only during exploration. Per-encounter uses are never saved, because they are always full outside combat.
+A save from another format version is refused with a message naming its version (version 2 added `background`). Saving is allowed only during exploration. Per-encounter uses are never saved, because they are always full outside combat.
 
 ### Adding content
 **Before adding or editing any JSON under `Data/`, read [`Docs/LORE.md`](Docs/LORE.md) to keep prose tone, philosophical themes, faction alignments, and flag/counter names consistent. Whenever a commit adds a new flag, counter, faction, class, or quest, update the registry in `Docs/LORE.md` in the same commit.**

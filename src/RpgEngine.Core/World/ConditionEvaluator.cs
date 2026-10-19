@@ -22,6 +22,7 @@ public static class ConditionEvaluator
         ReputationCondition c => InBounds(state.World.GetReputation(c.Faction), c.Min, c.Max, null),
         QuestStageCondition c => InBounds(state.World.GetQuestStage(c.Quest), c.Min, c.Max, c.EqualTo),
         ClassCondition c => string.Equals(state.Player.ClassId, c.ClassId, StringComparison.Ordinal),
+        BackgroundCondition b => string.Equals(state.Player.BackgroundId, b.BackgroundId, StringComparison.Ordinal),
         AbilityScoreCondition c => state.Player.Abilities[c.Ability] >= c.Min,
         VisitedCondition c => state.World.HasVisited(c.Room),
         AllCondition c => AllPass(c.Conditions, state),

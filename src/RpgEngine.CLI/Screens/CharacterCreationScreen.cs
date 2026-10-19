@@ -8,7 +8,7 @@ using Spectre.Console;
 
 namespace RpgEngine.CLI.Screens;
 
-/// <summary>Name, class, ability scores (standard array or 4d6 drop lowest), skills, expertise, and a final review.</summary>
+/// <summary>Name, calling (class), burden (background), ability scores (standard array or 4d6 drop lowest), skills, expertise, and a final review.</summary>
 internal sealed class CharacterCreationScreen(UiContext ui)
 {
     private readonly CharacterFactory _factory = new(ui.Content);
@@ -22,12 +22,13 @@ internal sealed class CharacterCreationScreen(UiContext ui)
 
             var name = AskName();
             var cls = ChooseClass();
+            var background = ChooseBackground();
             var scores = ChooseScores(cls, dice);
-            var skills = ChooseSkills(cls);
+            var skills = ChooseSkills(cls, background);
             var expertise = ChooseExpertise(cls, skills);
-            var player = _factory.Create(name, cls.Id, scores, skills, expertise);
+            var player = _factory.Create(name, cls.Id, background.Id, scores, skills, expertise);
 
-            ShowSummary(player, cls);
+            ShowSummary(player, cls, background);
             if (ui.Prompter.Confirm($"[{Theme.Accent}]Begin your adventure as {Markup.Escape(player.Name)}?[/]"))
             {
                 return player;
@@ -53,7 +54,7 @@ internal sealed class CharacterCreationScreen(UiContext ui)
     {
         var classes = ui.Content.ClassList;
         var table = new Table().Border(TableBorder.Rounded).BorderStyle(Style.Parse(Theme.Muted));
-        table.AddColumn("#").AddColumn("Class").AddColumn("Hit die").AddColumn("Description");
+        table.AddColumn("#").AddColumn("Calling").AddColumn("Hit die").AddColumn("Description");
         for (var i = 0; i < classes.Count; i++)
         {
             var cls = classes[i];
@@ -63,13 +64,47 @@ internal sealed class CharacterCreationScreen(UiContext ui)
         ui.Console.Write(table);
         while (true)
         {
-            var input = ui.Prompter.Ask($"[{Theme.Accent}]Choose a class (1-{classes.Count}):[/]");
+            var input = ui.Prompter.Ask($"[{Theme.Accent}]Choose a calling (1-{classes.Count}):[/]");
             if (Input.Prompter.TryParseChoice(input, classes.Count, out var index))
             {
                 return classes[index];
             }
 
             var byName = classes.FirstOrDefault(c => string.Equals(c.Name, input, StringComparison.OrdinalIgnoreCase) || c.Id == input.ToLowerInvariant());
+            if (byName is not null)
+            {
+                return byName;
+            }
+        }
+    }
+
+    private BackgroundDef ChooseBackground()
+    {
+        var backgrounds = ui.Content.BackgroundList;
+        var table = new Table().Border(TableBorder.Rounded).BorderStyle(Style.Parse(Theme.Muted));
+        table.AddColumn("#").AddColumn("Burden").AddColumn("Skill").AddColumn("Keepsake").AddColumn("Description");
+        for (var i = 0; i < backgrounds.Count; i++)
+        {
+            var background = backgrounds[i];
+            var gold = background.BonusGold > 0 ? $" [{Theme.Gold}](+{background.BonusGold} gold)[/]" : string.Empty;
+            table.AddRow(
+                $"[{Theme.Accent}]{i + 1}[/]",
+                Theme.Paint(Theme.Title, background.Name) + gold,
+                Markup.Escape(ui.Content.Skills[background.BonusSkill].Name),
+                Markup.Escape(ui.Content.Items[background.KeepsakeItem].Name),
+                Markup.Escape(background.Description));
+        }
+
+        ui.Console.Write(table);
+        while (true)
+        {
+            var input = ui.Prompter.Ask($"[{Theme.Accent}]Choose a burden (1-{backgrounds.Count}):[/]");
+            if (Input.Prompter.TryParseChoice(input, backgrounds.Count, out var index))
+            {
+                return backgrounds[index];
+            }
+
+            var byName = backgrounds.FirstOrDefault(b => string.Equals(b.Name, input, StringComparison.OrdinalIgnoreCase) || b.Id == input.ToLowerInvariant());
             if (byName is not null)
             {
                 return byName;
@@ -137,11 +172,13 @@ internal sealed class CharacterCreationScreen(UiContext ui)
         ui.Console.Write(table);
     }
 
-    private List<string> ChooseSkills(ClassDef cls)
+    private List<string> ChooseSkills(ClassDef cls, BackgroundDef background)
     {
-        var options = cls.SkillChoices.From.Select(id => ui.Content.Skills[id]).ToList();
+        // The burden's skill is already granted, so it never appears as a class pick.
+        var options = cls.SkillChoices.From.Where(id => id != background.BonusSkill).Select(id => ui.Content.Skills[id]).ToList();
+        var granted = Markup.Escape(ui.Content.Skills[background.BonusSkill].Name);
         return PickMany(
-            $"[{Theme.Accent}]Choose {cls.SkillChoices.Count} skills you are trained in[/] [{Theme.Muted}](numbers separated by spaces or commas)[/]",
+            $"[{Theme.Accent}]Choose {cls.SkillChoices.Count} skills you are trained in[/] [{Theme.Muted}](numbers separated by spaces or commas; {granted} comes from your burden)[/]",
             options.Select(s => $"{Markup.Escape(s.Name)} [{Theme.Muted}]({s.Ability.Abbreviation()})[/]").ToList(),
             cls.SkillChoices.Count)
             .Select(index => options[index].Id)
@@ -194,7 +231,7 @@ internal sealed class CharacterCreationScreen(UiContext ui)
         }
     }
 
-    private void ShowSummary(PlayerCharacter player, ClassDef cls)
+    private void ShowSummary(PlayerCharacter player, ClassDef cls, BackgroundDef background)
     {
         var skills = string.Join(", ", player.ProficientSkills
             .Select(id => ui.Content.Skills[id].Name + (player.ExpertiseSkills.Contains(id) ? " (expertise)" : string.Empty))
@@ -203,7 +240,9 @@ internal sealed class CharacterCreationScreen(UiContext ui)
         var abilities = string.Join("  ", AbilityExtensions.All.Select(a => $"{a.Abbreviation()} {player.Abilities[a]}"));
 
         var grid = new Grid().AddColumn().AddColumn();
-        grid.AddRow($"[{Theme.Muted}]Class[/]", Markup.Escape(cls.Name));
+        grid.AddRow($"[{Theme.Muted}]Calling[/]", Markup.Escape(cls.Name));
+        grid.AddRow($"[{Theme.Muted}]Burden[/]", Markup.Escape(background.Name));
+        grid.AddRow($"[{Theme.Muted}]Keepsake[/]", Markup.Escape(ui.Content.Items[background.KeepsakeItem].Name));
         grid.AddRow($"[{Theme.Muted}]Abilities[/]", abilities);
         grid.AddRow($"[{Theme.Muted}]Hit points[/]", $"{player.MaxHp}");
         if (player.MaxMana > 0)
