@@ -16,37 +16,49 @@
   "epilogues": [
     {
       "conditions": [
-        { "type": "flag", "flag": "knight_laid_to_rest" },
-        { "type": "flag", "flag": "wren_trusts_player" },
+        { "type": "flag", "flag": "tollbridge_resolved" },
+        { "type": "flag", "flag": "echo_chapel_resolved" },
+        { "type": "flag", "flag": "beacon_restored" },
+        { "type": "flag", "flag": "wren_joins_descent" },
+        { "type": "counter", "counter": "lantern_resonance", "min": 3 }
+      ],
+      "text": "Behind you, the Nocturne Beacon chimes across the sunken cathedral, a low amber note that keeps the waking dead lucid without forcing them back into dreamless sleep. Sister Wren stands at the edge of the Lantern Market with her sleeves rolled to the elbow and salt-flakes on her linen, and the Wayfarers have already chalked her name on the pillar beside yours.\n\nThe floodgate rises on its groaning winch. Beyond the far arch, black water drains away into the Memory Warrens, where the Hollow Choir keeps its archive of vows and the Ashen garrison scrubs its own soldiers clean of fear. The Barrowlight burns warm and gold in your hand. It has learned, as you have, that a watch can be ended without being betrayed.\n\nYou cross the tollbridge with the beacon's chime at your back, {player.name}. For the first time since the lantern died, the dark ahead does not feel like a grave. It feels like a road."
+    },
+    {
+      "conditions": [
+        { "type": "flag", "flag": "tollbridge_resolved" },
+        { "type": "flag", "flag": "echo_chapel_resolved" },
+        { "type": "flag", "flag": "beacon_restored" },
         { "type": "counter", "counter": "lantern_resonance", "min": 1 }
       ],
-      "text": "Above you, Ser Halric rests at last on his own sarcophagus, his long watch ended. Below you, the Barrowlight burns with a warm, steady gold, and the spiral stair winds down and down through the bedrock until the walls fall away entirely.\n\nThe cavern that opens beneath the hill is vast beyond reckoning. A mist of ash and silver moss drifts over sunken roofs and leaning towers, pale lanterns glimmer in windows that should have gone dark centuries ago, and somewhere in the twilight a bell answers the lantern's light. This is no tomb. Something down here is still living.\n\nYou chalk the Ashen flame on the last step. Whether Sister Wren is one turning behind you or an hour behind, following your marks into the dark, you know she is coming. The Ashen Order is two people now, {player.name}, and its true work has only just begun."
+      "text": "The Nocturne Beacon rings out behind you as you cross the Drowned Tollbridge, its amber light spilling over the black canal. In the Lantern Market the salt-frost is flaking from the spirits' hands, and Keeper Maeve is reading the remembered names aloud from the pillar, one by one, so that none of them slips out of the ink tonight.\n\nNo one walks beside you, but you do not leave unwitnessed. The Barrowlight burns gold in your grip, steady as a heartbeat, and the echoes in the wet stone seem to lean toward it as you pass.\n\nBeyond the floodgate the warrens wind deeper, toward older griefs and harder choices. Whatever waits there, {player.name}, Nocturne will remember who relit its bell."
     },
     {
       "conditions": [
-        { "type": "flag", "flag": "knight_laid_to_rest" },
+        { "type": "flag", "flag": "tollbridge_resolved" },
+        { "type": "flag", "flag": "echo_chapel_resolved" },
+        { "type": "flag", "flag": "beacon_restored" }
+      ],
+      "text": "The Nocturne Beacon burns again, but the square went quiet when you carried the tuning-tongue and the lens back through it, still marked by what it cost to take them. The spirits warm their hands at the amber light and do not meet your eyes.\n\nThe Barrowlight's flame is thin and ash-pale as you cross the tollbridge. It gives light, and the light is enough to see by, but it no longer leans toward the deep like a compass needle. It simply burns, the way a lamp burns in an empty room.\n\nYou mended the light the way the Order would have, {player.name}: with iron, and with a trail of the broken behind you. The warrens ahead will ask whether that was ever the same thing as mercy."
+    },
+    {
+      "conditions": [
+        { "type": "flag", "flag": "tollbridge_resolved" },
+        { "type": "notFlag", "flag": "beacon_restored" },
         { "type": "counter", "counter": "lantern_resonance", "min": 1 }
       ],
-      "text": "Ser Halric's last word follows you down the spiral stair: relieved. You walk without Sister Wren's blessing, and no one will chalk a trail behind you. Still, the Barrowlight burns warm and unclouded in your hand, a golden flame that seems to answer the mercy you showed its guardian.\n\nThe stair ends at the lip of a chasm so wide that its far side is lost in mist. Below, pale lanterns glimmer among sunken halls and silver moss, and a bell tolls somewhere in the deep, slow as a sleeper's heartbeat.\n\nYou did not need a blade to reach this place, {player.name}. Whatever waits in the Under-Barrow, you meet it with clean hands and a clear light."
+      "text": "Behind you, the Nocturne Beacon still stands dark. Its bell is silent, and along the colonnade the grey salt-frost keeps creeping across the knuckles of the spirits who waited for it to ring.\n\nStill, the Barrowlight burns gold in your hand. The people you met on the way down, you met as people: a clerk losing his own name, a sister refusing to lose her brother, a soldier who could not keep a promise. The light remembers that, even if the square cannot yet.\n\nThe floodgate groans open onto the warrens, {player.name}. You tell yourself you will come back for Nocturne. The black water closes over the causeway behind you, and the dark does not say whether it believes you."
     },
     {
       "conditions": [
-        { "type": "flag", "flag": "knight_destroyed" },
-        { "type": "flag", "flag": "wren_trusts_player" },
+        { "type": "flag", "flag": "tollbridge_resolved" },
+        { "type": "notFlag", "flag": "beacon_restored" },
         { "type": "counter", "counter": "lantern_resonance", "max": -1 }
       ],
-      "text": "Ser Halric's shattered armor lies scattered in the ash behind you. The Barrowlight burns in your hand, but its flame is thin and ash-pale, heavy with the memory of steel, as though it has not yet decided whether to forgive the way you won it.\n\nYet Wren believed in you, and her faith steadies your hand on the long spiral down. When the stair finally opens onto the vast twilight of the Under-Barrow, with its drowned roofs and drifting ash, you stop and say a prayer for the knight you could not save. Far off, the subterranean bells answer.\n\nYou chalk the Order's flame on the stone for Wren to follow, {player.name}, and walk on into the deep."
+      "text": "Behind you, Nocturne's beacon is still dark, and the Lantern Market has gone very quiet. The spirits along the colonnade sit with salt crawling up their wrists, and no one calls a name after you as you go.\n\nThe Barrowlight burns cold as frost in your grip. In its pale glare the echoes in the stone no longer speak. They only watch.\n\nThe floodgate rises on a shriek of rusted iron, and you walk into the warrens alone, {player.name}. The deep has noticed you now. It has not yet decided what you are."
     },
     {
-      "conditions": [
-        { "type": "flag", "flag": "knight_destroyed" },
-        { "type": "flag", "flag": "wren_fled" },
-        { "type": "counter", "counter": "lantern_resonance", "max": -1 }
-      ],
-      "text": "Above you, the lichgate stands empty, Wren's bedroll sodden in the mud, and Halric's bones lie broken in the ash of the Barrow Heart. In your grip the Barrowlight burns cold and pale as frost, giving light but no warmth.\n\nYou descend alone. The spiral stair goes down far longer than it should, and when it ends, the dark beneath the hill opens like an indrawn breath: endless, echoing, and not empty. Somewhere out in that black, older things are waking to the sound of your footsteps.\n\nNo one will follow your trail, {player.name}. No one even knows to."
-    },
-    {
-      "text": "With Ser Halric fallen and the Barrowlight awake in your hand, you leave the upper crypt behind and follow the hidden stair down into the earth. The lantern's flame is a thin, uncertain thing, but it is enough to light the next step, and the next.\n\nAt the bottom the stair opens onto a subterranean dark so vast that your light cannot find its edges. Somewhere out there lie the sunken halls of the first sleepers, and the true secrets of Greywater's dead wait for you in the deep, {player.name}."
+      "text": "The floodgate grinds open and you cross the Drowned Tollbridge into the dark. The Barrowlight's flame wavers between gold and ash, undecided, much like the Under-Barrow itself.\n\nBehind you, Nocturne's beacon is still dark, and the waking dead of the Lantern Market keep their uneasy watch beneath the broken ribs of the cathedral. Ahead, the Memory Warrens wind down into older griefs.\n\nWhatever you are becoming down here, {player.name}, the next step will decide it."
     }
   ],
   "gameOverText": "The cold of the barrow closes over you like deep water. Somewhere far above, rain falls on the lichgate, and the Barrowlight stays dark. Your story ends here, {player.name}."

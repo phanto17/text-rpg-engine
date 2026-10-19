@@ -79,11 +79,14 @@
             "effects": [
               {
                 "type": "if",
-                "conditions": [ { "type": "flag", "flag": "wren_joins_descent" } ],
+                "conditions": [
+                  { "type": "flag", "flag": "wren_joins_descent" },
+                  { "type": "not", "conditions": [ { "type": "visited", "room": "weeping_stair" } ] }
+                ],
                 "then": [ { "type": "message", "text": "At every turning you chalk the Ashen flame on the wall. Far above, faint and steady, Sister Wren's footsteps follow you down.", "style": "sensory" } ]
               },
               { "type": "setQuestStage", "quest": "barrowlight", "stage": 100 },
-              { "type": "endGame" }
+              { "type": "moveTo", "room": "weeping_stair" }
             ]
           }
         ]

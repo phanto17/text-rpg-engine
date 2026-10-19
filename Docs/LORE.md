@@ -111,12 +111,13 @@ Once claimed in `inner_crypt` (`item: barrowlight`), the lantern serves as both 
 ### Prologue: *The Upper Threshold* (Milestone 1 — Shipped)
 - **`lichgate` (The Lichgate):** Rain-swept hilltop gate above Hollin's Rest. Features the `toppled_headstone` (`perception` DC 10 -> `healing_potion`), `statues` with chiselled-off faces, and **Sister Wren** (`dialogue: wren`).
 - **`ossuary_hall` (The Ossuary Hall):** Vault of ash-marked skulls (`investigation` DC 11 -> 12 gold) and the `bronze_door` puzzle (Sun -> Moon -> Skull sequence; `religion` DC 13 `study`, `dex` DC 12 needle trap dealing `1d4` piercing).
-- **`inner_crypt` (The Barrow Heart):** Circular ash chamber housing **Ser Halric** (`gravebound_knight`) and a `barrow_thrall`. Resolvable via combat (`holy_water` deals double radiant damage) or `parley` (`persuasion` DC 13, or `religion` DC 10 with advantage if `wren_taught_rite`). Claiming `barrowlight` shifts the plinth, revealing the `sunken_stair` (`verb: descend`) into the Under-Barrow.
+- **`inner_crypt` (The Barrow Heart):** Circular ash chamber housing **Ser Halric** (`gravebound_knight`) and a `barrow_thrall`. Resolvable via combat (`holy_water` deals double radiant damage) or `parley` (`persuasion` DC 13, or `religion` DC 10 with advantage if `wren_taught_rite`). Claiming `barrowlight` shifts the plinth, revealing the `sunken_stair` (`verb: descend`), which leads down to the `weeping_stair` and Act I.
 
-### Act I: *Nocturne & The Weeping Stair* (Milestone 2 Target)
+### Act I: *Nocturne & The Weeping Stair* (Milestone 2 — Shipped)
 - **`weeping_stair` (The Weeping Stair):** The spiral descent beneath the Barrow Heart where surface rain gives way to bioluminescent ash-moss and echoing memory fragments.
 - **`nocturne_square` (Nocturne — The Lantern Market):** A subterranean hub settlement built inside a sunken cathedral. Populated by half-remembering revenant merchants, runaway heretics, and Sister Wren's makeshift sanctuary (if `wren_joins_descent`). Offers **Rest / Campfire recovery** and **Merchant bartering**.
-- **`drowned_tollbridge` & `echo_chapel`:** Spoke locations where the player investigates who sabotaged Nocturne's central beacon—uncovering the rivalry between the **Hollow Choir** and an **Ashen Order** expeditionary patrol.
+- **`drowned_tollbridge` & `echo_chapel`:** Spoke locations where the player investigates who sabotaged Nocturne's central beacon—uncovering the rivalry between the **Hollow Choir** and an **Ashen Order** expeditionary patrol. Neither fight starts on entry: the player chooses when to `approach` Cantor Miriel or Toll-Warden Garin, so each room's memory echo can be shone first for parley advantage. The beacon is relit with `relight` in the square (`restore` is the parser's synonym for loading a save).
+- **Act I ending:** once the tollbridge is resolved, `cross` at the `far_arch` ends the game. The epilogue (`game.json`) reflects `echo_chapel_resolved`, `beacon_restored`, `wren_joins_descent`, and `lantern_resonance`.
 
 ### Act II: *The Memory Warrens* (Future Milestone)
 - **`archive_of_vows` (Hollow Choir Sanctum)** & **`iron_reliquary` (Ashen Garrison):** Recovering the twin Triad Seals while confronting the extremes of pathological grief (tethering a dead child's spirit to a music box) and forced amnesia (soldiers scrubbing their own minds to feel no fear).
@@ -166,6 +167,7 @@ Once claimed in `inner_crypt` (`item: barrowlight`), the lantern serves as both 
 | `echo_chapel_resolved` | `Rooms/echo_chapel.json` | Defeated or parleyed with Cantor Miriel; allows taking `choir_tuning_fork`. |
 | `miriel_reconciled` | `Rooms/echo_chapel.json` | Parleyed with Cantor Miriel (+10 `lantern_bearers` rep, -5 `hollow_choir` rep, +135 XP, +1 `lantern_resonance`). |
 | `miriel_defeated` | `Rooms/echo_chapel.json` | Defeated Cantor Miriel in combat (-15 `hollow_choir` rep, -1 `lantern_resonance`). |
+| `challenged_miriel` | `Rooms/echo_chapel.json` | Climbed the pulpit steps to face Cantor Miriel; starts the `echo_chapel_choir` fight, which then resumes whenever the chapel is entered until it is resolved. |
 | `shone_chapel_echo` | `Rooms/echo_chapel.json` | Shone the `barrowlight` on Jonas's echo in the Echo Chapel; grants advantage on Miriel's parley. |
 | `released_choir_jars` | `Rooms/echo_chapel.json` | Unsealed the tethered spirit-jars in the Echo Chapel (+1 `lantern_resonance`, +5 `lantern_bearers` rep, -10 `hollow_choir` rep). |
 | `preserved_choir_jars` | `Rooms/echo_chapel.json` | Wound the Hollow Choir's brass music boxes (+10 `hollow_choir` rep, -5 `ashen_order` rep, grants `vesper_bell_blade`). |
@@ -173,6 +175,7 @@ Once claimed in `inner_crypt` (`item: barrowlight`), the lantern serves as both 
 | `tollbridge_resolved` | `Rooms/drowned_tollbridge.json` | Defeated or parleyed with Toll-Warden Garin; allows taking `beacon_lens`. |
 | `garin_relieved` | `Rooms/drowned_tollbridge.json` | Parleyed with Toll-Warden Garin (+10 `ashen_order` rep, +10 `lantern_bearers` rep, +130 XP, +1 `lantern_resonance`). |
 | `garin_destroyed` | `Rooms/drowned_tollbridge.json` | Defeated Toll-Warden Garin in combat (-10 `ashen_order` rep, -1 `lantern_resonance`). |
+| `challenged_garin` | `Rooms/drowned_tollbridge.json` | Stepped up to the toll-line to face Toll-Warden Garin; starts the `drowned_tollbridge_watch` fight, which then resumes whenever the bridge is entered until it is resolved. |
 | `shone_bridge_echo` | `Rooms/drowned_tollbridge.json` | Shone the `barrowlight` on the floodgate echo at the Drowned Tollbridge; grants advantage on Garin's parley. |
 | `garin_gift_given` | `Dialogues/garin.json` | Spoke to relieved Toll-Warden Garin and received `grave_salt_bomb`. |
 

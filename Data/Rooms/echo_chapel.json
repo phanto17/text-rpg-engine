@@ -43,6 +43,16 @@
         "description": "An organ built from hollowed stalactites and brass reliquary tubes. When its keys are pressed, air is forced through glass jars containing the tethered echoes of the dead.",
         "interactions": [
           {
+            "verb": "approach",
+            "label": "Climb the pulpit steps and face Cantor Miriel",
+            "conditions": [ { "type": "notFlag", "flag": "echo_chapel_resolved" } ],
+            "text": "You leave the shelter of the stalactite columns and start up the pulpit steps.",
+            "effects": [
+              { "type": "setFlag", "flag": "challenged_miriel" },
+              { "type": "startCombat", "encounter": "echo_chapel_choir" }
+            ]
+          },
+          {
             "verb": "take",
             "label": "Take the Resonant Tuning-Tongue",
             "conditions": [
@@ -130,8 +140,11 @@
     ],
     "encounter": {
       "id": "echo_chapel_choir",
-      "conditions": [ { "type": "notFlag", "flag": "echo_chapel_resolved" } ],
-      "intro": "As you step beneath the choir-arch, the bone-pipe organ shudders with a chord so sharp it tastes like copper. At the pulpit stands a woman in the silver-threaded shawl of the Hollow Choir, her knuckles white on the keys. Above her, wired into the organ's throat, hangs the bronze tuning-tongue stolen from Nocturne's beacon. Beside the steps, a spirit crusted in grey salt lurches to block your path.\n\n\"Stay back!\" Cantor Miriel cries, her voice cracking over the hum of the pipes. \"If you take the tongue back to the square, the chord breaks—and if the chord breaks, my brother Jonas goes dark forever! I won't let you murder what's left of him!\"",
+      "conditions": [
+        { "type": "notFlag", "flag": "echo_chapel_resolved" },
+        { "type": "flag", "flag": "challenged_miriel" }
+      ],
+      "intro": "As you climb the pulpit steps, the bone-pipe organ shudders with a chord so sharp it tastes like copper. At the pulpit stands a woman in the silver-threaded shawl of the Hollow Choir, her knuckles white on the keys. Above her, wired into the organ's throat, hangs the bronze tuning-tongue stolen from Nocturne's beacon. Beside the steps, a spirit crusted in grey salt lurches to block your path.\n\n\"Stay back!\" Cantor Miriel cries, her voice cracking over the hum of the pipes. \"If you take the tongue back to the square, the chord breaks—and if the chord breaks, my brother Jonas goes dark forever! I won't let you murder what's left of him!\"",
       "enemies": [
         { "monster": "choir_cantor_miriel", "count": 1 },
         { "monster": "calcified_mournling", "count": 1 }

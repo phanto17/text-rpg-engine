@@ -27,7 +27,7 @@ public sealed class GoldenPathTests
     private static readonly string[] OpenTheDoor = ["down", "press sun", "press moon", "press skull", "east"];
 
     [Fact]
-    public void PersuadeWren_SolvePuzzle_ParleyWithKnight_ReachesPeacefulEpilogue()
+    public void PersuadeWren_ParleyWithEveryWarden_RelightsNocturne_AndCrossesTheTollbridge()
     {
         using var cli = new CliHarness();
 
@@ -42,7 +42,30 @@ public sealed class GoldenPathTests
             "5",                    // combat: Parley
             "2",                    // [Religion DC 10] (advantage) Speak the Rite of Rest
             "take lantern",         // lights the lantern and opens the stair
-            "descend stair",
+            "descend stair",        // Act I: the Weeping Stair
+            "study relief",         // [History DC 11]
+            "shine echo",
+            "talk to orin",
+            "4",                    // [Insight DC 11] (advantage) Read the first line of your ledger back to me
+            "1",                    // I'll see the beacon relit, Brother Orin.
+            "down",                 // Nocturne
+            "rest",                 // the sanctuary brazier
+            "east",                 // the Echo Chapel: Miriel waits at the pulpit
+            "shine echo",
+            "approach pulpit",
+            "5",                    // combat: Parley
+            "1",                    // [Persuasion DC 13] (advantage) Show her that the forced chord is calcifying Jonas
+            "take tongue",
+            "west", "west",         // through the square to the Drowned Tollbridge
+            "shine echo",
+            "approach line",
+            "5",                    // combat: Parley
+            "1",                    // [Persuasion DC 13] (advantage) Tell him the flood has passed
+            "take lens",
+            "east",
+            "relight beacon",       // "restore" is the parser's synonym for load
+            "west",
+            "cross",
             "2",                    // after the epilogue: quit
         ];
 
@@ -67,7 +90,18 @@ public sealed class GoldenPathTests
         Assert.Contains("Descend the spiral stair into the Under-Barrow", output);
         Assert.Contains("Its flame leans toward the depths like a compass needle pulling home", output);
         Assert.Contains("You carried the Barrowlight down through the unsealed threshold into the Under-Barrow.", output);
-        Assert.Contains("Above you, Ser Halric rests at last on his own sarcophagus", output);
+        Assert.Contains("The Weeping Stair", output);
+        Assert.Contains("+ Ferryman's Obol", output);
+        Assert.Contains("Nocturne", output);
+        Assert.Contains("Climb the pulpit steps and face Cantor Miriel", output);
+        Assert.Contains("[Persuasion DC 13] (advantage) Show her that the forced chord", output);
+        Assert.Contains("+ Resonant Tuning-Tongue", output);
+        Assert.Contains("Step up to the toll-line and face Toll-Warden Garin", output);
+        Assert.Contains("[Persuasion DC 13] (advantage) Tell him the flood has passed", output);
+        Assert.Contains("+ Smoked-Glass Beacon Lens", output);
+        Assert.Contains("You rekindled Nocturne's central beacon.", output);
+        Assert.Contains("Garin wades over and takes the other spoke of the wheel", output);
+        Assert.Contains("The Nocturne Beacon rings out behind you", output);
         Assert.Contains("THE END", output);
     }
 
@@ -92,7 +126,8 @@ public sealed class GoldenPathTests
             "1",                    // round 2: attack the last thrall
             "take lantern",
             "descend",              // the only descend action here, so no target is needed
-            "2",                    // after the epilogue: quit
+            "quit", "y",
+            "2",                    // title: quit
         ];
 
         var exitCode = cli.Run(inputs);
@@ -107,7 +142,7 @@ public sealed class GoldenPathTests
         Assert.Contains("VICTORY", output);
         Assert.Contains("Level 2!", output);
         Assert.Contains("the Barrowlight's flame settles into a thin, ash-pale glow", output);
-        Assert.Contains("Ser Halric's shattered armor lies scattered in the ash behind you.", output);
+        Assert.Contains("The Barrowlight's frost-pale light casts sharp, brittle shadows", output);
     }
 
     [Fact]

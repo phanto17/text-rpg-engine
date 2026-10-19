@@ -7,7 +7,7 @@
     "variants": [
       {
         "conditions": [ { "type": "notFlag", "flag": "tollbridge_resolved" } ],
-        "text": "At the center of the flooded span stands Toll-Warden Garin in waterlogged plate, his halberd barred across the arch and the stolen beacon-lens locked inside an iron cage on the toll-post."
+        "text": "Beyond a line of rusted iron studs, a figure in waterlogged plate waits motionless in the toll-arch, his halberd barred across the span and the stolen beacon-lens locked inside an iron cage on the toll-post."
       },
       {
         "conditions": [ { "type": "flag", "flag": "garin_relieved" } ],
@@ -36,6 +36,46 @@
       { "direction": "east", "target": "nocturne_square", "description": "The flooded causeway climbs back east toward the Lantern Market of Nocturne." }
     ],
     "features": [
+      {
+        "id": "toll_line",
+        "name": "toll-line",
+        "aliases": ["line", "studs", "span", "toll-arch"],
+        "description": "A line of rusted iron studs crosses the flooded flagstones at the foot of the central arch. Beyond it, Toll-Warden Garin stands in the black water with his halberd barred across the span, as still as if he has not moved in years.",
+        "conditions": [ { "type": "notFlag", "flag": "tollbridge_resolved" } ],
+        "interactions": [
+          {
+            "verb": "approach",
+            "label": "Step up to the toll-line and face Toll-Warden Garin",
+            "text": "You wade forward until the black water swirls around the rusted studs of the toll-line.",
+            "effects": [
+              { "type": "setFlag", "flag": "challenged_garin" },
+              { "type": "startCombat", "encounter": "drowned_tollbridge_watch" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "far_arch",
+        "name": "far arch",
+        "aliases": ["arch", "gate", "bridge", "tollbridge", "warrens"],
+        "description": "Past the central toll-post, the third arch of the bridge ends at a dropped iron floodgate hung with quarantine chains. Beyond its bars the canal tunnels on into the dark, toward the deeper warrens of the Under-Barrow.",
+        "interactions": [
+          {
+            "verb": "cross",
+            "label": "Cross the tollbridge into the deeper warrens",
+            "conditions": [ { "type": "flag", "flag": "tollbridge_resolved" } ],
+            "text": "You set your shoulder to the rusted winch. Chain by groaning chain, the floodgate lifts out of the black water, and the far arch opens onto a tunnel that breathes cold air and older silence.",
+            "effects": [
+              {
+                "type": "if",
+                "conditions": [ { "type": "flag", "flag": "garin_relieved" } ],
+                "then": [ { "type": "message", "text": "Garin wades over and takes the other spoke of the wheel without a word. When the gate is high enough, he plants his halberd upright in the silt and raises a gauntlet to his brow as you pass.", "style": "narration" } ]
+              },
+              { "type": "endGame" }
+            ]
+          }
+        ]
+      },
       {
         "id": "toll_post_cage",
         "name": "iron lens-cage",
@@ -120,7 +160,10 @@
     ],
     "encounter": {
       "id": "drowned_tollbridge_watch",
-      "conditions": [ { "type": "notFlag", "flag": "tollbridge_resolved" } ],
+      "conditions": [
+        { "type": "notFlag", "flag": "tollbridge_resolved" },
+        { "type": "flag", "flag": "challenged_garin" }
+      ],
       "intro": "Water splashes beneath heavy boots as a figure in mud-blackened Ashen plate steps out from the toll-arch, levelling a rusted halberd at your chest. Beside the bridge pilings, a drowned lancer drags itself up out of the canal, black water pouring from its gorget.\n\n\"Halt at the line!\" Toll-Warden Garin barks, his voice echoing hollowly inside his helm as though he has shouted the same words a thousand times to an empty bridge. On the post behind him glints the curved smoked-glass lens pried from Nocturne's beacon. \"By order of the Ashen Tribunal, this crossing is under quarantine! No light passes! No waking thing crosses the water!\"",
       "enemies": [
         { "monster": "tollbridge_warden_garin", "count": 1 },

@@ -45,8 +45,7 @@
             "label": "Rest by the sanctuary brazier",
             "text": "You sit beside the warm iron brazier and breathe in the clean smoke of peat and memory-tallow. The ache in your limbs eases, and your focus returns.",
             "effects": [
-              { "type": "heal", "dice": "20" },
-              { "type": "restoreMana", "amount": 20 },
+              { "type": "rest" },
               { "type": "setFlag", "flag": "rested_in_nocturne" }
             ]
           }
@@ -81,8 +80,8 @@
             }
           },
           {
-            "verb": "restore",
-            "label": "Restore the Nocturne Beacon",
+            "verb": "relight",
+            "label": "Relight the Nocturne Beacon",
             "conditions": [
               { "type": "hasItem", "item": "choir_tuning_fork" },
               { "type": "hasItem", "item": "beacon_lens" },

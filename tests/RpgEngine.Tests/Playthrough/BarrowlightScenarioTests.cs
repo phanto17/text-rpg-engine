@@ -10,8 +10,8 @@ using RpgEngine.Tests.Content;
 namespace RpgEngine.Tests.Playthrough;
 
 /// <summary>
-/// Plays complete storylines through the shipped Barrowlight content with scripted dice, proving
-/// that choices made with Wren change the world, the final encounter, and the epilogue.
+/// Plays the prologue storylines through the shipped Barrowlight content with scripted dice, proving
+/// that choices made with Wren change the world, the final encounter, and the descent into Act I.
 /// Every room has ambient lines, so each room description consumes one die (the ambient pick).
 /// </summary>
 public sealed class BarrowlightScenarioTests
@@ -31,11 +31,12 @@ public sealed class BarrowlightScenarioTests
         session.ChooseDialogue(session.DialogueChoices().Single(c => c.Text.StartsWith(startOfChoice, StringComparison.Ordinal)).Index);
 
     [Fact]
-    public void PersuadeWren_ThenSpeakTheRite_EndsInPeace()
+    public void PersuadeWren_ThenSpeakTheRite_DescendsInPeace()
     {
-        // ambient 0 | persuasion 15 | ambient 0 (ossuary) + 0 (DescribeRoom) | ambient 0 (crypt) | initiative 15, 1, 1 | rite with advantage 15, 10
+        // ambient 0 | persuasion 15 | ambient 0 (ossuary) + 0 (DescribeRoom) | ambient 0 (crypt) | initiative 15, 1, 1 | rite with advantage 15, 10 | stair 0
         var auditor = Create("liminal_auditor", "ash_deserter", ["persuasion", "insight", "stealth", "perception"], ["persuasion", "stealth"]);
-        var session = GameSession.NewGame(Content, auditor, new FixedRandomSource(0, 15, 0, 0, 0, 15, 1, 1, 15, 10));
+        var dice = new FixedRandomSource(0, 15, 0, 0, 0, 15, 1, 1, 15, 10, 0);
+        var session = GameSession.NewGame(Content, auditor, dice);
         session.Begin();
 
         Do(session, "talk to wren");
@@ -81,24 +82,29 @@ public sealed class BarrowlightScenarioTests
         Assert.Equal(50, session.State.World.GetQuestStage("barrowlight"));
         Assert.Contains(session.ExplorationActions(), a => a.Label == "Descend the spiral stair into the Under-Barrow");
 
-        var ending = Do(session, "descend stair");
+        // The stair leads on into Act I; the adventure now ends at the Drowned Tollbridge.
+        var descent = Do(session, "descend stair");
 
-        Assert.Equal(GameMode.Ended, session.Mode);
-        Assert.DoesNotContain(ending.OfType<NarrationEvent>(), e => e.Text.Contains("Wren's footsteps", StringComparison.Ordinal));
-        Assert.StartsWith("Above you, Ser Halric rests at last on his own sarcophagus", session.Epilogue);
-        Assert.Contains("Tamsin", session.Epilogue);
-        Assert.IsType<EpilogueEvent>(ending[^1]);
+        Assert.Equal(GameMode.Exploration, session.Mode);
+        Assert.Null(session.Epilogue);
+        Assert.Equal("weeping_stair", session.State.CurrentRoomId);
+        Assert.DoesNotContain(descent.OfType<NarrationEvent>(), e => e.Text.Contains("Wren's footsteps", StringComparison.Ordinal));
+        var stair = descent.OfType<RoomDescribedEvent>().Single().Room;
+        Assert.Contains(stair.Paragraphs, p => p.StartsWith("As you pass, the Barrowlight's warm golden glow", StringComparison.Ordinal));
         Assert.Equal(20, session.State.World.GetReputation("ashen_order"));
         Assert.Equal(100, session.State.World.GetQuestStage("barrowlight"));
+        Assert.Equal(10, session.State.World.GetQuestStage("nocturne_beacon"));
+        Assert.Equal(0, dice.Remaining);
     }
 
     [Fact]
     public void ReturnToWrenWithTheLantern_SheJoinsTheDescentOnce()
     {
         // As above without DescribeRoom: ambient 0 | persuasion 15 | ossuary 0 | crypt 0 | initiative 15, 1, 1 | rite 15, 10
-        // then west 0 | up 0 | look 0 | down 0 | east 0 (the encounter is resolved, so no initiative)
+        // then west 0 | up 0 | look 0 | down 0 | east 0 (the encounter is resolved, so no initiative) | stair 0 | crypt 0 | stair 0
         var auditor = Create("liminal_auditor", "ash_deserter", ["persuasion", "insight", "stealth", "perception"], ["persuasion", "stealth"]);
-        var session = GameSession.NewGame(Content, auditor, new FixedRandomSource(0, 15, 0, 0, 15, 1, 1, 15, 10, 0, 0, 0, 0, 0));
+        var dice = new FixedRandomSource(0, 15, 0, 0, 15, 1, 1, 15, 10, 0, 0, 0, 0, 0, 0, 0, 0);
+        var session = GameSession.NewGame(Content, auditor, dice);
         session.Begin();
         Do(session, "talk to wren");
         Say(session, "I'm not here to rob the dead");
@@ -136,20 +142,28 @@ public sealed class BarrowlightScenarioTests
         Assert.Contains("Beside the sarcophagus, a spiral stair yawns open in the floor, leading down into the deep earth.", crypt.Paragraphs);
         Assert.DoesNotContain(crypt.Paragraphs, p => p.Contains("iron lantern", StringComparison.Ordinal) || p.Contains("waits on the sarcophagus", StringComparison.Ordinal));
         Assert.Contains("spiral stair", crypt.Features);
-        var ending = Do(session, "descend");
+        var descent = Do(session, "descend");
 
-        Assert.Contains(ending.OfType<NarrationEvent>(), e => e.Text.Contains("Sister Wren's footsteps follow you down", StringComparison.Ordinal));
-        Assert.Equal(GameMode.Ended, session.Mode);
-        Assert.StartsWith("Above you, Ser Halric rests at last on his own sarcophagus", session.Epilogue);
+        Assert.Contains(descent.OfType<NarrationEvent>(), e => e.Text.Contains("Sister Wren's footsteps follow you down", StringComparison.Ordinal));
+        Assert.Equal("weeping_stair", session.State.CurrentRoomId);
+        Assert.Contains(descent.OfType<RoomDescribedEvent>().Single().Room.Paragraphs, p => p.StartsWith("Fresh chalk-marks of the Ashen flame", StringComparison.Ordinal));
         Assert.Equal(100, session.State.World.GetQuestStage("barrowlight"));
+
+        // The stair can be climbed and descended again; Wren's footsteps are only heard the first time.
+        Do(session, "up");
+        var again = Do(session, "descend");
+
+        Assert.Equal("weeping_stair", session.State.CurrentRoomId);
+        Assert.DoesNotContain(again.OfType<NarrationEvent>(), e => e.Text.Contains("Wren's footsteps", StringComparison.Ordinal));
+        Assert.Equal(0, dice.Remaining);
     }
 
     [Fact]
-    public void IntimidateWren_ThenFight_EndsAlone()
+    public void IntimidateWren_ThenFight_DescendsAlone()
     {
-        // ambient 0 | intimidation 15 | look ambient 1 | ambient 0, 0 | initiative 20, 1, 1 | crit knight 20, 8, 8 | thrall 1 | crit thrall 20, 8, 8
+        // ambient 0 | intimidation 15 | look ambient 1 | ambient 0, 0 | initiative 20, 1, 1 | crit knight 20, 8, 8 | thrall 1 | crit thrall 20, 8, 8 | stair 0
         var oathEater = Create("oath_eater", "moor_bailiff", ["athletics", "intimidation"], []);
-        var session = GameSession.NewGame(Content, oathEater, new FixedRandomSource(0, 15, 1, 0, 0, 20, 1, 1, 20, 8, 8, 1, 20, 8, 8));
+        var session = GameSession.NewGame(Content, oathEater, new FixedRandomSource(0, 15, 1, 0, 0, 20, 1, 1, 20, 8, 8, 1, 20, 8, 8, 0));
         session.Begin();
 
         Do(session, "talk to wren");
@@ -182,9 +196,10 @@ public sealed class BarrowlightScenarioTests
         Assert.Contains(claim.OfType<NarrationEvent>(), e => e.Text.StartsWith("In your hand, the Barrowlight's flame settles into a thin, ash-pale glow", StringComparison.Ordinal));
         Assert.Equal(-1, session.State.World.GetCounter("lantern_resonance"));
 
-        Do(session, "descend the stair");
+        var stair = Do(session, "descend the stair").OfType<RoomDescribedEvent>().Single().Room;
 
-        Assert.StartsWith("Above you, the lichgate stands empty", session.Epilogue);
+        Assert.Contains(stair.Paragraphs, p => p.StartsWith("The Barrowlight's frost-pale light casts sharp, brittle shadows", StringComparison.Ordinal));
+        Assert.DoesNotContain(stair.Paragraphs, p => p.StartsWith("Fresh chalk-marks", StringComparison.Ordinal));
         Assert.Equal(-15, session.State.World.GetReputation("ashen_order"));
     }
 
