@@ -4,7 +4,7 @@ A narrative-driven, text-based RPG engine for the terminal, written in C# on .NE
 
 The engine is **purely data-driven**. Every room, item, monster, line of dialogue, class, and rule constant is loaded from JSON in [`Data/`](Data/), so new adventures can be written without touching C#.
 
-> **Status:** **Milestone 1 (the vertical slice) is complete.** *Barrowlight* is a short, playable three-room adventure with character creation, a branching NPC conversation with skill checks and permanent consequences, a riddle-and-trap puzzle, and a boss you can fight, flee, or talk down.
+> **Status:** **Milestone 1 (the vertical slice) is complete, and Milestone 2 is under way.** *Barrowlight* is a short, playable three-room prologue with character creation, a branching NPC conversation with skill checks and permanent consequences, a riddle-and-trap puzzle, and a boss you can fight, flee, or talk down. Milestone 2's first phase replaced the generic classes with four Greywater **Callings** and added **Burdens** (backgrounds) that the prologue reacts to.
 
 ---
 
@@ -12,7 +12,7 @@ The engine is **purely data-driven**. Every room, item, monster, line of dialogu
 
 - **Exploration:** rooms connected by exits (north, up, in…), with rich sensory descriptions, inspectable features, hidden secrets, and puzzles.
 - **Choices & consequences:** branching dialogue and event trees that read and write a global `WorldState` (flags, counters, faction reputation, quest stages). Choices permanently change the world.
-- **d20 mechanics:** STR/DEX/CON/INT/WIS/CHA, classes, proficiency and expertise, and inventory and equipment. Narrative skill checks show inline, e.g. `[Persuasion DC 12]`, with advantage and disadvantage.
+- **d20 mechanics:** STR/DEX/CON/INT/WIS/CHA, Callings (classes) and Burdens (backgrounds), proficiency and expertise, and inventory and equipment. Narrative skill checks show inline, e.g. `[Persuasion DC 12]`, with advantage and disadvantage.
 - **Tactical combat:** initiative, attacks against AC, crits, spells and techniques, status effects, resistances, and **Flee** and **Parley** options.
 - **Retro terminal UI** ([Spectre.Console](https://spectreconsole.net/)):
   - color-coded narration, HP/MP bars, stat tables, and animated dice rolls
@@ -26,7 +26,7 @@ Rain, a hilltop barrow, and a lantern that kept the dead asleep until it went da
 - Work out the sigil riddle on the bronze door in **the Ossuary Hall**, ideally without losing a hand to the trap.
 - Face what guards **the Barrow Heart**, then claim the Barrowlight and find out what its waking flame unseals beneath the sarcophagus.
 
-What you say to Wren permanently changes the world. It decides what you learn, what she gives you, whether she is still there when you come back (and whether she follows you down), how the final encounter can end, and which of five epilogues you get. How you win the lantern changes its flame too: mercy lights it gold, and steel leaves it ash-pale. Every ending is a descent into the Under-Barrow, the setting for Act I.
+Wren and Ser Halric notice who you are: each Calling and Burden opens its own lines with Wren and, for some, a new way to talk the knight down. What you say to Wren permanently changes the world. It decides what you learn, what she gives you, whether she is still there when you come back (and whether she follows you down), how the final encounter can end, and which of five epilogues you get. How you win the lantern changes its flame too: mercy lights it gold, and steel leaves it ash-pale. Every ending is a descent into the Under-Barrow, the setting for Act I.
 
 ## Architecture
 
@@ -146,11 +146,12 @@ dotnet test
 dotnet test --collect:"XPlat Code Coverage"
 ```
 
-There are about 740 tests, all deterministic:
+There are about 760 tests, all deterministic:
 - **Unit tests** for every Core system. The dice and skill-check code has 100% line and branch coverage.
 - **Content validation** of the shipped `Data/`, plus fixtures that prove each validator rule catches what it should.
 - **Scenario tests** that play the Barrowlight storylines through the engine with scripted dice (`FixedRandomSource`).
 - **CLI playthroughs** that drive the real terminal UI with scripted keyboard input through Spectre.Console's `TestConsole`.
+- **A balance check** that plays the Barrow Heart fight 2,000 times per Calling with a simple scripted player and keeps each win rate inside a band.
 
 Dice fairness is checked with fixed-seed chi-square tests.
 
@@ -165,7 +166,11 @@ Dice fairness is checked with fixed-seed chi-square tests.
   - save and load
   - full test coverage of dice and skill checks
 - [x] **CI:** GitHub Actions build and test on Ubuntu and Windows
-- [ ] **Later:** leveling and rests, multi-character parties, races and backgrounds, shops, more dungeons, JSON Schema export for editor autocomplete
+- [ ] **Milestone 2: the Under-Barrow**
+  - [x] 2A: four Callings, Burdens (backgrounds) with keepsakes, and prologue reactivity
+  - [ ] 2B: sanctuary rests, leveling, and shops
+  - [ ] 2C: Act I, the Weeping Stair and Nocturne
+- [ ] **Later:** multi-character parties, races, more dungeons, saving mid-combat, JSON Schema export for editor autocomplete
 
 ## Contributing
 

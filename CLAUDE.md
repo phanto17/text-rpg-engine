@@ -50,7 +50,7 @@ CLI layout:
 - `CliHost`: argument parsing and content-error reporting.
 - `GameApp`: the title-to-play loop, dispatching on `GameMode`.
 - `Rendering/`: `Theme` (every color), `EventRenderer`, `Bars`, `RollText`, `StatusBar`, `DiceAnimator`.
-- `Screens/`: Title, CharacterCreation, Exploration, Dialogue, Combat, Info (sheet, inventory, journal, help), End.
+- `Screens/`: Title, CharacterCreation (name, calling, burden, scores, skills, expertise, review), Exploration, Dialogue, Combat, Info (sheet, inventory, journal, help), End.
 - `Input/`: `Prompter`, the line-based numbered menus. There are no arrow-key widgets, so every prompt can be scripted in tests.
 
 ---
@@ -434,4 +434,8 @@ A save from another format version is refused with a message naming its version 
   - save and load
   - full dice and skill-check test coverage
 - [x] **CI:** GitHub Actions build and test on ubuntu-latest and windows-latest.
-- [ ] **Later:** leveling and rests, parties, races and backgrounds, shops, saving mid-combat, JSON Schema export for editor autocomplete.
+- [ ] **Milestone 2 (the Under-Barrow):**
+  - [x] 2A: four Callings, Burdens (backgrounds) with keepsakes, the `background` condition, save format v2, prologue reactivity
+  - [ ] 2B: sanctuary rests, leveling, shops
+  - [ ] 2C: Act I content (the Weeping Stair and Nocturne)
+- [ ] **Later:** parties, races, saving mid-combat, JSON Schema export for editor autocomplete.
