@@ -29,10 +29,10 @@ public sealed class BarrowHeartBalanceTests(ITestOutputHelper output)
     public void Simulate_EachClassWithoutFlask_WinRateStaysInBand()
     {
         var content = ContentLoader.LoadFromDirectory(RealDataTests.DataDirectory);
-        var simulator = new BarrowHeartSimulator(content);
+        var simulator = new BossFightSimulator(content, "barrow_heart", "gravebound_knight");
 
         var rows = content.ClassList
-            .SelectMany(cls => new[] { false, true }.Select(withFlask => simulator.Run(cls.Id, withFlask, FightsPerVariant)))
+            .SelectMany(cls => new[] { false, true }.Select(withFlask => simulator.Run(cls.Id, level: 1, withFlask, FightsPerVariant)))
             .ToList();
 
         output.WriteLine(BalanceRow.Header);

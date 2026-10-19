@@ -10,31 +10,36 @@ using RpgEngine.Core.World;
 namespace RpgEngine.Tests.Balance;
 
 /// <summary>
-/// Plays the Barrowlight boss fight (Ser Halric and a barrow thrall) over and over, driving
+/// Plays one boss encounter (for example Ser Halric and a barrow thrall) over and over, driving
 /// <see cref="CombatEngine"/> directly with <see cref="BalancePolicy"/>. Fight <c>n</c> uses
 /// <c>new Pcg32RandomSource(n)</c>, so every measured number is exact and repeatable.
 /// </summary>
-internal sealed class BarrowHeartSimulator
+internal sealed class BossFightSimulator
 {
-    public const string EncounterId = "barrow_heart";
-
     // A fight between two sides that always attack ends long before this; hitting it means a stalemate bug.
     private const int MaxRounds = 100;
 
     private readonly GameContent _content;
+    private readonly string _encounterId;
     private readonly BalancePolicy _policy;
 
-    public BarrowHeartSimulator(GameContent content)
+    public BossFightSimulator(GameContent content, string encounterId, string bossId)
     {
         ArgumentNullException.ThrowIfNull(content);
+        ArgumentException.ThrowIfNullOrWhiteSpace(encounterId);
         _content = content;
-        _policy = new BalancePolicy(content);
+        _encounterId = encounterId;
+        _policy = new BalancePolicy(content, bossId);
     }
 
-    /// <summary>Runs fights with seeds 1..<paramref name="fights"/> for a fresh level-1 character of the class.</summary>
-    public BalanceRow Run(string classId, bool withFlask, int fights)
+    /// <summary>
+    /// Runs fights with seeds 1..<paramref name="fights"/> for a fresh character of the class at
+    /// <paramref name="level"/>, carrying only the class's starting kit.
+    /// </summary>
+    public BalanceRow Run(string classId, int level, bool withFlask, int fights)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(fights);
+        ArgumentOutOfRangeException.ThrowIfLessThan(level, 1);
         var wins = 0;
         var rounds = 0;
         var hpLeft = 0;
@@ -42,7 +47,7 @@ internal sealed class BarrowHeartSimulator
 
         for (var seed = 1; seed <= fights; seed++)
         {
-            var (won, fightRounds, startMaxHp, hpAtEnd) = Fight(classId, withFlask, (ulong)seed);
+            var (won, fightRounds, startMaxHp, hpAtEnd) = Fight(classId, level, withFlask, (ulong)seed);
             rounds += fightRounds;
             maxHp = startMaxHp;
             if (won)
@@ -52,33 +57,33 @@ internal sealed class BarrowHeartSimulator
             }
         }
 
-        return new BalanceRow(classId, withFlask, maxHp, fights, wins, rounds, hpLeft);
+        return new BalanceRow(classId, level, withFlask, maxHp, fights, wins, rounds, hpLeft);
     }
 
     // Returns the HP left as the fight ended: the victory XP may level the character up, and the
     // hit points that level adds are not something the fight left behind.
-    private (bool Won, int Rounds, int StartMaxHp, int HpLeft) Fight(string classId, bool withFlask, ulong seed)
+    private (bool Won, int Rounds, int StartMaxHp, int HpLeft) Fight(string classId, int level, bool withFlask, ulong seed)
     {
         var dice = new DiceRoller(new Pcg32RandomSource(seed));
         var checks = new CheckRunner(_content, new CheckResolver(dice, _content.Rules.NaturalCritsOnChecks));
         var text = new TextFormatter(_content);
         var effects = new EffectApplier(_content, dice, checks, text);
 
-        var player = CreatePlayer(classId);
+        var player = CreatePlayer(classId, level);
         var startMaxHp = player.MaxHp;
         if (withFlask)
         {
             player.Inventory.Add(BalancePolicy.Flask);
         }
 
-        var state = new GameState(player, WorldState.CreateNew(_content), _content.EncounterRooms[EncounterId]);
-        var session = new CombatEngine(_content, dice, checks, effects, text).Begin(EncounterId, state, new TurnLog());
+        var state = new GameState(player, WorldState.CreateNew(_content), _content.EncounterRooms[_encounterId]);
+        var session = new CombatEngine(_content, dice, checks, effects, text).Begin(_encounterId, state, new TurnLog());
 
         while (!session.IsOver)
         {
             if (session.Round > MaxRounds)
             {
-                throw new InvalidOperationException($"Seed {seed}: the {classId} fight did not end within {MaxRounds} rounds.");
+                throw new InvalidOperationException($"Seed {seed}: the {classId} fight against {_encounterId} did not end within {MaxRounds} rounds.");
             }
 
             var log = new TurnLog();
@@ -98,13 +103,25 @@ internal sealed class BarrowHeartSimulator
     // Standard array by class priority, the first background, and the first listed skill choices it
     // leaves (and the first of those for expertise). Backgrounds only add a skill, gold, and a
     // keepsake, and skills never come into play because the policy neither parleys nor flees.
-    private PlayerCharacter CreatePlayer(string classId)
+    // Higher levels come from the XP threshold, so HP, mana, and spells grow exactly as in play.
+    private PlayerCharacter CreatePlayer(string classId, int level)
     {
         var cls = _content.Classes[classId];
         var background = _content.BackgroundList[0];
         var scores = CharacterFactory.AssignByPriority(_content.Rules.StandardArray, cls);
         var skills = cls.SkillChoices.From.Where(skill => skill != background.BonusSkill).Take(cls.SkillChoices.Count).ToList();
         var expertise = skills.Take(cls.ExpertiseCount).ToList();
-        return new CharacterFactory(_content).Create("Tester", classId, background.Id, scores, skills, expertise);
+        var player = new CharacterFactory(_content).Create("Tester", classId, background.Id, scores, skills, expertise);
+        if (level > 1)
+        {
+            Progression.GrantXp(player, _content, _content.Rules.XpThresholdsByLevel[level - 1], new TurnLog());
+        }
+
+        if (player.Level != level)
+        {
+            throw new InvalidOperationException($"Level {level} is beyond the XP thresholds.");
+        }
+
+        return player;
     }
 }

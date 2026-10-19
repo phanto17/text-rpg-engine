@@ -12,30 +12,32 @@ namespace RpgEngine.Tests.Balance;
 /// <list type="number">
 /// <item>Heal: the first ready self-targeted spell or technique that heals, below 50% HP; then a
 /// Potion of Healing below 40% HP while any remain.</item>
-/// <item>Target: the thrall if one plain attack likely kills it (average damage, after
-/// vulnerabilities, at least its HP); otherwise the knight.</item>
-/// <item>Attack: a carried Flask of Holy Water opens on the knight; then the castable mana spell with
+/// <item>Target: a minion if one plain attack likely kills it (average damage, after
+/// vulnerabilities, at least its HP); otherwise the boss.</item>
+/// <item>Attack: a carried Flask of Holy Water opens on the boss; then the castable mana spell with
 /// the highest average damage against the target (after resistances and vulnerabilities; hit and
 /// save odds are ignored); then the first ready per-fight technique aimed at an enemy, unless a plain
 /// attack is already sure to kill (its minimum damage covers the target's HP); otherwise the plain
 /// attack.</item>
 /// </list>
 /// The plain attack is the first free damaging spell the character knows, otherwise the equipped
-/// weapon. The flask waits for the thrall to fall because throwing it first hands the thrall an extra
+/// weapon. The flask waits for the minion to fall because throwing it first hands the minion an extra
 /// round against a fragile caster. The policy never defends, parleys, or flees.
 /// </summary>
 internal sealed class BalancePolicy
 {
-    public const string Knight = "gravebound_knight";
     public const string Flask = "holy_water";
     private const string Potion = "healing_potion";
 
     private readonly GameContent _content;
+    private readonly string _bossId;
 
-    public BalancePolicy(GameContent content)
+    public BalancePolicy(GameContent content, string bossId)
     {
         ArgumentNullException.ThrowIfNull(content);
+        ArgumentException.ThrowIfNullOrWhiteSpace(bossId);
         _content = content;
+        _bossId = bossId;
     }
 
     public PlayerAction Choose(CombatSession session)
@@ -56,16 +58,16 @@ internal sealed class BalancePolicy
         }
 
         var enemies = session.ActiveEnemies;
-        var knight = enemies.OfType<MonsterCombatant>().FirstOrDefault(m => m.Definition.Id == Knight);
+        var boss = enemies.OfType<MonsterCombatant>().FirstOrDefault(m => m.Definition.Id == _bossId);
         var (plainSpell, plainDamage, plainType) = PlainAttack(session, ready);
         var target = enemies
-            .Where(e => e != knight && Adjusted(plainDamage.Average, plainType, e) >= e.CurrentHp)
+            .Where(e => e != boss && Adjusted(plainDamage.Average, plainType, e) >= e.CurrentHp)
             .OrderBy(e => e.CurrentHp)
             .FirstOrDefault()
-            ?? knight
+            ?? boss
             ?? enemies.OrderBy(e => e.CurrentHp).First();
 
-        if (target == knight && player.Inventory.Contains(Flask))
+        if (target == boss && player.Inventory.Contains(Flask))
         {
             return new UseItemAction(Flask, target.Id);
         }
