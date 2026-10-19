@@ -4,7 +4,7 @@ A narrative-driven, text-based RPG engine for the terminal, written in C# on .NE
 
 The engine is **purely data-driven**. Every room, item, monster, line of dialogue, class, and rule constant is loaded from JSON in [`Data/`](Data/), so new adventures can be written without touching C#.
 
-> **Status:** **Milestones 1 and 2 are complete.** *Barrowlight* is a playable seven-room adventure. A three-room prologue (character creation, a branching NPC conversation with permanent consequences, a riddle-and-trap puzzle, and a boss you can fight, flee, or talk down) leads into **Act I**, a descent to the underground lantern-town of Nocturne. Milestone 2 replaced the generic classes with four Greywater **Callings**, added **Burdens** (backgrounds) that the story reacts to, built **leveling**, **sanctuary rests**, and **shops**, and shipped Act I.
+> **Status:** **Milestones 1, 2, and 3 are complete.** *Barrowlight* is a playable fourteen-room adventure. A three-room prologue (character creation, a branching NPC conversation with permanent consequences, a riddle-and-trap puzzle, and a boss you can fight, flee, or talk down) leads into **Act I**, a descent to the underground lantern-town of Nocturne, and **Act II**, the Memory Warrens, where two rival strongholds each guard half of the seal on the way down. Milestone 2 added four Greywater **Callings**, **Burdens** (backgrounds) that the story reacts to, **leveling**, **sanctuary rests**, and **shops**.
 
 ---
 
@@ -33,7 +33,13 @@ Wren and Ser Halric notice who you are: each Calling and Burden opens its own li
 - Help a fading clerk remember his name on **the Weeping Stair**, and read what the stone remembers by the Barrowlight.
 - Rest, trade, and take up the cause of **Nocturne**, a market of the living and the half-remembering dead whose beacon has gone dark.
 - Recover the beacon's two stolen pieces from a grieving cantor in **the Echo Chapel** and a drowned soldier still holding **the Drowned Tollbridge**. Shine the lantern on each room's memory echo before you face them, and you may not need to fight at all.
-- Relight the beacon (or don't), then cross the tollbridge into the deep. Which of six epilogues you get depends on the chapel, the beacon, whether Wren followed you, and the color your choices have given the lantern's flame.
+- Relight the beacon (or don't), then cross the tollbridge into the deep.
+
+**Act II: the Memory Warrens.** Beyond the tollbridge, a bronze gate bars the way down, sealed by two Triad Seals held by two factions that both believe they are saving the dead:
+- North, in **the Archive of Unkept Vows**, the Hollow Choir binds fading spirits to wax and silver wire. Prelate Vaelen keeps her drowned daughter's voice wound inside a carillon.
+- South, in **the Iron Reliquary**, Ashen soldiers scour their own names away in boiling lye. Commander Silas has forgotten why he fights, and whom he burned.
+- Read the ledgers, sabotage or tune the Choir's loom, flush the lye cistern, and shine the lantern on each stronghold's memory echoes, and you may talk both leaders down instead of cutting through them.
+- Set both seals into the gate to end the adventure. Which of six epilogues you get depends on how you resolved Vaelen and Silas, whether Wren followed you, and the color your choices have given the lantern's flame. Every ending looks down the stair toward Act III.
 
 ## Architecture
 
@@ -157,13 +163,13 @@ dotnet test
 dotnet test --collect:"XPlat Code Coverage"
 ```
 
-There are about 825 tests, all deterministic:
+There are about 855 tests, all deterministic:
 - **Unit tests** for every Core system. The dice and skill-check code has 100% line and branch coverage.
 - **Content validation** of the shipped `Data/`, plus fixtures that prove each validator rule catches what it should.
-- **Scenario tests** that play the prologue and Act I storylines through the engine with scripted dice (`FixedRandomSource`), from the Lichgate to the tollbridge crossing, including which epilogue each world state reaches.
+- **Scenario tests** that play the prologue, Act I, and Act II storylines through the engine with scripted dice (`FixedRandomSource`): merciful and violent runs through each act, ending at the Twin Seal gate, plus which epilogue each world state reaches.
 - **Reachability checks** that every room can be reached from the start and that only the tollbridge crossing ends the game.
 - **CLI playthroughs** that drive the real terminal UI with scripted keyboard input through Spectre.Console's `TestConsole`, including a full run from character creation to the Act I epilogue.
-- **A balance check** that plays the Barrow Heart fight 2,000 times per Calling with a simple scripted player and keeps each win rate inside a band.
+- **Balance checks** that play each boss fight 2,000 times per Calling with a simple scripted player (the Barrow Heart at level 1, Prelate Vaelen and Commander Silas at levels 2 and 3) and keep each win rate inside a band.
 
 Dice fairness is checked with fixed-seed chi-square tests.
 
@@ -182,6 +188,7 @@ Dice fairness is checked with fixed-seed chi-square tests.
   - [x] 2A: four Callings, Burdens (backgrounds) with keepsakes, and prologue reactivity
   - [x] 2B: sanctuary rests, leveling, and shops
   - [x] 2C: Act I, the Weeping Stair and Nocturne, ending at the Drowned Tollbridge
+- [x] **Milestone 3: the Memory Warrens** (Act II): the Archive of Unkept Vows, the Iron Reliquary, and the Gate of the Twin Seals, with level-3 abilities for every Calling
 - [x] **Tooling:** JSON Schema export for editor autocomplete in VS Code
 - [ ] **Later:** multi-character parties, races, more dungeons, saving mid-combat
 

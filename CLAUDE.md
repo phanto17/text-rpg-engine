@@ -96,8 +96,10 @@ CLI layout:
   - `TestContent`: an in-memory JSON content builder.
   - Fixtures: `ExplorationFixture`, `CombatFixture`, `SessionFixture`.
   - Harnesses: `TestWorld`, `ExplorationHarness`, `CombatHarness`, `CliHarness`.
-- **Balance check** (`Balance/`): `BarrowHeartBalanceTests` plays the `barrow_heart` boss fight 2,000 times per class, using seeds 1 to 2000, the real `Data/`, the standard array, and the simple documented player in `BalancePolicy`.
-  - Every class plays once without the Flask of Holy Water and once with it. Each class's no-flask win rate must stay inside its band.
+- **Balance checks** (`Balance/`): `BossFightSimulator` plays one boss encounter 2,000 times per class, using seeds 1 to 2000, the real `Data/`, the standard array, the class's starting kit, and the simple documented player in `BalancePolicy`. Higher levels are reached through the real XP thresholds, so HP, mana, and spells grow exactly as in play.
+  - `BarrowHeartBalanceTests`: the `barrow_heart` fight at level 1. Every class plays once without the Flask of Holy Water and once with it. Each class's no-flask win rate must stay inside its band.
+  - `MemoryWarrensBalanceTests`: the Act II bosses (`archive_vaelen_boss`, `reliquary_silas_boss`) at levels 2 and 3, without the flask. Level 3, where nearly every player meets them, has the fair band (40% to 85%); level 2 only rules out an unwinnable fight (at least 5%).
+  - A new boss fight gets the same treatment: add it to a balance test with bands that bracket its measured win rates.
   - After an intended tuning change, run `dotnet test --filter Balance --logger "console;verbosity=detailed"`. Read the printed table (win rate, average rounds, average HP left on wins) and move the bands in the same commit as the data change.
 - CLI tests drive the real UI through `Spectre.Console.Testing.TestConsole` with scripted input lines. The CLI exposes internals to the test assembly only.
 - Coverage target: 100% line coverage for `RpgEngine.Core.Dice` and `RpgEngine.Core.Checks`.
@@ -468,5 +470,6 @@ dotnet run --project src/RpgEngine.CLI -- --export-schemas
   - [x] 2A: four Callings, Burdens (backgrounds) with keepsakes, the `background` condition, save format v2, prologue reactivity
   - [x] 2B: the `rest` effect, XP thresholds with level-ups and `spellsByLevel`, shops (`shops.json`, `startShop`, Shop mode)
   - [x] 2C: Act I content: the Weeping Stair, Nocturne, the Echo Chapel, and the Drowned Tollbridge. The descent no longer ends the game; crossing the tollbridge does, with epilogues keyed to the chapel, the beacon, Wren, and `lantern_resonance`
+- [x] **Milestone 3 (the Memory Warrens, Act II):** `warren_crossroads` and the Twin Seal gate (the game now ends at `unseal`), the Archive of Unkept Vows (Prelate Vaelen) and the Iron Reliquary (Commander Silas), level-3 abilities for every Calling, epilogues keyed to both bosses, Wren, and `lantern_resonance`, and the Act II boss balance check.
 - [x] **Tooling:** JSON Schema export for editor autocomplete (`--export-schemas`, `.vscode/schemas/`).
 - [ ] **Later:** parties, races, saving mid-combat.
