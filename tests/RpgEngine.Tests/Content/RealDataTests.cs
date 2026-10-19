@@ -1,3 +1,4 @@
+using RpgEngine.Core.Characters;
 using RpgEngine.Core.Content;
 using RpgEngine.Core.Content.Defs;
 
@@ -101,15 +102,51 @@ public sealed class RealDataTests
     }
 
     [Fact]
-    public void EveryCalling_LearnsOneAbilityAtLevelTwo()
+    public void XpThresholds_PutLevelTwoAtTheBarrowHeart()
     {
         var content = Content.Value;
 
         Assert.Equal(new[] { 0, 100, 300, 900, 2700 }, content.Rules.XpThresholdsByLevel);
-        Assert.All(content.ClassList, cls => Assert.Single(Assert.Single(cls.SpellsByLevel, grant => grant.Level == 2).Spells));
 
         // Both ways through the Barrow Heart (100 XP for a parley, 125 for a victory) reach level 2.
         Assert.True(content.Monsters["gravebound_knight"].Xp >= content.Rules.XpThresholdsByLevel[1]);
+    }
+
+    [Theory]
+    [InlineData("oath_eater", "ash_brand", "iron_penance", SpellKind.Technique)]
+    [InlineData("liminal_auditor", "ledger_strike", "writ_of_foreclosure", SpellKind.Technique)]
+    [InlineData("vesper_cantor", "dirge_of_tallow", "shattering_cadence", SpellKind.Spell)]
+    [InlineData("remnant_vessel", "ember_vigil", "death_knell_echo", SpellKind.Spell)]
+    public void EveryCalling_LearnsOneAbilityAtLevelsTwoAndThree(string classId, string levelTwo, string levelThree, SpellKind levelThreeKind)
+    {
+        var content = Content.Value;
+        var cls = content.Classes[classId];
+
+        Assert.Equal(new[] { 2, 3 }, cls.SpellsByLevel.Select(g => g.Level));
+        Assert.Equal(levelTwo, Assert.Single(cls.SpellsByLevel[0].Spells));
+        Assert.Equal(levelThree, Assert.Single(cls.SpellsByLevel[1].Spells));
+
+        // Level 3 is an attack: martial Callings get a once-per-fight technique, casters a 3 MP spell.
+        var spell = content.Spells[levelThree];
+        Assert.Equal((levelThreeKind, SpellTarget.Enemy), (spell.Kind, spell.Target));
+        Assert.Equal(levelThreeKind == SpellKind.Technique ? (0, (int?)1) : (3, (int?)null), (spell.Cost.Mana, spell.Cost.UsesPerEncounter));
+        Assert.Equal(cls.Mana is null, levelThreeKind == SpellKind.Technique);
+        Assert.EndsWith("Learned at level 3.", spell.Description, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void LevelThreeAbilities_HaveTheirSpecifiedResolutions()
+    {
+        var spells = Content.Value.Spells;
+
+        var penance = Assert.IsType<SaveResolutionDef>(spells["iron_penance"].Resolution);
+        Assert.Equal((Ability.Wis, "2d8", DamageType.Psychic, true, "grave_chill"), (penance.Ability, penance.Damage, penance.DamageType, penance.HalfOnSave, penance.Status));
+        var writ = Assert.IsType<AutoHitResolutionDef>(spells["writ_of_foreclosure"].Resolution);
+        Assert.Equal(("2d6+3", DamageType.Radiant), (writ.Damage, writ.DamageType));
+        var cadence = Assert.IsType<SaveResolutionDef>(spells["shattering_cadence"].Resolution);
+        Assert.Equal((Ability.Con, "3d8", DamageType.Force, true, (string?)null), (cadence.Ability, cadence.Damage, cadence.DamageType, cadence.HalfOnSave, cadence.Status));
+        var knell = Assert.IsType<SpellAttackResolutionDef>(spells["death_knell_echo"].Resolution);
+        Assert.Equal(("3d6", DamageType.Lightning, "grave_chill"), (knell.Damage, knell.DamageType, knell.Status));
     }
 
     [Fact]

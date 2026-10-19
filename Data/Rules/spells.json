@@ -122,5 +122,41 @@
     "cost": { "mana": 1 },
     "target": "self",
     "resolution": { "type": "effects", "effects": [ { "type": "heal", "dice": "1d6+2" } ] }
+  },
+  {
+    "id": "iron_penance",
+    "name": "Iron Penance",
+    "kind": "technique",
+    "description": "Lay the whole weight of the vow you broke on a foe's mind, the way the tribunal once laid it on yours. The foe makes a Wisdom save or takes 2d8 psychic damage and suffers Grave Chill (half damage and no chill on a success). Once per fight. Learned at level 3.",
+    "cost": { "usesPerEncounter": 1 },
+    "target": "enemy",
+    "resolution": { "type": "save", "ability": "wis", "damage": "2d8", "damageType": "psychic", "halfOnSave": true, "status": "grave_chill" }
+  },
+  {
+    "id": "writ_of_foreclosure",
+    "name": "Writ of Foreclosure",
+    "kind": "technique",
+    "description": "Read out everything a foe owes the dead and call the whole debt due at once. Deals 2d6+3 radiant damage and never misses. Once per fight. Learned at level 3.",
+    "cost": { "usesPerEncounter": 1 },
+    "target": "enemy",
+    "resolution": { "type": "autoHit", "damage": "2d6+3", "damageType": "radiant" }
+  },
+  {
+    "id": "shattering_cadence",
+    "name": "Shattering Cadence",
+    "kind": "spell",
+    "description": "Find the pitch at which bone and old iron ring, and hold it until something gives. The foe makes a Constitution save or takes 3d8 force damage (half on a success). Learned at level 3.",
+    "cost": { "mana": 3 },
+    "target": "enemy",
+    "resolution": { "type": "save", "ability": "con", "damage": "3d8", "damageType": "force", "halfOnSave": true }
+  },
+  {
+    "id": "death_knell_echo",
+    "name": "Death-Knell Echo",
+    "kind": "spell",
+    "description": "Ring again the bell that tolled on the night you died, and hurl its echo at a foe. A spell attack that deals 3d6 lightning damage and inflicts Grave Chill on a hit. Learned at level 3.",
+    "cost": { "mana": 3 },
+    "target": "enemy",
+    "resolution": { "type": "spellAttack", "damage": "3d6", "damageType": "lightning", "status": "grave_chill" }
   }
 ]

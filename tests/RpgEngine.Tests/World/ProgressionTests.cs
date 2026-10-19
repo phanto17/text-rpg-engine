@@ -1,6 +1,10 @@
+using RpgEngine.Core.Characters;
+using RpgEngine.Core.Combat;
 using RpgEngine.Core.Content;
+using RpgEngine.Core.Engine;
 using RpgEngine.Core.Events;
 using RpgEngine.Core.World;
+using RpgEngine.Tests.Content;
 using RpgEngine.Tests.TestSupport;
 
 namespace RpgEngine.Tests.World;
@@ -12,6 +16,8 @@ public sealed class ProgressionTests
         .With("game.json", TestContent.Manifest.Replace("\"naturalCritsOnChecks\": true", "\"xpThresholdsByLevel\": [0, 100, 300], \"naturalCritsOnChecks\": true", StringComparison.Ordinal))
         .With("Rules/classes.json", TestContent.Classes.Replace("\"spells\": [\"firebolt\", \"missile\"]", "\"spells\": [\"firebolt\", \"missile\"], \"spellsByLevel\": [ { \"level\": 2, \"spells\": [\"second_wind\"] } ]", StringComparison.Ordinal))
         .Load();
+
+    private static readonly Lazy<GameContent> Shipped = new(() => ContentLoader.LoadFromDirectory(RealDataTests.DataDirectory));
 
     private static TurnLog Grant(GameContent content, Core.Characters.PlayerCharacter player, int xp)
     {
@@ -103,6 +109,50 @@ public sealed class ProgressionTests
         var fighter = TestCharacters.Create(classId: "fighter");
 
         Assert.Equal(100, Progression.NextLevelXp(fighter, Leveling()));
+    }
+
+    [Theory]
+    [InlineData("oath_eater", "ash_brand", "iron_penance")]
+    [InlineData("liminal_auditor", "ledger_strike", "writ_of_foreclosure")]
+    [InlineData("vesper_cantor", "dirge_of_tallow", "shattering_cadence")]
+    [InlineData("remnant_vessel", "ember_vigil", "death_knell_echo")]
+    public void GrantXp_ShippedCallings_LearnTheirLevelTwoAndThreeAbilities(string classId, string levelTwo, string levelThree)
+    {
+        var content = Shipped.Value;
+        var player = CreateCalling(content, classId);
+        var starting = player.SpellIds.ToList();
+
+        // 300 XP crosses both thresholds in one award, so each level's grant is checked separately.
+        var ups = Grant(content, player, 300).Events.OfType<LeveledUpEvent>().ToList();
+
+        Assert.Equal(new[] { 2, 3 }, ups.Select(u => u.Level));
+        Assert.Equal(levelTwo, Assert.Single(ups[0].NewSpells).Id);
+        Assert.Equal(levelThree, Assert.Single(ups[1].NewSpells).Id);
+        Assert.Equal([.. starting, levelTwo, levelThree], player.SpellIds);
+        Assert.Equal(900, Progression.NextLevelXp(player, content));
+
+        // A technique starts each fight with its uses; a spell's cost fits in the caster's level-3 mana.
+        var spell = content.Spells[levelThree];
+        if (spell.Cost.UsesPerEncounter is { } uses)
+        {
+            Assert.Equal(uses, CombatRules.EncounterUses(player, content)[levelThree]);
+        }
+        else
+        {
+            Assert.InRange(spell.Cost.Mana, 1, player.MaxMana);
+        }
+
+        // Further XP short of level 4 grants nothing new.
+        Assert.Empty(Grant(content, player, 599).Events.OfType<LeveledUpEvent>());
+    }
+
+    private static PlayerCharacter CreateCalling(GameContent content, string classId)
+    {
+        var cls = content.Classes[classId];
+        var background = content.BackgroundList[0];
+        var skills = cls.SkillChoices.From.Where(s => s != background.BonusSkill).Take(cls.SkillChoices.Count).ToList();
+        var scores = CharacterFactory.AssignByPriority(content.Rules.StandardArray, cls);
+        return new CharacterFactory(content).Create("Tamsin", classId, background.Id, scores, skills, skills.Take(cls.ExpertiseCount).ToList());
     }
 
     [Fact]
