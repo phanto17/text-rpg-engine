@@ -1,32 +1,32 @@
 [
   {
-    "id": "fighter",
-    "name": "Fighter",
-    "description": "A trained warrior in heavy mail, at home in the press of steel. Hardy, accurate, and very hard to put down. Can catch a second wind once per fight.",
+    "id": "oath_eater",
+    "name": "Oath-Eater",
+    "description": "A former iron-penitent who survived an Ashen tribunal by swallowing the ash of a broken vow. Heavy mail, a long blade, and a body that refuses to fall. Knows the weight of a duty that outlives its reason.",
     "hitDie": 10,
-    "abilityPriority": ["str", "con", "dex", "wis", "cha", "int"],
+    "abilityPriority": ["str", "con", "cha", "wis", "dex", "int"],
     "savingThrows": ["str", "con"],
     "skillChoices": {
       "count": 2,
-      "from": ["acrobatics", "animal_handling", "athletics", "history", "insight", "intimidation", "perception", "survival"]
+      "from": ["athletics", "history", "insight", "intimidation", "perception", "religion", "survival"]
     },
     "startingItems": [
       { "item": "longsword", "equip": true },
       { "item": "chain_mail", "equip": true },
       { "item": "healing_potion", "count": 2 }
     ],
-    "spells": ["second_wind"]
+    "spells": ["second_wind", "vowbreaker_strike"]
   },
   {
-    "id": "rogue",
-    "name": "Rogue",
-    "description": "Quick hands, a quicker tongue, and a talent for finding the soft spot in anything, whether a lock, an argument, or an enemy. Masters two chosen skills.",
+    "id": "liminal_auditor",
+    "name": "Liminal Auditor",
+    "description": "A funerary bailiff and tomb-runner who audits the unsettled debts of the restless dead. Quick hands, a quicker tongue, and a ledger of everything the dead still owe and are owed. Masters two chosen skills.",
     "hitDie": 8,
     "abilityPriority": ["dex", "con", "cha", "wis", "int", "str"],
     "savingThrows": ["dex", "int"],
     "skillChoices": {
       "count": 4,
-      "from": ["acrobatics", "athletics", "deception", "insight", "intimidation", "investigation", "perception", "persuasion", "sleight_of_hand", "stealth"]
+      "from": ["acrobatics", "athletics", "deception", "history", "insight", "intimidation", "investigation", "perception", "persuasion", "sleight_of_hand", "stealth"]
     },
     "expertiseCount": 2,
     "startingItems": [
@@ -35,24 +35,43 @@
       { "item": "dagger" },
       { "item": "healing_potion", "count": 2 }
     ],
-    "spells": ["sneak_attack"]
+    "spells": ["sneak_attack", "grave_salt_feint"]
   },
   {
-    "id": "wizard",
-    "name": "Wizard",
-    "description": "A scholar of the arcane who trades armor for spells. Fragile in a brawl, devastating at range, and well read in the old rites of the dead.",
+    "id": "vesper_cantor",
+    "name": "Vesper Cantor",
+    "description": "An exiled scholar of funerary acoustics who casts by plucking the resonant frequencies of the dead. Fragile in a brawl, devastating at range, and fluent in the old litanies of the barrows.",
     "hitDie": 6,
     "abilityPriority": ["int", "con", "dex", "wis", "cha", "str"],
     "savingThrows": ["int", "wis"],
     "skillChoices": {
       "count": 2,
-      "from": ["arcana", "history", "insight", "investigation", "medicine", "religion"]
+      "from": ["arcana", "history", "insight", "investigation", "medicine", "performance", "religion"]
     },
     "mana": { "base": 4, "ability": "int" },
     "startingItems": [
       { "item": "quarterstaff", "equip": true },
       { "item": "healing_potion", "count": 2 }
     ],
-    "spells": ["fire_bolt", "magic_missile"]
+    "spells": ["fire_bolt", "magic_missile", "vesper_toll"]
+  },
+  {
+    "id": "remnant_vessel",
+    "name": "Remnant Vessel",
+    "description": "A traveler who died on the night the Barrowlight went out and woke with a cold ember in their ribs. Walks the razor's edge between living will and ghostly calcification, spending borrowed warmth to stay on the right side of it.",
+    "hitDie": 8,
+    "abilityPriority": ["cha", "con", "dex", "wis", "str", "int"],
+    "savingThrows": ["con", "cha"],
+    "skillChoices": {
+      "count": 2,
+      "from": ["arcana", "deception", "insight", "intimidation", "medicine", "perception", "persuasion", "religion"]
+    },
+    "mana": { "base": 3, "ability": "cha" },
+    "startingItems": [
+      { "item": "shortsword", "equip": true },
+      { "item": "leather_armor", "equip": true },
+      { "item": "healing_potion", "count": 2 }
+    ],
+    "spells": ["hollow_rasp", "borrowed_ember", "shroud_of_ash"]
   }
 ]

@@ -34,8 +34,8 @@ public sealed class BarrowlightScenarioTests
     public void PersuadeWren_ThenSpeakTheRite_EndsInPeace()
     {
         // ambient 0 | persuasion 15 | ambient 0 (ossuary) + 0 (DescribeRoom) | ambient 0 (crypt) | initiative 15, 1, 1 | rite with advantage 15, 10
-        var rogue = Create("rogue", "ash_deserter", ["persuasion", "insight", "stealth", "perception"], ["persuasion", "stealth"]);
-        var session = GameSession.NewGame(Content, rogue, new FixedRandomSource(0, 15, 0, 0, 0, 15, 1, 1, 15, 10));
+        var auditor = Create("liminal_auditor", "ash_deserter", ["persuasion", "insight", "stealth", "perception"], ["persuasion", "stealth"]);
+        var session = GameSession.NewGame(Content, auditor, new FixedRandomSource(0, 15, 0, 0, 0, 15, 1, 1, 15, 10));
         session.Begin();
 
         Do(session, "talk to wren");
@@ -93,8 +93,8 @@ public sealed class BarrowlightScenarioTests
     {
         // As above without DescribeRoom: ambient 0 | persuasion 15 | ossuary 0 | crypt 0 | initiative 15, 1, 1 | rite 15, 10
         // then west 0 | up 0 | look 0 | down 0 | east 0 (the encounter is resolved, so no initiative)
-        var rogue = Create("rogue", "ash_deserter", ["persuasion", "insight", "stealth", "perception"], ["persuasion", "stealth"]);
-        var session = GameSession.NewGame(Content, rogue, new FixedRandomSource(0, 15, 0, 0, 15, 1, 1, 15, 10, 0, 0, 0, 0, 0));
+        var auditor = Create("liminal_auditor", "ash_deserter", ["persuasion", "insight", "stealth", "perception"], ["persuasion", "stealth"]);
+        var session = GameSession.NewGame(Content, auditor, new FixedRandomSource(0, 15, 0, 0, 15, 1, 1, 15, 10, 0, 0, 0, 0, 0));
         session.Begin();
         Do(session, "talk to wren");
         Say(session, "I'm not here to rob the dead");
@@ -144,8 +144,8 @@ public sealed class BarrowlightScenarioTests
     public void IntimidateWren_ThenFight_EndsAlone()
     {
         // ambient 0 | intimidation 15 | look ambient 1 | ambient 0, 0 | initiative 20, 1, 1 | crit knight 20, 8, 8 | thrall 1 | crit thrall 20, 8, 8
-        var fighter = Create("fighter", "moor_bailiff", ["athletics", "intimidation"], []);
-        var session = GameSession.NewGame(Content, fighter, new FixedRandomSource(0, 15, 1, 0, 0, 20, 1, 1, 20, 8, 8, 1, 20, 8, 8));
+        var oathEater = Create("oath_eater", "moor_bailiff", ["athletics", "intimidation"], []);
+        var session = GameSession.NewGame(Content, oathEater, new FixedRandomSource(0, 15, 1, 0, 0, 20, 1, 1, 20, 8, 8, 1, 20, 8, 8));
         session.Begin();
 
         Do(session, "talk to wren");
@@ -186,8 +186,8 @@ public sealed class BarrowlightScenarioTests
     public void WrongSigil_TriggersNeedleTrapAndResets()
     {
         // ambient 0 | ossuary ambient 0 | DEX save 2 (fails) | 1d4 = 3
-        var wizard = Create("wizard", "fever_dreamer", ["religion", "arcana"], []);
-        var session = GameSession.NewGame(Content, wizard, new FixedRandomSource(0, 0, 2, 3));
+        var cantor = Create("vesper_cantor", "fever_dreamer", ["religion", "arcana"], []);
+        var session = GameSession.NewGame(Content, cantor, new FixedRandomSource(0, 0, 2, 3));
         session.Begin();
         Do(session, "down");
 

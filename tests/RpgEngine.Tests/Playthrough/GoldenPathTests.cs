@@ -8,21 +8,21 @@ namespace RpgEngine.Tests.Playthrough;
 /// </summary>
 public sealed class GoldenPathTests
 {
-    private static readonly string[] CreateRogue =
+    private static readonly string[] CreateAuditor =
     [
         "1",            // title: new game
         "Tamsin",       // name
-        "2",            // class: rogue
-        "2",            // burden: Ash Deserter (religion, outside the rogue's list)
+        "2",            // calling: Liminal Auditor
+        "2",            // burden: Ash Deserter (religion, outside the auditor's list)
         "1",            // standard array
         "1",            // keep suggested scores
-        "8 4 7 10",     // persuasion, insight, perception, stealth
+        "9 5 8 11",     // persuasion, insight, perception, stealth
         "3 4",          // expertise: persuasion, stealth
         "y",            // begin
     ];
 
-    // Fighter with the Moor Bailiff burden (persuasion, outside the fighter's list).
-    private static readonly string[] CreateFighter = ["1", "Bram", "1", "3", "1", "1", "3 6", "y"];
+    // Oath-Eater with the Moor Bailiff burden (persuasion, outside the oath-eater's list): athletics, intimidation.
+    private static readonly string[] CreateOathEater = ["1", "Bram", "1", "3", "1", "1", "1 4", "y"];
 
     private static readonly string[] OpenTheDoor = ["down", "press sun", "press moon", "press skull", "east"];
 
@@ -33,7 +33,7 @@ public sealed class GoldenPathTests
 
         string[] inputs =
         [
-            .. CreateRogue,
+            .. CreateAuditor,
             "talk to wren",
             "4",                    // [Persuasion DC 12] I'm not here to rob the dead...
             "1",                    // I'll bring the light back.
@@ -74,12 +74,12 @@ public sealed class GoldenPathTests
     {
         using var cli = new CliHarness();
 
-        // Lucky dice: everyone rolls 20 for initiative, and the rogue's DEX acts first. The flask's
+        // Lucky dice: everyone rolls 20 for initiative, and the auditor's DEX acts first. The flask's
         // 2d4 rolls 8, doubled to 16 against Ser Halric's 15 HP. The thrall's critical claw leaves
-        // the rogue on 2 HP, and the rogue's critical strike finishes it.
+        // the auditor on 2 HP, and the auditor's critical strike finishes it.
         string[] inputs =
         [
-            .. CreateRogue,
+            .. CreateAuditor,
             "talk to wren",
             "4",                    // [Persuasion DC 12] earns her trust and the flask
             "1",                    // I'll bring the light back.
@@ -108,13 +108,13 @@ public sealed class GoldenPathTests
     }
 
     [Fact]
-    public void FalteringFighter_DiesToTheBarrowHeart_AndCanQuitFromGameOver()
+    public void FalteringOathEater_DiesToTheBarrowHeart_AndCanQuitFromGameOver()
     {
         using var cli = new CliHarness();
 
         string[] inputs =
         [
-            .. CreateFighter,
+            .. CreateOathEater,
             .. OpenTheDoor,
             "4",    // Defend; lucky dice make the undead crit, and the thrall finishes the job
             "2",    // game over menu (no saves): quit
@@ -128,7 +128,7 @@ public sealed class GoldenPathTests
     }
 
     [Fact]
-    public void WizardBacksOutOfSpellMenu_ThenFlees()
+    public void CantorBacksOutOfSpellMenu_ThenFlees()
     {
         using var cli = new CliHarness();
 
@@ -146,7 +146,7 @@ public sealed class GoldenPathTests
         var exitCode = cli.Run(inputs);
 
         Assert.Equal(0, exitCode);
-        Assert.Contains("Magic Missile (2 MP)", cli.Output);
+        Assert.Contains("Chords of Unrest (2 MP)", cli.Output);
         Assert.Contains("You got away.", cli.Output);
         Assert.Contains("The Ossuary Hall", cli.Output);
     }
@@ -158,7 +158,7 @@ public sealed class GoldenPathTests
 
         string[] inputs =
         [
-            .. CreateFighter,
+            .. CreateOathEater,
             "stats", "inventory", "journal", "help", "look", "examine wren", "99", "",
             "save test-slot",
             "quit", "n",
@@ -199,7 +199,7 @@ public sealed class GoldenPathTests
             "",                         // empty name is rejected
             "Wren's Cousin",
             "bard",                     // unknown class name is ignored
-            "Rogue",                    // class by name
+            "Liminal Auditor",          // calling by name
             "Ash Deserter",             // burden by name
             "2",                        // roll 4d6 drop lowest (lucky: all 18s)
             "2",                        // assign manually

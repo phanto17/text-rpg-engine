@@ -61,21 +61,22 @@ Every funeral lock, faction debate, and questline in *Barrowlight* revolves arou
 
 ## 5. Character Callings & Protagonist Backgrounds (`Data/Rules/classes.json`)
 
-To ground the protagonist in Greywater's world, character classes represent **Callings**—unconventional vocations with built-in backstories and `ClassCondition` hooks:
+To ground the protagonist in Greywater's world, character classes represent **Callings**: unconventional vocations with built-in backstories and `ClassCondition` hooks. All four ship in `classes.json` (file order is the creation menu order); spells and techniques keep stable ids even when renamed.
 
-1. **The Oath-Eater (`oath_eater` — Martial / Tank, `d10` Hit Die, `STR/CON/CHA`):**
-   - *Lore:* A former iron-penitent who survived an Ashen tribunal by swallowing the ash of a broken vow. Heavy armor (`chain_mail`), `longsword`, and `usesPerEncounter` techniques (*Second Wind*, *Vow-Breaker's Strike*).
+1. **The Oath-Eater (`oath_eater`: martial, `d10` hit die, priority STR/CON/CHA):**
+   - *Lore:* A former iron-penitent who survived an Ashen tribunal by swallowing the ash of a broken vow. `longsword` and `chain_mail`, with per-fight techniques *Ash-Blood Second Wind* (`second_wind`, self-heal 1d10+1) and *Vow-Breaker's Strike* (`vowbreaker_strike`, weapon attack +1d6).
    - *Narrative Hook:* Understands the crushing weight of sworn duty; unlocks unique dialogue with bound guardians and Ashen soldiers.
-2. **The Liminal Auditor (`liminal_auditor` — Specialist / Skill Master, `d8` Hit Die, `DEX/Con/CHA`, `expertiseCount: 2`):**
-   - *Lore:* A funerary bailiff and tomb-runner from Hollin's Rest hired to audit the unsettled debts and heirlooms of the restless dead. Finesse weapons (`shortsword`, `dagger`), `leather_armor`, and `usesPerEncounter` techniques (*Sneak Attack* / *Ledger Strike*).
+2. **The Liminal Auditor (`liminal_auditor`: specialist, `d8` hit die, priority DEX/CON/CHA, `expertiseCount: 2`):**
+   - *Lore:* A funerary bailiff and tomb-runner from Hollin's Rest hired to audit the unsettled debts and heirlooms of the restless dead. `shortsword`, `dagger`, `leather_armor`, with per-fight techniques *Clause of Severance* (`sneak_attack`, weapon attack +1d6, twice) and *Grave-Salt Feint* (`grave_salt_feint`, CON DC 12 save or 1d4 piercing and `grave_chill`).
    - *Narrative Hook:* Approaches the supernatural as a web of human promises, contracts, and secrets; excels at skill checks and underground commerce.
-3. **The Vesper Cantor (`vesper_cantor` — Liturgical Caster / Scholar, `d6` Hit Die, `INT/CON/DEX`, `mana` user):**
-   - *Lore:* An exiled scholar of funerary acoustics and memory-tallow who casts spells by plucking the resonant frequencies of the dead. Wields a `quarterstaff` and `mana` spells (*Fire Bolt* / *Tallow-Flame*, *Magic Missile* / *Choir of Unrest*).
+3. **The Vesper Cantor (`vesper_cantor`: liturgical caster, `d6` hit die, priority INT/CON/DEX, mana 4 + INT):**
+   - *Lore:* An exiled scholar of funerary acoustics and memory-tallow who casts spells by plucking the resonant frequencies of the dead. `quarterstaff`; spells *Tallow-Spark* (`fire_bolt`, free 1d10 fire), *Chords of Unrest* (`magic_missile`, 2 MP, 3d4+3 force, never misses), and *Toll the Vesper* (`vesper_toll`, 2 MP, WIS save, 2d8 radiant, half on a save).
    - *Narrative Hook:* Deciphers ancient Under-Barrow litanies and senses the emotional echoes left in stone and ash.
-4. **The Remnant Vessel (`remnant_vessel` — Optional Milestone 2 Calling, `d8` Hit Die, `CON/CHA/WIS`):**
-   - *Lore:* A traveler who died on the night the Barrowlight went out and woke with a cold ember in their ribs. Walks the razor's edge between mortal agency and ghostly calcification.
+4. **The Remnant Vessel (`remnant_vessel`: half-dead caster, `d8` hit die, priority CHA/CON/DEX, mana 3 + CHA):**
+   - *Lore:* A traveler who died on the night the Barrowlight went out and woke with a cold ember in their ribs. Walks the razor's edge between mortal agency and ghostly calcification. `shortsword` and `leather_armor`; *Hollow Rasp* (`hollow_rasp`, free 1d8 cold), *Borrowed Ember* (`borrowed_ember`, 2 MP, DEX save, 2d6 radiant, half on a save), and *Shroud of Ash* (`shroud_of_ash`, per-fight self-heal 1d8+1).
+   - *Narrative Hook:* The dead recognize one of their own; the living are never quite sure.
 
-*(Note: During transition, existing test fixtures referencing `fighter`, `rogue`, and `wizard` must either be updated in lockstep with `classes.json` or supported via aliases/expanded class definitions.)*
+Every Calling starts with two `healing_potion`s. The balance check (`tests/RpgEngine.Tests/Balance/`) keeps each Calling's solo win rate against the Barrow Heart inside a band (about 55-80% without the holy water).
 
 ### Burdens (`Data/Rules/backgrounds.json`)
 

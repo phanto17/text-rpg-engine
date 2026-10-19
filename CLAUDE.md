@@ -150,15 +150,16 @@ CLI layout:
 ### `Data/Rules/`
 **`classes.json`**
 ```json
-{ "id": "rogue", "name": "Rogue", "description": "...", "hitDie": 8,
+{ "id": "liminal_auditor", "name": "Liminal Auditor", "description": "...", "hitDie": 8,
   "abilityPriority": ["dex", "con", "cha", "wis", "int", "str"],
   "savingThrows": ["dex", "int"],
   "skillChoices": { "count": 4, "from": ["acrobatics", "deception", "insight", "intimidation", "investigation", "perception", "persuasion", "stealth"] },
   "expertiseCount": 2,
   "mana": null,
-  "startingItems": [ { "item": "shortsword", "equip": true }, { "item": "leather_armor", "equip": true }, { "item": "healing_potion", "count": 1 } ],
-  "spells": ["sneak_attack"] }
+  "startingItems": [ { "item": "shortsword", "equip": true }, { "item": "leather_armor", "equip": true }, { "item": "healing_potion", "count": 2 } ],
+  "spells": ["sneak_attack", "grave_salt_feint"] }
 ```
+- Classes are the four Callings of `Docs/LORE.md`; the file order is the creation menu order.
 - `abilityPriority` drives auto-assignment of the standard array.
 - `mana` is `{ "base": 4, "ability": "int" }` or `null`. Max mana = base + ability modifier.
 
@@ -175,10 +176,10 @@ CLI layout:
 
 **`spells.json`**: spells and martial techniques share one schema.
 ```json
-{ "id": "magic_missile", "name": "Magic Missile", "kind": "spell", "description": "...",
+{ "id": "magic_missile", "name": "Chords of Unrest", "kind": "spell", "description": "...",
   "cost": { "mana": 2 }, "target": "enemy",
   "resolution": { "type": "autoHit", "damage": "3d4+3", "damageType": "force" } }
-{ "id": "second_wind", "name": "Second Wind", "kind": "technique", "description": "...",
+{ "id": "second_wind", "name": "Ash-Blood Second Wind", "kind": "technique", "description": "...",
   "cost": { "usesPerEncounter": 1 }, "target": "self",
   "resolution": { "type": "effects", "effects": [ { "type": "heal", "dice": "1d10+1" } ] } }
 ```

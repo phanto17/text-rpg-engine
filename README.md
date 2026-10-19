@@ -21,7 +21,7 @@ The engine is **purely data-driven**. Every room, item, monster, line of dialogu
 
 ## The adventure: *Barrowlight*
 
-Rain, a hilltop barrow, and a lantern that kept the dead asleep until it went dark. Pick a **Fighter**, **Rogue**, or **Wizard**:
+Rain, a hilltop barrow, and a lantern that kept the dead asleep until it went dark. Pick one of four **Callings** (the Oath-Eater, the Liminal Auditor, the Vesper Cantor, or the Remnant Vessel) and the **Burden** that brought you up the hill:
 - Win over (or drive off) Sister Wren at **the Lichgate**, and search the graves for anything left behind.
 - Work out the sigil riddle on the bronze door in **the Ossuary Hall**, ideally without losing a hand to the trap.
 - Face what guards **the Barrow Heart**, then claim the Barrowlight and find out what its waking flame unseals beneath the sarcophagus.
@@ -102,9 +102,9 @@ Useful flags (after `--`): `--seed <n>` for a reproducible run, `--no-anim` to s
 ## How to play
 
 **Character creation:**
-- Choose a name and a class.
+- Choose a name, a Calling (class), and a Burden (background). Your Burden grants a bonus skill, a keepsake, and sometimes coin.
 - Set your ability scores with the standard array (auto-assigned for your class, or assigned yourself) or by rolling 4d6 and dropping the lowest die.
-- Pick your trained skills. Rogues also choose two skills for expertise.
+- Pick your trained skills (your Burden's skill is already granted). Liminal Auditors also choose two skills for expertise.
 
 **Exploring:** each turn shows your status line and a numbered list of actions. Type the **number** of a listed action, or a **command**:
 

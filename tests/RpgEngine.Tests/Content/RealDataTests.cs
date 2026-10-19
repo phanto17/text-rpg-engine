@@ -24,7 +24,10 @@ public sealed class RealDataTests
     {
         var content = Content.Value;
 
-        Assert.Equal(new[] { "fighter", "rogue", "wizard" }, content.ClassList.Select(c => c.Id));
+        Assert.Equal(new[] { "oath_eater", "liminal_auditor", "vesper_cantor", "remnant_vessel" }, content.ClassList.Select(c => c.Id));
+        Assert.Equal(new[] { "bereaved_kin", "ash_deserter", "moor_bailiff", "fever_dreamer" }, content.BackgroundList.Select(b => b.Id));
+        Assert.All(content.BackgroundList, b => Assert.Equal(ItemType.Quest, content.Items[b.KeepsakeItem].Type));
+        Assert.All(content.ClassList.SelectMany(c => c.Spells), id => Assert.True(content.Spells.ContainsKey(id)));
         Assert.Equal(18, content.Skills.Count);
         Assert.Equal(new[] { "inner_crypt", "lichgate", "ossuary_hall" }, content.Rooms.Keys.Order(StringComparer.Ordinal));
         Assert.True(content.Dialogues.ContainsKey("wren"));
