@@ -32,7 +32,24 @@ public sealed class RealDataTests
         Assert.Equal(new[] { "inner_crypt", "lichgate", "ossuary_hall" }, content.Rooms.Keys.Order(StringComparer.Ordinal));
         Assert.True(content.Dialogues.ContainsKey("wren"));
         Assert.Equal("inner_crypt", content.EncounterRooms["barrow_heart"]);
-        Assert.Equal(2, content.Encounters["barrow_heart"].Parley!.Options.Count);
+        Assert.Equal(6, content.Encounters["barrow_heart"].Parley!.Options.Count);
+    }
+
+    [Fact]
+    public void WrenAndHalric_AcknowledgeEveryCallingAndBurden()
+    {
+        var content = Content.Value;
+        var hub = content.Dialogues["wren"].Nodes.Single(n => n.Id == "hub");
+        var gates = hub.Choices.SelectMany(c => c.Conditions).ToList();
+
+        Assert.All(content.ClassList, cls => Assert.Single(gates, g => g is ClassCondition c && c.ClassId == cls.Id));
+        Assert.All(content.BackgroundList, bg => Assert.Single(gates, g => g is BackgroundCondition b && b.BackgroundId == bg.Id));
+        Assert.Equal("I'll leave you to your watch.", hub.Choices[^1].Text);
+
+        // The Rite stays the second option so it keeps its menu number; the new options only follow it.
+        var parley = content.Encounters["barrow_heart"].Parley!.Options;
+        Assert.Equal("Speak the Rite of Rest", parley[1].Label);
+        Assert.All(parley.Skip(2), option => Assert.Single(option.Conditions, c => c is ClassCondition or BackgroundCondition));
     }
 
     [Fact]

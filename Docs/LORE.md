@@ -82,6 +82,8 @@ Every Calling starts with two `healing_potion`s. The balance check (`tests/RpgEn
 
 After choosing a Calling, the protagonist chooses a **Burden**: the grief, debt, or vow that brought them up the hill. Each grants one bonus skill, a keepsake (`type: quest`, so it can't be dropped), and sometimes coin. Dialogue and parley options can react to it with `{ "type": "background", "background": "<id>" }`.
 
+**Prologue reactivity:** Sister Wren's hub offers one line per Calling and one per Burden (`class`/`background` conditions). The Bereaved Kin and the Ash Deserter earn `wren_kinship`; the Vesper Cantor learns the sigil order from her litany; the others are acknowledged in prose only. Ser Halric's parley adds an option for the Oath-Eater (the vow he keeps), the Remnant Vessel (one dead thing to another), the Ash Deserter (the scored signet), and the Bereaved Kin (who you lost).
+
 | Burden ID | Name | Bonus Skill | Keepsake | Hook |
 | :--- | :--- | :--- | :--- | :--- |
 | `bereaved_kin` | Bereaved Kin | `insight` | `tarnished_locket` | Someone they loved was buried at Hollin's Rest and no longer stays in the grave. Understands grief from the inside; the Moon pillar made personal. |
@@ -131,12 +133,13 @@ Once claimed in `inner_crypt` (`item: barrowlight`), the lantern serves as both 
 | :--- | :--- | :--- |
 | `met_wren` | `Dialogues/wren.json` | Player has spoken to Sister Wren at least once. |
 | `read_wren` | `Dialogues/wren.json` | Passed `[Insight DC 10]` on Wren; grants advantage on `[Persuasion DC 12]`. |
+| `wren_kinship` | `Dialogues/wren.json` | A Bereaved Kin or Ash Deserter shared their burden with Wren; like `read_wren`, grants advantage on `[Persuasion DC 12]`. |
 | `wren_trusts_player` | `Dialogues/wren.json` | Passed `[Persuasion DC 12]` (+10 `ashen_order` rep, grants `holy_water`, sets `wren_taught_rite` and `knows_sigil_order`). |
 | `wren_distrusts` | `Dialogues/wren.json` | Failed Persuasion or Intimidation (-5 `ashen_order` rep); locks Wren into `cold` greeting. |
 | `wren_fled` | `Dialogues/wren.json` | Passed `[Intimidation DC 12]` (-15 `ashen_order` rep); Wren vanishes from `lichgate`. |
 | `wren_taught_rite` | `Dialogues/wren.json` | Unlocks `"Speak the Rite of Rest"` (`[Religion DC 10]` with advantage) in `barrow_heart` parley. |
 | `wren_joins_descent` | `Dialogues/wren.json` | Spoke to trusted Wren while holding `barrowlight`; she vows to follow you into the Under-Barrow (+5 `ashen_order` rep). |
-| `knows_sigil_order` | `wren.json` / `ossuary_hall.json` | Learned the Sun -> Moon -> Skull order from Wren or `[Religion DC 13]` on `bronze_door`. |
+| `knows_sigil_order` | `wren.json` / `ossuary_hall.json` | Learned the Sun -> Moon -> Skull order from Wren (her trust, or a Vesper Cantor hearing her litany as a tuning) or `[Religion DC 13]` on `bronze_door`. |
 | `sigil_door_open` | `Rooms/ossuary_hall.json` | Completed the Sun -> Moon -> Skull puzzle; unlocks the `east` exit to `inner_crypt`. |
 | `barrow_heart_resolved` | `Rooms/inner_crypt.json` | Defeated or parleyed with Ser Halric; reveals `barrowlight_lantern` feature. |
 | `knight_laid_to_rest` | `Rooms/inner_crypt.json` | Parleyed with Ser Halric (+10 `ashen_order` rep, +100 XP, +1 `lantern_resonance`). |

@@ -106,6 +106,26 @@
             "label": "Speak the Rite of Rest",
             "conditions": [ { "type": "flag", "flag": "wren_taught_rite" } ],
             "check": { "skill": "religion", "dc": 10, "advantage": true }
+          },
+          {
+            "label": "Name the vow he keeps, and the one you broke",
+            "conditions": [ { "type": "class", "class": "oath_eater" } ],
+            "check": { "skill": "persuasion", "dc": 11, "advantage": true }
+          },
+          {
+            "label": "Speak to him as one dead thing to another",
+            "conditions": [ { "type": "class", "class": "remnant_vessel" } ],
+            "check": { "skill": "persuasion", "dc": 12 }
+          },
+          {
+            "label": "Show him the scored signet",
+            "conditions": [ { "type": "background", "background": "ash_deserter" } ],
+            "check": { "skill": "religion", "dc": 11, "advantage": true }
+          },
+          {
+            "label": "Tell him who you lost",
+            "conditions": [ { "type": "background", "background": "bereaved_kin" } ],
+            "check": { "skill": "insight", "dc": 11 }
           }
         ],
         "onSuccess": [

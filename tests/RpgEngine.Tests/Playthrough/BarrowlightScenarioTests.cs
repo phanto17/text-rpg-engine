@@ -183,6 +183,45 @@ public sealed class BarrowlightScenarioTests
     }
 
     [Fact]
+    public void AshDeserter_SignetWinsKinshipWithWren_AndOpensASignetParley()
+    {
+        // ambient 0 | persuasion with advantage 15, 3 | ossuary 0 | crypt 0 | initiative 15, 1, 1 | signet religion with advantage 15, 3
+        var auditor = Create("liminal_auditor", "ash_deserter", ["persuasion", "insight", "stealth", "perception"], ["persuasion", "stealth"]);
+        var session = GameSession.NewGame(Content, auditor, new FixedRandomSource(0, 15, 3, 0, 0, 15, 1, 1, 15, 3));
+        session.Begin();
+
+        Do(session, "talk to wren");
+        Assert.DoesNotContain(session.DialogueChoices(), c => c.Text.StartsWith("Someone I loved", StringComparison.Ordinal));
+        var signet = Say(session, "Show her the scored signet.");
+        Assert.Contains(signet.OfType<DialogueLineEvent>(), e => e.Text.Contains("You walked out", StringComparison.Ordinal));
+        Assert.True(session.State.World.HasFlag("wren_kinship"));
+
+        var persuade = session.DialogueChoices().Single(c => c.CheckLabel == "Persuasion");
+        Assert.Equal(RollMode.Advantage, persuade.Mode);
+        Assert.DoesNotContain(session.DialogueChoices(), c => c.Text.StartsWith("Show her the scored signet", StringComparison.Ordinal));
+        Say(session, "I'm not here to rob the dead");
+        Say(session, "I'll bring the light back.");
+
+        Do(session, "down");
+        Do(session, "press sun");
+        Do(session, "press moon");
+        Do(session, "press skull");
+        Do(session, "east");
+
+        var options = session.Combat!.ParleyOptions();
+        Assert.Equal(
+            new[] { "Tell him his watch is over", "Speak the Rite of Rest", "Show him the scored signet" },
+            options.Select(o => o.Label));
+        var show = options.Single(o => o.Label == "Show him the scored signet");
+        Assert.Equal(("Religion", 11, RollMode.Advantage), (show.CheckLabel, show.Dc, show.Mode));
+
+        var parley = session.CombatAct(new ParleyAction(show.Index));
+
+        Assert.Contains(new CombatEndedEvent(CombatOutcome.Parleyed), parley);
+        Assert.True(session.State.World.HasFlag("knight_laid_to_rest"));
+    }
+
+    [Fact]
     public void WrongSigil_TriggersNeedleTrapAndResets()
     {
         // ambient 0 | ossuary ambient 0 | DEX save 2 (fails) | 1d4 = 3

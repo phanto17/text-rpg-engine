@@ -32,7 +32,11 @@
           },
           {
             "text": "I'm not here to rob the dead. I'm here to end whatever is keeping them awake.",
-            "check": { "skill": "persuasion", "dc": 12, "advantageIf": [ { "type": "flag", "flag": "read_wren" } ] },
+            "check": {
+              "skill": "persuasion",
+              "dc": 12,
+              "advantageIf": [ { "type": "any", "conditions": [ { "type": "flag", "flag": "read_wren" }, { "type": "flag", "flag": "wren_kinship" } ] } ]
+            },
             "successNode": "trusts",
             "failureNode": "refuses",
             "retry": false
@@ -44,8 +48,99 @@
             "failureNode": "scoffs",
             "retry": false
           },
+          {
+            "text": "I swallowed the ash of a broken vow once, Sister. I know what a watch costs.",
+            "conditions": [ { "type": "class", "class": "oath_eater" } ],
+            "once": true,
+            "next": "calling_oath_eater"
+          },
+          {
+            "text": "I settle what the dead leave unfinished. What did Halric leave unfinished?",
+            "conditions": [ { "type": "class", "class": "liminal_auditor" } ],
+            "once": true,
+            "next": "calling_liminal_auditor"
+          },
+          {
+            "text": "Your litany has a tune underneath it. Will you sing it for me?",
+            "conditions": [ { "type": "class", "class": "vesper_cantor" } ],
+            "once": true,
+            "next": "calling_vesper_cantor"
+          },
+          {
+            "text": "Look at me, Sister. Tell me what you see.",
+            "conditions": [ { "type": "class", "class": "remnant_vessel" } ],
+            "once": true,
+            "next": "calling_remnant_vessel"
+          },
+          {
+            "text": "Someone I loved was buried at Hollin's Rest. They didn't stay buried.",
+            "conditions": [ { "type": "background", "background": "bereaved_kin" } ],
+            "once": true,
+            "next": "burden_bereaved_kin"
+          },
+          {
+            "text": "Show her the scored signet.",
+            "conditions": [ { "type": "background", "background": "ash_deserter" } ],
+            "once": true,
+            "next": "burden_ash_deserter"
+          },
+          {
+            "text": "The elders sent me to settle the barrow's accounts.",
+            "conditions": [ { "type": "background", "background": "moor_bailiff" } ],
+            "once": true,
+            "next": "burden_moor_bailiff"
+          },
+          {
+            "text": "I hear a bell under the moor every night. Do you?",
+            "conditions": [ { "type": "background", "background": "fever_dreamer" } ],
+            "once": true,
+            "next": "burden_fever_dreamer"
+          },
           { "text": "I'll leave you to your watch.", "end": true }
         ]
+      },
+      {
+        "id": "calling_oath_eater",
+        "text": "Her eyes go to the grey stain at the corner of your mouth, the mark every penitent who survived the tribunal carries. Something in her face shifts.\n\n\"Then you understand Halric better than I ever could,\" she says quietly. \"A vow that outlives its reason is still a vow to the one who keeps it. Remember that when you stand in front of him.\"",
+        "next": "hub"
+      },
+      {
+        "id": "calling_liminal_auditor",
+        "text": "Wren almost smiles. \"A bailiff for the dead. The Order used to keep people like you at arm's length.\" She looks at the stair. \"His relief. Three hundred years of it, owed and never paid. If you're the kind who settles accounts, settle that one.\"",
+        "next": "hub"
+      },
+      {
+        "id": "calling_vesper_cantor",
+        "text": "She hesitates, then hums the Ashen litany under her breath, the way novices learn it. To your ear it is not a riddle at all but a tuning: three notes rising, bright, then pale, then hollow. Sun, then moon, then skull.\n\nWren stops when she sees your face. \"You heard something in that I never have.\"",
+        "effects": [ { "type": "setFlag", "flag": "knows_sigil_order" } ],
+        "next": "hub"
+      },
+      {
+        "id": "calling_remnant_vessel",
+        "text": "Her blade rises an inch. She looks at you for a long time, and you watch her see the cold ember where your heartbeat should be.\n\n\"You died the night the light went out,\" she says. \"And you came back wearing your own face.\" The sword lowers again, slowly. \"Go carefully below. The dead down there may take you for one of their own. Some of them may be right.\"",
+        "next": "hub"
+      },
+      {
+        "id": "burden_bereaved_kin",
+        "text": "The sword does not lower, but her voice does. \"I've buried eleven sisters since the turn of the season, and walked three of them back to their graves afterward.\" She swallows. \"I'm sorry. Whoever they were, they deserved to stay asleep.\"",
+        "effects": [ { "type": "setFlag", "flag": "wren_kinship" } ],
+        "next": "hub"
+      },
+      {
+        "id": "burden_ash_deserter",
+        "text": "She looks at the gouge across the flame for a long moment.\n\n\"You walked out,\" she says. \"I nearly did, the night they burned the Marley grave with the widow still standing at the edge of it. I stayed, and told myself I could change the Order from inside.\" A tired breath. \"Look where that got me.\"",
+        "effects": [ { "type": "setFlag", "flag": "wren_kinship" } ],
+        "next": "hub"
+      },
+      {
+        "id": "burden_moor_bailiff",
+        "text": "Wren laughs, short and humorless. \"Of course they did. The elders of Hollin's Rest won't say the barrow's name, but they'll send a bailiff to bill it.\" She jerks her chin at the stair. \"Go on, then. Present your writ to Ser Halric. See what he owes.\"",
+        "next": "hub"
+      },
+      {
+        "id": "burden_fever_dreamer",
+        "text": "All the color leaves her face. \"A bell.\" Her grip tightens on the hilt. \"The Order's oldest books speak of a bell beneath the barrows that rings when the light fails. No one has heard it in three hundred years.\" She looks at you as though you might be something other than a person. \"Don't let it lead you anywhere you can't climb back from.\"",
+        "next": "hub"
       },
       {
         "id": "who",
