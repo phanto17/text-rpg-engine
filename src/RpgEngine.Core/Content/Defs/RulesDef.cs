@@ -6,6 +6,12 @@ public sealed record RulesDef
 
     public required IReadOnlyList<int> ProficiencyBonusByLevel { get; init; }
 
+    /// <summary>
+    /// Total XP needed for each level: index 0 is level 1 (always 0), index 1 is level 2, and so on.
+    /// The list length is the maximum level; the default allows no leveling at all.
+    /// </summary>
+    public IReadOnlyList<int> XpThresholdsByLevel { get; init; } = [0];
+
     public bool NaturalCritsOnChecks { get; init; } = true;
 
     public MonsterHpMode MonsterHp { get; init; } = MonsterHpMode.Average;

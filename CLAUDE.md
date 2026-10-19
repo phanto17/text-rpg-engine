@@ -130,6 +130,7 @@ CLI layout:
   "rules": {
     "standardArray": [16, 14, 13, 12, 10, 8],
     "proficiencyBonusByLevel": [2, 2, 2, 2, 3],
+    "xpThresholdsByLevel": [0, 100, 300, 900, 2700],
     "naturalCritsOnChecks": true,
     "monsterHp": "average",
     "flee": { "skill": "acrobatics", "dc": 10 },
@@ -143,6 +144,7 @@ CLI layout:
 }
 ```
 - `monsterHp` is `average` (the floor of the hit-dice average) or `roll`.
+- `xpThresholdsByLevel` (default `[0]`, meaning no leveling) is the total XP for each level: the first entry is level 1 and must be `0`, and the list must be strictly increasing. Its length is the maximum level. Every XP award (`grantXp` effects and combat victories) levels the character up as many times as the new total allows. Each level adds `max(1, hitDie / 2 + 1 + CON modifier)` to maximum and current HP, 2 mana for classes with `mana`, and any `spellsByLevel` grants for that level. Proficiency follows `proficiencyBonusByLevel`.
 - `flee` is the check for escaping combat.
 - `defendStatus` is the status that the Defend action applies.
 - When `endGame` fires, the first epilogue whose conditions pass is shown.
@@ -160,6 +162,7 @@ CLI layout:
   "spells": ["sneak_attack", "grave_salt_feint"] }
 ```
 - Classes are the four Callings of `Docs/LORE.md`; the file order is the creation menu order.
+- `spellsByLevel` (default `[]`): `[ { "level": 2, "spells": ["ash_brand"] } ]`. Each level must be reachable (2 to the maximum level), and a spell may be granted only once (never one the class already starts with).
 - `abilityPriority` drives auto-assignment of the standard array.
 - `mana` is `{ "base": 4, "ability": "int" }` or `null`. Max mana = base + ability modifier.
 

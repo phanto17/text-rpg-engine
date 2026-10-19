@@ -283,6 +283,25 @@ public sealed class CombatEngineTests
     }
 
     [Fact]
+    public void Victory_CrossingAnXpThreshold_LevelsUpAfterTheXp()
+    {
+        var content = CombatFixture.Content()
+            .With("game.json", TestContent.Manifest.Replace("\"naturalCritsOnChecks\": true", "\"xpThresholdsByLevel\": [0, 50], \"naturalCritsOnChecks\": true", StringComparison.Ordinal))
+            .Load();
+        var combat = new CombatHarness(content: content, dice: [20, 1, 1, 15, 4, 1, 15, 4, 50, 99]);
+        combat.Begin("rats");
+
+        combat.Act(new AttackAction("rat#1"));
+        combat.EnemyTurn();
+        var log = combat.Act(new AttackAction("rat#2"));
+
+        var xp = log.Events.ToList().FindIndex(e => e is XpGainedEvent);
+        var level = log.Events.ToList().FindIndex(e => e is LeveledUpEvent);
+        Assert.True(xp >= 0 && level == xp + 1);
+        Assert.Equal(2, combat.World.Player.Level);
+    }
+
+    [Fact]
     public void Defeat_EndsTheFight()
     {
         var combat = new CombatHarness(CombatFixture.Hero(maxHp: 3), dice: [2, 15, 15, 2]);

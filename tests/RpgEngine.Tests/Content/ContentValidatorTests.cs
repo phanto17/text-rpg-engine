@@ -246,6 +246,32 @@ public sealed class ContentValidatorTests
         AssertError(errors, fragment);
     }
 
+    [Theory]
+    [InlineData("[1, 100]", "rules.xpThresholdsByLevel must start with 0")]
+    [InlineData("[]", "rules.xpThresholdsByLevel must start with 0")]
+    [InlineData("[0, 100, 100]", "rules.xpThresholdsByLevel must be strictly increasing")]
+    public void Validate_XpThresholds(string thresholds, string fragment)
+    {
+        var manifest = TestContent.Manifest.Replace("\"naturalCritsOnChecks\": true", $"\"xpThresholdsByLevel\": {thresholds}, \"naturalCritsOnChecks\": true", StringComparison.Ordinal);
+
+        AssertError(Errors(("game.json", manifest)), fragment);
+    }
+
+    [Theory]
+    [InlineData("""[ { "level": 1, "spells": ["second_wind"] } ]""", "spellsByLevel level 1 can never be reached (levels 2 to 3 exist)")]
+    [InlineData("""[ { "level": 4, "spells": ["second_wind"] } ]""", "spellsByLevel level 4 can never be reached")]
+    [InlineData("""[ { "level": 2, "spells": [] } ]""", "spellsByLevel level 2 must list at least one spell")]
+    [InlineData("""[ { "level": 2, "spells": ["fireball"] } ]""", "spellsByLevel level 2 references unknown spell 'fireball'")]
+    [InlineData("""[ { "level": 2, "spells": ["missile"] } ]""", "spellsByLevel level 2: 'missile' is already known")]
+    [InlineData("""[ { "level": 2, "spells": ["second_wind"] }, { "level": 3, "spells": ["second_wind"] } ]""", "spellsByLevel level 3: 'second_wind' is already known")]
+    public void Validate_SpellsByLevel(string grants, string fragment)
+    {
+        var manifest = TestContent.Manifest.Replace("\"naturalCritsOnChecks\": true", "\"xpThresholdsByLevel\": [0, 100, 300], \"naturalCritsOnChecks\": true", StringComparison.Ordinal);
+        var classes = TestContent.Classes.Replace("\"spells\": [\"firebolt\", \"missile\"]", $"\"spells\": [\"firebolt\", \"missile\"], \"spellsByLevel\": {grants}", StringComparison.Ordinal);
+
+        AssertError(Errors(("game.json", manifest), ("Rules/classes.json", classes)), fragment);
+    }
+
     [Fact]
     public void Validate_NoBackgrounds_IsAnError()
     {

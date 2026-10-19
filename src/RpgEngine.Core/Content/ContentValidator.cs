@@ -137,6 +137,17 @@ public static partial class ContentValidator
                 RequireRange(context, bonus, 0, 10, "rules.proficiencyBonusByLevel value");
             }
 
+            var thresholds = rules.XpThresholdsByLevel;
+            if (thresholds.Count == 0 || thresholds[0] != 0)
+            {
+                Error(context, "rules.xpThresholdsByLevel must start with 0 (level 1).");
+            }
+
+            if (thresholds.Zip(thresholds.Skip(1)).Any(pair => pair.Second <= pair.First))
+            {
+                Error(context, "rules.xpThresholdsByLevel must be strictly increasing.");
+            }
+
             ValidateCheck($"{context} rules.flee", rules.Flee);
             RequireStatus(context, rules.DefendStatus, "rules.defendStatus");
 
@@ -226,6 +237,38 @@ public static partial class ContentValidator
                 if (!content.Spells.ContainsKey(spell))
                 {
                     Error(context, $"spells references unknown spell '{spell}'.");
+                }
+            }
+
+            ValidateSpellGrants(context, cls);
+        }
+
+        private void ValidateSpellGrants(string context, ClassDef cls)
+        {
+            var maxLevel = content.Rules.XpThresholdsByLevel.Count;
+            var known = new HashSet<string>(cls.Spells, StringComparer.Ordinal);
+            foreach (var grant in cls.SpellsByLevel)
+            {
+                if (grant.Level < 2 || grant.Level > maxLevel)
+                {
+                    Error(context, $"spellsByLevel level {grant.Level} can never be reached (levels 2 to {maxLevel} exist).");
+                }
+
+                if (grant.Spells.Count == 0)
+                {
+                    Error(context, $"spellsByLevel level {grant.Level} must list at least one spell.");
+                }
+
+                foreach (var spell in grant.Spells)
+                {
+                    if (!content.Spells.ContainsKey(spell))
+                    {
+                        Error(context, $"spellsByLevel level {grant.Level} references unknown spell '{spell}'.");
+                    }
+                    else if (!known.Add(spell))
+                    {
+                        Error(context, $"spellsByLevel level {grant.Level}: '{spell}' is already known.");
+                    }
                 }
             }
         }

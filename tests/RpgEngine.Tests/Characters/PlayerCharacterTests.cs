@@ -40,6 +40,21 @@ public sealed class PlayerCharacterTests
     }
 
     [Fact]
+    public void LevelUp_RaisesMaximumsCurrentValuesAndSpells()
+    {
+        var hero = TestCharacters.Create(maxHp: 10, maxMana: 4, spells: ["firebolt"]);
+        hero.TakeDamage(6);
+
+        hero.LevelUp(5, 2, ["missile", "firebolt", "missile"]);
+
+        Assert.Equal((2, 15, 9, 6, 6), (hero.Level, hero.MaxHp, hero.CurrentHp, hero.MaxMana, hero.CurrentMana));
+        Assert.Equal(new[] { "firebolt", "missile" }, hero.SpellIds);
+        Assert.Throws<ArgumentOutOfRangeException>(() => hero.LevelUp(-1, 0, []));
+        Assert.Throws<ArgumentOutOfRangeException>(() => hero.LevelUp(0, -1, []));
+        Assert.Throws<ArgumentNullException>(() => hero.LevelUp(0, 0, null!));
+    }
+
+    [Fact]
     public void Constructor_InvalidVitals_Throw()
     {
         Assert.Throws<ArgumentOutOfRangeException>(() => TestCharacters.Create(maxHp: 0));

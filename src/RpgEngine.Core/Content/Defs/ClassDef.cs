@@ -27,4 +27,7 @@ public sealed record ClassDef : IContentDef
     public IReadOnlyList<StartingItemDef> StartingItems { get; init; } = [];
 
     public IReadOnlyList<string> Spells { get; init; } = [];
+
+    /// <summary>Spells and techniques learned on reaching later levels.</summary>
+    public IReadOnlyList<SpellGrantDef> SpellsByLevel { get; init; } = [];
 }

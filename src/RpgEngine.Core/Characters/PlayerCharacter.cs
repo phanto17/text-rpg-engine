@@ -8,6 +8,7 @@ public sealed class PlayerCharacter : ICheckSubject
     private readonly HashSet<Ability> _savingThrows;
     private readonly IReadOnlyList<int> _proficiencyBonusByLevel;
     private readonly Dictionary<string, int> _encounterUses = new(StringComparer.Ordinal);
+    private readonly List<string> _spellIds;
 
     public PlayerCharacter(
         string name,
@@ -45,7 +46,7 @@ public sealed class PlayerCharacter : ICheckSubject
         _proficientSkills = new HashSet<string>(proficientSkills, StringComparer.Ordinal);
         _expertiseSkills = new HashSet<string>(expertiseSkills, StringComparer.Ordinal);
         _savingThrows = [.. savingThrows];
-        SpellIds = spellIds.ToList();
+        _spellIds = spellIds.ToList();
         _proficiencyBonusByLevel = proficiencyBonusByLevel;
 
         if (!_expertiseSkills.IsSubsetOf(_proficientSkills))
@@ -67,11 +68,11 @@ public sealed class PlayerCharacter : ICheckSubject
 
     public AbilityScores Abilities { get; }
 
-    public int MaxHp { get; }
+    public int MaxHp { get; private set; }
 
     public int CurrentHp { get; private set; }
 
-    public int MaxMana { get; }
+    public int MaxMana { get; private set; }
 
     public int CurrentMana { get; private set; }
 
@@ -83,7 +84,7 @@ public sealed class PlayerCharacter : ICheckSubject
 
     public string? EquippedArmorId { get; set; }
 
-    public IReadOnlyList<string> SpellIds { get; }
+    public IReadOnlyList<string> SpellIds => _spellIds;
 
     public IReadOnlySet<string> ProficientSkills => _proficientSkills;
 
@@ -150,6 +151,24 @@ public sealed class PlayerCharacter : ICheckSubject
     {
         ArgumentOutOfRangeException.ThrowIfNegative(amount);
         Xp += amount;
+    }
+
+    /// <summary>
+    /// Advances one level: raises maximum HP and mana (and the current values by the same amount)
+    /// and learns any spells not already known.
+    /// </summary>
+    public void LevelUp(int hpGain, int manaGain, IEnumerable<string> newSpells)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(hpGain);
+        ArgumentOutOfRangeException.ThrowIfNegative(manaGain);
+        ArgumentNullException.ThrowIfNull(newSpells);
+
+        Level++;
+        MaxHp += hpGain;
+        CurrentHp += hpGain;
+        MaxMana += manaGain;
+        CurrentMana += manaGain;
+        _spellIds.AddRange(newSpells.Where(id => !_spellIds.Contains(id)).Distinct().ToList());
     }
 
     public int GetEncounterUses(string spellId) => _encounterUses.GetValueOrDefault(spellId);

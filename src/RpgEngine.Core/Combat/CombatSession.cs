@@ -321,8 +321,8 @@ public sealed class CombatSession
                 var xp = defeated.Sum(m => m.Definition.Xp);
                 if (xp > 0)
                 {
-                    character.AddXp(xp);
-                    log.Add(new XpGainedEvent(xp, character.Xp));
+                    // Before loot and the end-of-fight recharge, so a technique learned now starts full.
+                    Progression.GrantXp(character, _content, xp, log);
                 }
 
                 foreach (var loot in defeated.SelectMany(m => m.Definition.Loot))

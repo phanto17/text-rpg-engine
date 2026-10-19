@@ -82,8 +82,7 @@ public sealed class EffectApplier
                 log.Add(new GoldGainedEvent(e.Amount, player.Gold));
                 break;
             case GrantXpEffect e:
-                player.AddXp(e.Amount);
-                log.Add(new XpGainedEvent(e.Amount, player.Xp));
+                Progression.GrantXp(player, _content, e.Amount, log);
                 break;
             case HealEffect e:
                 var healing = _dice.Roll(e.Dice);

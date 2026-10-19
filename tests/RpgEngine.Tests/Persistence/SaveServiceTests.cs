@@ -67,6 +67,25 @@ public sealed class SaveServiceTests : IDisposable
     }
 
     [Fact]
+    public void SaveThenLoad_LeveledCharacterAtFullStrength_RestoresLevelMaximumsAndSpells()
+    {
+        // A level 2 hero at full HP and MP has current values above the level 1 maximums, so the
+        // save must carry the leveled maximums and learned spells for the restore to accept them.
+        var content = World.ProgressionTests.Leveling();
+        var wizard = TestCharacters.Create(maxHp: 6, maxMana: 6, spells: ["firebolt", "missile"], classId: "wizard", name: "Ilse");
+        Progression.GrantXp(wizard, content, 150, new Core.Events.TurnLog());
+        Assert.Equal((2, 10, 10, 8, 8), (wizard.Level, wizard.MaxHp, wizard.CurrentHp, wizard.MaxMana, wizard.CurrentMana));
+        var service = Service();
+
+        service.Save(new GameState(wizard, WorldState.CreateNew(content), "start"), content, "leveled");
+        var restored = service.Load("leveled", content).State.Player;
+
+        Assert.Equal((2, 150, 10, 10, 8, 8), (restored.Level, restored.Xp, restored.MaxHp, restored.CurrentHp, restored.MaxMana, restored.CurrentMana));
+        Assert.Equal(new[] { "firebolt", "missile", "second_wind" }, restored.SpellIds);
+        Assert.Equal(300, Progression.NextLevelXp(restored, content));
+    }
+
+    [Fact]
     public void Load_RestoresPlayableState()
     {
         var service = Service();

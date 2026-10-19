@@ -2,6 +2,7 @@ using RpgEngine.CLI.Rendering;
 using RpgEngine.Core.Characters;
 using RpgEngine.Core.Combat;
 using RpgEngine.Core.Engine;
+using RpgEngine.Core.World;
 using Spectre.Console;
 
 namespace RpgEngine.CLI.Screens;
@@ -33,7 +34,8 @@ internal sealed class InfoScreens(UiContext ui)
         vitals.AddRow($"[{Theme.Muted}]Armor class[/]", $"{CombatRules.ArmorClass(player, content)}");
         vitals.AddRow($"[{Theme.Muted}]Proficiency[/]", RollText.Signed(player.ProficiencyBonus));
         vitals.AddRow($"[{Theme.Muted}]Weapon[/]", $"{Markup.Escape(weapon.Name)} {RollText.Signed(weapon.ToHitBonus)} to hit, {Markup.Escape(weapon.Damage.Text)} {weapon.DamageType.ToString().ToLowerInvariant()}");
-        vitals.AddRow($"[{Theme.Muted}]Experience[/]", $"{player.Xp} XP");
+        var next = Progression.NextLevelXp(player, content);
+        vitals.AddRow($"[{Theme.Muted}]Experience[/]", next is { } needed ? $"{player.Xp} XP [{Theme.Muted}](next level at {needed})[/]" : $"{player.Xp} XP");
         vitals.AddRow($"[{Theme.Muted}]Gold[/]", $"[{Theme.Gold}]{player.Gold}[/]");
         vitals.AddRow($"[{Theme.Muted}]Seed[/]", $"{ui.Seed} [{Theme.Muted}](replay with --seed {ui.Seed})[/]");
 

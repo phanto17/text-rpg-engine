@@ -108,6 +108,9 @@ internal sealed class EventRenderer(IAnsiConsole console, DiceAnimator animator)
             case XpGainedEvent e:
                 console.MarkupLine($"[{Theme.Accent}]+{e.Amount} XP[/] [{Theme.Muted}]({e.Total} total)[/]");
                 break;
+            case LeveledUpEvent e:
+                RenderLevelUp(e);
+                break;
             case DamageTakenEvent e:
                 console.MarkupLine($"{Who(e.Target)} {(IsPlayer(e.Target) ? "take" : "takes")} [{Theme.Failure}]{e.Amount}{DamageType(e)} damage[/]{Modifier(e.Modifier)}  {Bars.Hp(e.Hp, e.MaxHp, Unicode)}");
                 break;
@@ -201,6 +204,28 @@ internal sealed class EventRenderer(IAnsiConsole console, DiceAnimator animator)
                     .BorderStyle(Style.Parse(Theme.Failure)));
                 break;
         }
+    }
+
+    private void RenderLevelUp(LeveledUpEvent e)
+    {
+        var grid = new Grid().AddColumn().AddColumn();
+        grid.AddRow($"[{Theme.Muted}]Hit points[/]", $"[{Theme.Success}]+{e.HpGain}[/] [{Theme.Muted}](max {e.MaxHp})[/]");
+        if (e.ManaGain > 0)
+        {
+            grid.AddRow($"[{Theme.Muted}]Mana[/]", $"[{Theme.Mana}]+{e.ManaGain}[/] [{Theme.Muted}](max {e.MaxMana})[/]");
+        }
+
+        grid.AddRow($"[{Theme.Muted}]Proficiency[/]", RollText.Signed(e.ProficiencyBonus));
+        foreach (var spell in e.NewSpells)
+        {
+            grid.AddRow($"[{Theme.Muted}]Learned[/]", $"{Theme.Paint(Theme.Mana, spell.Name)} [{Theme.Muted}]- {Markup.Escape(spell.Description)}[/]");
+        }
+
+        console.WriteLine();
+        console.Write(new Panel(grid)
+            .Header($" [{Theme.Title}]Level {e.Level}![/] ")
+            .Border(BoxBorder.Double)
+            .BorderStyle(Style.Parse(Theme.Accent)));
     }
 
     private void RenderCombatEnd(CombatOutcome outcome)

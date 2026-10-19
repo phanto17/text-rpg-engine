@@ -34,6 +34,16 @@ public sealed record GoldGainedEvent(int Amount, int Total) : GameEvent;
 
 public sealed record XpGainedEvent(int Amount, int Total) : GameEvent;
 
+/// <summary>The player reached <see cref="Level"/>; one event per level gained.</summary>
+public sealed record LeveledUpEvent(
+    int Level,
+    int HpGain,
+    int MaxHp,
+    int ManaGain,
+    int MaxMana,
+    IReadOnlyList<SpellDef> NewSpells,
+    int ProficiencyBonus) : GameEvent;
+
 public sealed record DamageTakenEvent(
     string Target,
     bool IsPlayer,
