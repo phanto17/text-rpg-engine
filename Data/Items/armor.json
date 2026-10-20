@@ -34,7 +34,23 @@
     "description": "Layered robes of spore-dyed silk interwoven with fine silver resonance-thread that deflects incoming blows with a soft harmonic hum.",
     "value": 60,
     "armor": { "baseAc": 12 }
+  },
+  {
+    "id": "architect_scale_mail",
+    "name": "Architect's Bronze Scale",
+    "aliases": ["scale", "scale mail", "bronze scale", "architect scale"],
+    "type": "armor",
+    "description": "Overlapping scales of green-black foundation bronze riveted to ash-cured leather, forged for the wardens of the deepest threshold.",
+    "value": 90,
+    "armor": { "baseAc": 17, "maxDexBonus": 0 }
+  },
+  {
+    "id": "triad_ward_mantle",
+    "name": "Mantle of the Balanced Triad",
+    "aliases": ["mantle", "cloak", "triad mantle", "ward mantle"],
+    "type": "armor",
+    "description": "A supple ash-grey mantle stitched with sun-bronze and moon-silver wire that turns aside blows without weighing down the wearer's step.",
+    "value": 80,
+    "armor": { "baseAc": 13 }
   }
 ]
-
-

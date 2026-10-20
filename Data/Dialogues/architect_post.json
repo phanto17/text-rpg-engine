@@ -1,0 +1,26 @@
+[
+  {
+    "id": "architect_post",
+    "speaker": "Aurelius, the First Architect",
+    "entries": [
+      {
+        "conditions": [ { "type": "flag", "flag": "spoke_to_reconciled_architect" } ],
+        "node": "waiting"
+      },
+      { "node": "first_words" }
+    ],
+    "nodes": [
+      {
+        "id": "first_words",
+        "text": "Aurelius remains on his knees beside the amber sarcophagus, his calcified fingers tracing the fingernail-marks Caelia left on the underside of the glass three centuries ago.\n\n\"All these years, I was so terrified that looking closely would wake her into pain that I never read her last words to me,\" he whispers. \"Step up to the Great Brazier when you are ready, {player.name}. Whether you relight the Sun, tune the Moon, or restore the Skull I chiseled away... I will not raise my hand again.\"",
+        "effects": [
+          { "type": "setFlag", "flag": "spoke_to_reconciled_architect" }
+        ]
+      },
+      {
+        "id": "waiting",
+        "text": "\"The Great Brazier awaits your hand, {player.name}. Let the third verse be spoken at last.\""
+      }
+    ]
+  }
+]

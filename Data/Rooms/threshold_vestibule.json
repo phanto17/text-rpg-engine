@@ -1,0 +1,91 @@
+[
+  {
+    "id": "threshold_vestibule",
+    "name": "The Stair of the Uncarved Skull",
+    "description": "Beneath the parted bronze of the Twin-Seal Gate, a cyclopean stair of black basalt spirals down into the oldest stratum of the earth. Neither the Choir's silver wires nor the Order's whitewash reached this deep; the walls are vitrified by ancient furnace-heat, smooth as dark glass and cold to the touch.\n\nEvery twelve steps, a bronze bas-relief set into the curving wall depicts the Triad of Passage—Sun, Moon, and Skull. Yet on every panel along the descent, the third sigil has been violently chiseled out of the bronze and plugged with dull grey lead.",
+    "revisit": "Black basalt steps spiral between vitrified walls where every Skull relief has been plugged with lead.",
+    "variants": [
+      {
+        "conditions": [ { "type": "flag", "flag": "read_architect_frieze" } ],
+        "text": "Beneath the pried lead on the third landing, the First Architect's erased verse—'none is whole without the third'—glimmers faintly."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "shone_vestibule_echo" } ],
+        "text": "Where Aurelius stood with his mason's hammer three centuries ago, the basalt still holds a faint warmth from the Barrowlight."
+      }
+    ],
+    "ambient": [
+      "A sub-audible vibration rises through the soles of your boots, like a colossal bell humming in the dark below.",
+      "Fine white grains of memory-salt sift down from the mortar seams whenever the air stirs.",
+      "The Barrowlight's flame steadies, pointing down the stair like a plumb-line.",
+      "Cold lead plugs stare blindly from the third socket of every bronze relief."
+    ],
+    "exits": [
+      { "direction": "up", "target": "warren_crossroads", "description": "The basalt steps climb back through the parted Twin-Seal Gate to the crossroads." },
+      { "direction": "down", "target": "penitent_landing", "description": "The spiral stair opens below onto a sheltered stone terrace lit by a sanctuary brazier." }
+    ],
+    "features": [
+      {
+        "id": "defaced_triad_frieze",
+        "name": "defaced Triad relief",
+        "aliases": ["frieze", "relief", "panels", "lead", "skull", "inscription"],
+        "description": "A series of green-black bronze panels cast when the Under-Barrow was first hollowed out. The Sun and the Moon remain intact, but the Skull has been gouged away with cold chisels and filled with lead.",
+        "interactions": [
+          {
+            "verb": "read",
+            "label": "Read the surviving inscription beneath the frieze",
+            "text": "Carved in archaic Greywater script beneath the Sun and Moon are the words: \"TO WAKE IN LIGHT, TO GRIEVE IN SHADOW...\" The final clause is buried under a thick smear of lead solder."
+          },
+          {
+            "verb": "study",
+            "label": "Trace the chiseled letters beneath the lead plug",
+            "once": true,
+            "check": {
+              "skill": "history",
+              "dc": 13,
+              "advantageIf": [
+                { "type": "any", "conditions": [
+                  { "type": "class", "class": "vesper_cantor" },
+                  { "type": "background", "background": "ash_deserter" },
+                  { "type": "flag", "flag": "read_stair_relief" }
+                ] }
+              ]
+            },
+            "success": {
+              "text": "By feeling the underlying chisel-grooves through the soft lead, you reconstruct the erased verse: \"...TO YIELD IN PEACE—NONE IS WHOLE WITHOUT THE THIRD.\"\n\nThe heresy at the foundation of the Under-Barrow becomes unmistakable. The First Architect did not build the Barrowlight network to guide the dead to rest; he deliberately severed the Third Pillar of the Triad so that no soul buried in Greywater could ever pass beyond his reach.",
+              "effects": [
+                { "type": "setFlag", "flag": "read_architect_frieze" },
+                { "type": "grantXp", "amount": 30 }
+              ]
+            },
+            "failure": {
+              "text": "The lead was poured hot into the bronze grooves three centuries ago; you cannot make out the words beneath."
+            }
+          }
+        ]
+      },
+      {
+        "id": "vestibule_memory_echo",
+        "name": "glimmer of ash-light on the third landing",
+        "aliases": ["echo", "glimmer", "landing", "memory"],
+        "description": "Where a chip of bronze lies wedged in the step, the Barrowlight catches a pale, lingering silhouette.",
+        "conditions": [ { "type": "hasItem", "item": "barrowlight" } ],
+        "interactions": [
+          {
+            "verb": "shine",
+            "label": "Raise the Barrowlight to unveil the memory echo",
+            "once": true,
+            "text": "Golden light spills across the landing. Three hundred years ago, a tall man in a master-mason's apron stands before the frieze with a heavy iron hammer in his fist, his knuckles raw and bleeding. At his feet rests a bier draped in winter linen.\n\n\"If the Skull is the law of the world,\" Aurelius whispers to the still form beneath the linen, \"then the world is a butcher's ledger, Caelia. Brick up the third gate. Let every soul in Greywater sleep in the Sun's amber until I find a way to wake you without losing a single word.\"",
+            "effects": [
+              { "type": "setFlag", "flag": "shone_vestibule_echo" },
+              { "type": "grantXp", "amount": 30 }
+            ]
+          }
+        ]
+      }
+    ],
+    "onFirstEnter": [
+      { "type": "setQuestStage", "quest": "cradle_of_ash_quest", "stage": 10 }
+    ]
+  }
+]

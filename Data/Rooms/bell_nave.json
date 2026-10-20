@@ -1,0 +1,104 @@
+[
+  {
+    "id": "bell_nave",
+    "name": "The Nave of the Sundered Bell",
+    "description": "Beyond the southern causeway, the cavern vaults upward into a colossal subterranean foundry-cathedral spanning a dry riverbed of coarse white memory-salt. Suspended from the crown of the vault by chains as thick as ship-masts hangs the Great Vesper Bell—twenty feet of green-black bronze cast with every funerary chord of the old world.\n\nA jagged vertical fracture splits the bell from its lip to its crown. Around its lower rim, two deep sockets—one shaped like a crescent moon, the other like a spoked sun—stand pried open and empty, and a three-inch triangular notch is missing from the bronze lip directly at the base of the crack.",
+    "revisit": "Above the dry riverbed of memory-salt hangs the twenty-foot Great Vesper Bell, split from lip to crown.",
+    "variants": [
+      {
+        "conditions": [ { "type": "flag", "flag": "diagnosed_sundered_bell" } ],
+        "text": "Along the jagged fracture in the bronze, crusted seams of memory-salt mark where three centuries of un-released grief burst the bell's harmonic ring."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "fitted_bell_splinter" } ],
+        "text": "Wedged into the triangular notch at the bell's lip, your bronze splinter hums with a quiet, resolving overtone."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "shone_nave_echo" } ],
+        "text": "Beneath the bell's shadow, the salt-drifts still bear the faint golden warmth of the night the Barrowlight broke."
+      }
+    ],
+    "ambient": [
+      "The fractured bronze bell gives off a low, sympathetic hum whenever your footsteps crunch in the salt.",
+      "Great links of overhead chain creak as cold air rises from the Cradle to the south.",
+      "White drifts of precipitated memory-salt lie banked against the foundry pillars like winter snow.",
+      "The Barrowlight's flame beats in time with the silent pendulum hanging inside the split bell."
+    ],
+    "exits": [
+      { "direction": "north", "target": "penitent_landing", "description": "The black basalt causeway leads back north to the Vigil of the Last Watch." },
+      { "direction": "south", "target": "cradle_of_ash", "description": "Wide obsidian steps descend south beneath the bell's shadow into the Cradle of the First Architect." }
+    ],
+    "features": [
+      {
+        "id": "sundered_vesper_bell",
+        "name": "Great Vesper Bell",
+        "aliases": ["bell", "fracture", "crack", "chains", "vesper bell", "rim"],
+        "description": "A monumental casting of funerary bronze that once regulated the pressure of the Great Brazier below. Three hundred years of holding ten thousand Greywater souls in forced stasis without the release of the Third Pillar caused the accumulated resonance to split the metal from lip to crown on the night the Barrowlight went out.",
+        "interactions": [
+          {
+            "verb": "study",
+            "label": "Examine the fracture and acoustic markings on the Great Bell",
+            "once": true,
+            "check": {
+              "skill": "arcana",
+              "dc": 13,
+              "advantageIf": [
+                { "type": "any", "conditions": [
+                  { "type": "class", "class": "liminal_auditor" },
+                  { "type": "class", "class": "vesper_cantor" }
+                ] }
+              ]
+            },
+            "success": {
+              "text": "Tracing the stress-lines along the bronze lip, you read the harmonic equations cast into the bell's inner rim. The Great Bell was engineered to ring three chords in sequence: Waking (Sun), Witness (Moon), and Release (Skull).\n\nWhen the First Architect damped the third chord and pried out the Twin Seals, the bell became a closed pressure-vessel. Neither relighting the Sun's stasis nor tuning the Moon's vigil can heal the fracture permanently—only restoring the third note of release can relieve the pressure without tearing the Under-Barrow apart.",
+              "effects": [
+                { "type": "setFlag", "flag": "diagnosed_sundered_bell" },
+                { "type": "grantXp", "amount": 30 }
+              ]
+            },
+            "failure": {
+              "text": "The acoustic diagrams along the fractured rim are crusted over with thick memory-salt, obscuring the builder's calculations."
+            }
+          },
+          {
+            "verb": "fit",
+            "label": "Press your bronze bell-splinter into the missing notch at the bell's lip",
+            "once": true,
+            "conditions": [
+              { "type": "background", "background": "fever_dreamer" },
+              { "type": "hasItem", "item": "bell_splinter" }
+            ],
+            "text": "You lift the three-inch sliver of green-black bronze that has hummed beneath your pillow since the night the Barrowlight died and press it into the jagged gap at the lip of the Great Vesper Bell.\n\nThe grain of the metal locks together to the millimeter. A single, pure overtone—the long-silenced note of the Skull—ripples up the twenty-foot fracture, and the fever-hum behind your eyes finally stills into lucid clarity.",
+            "effects": [
+              { "type": "setFlag", "flag": "fitted_bell_splinter" },
+              { "type": "addCounter", "counter": "lantern_resonance", "amount": 1 },
+              { "type": "grantXp", "amount": 30 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "nave_memory_echo",
+        "name": "fractured shimmer beneath the bell-clapper",
+        "aliases": ["echo", "shimmer", "clapper", "memory"],
+        "description": "Directly below the split lip of the Great Bell, the salt-drifts shimmer with a violent residual memory.",
+        "conditions": [ { "type": "hasItem", "item": "barrowlight" } ],
+        "interactions": [
+          {
+            "verb": "shine",
+            "label": "Hold the Barrowlight up to the bell's fractured lip",
+            "once": true,
+            "text": "The lantern's light catches the memory of the night the season turned. Beneath the groaning bronze stands the First Architect, Aurelius—his robes torn, riveting bands of whitewashed iron across his own calcifying ribs as the bell above him splits with a sound like thunder.\n\n\"Three hundred years, and still Caelia's face blurs whenever the flame dips!\" he roars into the shower of bronze sparks. \"Hold together, damn you! If the stasis breaks, she will wake just long enough to remember that she is dead!\"",
+            "effects": [
+              { "type": "setFlag", "flag": "shone_nave_echo" },
+              { "type": "grantXp", "amount": 30 }
+            ]
+          }
+        ]
+      }
+    ],
+    "onFirstEnter": [
+      { "type": "setQuestStage", "quest": "cradle_of_ash_quest", "stage": 20 }
+    ]
+  }
+]

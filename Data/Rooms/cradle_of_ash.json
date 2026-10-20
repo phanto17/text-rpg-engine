@@ -1,0 +1,309 @@
+[
+  {
+    "id": "cradle_of_ash",
+    "name": "The Cradle of the First Architect",
+    "description": "At the bedrock foundation of the Under-Barrow, the cavern opens into a vast circular amphitheater of black volcanic glass and drifted white ash. At the center of the dais stands the Great Brazier—an octagonal furnace-altar whose roots of petrified bone-tallow and bronze conduit-pipes climb upward through the stone toward Nocturne, the Memory Warrens, and the distant Lichgate on Greywater moor.\n\nBeside the cold brazier rests an alabaster sarcophagus sealed under a dome of golden amber glass, within which lies the still, dreamless form of Caelia. Standing watch before the dais is the First Architect, Aurelius the Undying—his tall frame half-fused with bronze astrolabes, silver Choir-wires, and lye-white plate.",
+    "revisit": "At the center of the obsidian amphitheater stand Caelia's amber-sealed sarcophagus and the octagonal dais of the Great Brazier.",
+    "variants": [
+      {
+        "conditions": [
+          { "type": "notFlag", "flag": "architect_resolved" },
+          { "type": "notFlag", "flag": "challenged_architect" }
+        ],
+        "text": "Before the octagonal dais, the First Architect stands motionless with his bronze pendulum-blade grounded in the ash, waiting to see whether you will step onto the plinth."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "read_caelia_inscription" } ],
+        "text": "On the inside of the amber glass above Caelia's hands, her fingernail-scratched plea—'last the face all faces yield'—catches the lantern light."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "shone_cradle_echo" } ],
+        "text": "Around the rim of the sarcophagus, golden motes linger where Caelia begged Aurelius to let the song end."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "architect_reconciled" } ],
+        "text": "The First Architect kneels beside Caelia's quiet sarcophagus with his bronze pendulum laid down in the ash, leaving the Great Brazier open to your judgment."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "architect_destroyed" } ],
+        "text": "The shattered bronze astrolabes and iron plate of the First Architect lie scattered across the obsidian floor below the unguarded Great Brazier."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "ending_sun_stasis" } ],
+        "text": "Blinding white stasis-fire roars through the Great Brazier's sun-grate."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "ending_moon_vigil" } ],
+        "text": "Silver-blue resonance hums through the Great Brazier's acoustic coils."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "ending_triad_passage" } ],
+        "text": "Sun, Moon, and Barrowlight burn together as one warm golden beacon of passage."
+      }
+    ],
+    "ambient": [
+      "Conduit-roots of bronze and bone-tallow climb the walls like the ribs of a sleeping leviathan.",
+      "Inside the amber glass, not a single grain of dust has fallen on Caelia's hands in three hundred years.",
+      "The Barrowlight's flame leans toward the central socket of the Great Brazier, recognizing the hearth from which it was lit.",
+      "Every breath you take in the amphitheater tastes of ancient peat, silver wire, and cold iron."
+    ],
+    "exits": [
+      { "direction": "north", "target": "bell_nave", "description": "Obsidian steps climb north toward the Nave of the Sundered Bell." }
+    ],
+    "features": [
+      {
+        "id": "caelia_sarcophagus",
+        "name": "Caelia's amber-sealed sarcophagus",
+        "aliases": ["sarcophagus", "caelia", "amber", "glass", "bier", "tomb"],
+        "description": "An alabaster bier encased in thick, vitrified amber glass that holds a single soul in timeless stasis. Within lies Caelia, wife of the First Architect, her hands folded over a winter wreath that has neither withered nor bloomed in three centuries.",
+        "interactions": [
+          {
+            "verb": "read",
+            "label": "Peer closely at the faint scratches on the underside of the amber glass",
+            "once": true,
+            "check": {
+              "skill": "investigation",
+              "dc": 13,
+              "advantageIf": [
+                { "type": "any", "conditions": [
+                  { "type": "class", "class": "liminal_auditor" },
+                  { "type": "background", "background": "fever_dreamer" }
+                ] }
+              ]
+            },
+            "success": {
+              "text": "Angling the lantern against the thick amber dome, you realize the marks above Caelia's knuckles are not flaws in the casting. Before the stasis hardened completely three hundred years ago, Caelia scratched a message into the *inside* of the glass with her own fingernail:\n\n\"AURELIUS—LAST THE FACE ALL FACES YIELD. DO NOT BUILD A PRISON OUT OF MY NAME.\"\n\nBecause Aurelius never dared look closely enough to risk waking her, he has stood guard for three centuries over a plea he never read.",
+              "effects": [
+                { "type": "setFlag", "flag": "read_caelia_inscription" },
+                { "type": "grantXp", "amount": 30 }
+              ]
+            },
+            "failure": {
+              "text": "The refractive glare of the thick amber glass hides whatever faint markings lie beneath its inner surface."
+            }
+          }
+        ]
+      },
+      {
+        "id": "cradle_memory_echo",
+        "name": "golden refraction above the sarcophagus",
+        "aliases": ["echo", "refraction", "motes", "memory"],
+        "description": "Where the conduit-pipes meet the amber glass, a timeless memory hangs trapped in the air.",
+        "conditions": [ { "type": "hasItem", "item": "barrowlight" } ],
+        "interactions": [
+          {
+            "verb": "shine",
+            "label": "Shine the Barrowlight through the amber dome to wake the memory echo",
+            "once": true,
+            "text": "The Barrowlight's beam pierces the amber glass, unveiling the hour the Great Brazier was first lit. Inside the rising wall of stasis, Caelia's translucent spirit presses both palms against the hardening glass, her voice muffled by the deafening roar of the Great Bell overhead:\n\n\"My love, listen to me! A song that cannot end is only noise! Let me sleep so that you can live!\"\n\nOutside the glass, Aurelius—deafened by the bronze bell and blinded by tears—drives the master-key home, locking ten thousand graves to keep one voice from saying goodbye.",
+            "effects": [
+              { "type": "setFlag", "flag": "shone_cradle_echo" },
+              { "type": "grantXp", "amount": 30 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "great_brazier",
+        "name": "The Great Brazier of the Under-Barrow",
+        "aliases": ["brazier", "altar", "dais", "great brazier", "hearth", "architect"],
+        "description": "The octagonal master-hearth of the Barrowlight network. Three deep recesses are carved into its crown: a Sun socket on the left, a Moon socket on the right, and a central Skull cradle shaped to fit the Barrowlight lantern itself.",
+        "interactions": [
+          {
+            "verb": "approach",
+            "label": "Step onto the octagonal dais to confront the First Architect",
+            "conditions": [
+              { "type": "notFlag", "flag": "architect_resolved" },
+              { "type": "notFlag", "flag": "challenged_architect" }
+            ],
+            "text": "Your boots ring against the obsidian steps of the dais. The First Architect slowly lifts his head; silver Choir-wires pull taut across his whitewashed plate, and his voice echoes like a cracked bell.",
+            "effects": [
+              { "type": "setFlag", "flag": "challenged_architect" },
+              { "type": "startCombat", "encounter": "cradle_architect_boss" }
+            ]
+          },
+          {
+            "verb": "relight",
+            "label": "The Path of the Sun: Lock the Sun Seal into the Great Brazier to restore dreamless stasis",
+            "conditions": [ { "type": "flag", "flag": "architect_resolved" } ],
+            "text": "You press the Seal of the Unclouded Sun into the primary grate of the Great Brazier and tip the Barrowlight's flame into the dry conduit-roots.\n\nA torrent of blinding, ash-white fire roars outward through the bronze arteries of the Under-Barrow. Up through the Nave, the Memory Warrens, Nocturne, and the Lichgate, the waking dead feel the ancient weight of the Sun return—drawing every restless wraith and every lingering citizen alike back into quiet, dreamless sleep.",
+            "effects": [
+              { "type": "setFlag", "flag": "ending_sun_stasis" },
+              { "type": "changeReputation", "faction": "ashen_order", "amount": 20 },
+              { "type": "changeReputation", "faction": "hollow_choir", "amount": -20 },
+              { "type": "setQuestStage", "quest": "cradle_of_ash_quest", "stage": 100 },
+              { "type": "endGame" }
+            ]
+          },
+          {
+            "verb": "tune",
+            "label": "The Path of the Moon: Set the Moon Seal into the Great Brazier to preserve the waking dead forever",
+            "conditions": [ { "type": "flag", "flag": "architect_resolved" } ],
+            "text": "You lock the Seal of the Waxing Moon into the Great Brazier's acoustic resonator and draw the Barrowlight's flame across the silver Choir-wires.\n\nA deep, luminous chord of silver-blue light pulses upward through the roots of the mountain. In the Archive, the Weeping Stair, and the Lantern Market of Nocturne, the fading spirits feel their outlines lock fast against the dark—held awake in an endless, melancholic vigil where no voice will ever be lost, whatever the cost in salt.",
+            "effects": [
+              { "type": "setFlag", "flag": "ending_moon_vigil" },
+              { "type": "changeReputation", "faction": "hollow_choir", "amount": 20 },
+              { "type": "changeReputation", "faction": "ashen_order", "amount": -20 },
+              { "type": "setQuestStage", "quest": "cradle_of_ash_quest", "stage": 100 },
+              { "type": "endGame" }
+            ]
+          },
+          {
+            "verb": "complete",
+            "label": "The Path of the Complete Triad: Unite Sun, Moon, and Barrowlight in the Rite of True Passage",
+            "conditions": [
+              { "type": "flag", "flag": "architect_resolved" },
+              { "type": "any", "conditions": [
+                { "type": "counter", "counter": "lantern_resonance", "min": 3 },
+                { "type": "flag", "flag": "architect_reconciled" },
+                { "type": "all", "conditions": [
+                  { "type": "flag", "flag": "read_architect_frieze" },
+                  { "type": "flag", "flag": "diagnosed_sundered_bell" },
+                  { "type": "flag", "flag": "read_caelia_inscription" }
+                ] }
+              ] }
+            ],
+            "text": "You set the Seal of the Unclouded Sun into the left socket, the Seal of the Waxing Moon into the right, and place the Barrowlight lantern itself into the central cradle of the Skull.\n\n\"First the light that wakes the field. Then the lamp the night must wield. Last the face all faces yield.\"\n\nAs you speak the complete Triad aloud, warm golden light flows through the Great Brazier—neither the blinding whitewash of forced amnesia nor the silver wire of endless clinging. Beside the dais, the amber glass over Caelia's sarcophagus dissolves like morning frost, and her long-held breath finally sighs out into peace. Above you, the Great Vesper Bell rings once, clear and whole, opening a true threshold across Greywater where the calcified dead may rest at last and the living and lucid may walk free.",
+            "effects": [
+              { "type": "setFlag", "flag": "ending_triad_passage" },
+              { "type": "changeReputation", "faction": "lantern_bearers", "amount": 25 },
+              { "type": "setQuestStage", "quest": "cradle_of_ash_quest", "stage": 100 },
+              { "type": "endGame" }
+            ]
+          }
+        ]
+      }
+    ],
+    "npcs": [
+      {
+        "id": "reconciled_architect",
+        "name": "Aurelius, the First Architect",
+        "aliases": ["aurelius", "architect", "founder"],
+        "description": "Aurelius kneels beside Caelia's opened sarcophagus, his bronze astrolabes unbuckled and his calcified fingers resting lightly on the edge of the glass.",
+        "dialogue": "architect_post",
+        "conditions": [ { "type": "flag", "flag": "architect_reconciled" } ]
+      }
+    ],
+    "encounter": {
+      "id": "cradle_architect_boss",
+      "conditions": [
+        { "type": "flag", "flag": "challenged_architect" },
+        { "type": "notFlag", "flag": "architect_resolved" }
+      ],
+      "intro": "The First Architect rises to his full height before the Great Brazier, raising his bronze pendulum-blade as a Calcified Threshold Warden steps from the salt-drifts.\n\n\"Three hundred years I have held the third gate shut so she would not be taken from me,\" Aurelius intones, his voice layering a dozen hollow echoes. \"Have you come with the Order's iron or the Choir's wire, little moth? It does not matter. No one opens the Skull while I still stand.\"",
+      "enemies": [
+        { "monster": "first_architect", "count": 1 },
+        { "monster": "calcified_warden", "count": 1 }
+      ],
+      "canFlee": true,
+      "fleeTo": "bell_nave",
+      "parley": {
+        "options": [
+          {
+            "label": "Speak Caelia's scratched words and the third verse of the Triad: love that refuses finality becomes a prison",
+            "check": {
+              "skill": "persuasion",
+              "dc": 15,
+              "advantageIf": [
+                { "type": "any", "conditions": [
+                  { "type": "flag", "flag": "shone_cradle_echo" },
+                  { "type": "flag", "flag": "shone_nave_echo" },
+                  { "type": "flag", "flag": "shone_vestibule_echo" },
+                  { "type": "flag", "flag": "read_caelia_inscription" },
+                  { "type": "flag", "flag": "read_architect_frieze" },
+                  { "type": "flag", "flag": "diagnosed_sundered_bell" },
+                  { "type": "flag", "flag": "carries_vaelen_testimony" },
+                  { "type": "flag", "flag": "carries_silas_testimony" },
+                  { "type": "flag", "flag": "wren_cradle_blessing" },
+                  { "type": "flag", "flag": "fitted_bell_splinter" }
+                ] }
+              ]
+            }
+          },
+          {
+            "label": "Show him the tribunal ash on your tongue: an oath that enslaves ten thousand graves has devoured what it swore to save",
+            "conditions": [ { "type": "class", "class": "oath_eater" } ],
+            "check": { "skill": "persuasion", "dc": 12, "advantage": true }
+          },
+          {
+            "label": "Audit his three-hundred-year ledger: Caelia released him from his debt on the inside of her own glass",
+            "conditions": [ { "type": "class", "class": "liminal_auditor" } ],
+            "check": { "skill": "investigation", "dc": 12, "advantage": true }
+          },
+          {
+            "label": "Sing the Third Harmonic—the resolving cadence of the Skull that lets a three-century dissonance rest",
+            "conditions": [ { "type": "class", "class": "vesper_cantor" } ],
+            "check": { "skill": "performance", "dc": 12, "advantage": true }
+          },
+          {
+            "label": "Open the cold ember in your ribs so Aurelius feels what his broken stasis did to the dead who woke",
+            "conditions": [ { "type": "class", "class": "remnant_vessel" } ],
+            "check": { "skill": "insight", "dc": 12, "advantage": true }
+          },
+          {
+            "label": "Hold up the tarnished locket: tell him you came for someone you lost too, and learned that letting go is still love",
+            "conditions": [ { "type": "background", "background": "bereaved_kin" } ],
+            "check": { "skill": "insight", "dc": 12, "advantage": true }
+          },
+          {
+            "label": "Hold up your scored signet and recite the unexpurgated Rite of Rest that he chiseled out of the stone",
+            "conditions": [ { "type": "background", "background": "ash_deserter" } ],
+            "check": { "skill": "religion", "dc": 12, "advantage": true }
+          },
+          {
+            "label": "Serve the Elders' Writ of Hollin's Rest upon the Founder: the living moor will no longer pay the interest on his grief",
+            "conditions": [ { "type": "background", "background": "moor_bailiff" } ],
+            "check": { "skill": "persuasion", "dc": 12, "advantage": true }
+          },
+          {
+            "label": "Hold up the bronze bell-splinter: the Great Bell cracked because Caelia herself was trying to ring the hour of release",
+            "conditions": [ { "type": "background", "background": "fever_dreamer" } ],
+            "check": { "skill": "perception", "dc": 12, "advantage": true }
+          },
+          {
+            "label": "Deliver the combined witness of Sister Wren, Prelate Vaelen, and Commander Silas: both Sun and Moon have stood down",
+            "conditions": [
+              { "type": "all", "conditions": [
+                { "type": "flag", "flag": "wren_joins_descent" },
+                { "type": "flag", "flag": "vaelen_reconciled" },
+                { "type": "flag", "flag": "silas_relieved" }
+              ] }
+            ],
+            "check": { "skill": "religion", "dc": 10, "advantage": true }
+          }
+        ],
+        "onSuccess": [
+          { "type": "setFlag", "flag": "architect_reconciled" },
+          { "type": "addCounter", "counter": "lantern_resonance", "amount": 1 },
+          { "type": "changeReputation", "faction": "lantern_bearers", "amount": 20 },
+          { "type": "grantXp", "amount": 200 },
+          {
+            "type": "message",
+            "text": "The First Architect freezes. Slowly, his bronze pendulum slips from his calcified fingers and rings once against the obsidian floor. Turning toward the amber sarcophagus, he bends close enough to see the faint scratches on the underside of the glass—the words Caelia wrote with her own hand three hundred years ago.\n\n\"Do not build a prison out of my name...\" Aurelius whispers, his layered voice cracking down to that of a single, weary old mason. He motions the Calcified Warden to stillness and sinks to his knees beside the bier. \"The Great Brazier is yours, {player.name}. Finish the work I was too afraid to complete.\"",
+            "style": "success"
+          }
+        ],
+        "onFailure": [
+          {
+            "type": "message",
+            "text": "\"Lies and grave-dust!\" Aurelius roars, the silver wires along his arms shrieking taut. \"If I open the third gate, she is gone forever!\"",
+            "style": "warning"
+          }
+        ]
+      },
+      "onVictory": [
+        { "type": "setFlag", "flag": "architect_destroyed" },
+        { "type": "addCounter", "counter": "lantern_resonance", "amount": -1 },
+        {
+          "type": "message",
+          "text": "With a final, shattering groan of torn bronze and brittle bone-salt, the First Architect collapses at the foot of Caelia's sarcophagus. His astrolabe stops spinning, leaving the Great Brazier silent and unguarded before you.",
+          "style": "narration"
+        }
+      ],
+      "onResolved": [
+        { "type": "setFlag", "flag": "architect_resolved" },
+        { "type": "setQuestStage", "quest": "cradle_of_ash_quest", "stage": 30 }
+      ]
+    }
+  }
+]

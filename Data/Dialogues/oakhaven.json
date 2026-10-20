@@ -1,0 +1,73 @@
+[
+  {
+    "id": "oakhaven",
+    "speaker": "Barrow-wright Oakhaven",
+    "entries": [
+      {
+        "conditions": [ { "type": "flag", "flag": "met_oakhaven" } ],
+        "node": "return_visit"
+      },
+      { "node": "first_meeting" }
+    ],
+    "nodes": [
+      {
+        "id": "first_meeting",
+        "text": "The old Wayfarer quartermaster lifts a visor ground from smoked glass, his knuckles crusted with pale memory-salt where he rests them on a crate of foundation-bronze.\n\n\"So someone finally brought both Triad Seals down the stair. I am Oakhaven. I have kept this landing stocked since before Commander Silas took his first scouring. If you still carry surface coin in your purse, {player.name}, spend it here—the First Architect does not take silver at the Great Brazier.\"",
+        "effects": [
+          { "type": "setFlag", "flag": "met_oakhaven" }
+        ],
+        "choices": [
+          {
+            "text": "Barter for supplies and endgame armor.",
+            "effects": [ { "type": "startShop", "shop": "cradle_quartermaster" } ],
+            "end": true
+          },
+          {
+            "text": "Ask what waits beyond the Nave of the Sundered Bell.",
+            "next": "about_architect",
+            "once": true
+          },
+          {
+            "text": "Leave him to his crates.",
+            "end": true
+          }
+        ]
+      },
+      {
+        "id": "return_visit",
+        "text": "\"Still have coin to lighten before the Nave, {player.name}? My crates are open.\"",
+        "choices": [
+          {
+            "text": "Barter for supplies and endgame armor.",
+            "effects": [ { "type": "startShop", "shop": "cradle_quartermaster" } ],
+            "end": true
+          },
+          {
+            "text": "Ask what waits beyond the Nave of the Sundered Bell.",
+            "next": "about_architect",
+            "once": true
+          },
+          {
+            "text": "Leave him to his crates.",
+            "end": true
+          }
+        ]
+      },
+      {
+        "id": "about_architect",
+        "text": "\"Aurelius the Undying,\" Oakhaven murmurs, tapping the bronze scale mail on his rack. \"Three hundred years ago he lost his wife Caelia to the winter fever and built the whole Barrowlight apparatus to hold her soul on the threshold. If you mean to fight him, bring force or radiant light to crack his bronze shell. If you mean to reach the man inside the shell... look closely at Caelia's glass before you step onto the dais.\"",
+        "choices": [
+          {
+            "text": "Barter for supplies and endgame armor.",
+            "effects": [ { "type": "startShop", "shop": "cradle_quartermaster" } ],
+            "end": true
+          },
+          {
+            "text": "Thank him and step back.",
+            "end": true
+          }
+        ]
+      }
+    ]
+  }
+]
