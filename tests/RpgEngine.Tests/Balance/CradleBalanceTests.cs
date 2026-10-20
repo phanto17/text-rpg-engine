@@ -18,8 +18,8 @@ namespace RpgEngine.Tests.Balance;
 /// Auditor, Vesper Cantor, Remnant Vessel):
 /// </para>
 /// <list type="bullet">
-/// <item>Level 3: 46.7% / 85.5%, 23.0% / 69.6%, 52.0% / 63.4%, 15.5% / 38.8%.</item>
-/// <item>Level 4: 78.9% / 98.0%, 43.0% / 83.4%, 80.6% / 87.0%, 82.0% / 82.9%. The Architect is
+/// <item>Level 3: 47.3% / 85.6%, 57.8% / 90.5%, 52.0% / 63.4%, 15.5% / 38.8%.</item>
+/// <item>Level 4: 79.0% / 97.8%, 80.8% / 96.9%, 80.6% / 87.0%, 82.0% / 82.9%. The Architect is
 /// weak to force and radiant, so the Remnant Vessel's Reclaim the Ember and the Vesper Cantor's
 /// Requiem hit him for double, and the blessings add little to a fight they already end quickly.</item>
 /// </list>

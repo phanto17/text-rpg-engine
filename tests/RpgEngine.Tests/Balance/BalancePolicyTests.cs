@@ -16,9 +16,16 @@ public sealed class BalancePolicyTests
         ]
         """;
 
+    // A weak once-per-fight technique that the fixture lists nowhere else.
+    private const string Feint = """
+        { "id": "feint", "name": "Feint", "kind": "technique", "description": "Jab.", "cost": { "usesPerEncounter": 1 }, "target": "enemy",
+          "resolution": { "type": "save", "ability": "con", "dc": 12, "damage": "1d4", "damageType": "piercing" } }
+        """;
+
     private static PlayerAction Choose(IReadOnlyList<string> spells, int damageTaken, params string[] items)
     {
-        var content = CombatFixture.Content().With("Items/blessings.json", Blessings).Load();
+        var spellFile = CombatFixture.Spells.TrimEnd()[..^1] + "," + Feint + "]";
+        var content = CombatFixture.Content().With("Items/blessings.json", Blessings).With("Rules/spells.json", spellFile).Load();
         var combat = new CombatHarness(CombatFixture.Hero(spells: spells), content, dice: [15, 2]);
         combat.World.Player.TakeDamage(damageTaken);
         foreach (var item in items)
@@ -55,6 +62,13 @@ public sealed class BalancePolicyTests
     public void Choose_BelowFortyPercentHp_DrinksTheStrongestHealingItem_ABlessingWinningATie(string first, string second, string expected)
     {
         Assert.Equal(new UseItemAction(expected), Choose([], damageTaken: 13, first, second));
+    }
+
+    [Fact]
+    public void Choose_PicksTheTechniqueThatHitsHardest_NotTheFirstListed()
+    {
+        // Sneak Attack is a sword blow plus 1d6; the feint listed before it deals 1d4.
+        Assert.Equal(new CastAction("sneak", "brute#1"), Choose(["feint", "sneak"], damageTaken: 0));
     }
 
     [Theory]

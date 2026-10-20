@@ -19,8 +19,10 @@ namespace RpgEngine.Tests.Balance;
 /// <item>Attack: the castable mana spell or, against the boss, the carried item thrown at an enemy
 /// (the Flask of Holy Water, Vaelen's Silver Chime) with the highest average damage against the
 /// target (after resistances and vulnerabilities; hit and save odds are ignored; an item wins a
-/// tie); then the first ready per-fight technique aimed at an enemy, unless a plain attack is already
-/// sure to kill (its minimum damage covers the target's HP); otherwise the plain attack.</item>
+/// tie); then the ready per-fight technique aimed at an enemy with the highest average damage against
+/// the target (a weapon technique counts its weapon's damage plus the bonus; the first listed on a
+/// tie), unless a plain attack is already sure to kill (its minimum damage covers the target's HP);
+/// otherwise the plain attack.</item>
 /// </list>
 /// The plain attack is the first free damaging spell the character knows, otherwise the equipped
 /// weapon. Thrown items wait for the minion to fall because throwing one first hands the minion an
@@ -99,7 +101,13 @@ internal sealed class BalancePolicy
             return strongest;
         }
 
-        var technique = ready.FirstOrDefault(spell => spell.Target == SpellTarget.Enemy && spell.Cost.UsesPerEncounter is not null);
+        var technique = ready
+            .Where(spell => spell.Target == SpellTarget.Enemy && spell.Cost.UsesPerEncounter is not null)
+            .Select(spell => (Spell: spell, Damage: Damage(spell.Resolution, session)))
+            .Where(x => x.Damage is not null)
+            .OrderByDescending(x => Adjusted(x.Damage!.Value.Expression.Average, x.Damage.Value.Type, target))
+            .Select(x => x.Spell)
+            .FirstOrDefault();
         if (technique is not null && Adjusted(plainDamage.Min, plainType, target) < target.CurrentHp)
         {
             return new CastAction(technique.Id, target.Id);
