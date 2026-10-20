@@ -54,6 +54,8 @@ public sealed class ContentSchemasTests
         Assert.Contains(branches, b => (string?)b["properties"]!["type"]!["const"] == "startShop");
         var applyStatus = branches.Single(b => (string?)b["properties"]!["type"]!["const"] == "applyStatus");
         Assert.Contains("status", applyStatus["required"]!.AsArray().Select(n => (string?)n));
+        var spendGold = branches.Single(b => (string?)b["properties"]!["type"]!["const"] == "spendGold");
+        Assert.Contains("amount", spendGold["required"]!.AsArray().Select(n => (string?)n));
     }
 
     [Fact]

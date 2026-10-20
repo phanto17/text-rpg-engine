@@ -207,6 +207,26 @@
                   {
                     "properties": {
                       "type": {
+                        "const": "gold"
+                      },
+                      "min": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "max": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "properties": {
+                      "type": {
                         "const": "questStage"
                       },
                       "quest": {

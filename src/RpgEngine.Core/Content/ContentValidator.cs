@@ -885,6 +885,9 @@ public static partial class ContentValidator
                     RequireFaction(context, reputation.Faction);
                     RequireBound(context, reputation.Min, reputation.Max, null, "reputation");
                     break;
+                case GoldCondition gold:
+                    RequireBound(context, gold.Min, gold.Max, null, "gold");
+                    break;
                 case QuestStageCondition quest:
                     RequireQuest(context, quest.Quest, out _);
                     RequireBound(context, quest.Min, quest.Max, quest.EqualTo, "questStage");
@@ -979,6 +982,9 @@ public static partial class ContentValidator
                     break;
                 case GiveGoldEffect gold:
                     RequireRange(context, gold.Amount, 0, int.MaxValue, "giveGold amount");
+                    break;
+                case SpendGoldEffect spend:
+                    RequireRange(context, spend.Amount, 1, int.MaxValue, "spendGold amount");
                     break;
                 case GrantXpEffect xp:
                     RequireRange(context, xp.Amount, 0, int.MaxValue, "grantXp amount");

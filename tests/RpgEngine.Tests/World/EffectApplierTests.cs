@@ -141,6 +141,25 @@ public sealed class EffectApplierTests
     }
 
     [Fact]
+    public void SpendGold_TakesTheAmount_AndEmitsTheNewTotal()
+    {
+        var (game, log) = Run([new GiveGoldEffect { Amount = 25 }, new SpendGoldEffect { Amount = 10 }]);
+
+        Assert.Equal(new GoldSpentEvent(10, 15), log.Events[1]);
+        Assert.Equal(15, game.Player.Gold);
+    }
+
+    [Fact]
+    public void SpendGold_NeverTakesMoreThanThePlayerCarries()
+    {
+        var (game, log) = Run([new GiveGoldEffect { Amount = 4 }, new SpendGoldEffect { Amount = 10 }, new SpendGoldEffect { Amount = 10 }]);
+
+        Assert.Equal(new GoldSpentEvent(4, 0), log.Events[1]);
+        Assert.Equal(2, log.Events.Count);
+        Assert.Equal(0, game.Player.Gold);
+    }
+
+    [Fact]
     public void Rest_RestoresHpAndManaToMax()
     {
         var player = TestCharacters.Create(maxHp: 12, maxMana: 6);

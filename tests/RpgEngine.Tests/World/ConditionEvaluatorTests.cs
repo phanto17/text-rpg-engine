@@ -66,6 +66,18 @@ public sealed class ConditionEvaluatorTests
         Assert.True(Passes(new ReputationCondition { Faction = "guild", Max = 0 }));
     }
 
+    [Theory]
+    [InlineData(10, 10, null, true)]
+    [InlineData(9, 10, null, false)]
+    [InlineData(5, null, 5, true)]
+    [InlineData(6, null, 5, false)]
+    public void Gold_RespectsMinAndMax(int gold, int? min, int? max, bool expected)
+    {
+        _game.Player.AddGold(gold);
+
+        Assert.Equal(expected, Passes(new GoldCondition { Min = min, Max = max }));
+    }
+
     [Fact]
     public void QuestStage()
     {

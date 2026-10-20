@@ -155,6 +155,26 @@
                   {
                     "properties": {
                       "type": {
+                        "const": "gold"
+                      },
+                      "min": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      },
+                      "max": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ]
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "properties": {
+                      "type": {
                         "const": "questStage"
                       },
                       "quest": {
@@ -587,6 +607,20 @@
                         {
                           "properties": {
                             "type": {
+                              "const": "spendGold"
+                            },
+                            "amount": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "amount"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "properties": {
+                            "type": {
                               "const": "grantXp"
                             },
                             "amount": {
@@ -941,10 +975,10 @@
                         "type": "boolean"
                       },
                       "advantageIf": {
-                        "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items/anyOf/15/properties/check/properties/advantageIf"
+                        "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items/anyOf/16/properties/check/properties/advantageIf"
                       },
                       "disadvantageIf": {
-                        "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items/anyOf/15/properties/check/properties/disadvantageIf"
+                        "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items/anyOf/16/properties/check/properties/disadvantageIf"
                       }
                     },
                     "required": [
@@ -1150,10 +1184,10 @@
                           "type": "boolean"
                         },
                         "advantageIf": {
-                          "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items/anyOf/15/properties/check/properties/advantageIf"
+                          "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items/anyOf/16/properties/check/properties/advantageIf"
                         },
                         "disadvantageIf": {
-                          "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items/anyOf/15/properties/check/properties/disadvantageIf"
+                          "$ref": "#/items/properties/features/items/properties/interactions/items/properties/effects/items/anyOf/16/properties/check/properties/disadvantageIf"
                         }
                       },
                       "required": [

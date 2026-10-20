@@ -20,6 +20,7 @@ public static class ConditionEvaluator
         LacksItemCondition c => !state.Player.Inventory.Contains(c.Item),
         CounterCondition c => InBounds(state.World.GetCounter(c.Counter), c.Min, c.Max, c.EqualTo),
         ReputationCondition c => InBounds(state.World.GetReputation(c.Faction), c.Min, c.Max, null),
+        GoldCondition c => InBounds(state.Player.Gold, c.Min, c.Max, null),
         QuestStageCondition c => InBounds(state.World.GetQuestStage(c.Quest), c.Min, c.Max, c.EqualTo),
         ClassCondition c => string.Equals(state.Player.ClassId, c.ClassId, StringComparison.Ordinal),
         BackgroundCondition b => string.Equals(state.Player.BackgroundId, b.BackgroundId, StringComparison.Ordinal),

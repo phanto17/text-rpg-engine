@@ -13,6 +13,7 @@ namespace RpgEngine.Core.Content.Defs;
 [JsonDerivedType(typeof(LacksItemCondition), "lacksItem")]
 [JsonDerivedType(typeof(CounterCondition), "counter")]
 [JsonDerivedType(typeof(ReputationCondition), "reputation")]
+[JsonDerivedType(typeof(GoldCondition), "gold")]
 [JsonDerivedType(typeof(QuestStageCondition), "questStage")]
 [JsonDerivedType(typeof(ClassCondition), "class")]
 [JsonDerivedType(typeof(BackgroundCondition), "background")]
@@ -68,6 +69,13 @@ public sealed record ReputationCondition : ConditionDef
 }
 
 /// <summary>Passes when the quest stage (default 0) satisfies every bound given.</summary>
+public sealed record GoldCondition : ConditionDef
+{
+    public int? Min { get; init; }
+
+    public int? Max { get; init; }
+}
+
 public sealed record QuestStageCondition : ConditionDef
 {
     public required string Quest { get; init; }

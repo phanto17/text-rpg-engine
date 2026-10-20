@@ -372,6 +372,7 @@ CLI layout:
 | `hasItem` / `lacksItem` | `item`, `count?` |
 | `counter` | `counter`, `min?`, `max?`, `equals?` |
 | `reputation` | `faction`, `min?`, `max?` |
+| `gold` | `min?`, `max?` (the gold the player carries) |
 | `questStage` | `quest`, `min?`, `max?`, `equals?` |
 | `class` | `class` |
 | `background` | `background` |
@@ -388,6 +389,7 @@ CLI layout:
 | `setQuestStage` | `quest`, `stage` (never moves backwards) |
 | `giveItem` / `removeItem` | `item`, `count?` |
 | `giveGold` | `amount` |
+| `spendGold` | `amount` (at least 1); takes that much gold, never more than the player carries. Gate the interaction with a `gold` condition so it only appears when the player can pay. |
 | `grantXp` | `amount` |
 | `heal` / `damage` | `dice`, `damageType?` |
 | `restoreMana` | `amount` |

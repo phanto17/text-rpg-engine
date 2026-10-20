@@ -85,6 +85,14 @@ public sealed class EffectApplier
                 player.AddGold(e.Amount);
                 log.Add(new GoldGainedEvent(e.Amount, player.Gold));
                 break;
+            case SpendGoldEffect e:
+                var spent = Math.Min(e.Amount, player.Gold);
+                if (spent > 0 && player.TrySpendGold(spent))
+                {
+                    log.Add(new GoldSpentEvent(spent, player.Gold));
+                }
+
+                break;
             case GrantXpEffect e:
                 Progression.GrantXp(player, _content, e.Amount, log);
                 break;

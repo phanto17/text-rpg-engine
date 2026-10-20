@@ -16,6 +16,7 @@ namespace RpgEngine.Core.Content.Defs;
 [JsonDerivedType(typeof(GiveItemEffect), "giveItem")]
 [JsonDerivedType(typeof(RemoveItemEffect), "removeItem")]
 [JsonDerivedType(typeof(GiveGoldEffect), "giveGold")]
+[JsonDerivedType(typeof(SpendGoldEffect), "spendGold")]
 [JsonDerivedType(typeof(GrantXpEffect), "grantXp")]
 [JsonDerivedType(typeof(HealEffect), "heal")]
 [JsonDerivedType(typeof(DamageEffect), "damage")]
@@ -87,6 +88,12 @@ public sealed record RemoveItemEffect : EffectDef
 }
 
 public sealed record GiveGoldEffect : EffectDef
+{
+    public required int Amount { get; init; }
+}
+
+/// <summary>Takes gold from the player, never more than they carry; gate it with a <c>gold</c> condition.</summary>
+public sealed record SpendGoldEffect : EffectDef
 {
     public required int Amount { get; init; }
 }
