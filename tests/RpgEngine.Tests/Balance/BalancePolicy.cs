@@ -11,24 +11,24 @@ namespace RpgEngine.Tests.Balance;
 /// id, so any class plays the same way. Each turn takes the first rule that applies:
 /// <list type="number">
 /// <item>Heal: below 50% HP, the ready self-targeted spell or technique that heals the most on
-/// average (the first listed on a tie), along with any status it applies; then a Potion of Healing
-/// below 40% HP while any remain.</item>
+/// average (the first listed on a tie), along with any status it applies; then, below 40% HP, the
+/// carried healing item that heals the most on average (an ally blessing, which also applies a
+/// status, before a Potion of Healing on a tie).</item>
 /// <item>Target: a minion if one plain attack likely kills it (average damage, after
 /// vulnerabilities, at least its HP); otherwise the boss.</item>
-/// <item>Attack: a carried Flask of Holy Water opens on the boss; then the castable mana spell with
-/// the highest average damage against the target (after resistances and vulnerabilities; hit and
-/// save odds are ignored); then the first ready per-fight technique aimed at an enemy, unless a plain
-/// attack is already sure to kill (its minimum damage covers the target's HP); otherwise the plain
-/// attack.</item>
+/// <item>Attack: the castable mana spell or, against the boss, the carried item thrown at an enemy
+/// (the Flask of Holy Water, Vaelen's Silver Chime) with the highest average damage against the
+/// target (after resistances and vulnerabilities; hit and save odds are ignored; an item wins a
+/// tie); then the first ready per-fight technique aimed at an enemy, unless a plain attack is already
+/// sure to kill (its minimum damage covers the target's HP); otherwise the plain attack.</item>
 /// </list>
 /// The plain attack is the first free damaging spell the character knows, otherwise the equipped
-/// weapon. The flask waits for the minion to fall because throwing it first hands the minion an extra
-/// round against a fragile caster. The policy never defends, parleys, or flees.
+/// weapon. Thrown items wait for the minion to fall because throwing one first hands the minion an
+/// extra round against a fragile caster. The policy never defends, parleys, or flees.
 /// </summary>
 internal sealed class BalancePolicy
 {
     public const string Flask = "holy_water";
-    private const string Potion = "healing_potion";
 
     private readonly GameContent _content;
     private readonly string _bossId;
@@ -59,9 +59,18 @@ internal sealed class BalancePolicy
             return new CastAction(heal.Id, null);
         }
 
-        if (player.Inventory.Contains(Potion) && player.CurrentHp * 5 < player.MaxHp * 2)
+        var carried = player.Inventory.Entries.Select(entry => _content.Items[entry.ItemId]).Where(item => item.Use is { InCombat: true }).ToList();
+        var healingItem = carried
+            .Where(item => item.Use!.Target == SpellTarget.Self)
+            .Select(item => (Item: item, Average: AverageHealing(item.Use!.Effects)))
+            .Where(x => x.Average > 0)
+            .OrderByDescending(x => x.Average)
+            .ThenByDescending(x => x.Item.Use!.Effects.OfType<ApplyStatusEffect>().Any())
+            .Select(x => x.Item)
+            .FirstOrDefault();
+        if (healingItem is not null && player.CurrentHp * 5 < player.MaxHp * 2)
         {
-            return new UseItemAction(Potion);
+            return new UseItemAction(healingItem.Id);
         }
 
         var enemies = session.ActiveEnemies;
@@ -74,21 +83,20 @@ internal sealed class BalancePolicy
             ?? boss
             ?? enemies.OrderBy(e => e.CurrentHp).First();
 
-        if (target == boss && player.Inventory.Contains(Flask))
-        {
-            return new UseItemAction(Flask, target.Id);
-        }
-
-        var manaSpell = ready
+        var thrown = carried
+            .Where(item => target == boss && item.Use!.Target == SpellTarget.Enemy && item.Use.Resolution is not null)
+            .Select(item => (Action: (PlayerAction)new UseItemAction(item.Id, target.Id), Damage: Damage(item.Use!.Resolution!, session)));
+        var cast = ready
             .Where(spell => spell.Target == SpellTarget.Enemy && spell.Cost.Mana > 0)
-            .Select(spell => (Spell: spell, Damage: Damage(spell.Resolution, session)))
+            .Select(spell => (Action: (PlayerAction)new CastAction(spell.Id, target.Id), Damage: Damage(spell.Resolution, session)));
+        var strongest = thrown.Concat(cast)
             .Where(x => x.Damage is not null)
             .OrderByDescending(x => Adjusted(x.Damage!.Value.Expression.Average, x.Damage.Value.Type, target))
-            .Select(x => x.Spell)
+            .Select(x => x.Action)
             .FirstOrDefault();
-        if (manaSpell is not null)
+        if (strongest is not null)
         {
-            return new CastAction(manaSpell.Id, target.Id);
+            return strongest;
         }
 
         var technique = ready.FirstOrDefault(spell => spell.Target == SpellTarget.Enemy && spell.Cost.UsesPerEncounter is not null);
@@ -102,9 +110,10 @@ internal sealed class BalancePolicy
 
     // Self-buffs ride along with their healing; a spell that only applies a status never heals here.
     private static double AverageHealing(SpellResolutionDef resolution) =>
-        resolution is EffectsResolutionDef effects
-            ? effects.Effects.OfType<HealEffect>().Sum(heal => DiceExpression.Parse(heal.Dice).Average)
-            : 0;
+        resolution is EffectsResolutionDef effects ? AverageHealing(effects.Effects) : 0;
+
+    private static double AverageHealing(IEnumerable<EffectDef> effects) =>
+        effects.OfType<HealEffect>().Sum(heal => DiceExpression.Parse(heal.Dice).Average);
 
     // The first free damaging spell the character knows (e.g. a cantrip), otherwise the weapon.
     private (SpellDef? Spell, DiceExpression Damage, DamageType Type) PlainAttack(CombatSession session, IReadOnlyList<SpellDef> ready)

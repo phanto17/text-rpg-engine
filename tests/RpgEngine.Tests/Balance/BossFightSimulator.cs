@@ -34,10 +34,12 @@ internal sealed class BossFightSimulator
 
     /// <summary>
     /// Runs fights with seeds 1..<paramref name="fights"/> for a fresh character of the class at
-    /// <paramref name="level"/>, carrying only the class's starting kit.
+    /// <paramref name="level"/>, carrying the class's starting kit and one of each of
+    /// <paramref name="extraItems"/> (for example the Flask of Holy Water).
     /// </summary>
-    public BalanceRow Run(string classId, int level, bool withFlask, int fights)
+    public BalanceRow Run(string classId, int level, int fights, params IReadOnlyList<string> extraItems)
     {
+        ArgumentNullException.ThrowIfNull(extraItems);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(fights);
         ArgumentOutOfRangeException.ThrowIfLessThan(level, 1);
         var wins = 0;
@@ -47,7 +49,7 @@ internal sealed class BossFightSimulator
 
         for (var seed = 1; seed <= fights; seed++)
         {
-            var (won, fightRounds, startMaxHp, hpAtEnd) = Fight(classId, level, withFlask, (ulong)seed);
+            var (won, fightRounds, startMaxHp, hpAtEnd) = Fight(classId, level, extraItems, (ulong)seed);
             rounds += fightRounds;
             maxHp = startMaxHp;
             if (won)
@@ -57,12 +59,12 @@ internal sealed class BossFightSimulator
             }
         }
 
-        return new BalanceRow(classId, level, withFlask, maxHp, fights, wins, rounds, hpLeft);
+        return new BalanceRow(classId, level, extraItems, maxHp, fights, wins, rounds, hpLeft);
     }
 
     // Returns the HP left as the fight ended: the victory XP may level the character up, and the
     // hit points that level adds are not something the fight left behind.
-    private (bool Won, int Rounds, int StartMaxHp, int HpLeft) Fight(string classId, int level, bool withFlask, ulong seed)
+    private (bool Won, int Rounds, int StartMaxHp, int HpLeft) Fight(string classId, int level, IReadOnlyList<string> extraItems, ulong seed)
     {
         var dice = new DiceRoller(new Pcg32RandomSource(seed));
         var checks = new CheckRunner(_content, new CheckResolver(dice, _content.Rules.NaturalCritsOnChecks));
@@ -71,9 +73,9 @@ internal sealed class BossFightSimulator
 
         var player = CreatePlayer(classId, level);
         var startMaxHp = player.MaxHp;
-        if (withFlask)
+        foreach (var item in extraItems)
         {
-            player.Inventory.Add(BalancePolicy.Flask);
+            player.Inventory.Add(item);
         }
 
         var state = new GameState(player, WorldState.CreateNew(_content), _content.EncounterRooms[_encounterId]);

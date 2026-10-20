@@ -46,7 +46,7 @@ public sealed class MemoryWarrensBalanceTests(ITestOutputHelper output)
         var simulator = new BossFightSimulator(content, encounterId, bossId);
 
         var rows = content.ClassList
-            .SelectMany(cls => WinRateBandsByLevel.Keys.Select(level => simulator.Run(cls.Id, level, withFlask: false, FightsPerVariant)))
+            .SelectMany(cls => WinRateBandsByLevel.Keys.Select(level => simulator.Run(cls.Id, level, FightsPerVariant)))
             .ToList();
 
         output.WriteLine(encounterId);

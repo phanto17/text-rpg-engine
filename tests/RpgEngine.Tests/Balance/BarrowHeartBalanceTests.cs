@@ -32,13 +32,13 @@ public sealed class BarrowHeartBalanceTests(ITestOutputHelper output)
         var simulator = new BossFightSimulator(content, "barrow_heart", "gravebound_knight");
 
         var rows = content.ClassList
-            .SelectMany(cls => new[] { false, true }.Select(withFlask => simulator.Run(cls.Id, level: 1, withFlask, FightsPerVariant)))
+            .SelectMany(cls => new[] { simulator.Run(cls.Id, level: 1, FightsPerVariant), simulator.Run(cls.Id, level: 1, FightsPerVariant, BalancePolicy.Flask) })
             .ToList();
 
         output.WriteLine(BalanceRow.Header);
         rows.ForEach(row => output.WriteLine(row.ToString()));
 
-        var noFlask = rows.Where(row => !row.WithFlask).ToList();
+        var noFlask = rows.Where(row => row.ExtraItems.Count == 0).ToList();
         Assert.Equal(NoFlaskWinRateBands.Keys.Order(StringComparer.Ordinal), noFlask.Select(row => row.ClassId).Order(StringComparer.Ordinal));
         Assert.All(noFlask, row => Assert.InRange(row.WinRate, NoFlaskWinRateBands[row.ClassId].Min, NoFlaskWinRateBands[row.ClassId].Max));
     }

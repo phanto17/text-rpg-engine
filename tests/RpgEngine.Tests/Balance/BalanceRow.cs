@@ -2,10 +2,10 @@ using System.Globalization;
 
 namespace RpgEngine.Tests.Balance;
 
-/// <summary>Aggregated results of many seeded fights for one class at one level, with or without the holy water flask.</summary>
-internal sealed record BalanceRow(string ClassId, int Level, bool WithFlask, int MaxHp, int Fights, int Wins, int TotalRounds, int TotalHpLeftOnWins)
+/// <summary>Aggregated results of many seeded fights for one class at one level, carrying the given items beyond the starting kit.</summary>
+internal sealed record BalanceRow(string ClassId, int Level, IReadOnlyList<string> ExtraItems, int MaxHp, int Fights, int Wins, int TotalRounds, int TotalHpLeftOnWins)
 {
-    public const string Header = "Class            Level  Flask  Win rate  Avg rounds  Avg HP left (wins)";
+    public const string Header = "Class            Level  Win rate  Avg rounds  Avg HP left (wins)  Extra items";
 
     public double WinRate => (double)Wins / Fights;
 
@@ -15,12 +15,12 @@ internal sealed record BalanceRow(string ClassId, int Level, bool WithFlask, int
 
     public override string ToString() => string.Format(
         CultureInfo.InvariantCulture,
-        "{0,-16} {1,5}  {2,-5} {3,8:P1} {4,11:F2} {5,12:F1} / {6}",
+        "{0,-16} {1,5} {2,9:P1} {3,11:F2} {4,12:F1} / {5,-3}  {6}",
         ClassId,
         Level,
-        WithFlask ? "yes" : "no",
         WinRate,
         AverageRounds,
         AverageHpLeftOnWins,
-        MaxHp);
+        MaxHp,
+        ExtraItems.Count == 0 ? "-" : string.Join(", ", ExtraItems));
 }
