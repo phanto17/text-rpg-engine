@@ -31,7 +31,15 @@
       { "stage": 30, "journal": "You hold both the Seal of the Waxing Moon and the Seal of the Unclouded Sun. Return to the Gate of the Twin Seals at the crossroads and unseal the descent." },
       { "stage": 100, "journal": "You set both Triad Seals into the bronze gate at the crossroads, unsealing the way down to the Cradle of the First Architect." }
     ]
+  },
+  {
+    "id": "cradle_of_ash_quest",
+    "name": "The Cradle of the First Architect",
+    "stages": [
+      { "stage": 10, "journal": "You descended beneath the Gate of the Twin Seals onto the Stair of the Uncarved Skull, where the Third Pillar of the Triad was chiseled out of the stone three centuries ago." },
+      { "stage": 20, "journal": "Beyond the Vigil of the Last Watch, you stood beneath the Great Vesper Bell—cracked from crown to lip by three hundred years of accumulated memory-salt. The Cradle of the First Architect lies just ahead." },
+      { "stage": 30, "journal": "The First Architect no longer bars the dais. The Great Brazier of the Under-Barrow stands open before you, waiting for you to choose whether to relight the Sun's stasis, tune the Moon's vigil, or restore the Complete Triad of Passage." },
+      { "stage": 100, "journal": "At the Great Brazier in the bedrock of the Under-Barrow, you made your choice and answered the last question of Greywater." }
+    ]
   }
 ]
-
-

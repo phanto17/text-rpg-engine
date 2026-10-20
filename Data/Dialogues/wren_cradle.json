@@ -1,0 +1,87 @@
+[
+  {
+    "id": "wren_cradle",
+    "speaker": "Sister Wren",
+    "entries": [
+      {
+        "conditions": [ { "type": "flag", "flag": "wren_cradle_blessing" } ],
+        "node": "after_blessing"
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "met_wren_cradle" } ],
+        "node": "return_visit"
+      },
+      { "node": "first_meeting" }
+    ],
+    "nodes": [
+      {
+        "id": "first_meeting",
+        "text": "Sister Wren stands by the southern parapet, looking out toward the fractured silhouette of the Great Vesper Bell. When you approach, she turns and lifts a small iron censer warm with moor-thyme and white ash.\n\n\"All my life in the Order, {player.name}, they taught us that the Barrowlight was a mercy—that keeping the dead asleep was the holiest work on Greywater moor. Seeing the chiseled-out skulls on that stair... we were never tending a sanctuary. We were jailers for a man who could not bear to say goodbye.\"",
+        "effects": [
+          { "type": "setFlag", "flag": "met_wren_cradle" }
+        ],
+        "choices": [
+          {
+            "text": "Receive Sister Wren's blessing before confronting the First Architect.",
+            "next": "blessing_node"
+          },
+          {
+            "text": "Ask what she hopes you will do when you reach the Great Brazier.",
+            "next": "counsel_node",
+            "once": true
+          },
+          {
+            "text": "Step back to the terrace.",
+            "end": true
+          }
+        ]
+      },
+      {
+        "id": "return_visit",
+        "text": "\"The air grows heavier with every step toward the Bell,\" Wren says quietly, holding the warm iron censer ready in both hands. \"Let me bless your road before you cross the nave, {player.name}.\"",
+        "choices": [
+          {
+            "text": "Receive Sister Wren's blessing before confronting the First Architect.",
+            "next": "blessing_node"
+          },
+          {
+            "text": "Ask what she hopes you will do when you reach the Great Brazier.",
+            "next": "counsel_node",
+            "once": true
+          },
+          {
+            "text": "Step back to the terrace.",
+            "end": true
+          }
+        ]
+      },
+      {
+        "id": "counsel_node",
+        "text": "\"Neither the Order's blindness nor the Choir's chains,\" she answers without hesitation. \"In the old frieze on the stair, the Sun and the Moon were meant to lead to the Skull—not to war over its grave. If the Barrowlight in your hand still burns warm, perhaps you can restore the third verse Aurelius stole from us.\"",
+        "choices": [
+          {
+            "text": "Receive her blessing and take her censer.",
+            "next": "blessing_node"
+          },
+          {
+            "text": "Step back to the terrace.",
+            "end": true
+          }
+        ]
+      },
+      {
+        "id": "blessing_node",
+        "text": "Wren traces the sign of the complete Triad—Sun, Moon, and Skull—across your brow with warm ash, then presses her iron censer into your hands.\n\n\"May your watch be honest, {player.name}, and may you know when it is ended. Take my censer—its moor-thyme smoke will shield you if the Architect raises his hand against you.\"",
+        "effects": [
+          { "type": "setFlag", "flag": "wren_cradle_blessing" },
+          { "type": "giveItem", "item": "wrens_ashen_censer" },
+          { "type": "grantXp", "amount": 25 }
+        ]
+      },
+      {
+        "id": "after_blessing",
+        "text": "\"Go with a steady heart, {player.name}. Whatever happens at the Great Brazier, you did not walk down into the dark alone.\""
+      }
+    ]
+  }
+]

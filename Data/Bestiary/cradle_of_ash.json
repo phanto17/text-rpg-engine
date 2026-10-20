@@ -1,0 +1,42 @@
+[
+  {
+    "id": "first_architect",
+    "name": "The First Architect, Aurelius",
+    "description": "The undying founder of the Under-Barrow, his tall frame half-fused with green-black bronze astrolabes, silver Choir-wires, and lye-white plate. Three centuries of refusing to let his wife Caelia pass have calcified him into a living monument of grief and iron law.",
+    "hp": "5d8+3",
+    "ac": 14,
+    "abilities": { "str": 15, "dex": 12, "con": 15, "int": 16, "wis": 15, "cha": 16 },
+    "attacks": [
+      { "name": "Pendulum of Stasis", "toHit": 5, "damage": "1d8+2", "damageType": "slashing", "weight": 2 },
+      {
+        "name": "Chord of Calcification",
+        "toHit": 5,
+        "damage": "1d6+2",
+        "damageType": "necrotic",
+        "weight": 1,
+        "onHit": { "save": { "ability": "wis", "dc": 12 }, "status": "grave_chill" }
+      }
+    ],
+    "resistances": ["necrotic"],
+    "vulnerabilities": ["force", "radiant"],
+    "immunities": ["poison"],
+    "xp": 200,
+    "ai": { "behavior": "aggressive", "fleeBelowHpPercent": 0 },
+    "loot": [ { "item": "lye_salve", "chance": 1.0 } ]
+  },
+  {
+    "id": "calcified_warden",
+    "name": "Calcified Threshold Warden",
+    "description": "An ancient mason-guard of the First Architect whose flesh has turned to coarse white memory-salt inside his bronze harness, swinging a plumb-weight in an eternal arc.",
+    "hp": "2d6+2",
+    "ac": 12,
+    "abilities": { "str": 14, "dex": 10, "con": 13, "int": 8, "wis": 10, "cha": 6 },
+    "attacks": [
+      { "name": "Bronze Plumb-Maul", "toHit": 4, "damage": "1d6+2", "damageType": "bludgeoning" }
+    ],
+    "resistances": ["necrotic"],
+    "vulnerabilities": ["force", "bludgeoning"],
+    "immunities": ["poison"],
+    "xp": 55
+  }
+]

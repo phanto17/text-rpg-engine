@@ -29,9 +29,14 @@
       {
         "conditions": [
           { "type": "hasItem", "item": "moon_triad_seal" },
-          { "type": "hasItem", "item": "sun_triad_seal" }
+          { "type": "hasItem", "item": "sun_triad_seal" },
+          { "type": "notFlag", "flag": "unsealed_cradle_gate" }
         ],
         "text": "Both the Moon Seal and the Sun Seal resonate against the Barrowlight at your hip, ready to unseal the Twin-Seal Gate."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "unsealed_cradle_gate" } ],
+        "text": "Set with the Moon and Sun Seals, the great bronze floor-gate stands parted above the Stair of the Uncarved Skull."
       },
       {
         "conditions": [ { "type": "flag", "flag": "rested_at_crossroads" } ],
@@ -47,7 +52,14 @@
     "exits": [
       { "direction": "east", "target": "drowned_tollbridge", "description": "The raised floodgate arch leads back east onto the Drowned Tollbridge." },
       { "direction": "north", "target": "whispering_stacks", "description": "A gallery hung with silver wires leads north into the Archive of Unkept Vows." },
-      { "direction": "south", "target": "scoured_cloister", "description": "A whitewashed stone causeway leads south into the Iron Reliquary." }
+      { "direction": "south", "target": "scoured_cloister", "description": "A whitewashed stone causeway leads south into the Iron Reliquary." },
+      {
+        "direction": "down",
+        "target": "threshold_vestibule",
+        "description": "Between the parted halves of the bronze floor-gate, basalt steps descend to the Stair of the Uncarved Skull.",
+        "conditions": [ { "type": "flag", "flag": "unsealed_cradle_gate" } ],
+        "blockedText": "The Twin-Seal Threshold Gate is locked tight until both the Moon Seal and the Sun Seal are set into its sockets."
+      }
     ],
     "features": [
       {
@@ -78,12 +90,14 @@
             "label": "Set both Triad Seals into the gate and descend toward the Cradle",
             "conditions": [
               { "type": "hasItem", "item": "moon_triad_seal" },
-              { "type": "hasItem", "item": "sun_triad_seal" }
+              { "type": "hasItem", "item": "sun_triad_seal" },
+              { "type": "notFlag", "flag": "unsealed_cradle_gate" }
             ],
             "text": "You press the Seal of the Waxing Moon into the left socket and the Seal of the Unclouded Sun into the right, then hold the Barrowlight over the central skull relief.\n\nSilver resonance and golden warmth flow together into the ancient bronze. With a deep, harmonic chord that shakes the dust from the vault overhead, the twin halves of the floor-gate part, revealing the grand stair descending into the Cradle of the First Architect.",
             "effects": [
+              { "type": "setFlag", "flag": "unsealed_cradle_gate" },
               { "type": "setQuestStage", "quest": "twin_seals", "stage": 100 },
-              { "type": "endGame" }
+              { "type": "moveTo", "room": "threshold_vestibule" }
             ]
           }
         ]

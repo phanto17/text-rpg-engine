@@ -1,0 +1,154 @@
+[
+  {
+    "id": "penitent_landing",
+    "name": "The Vigil of the Last Watch",
+    "description": "The spiral stair emerges onto a broad circular terrace cantilevered over the subterranean abyss, sheltered beneath the ribs of a petrified stone aqueduct. At the center of the flagstones burns a low, steady Sanctuary Brazier ringed with worn sitting-stones left by the first masons of the deep.\n\nTo the south, a narrow causeway of black basalt spans the gulf toward the Nave of the Sundered Bell, where the air thrums with deep, rhythmic pressure. This terrace is the last warm threshold before the Cradle of the First Architect.",
+    "revisit": "The sheltered terrace of the Last Watch overlooks the black bridge to the south, its sanctuary brazier burning steady.",
+    "variants": [
+      {
+        "conditions": [ { "type": "flag", "flag": "rested_at_cradle" } ],
+        "text": "The Sanctuary Brazier of the Last Watch glows with fresh peat-embers."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "wren_joins_descent" } ],
+        "text": "Sister Wren stands near the southern parapet with her unlit lantern at her belt, looking out toward the Nave of the Sundered Bell."
+      },
+      {
+        "conditions": [
+          { "type": "flag", "flag": "vaelen_reconciled" },
+          { "type": "notFlag", "flag": "carries_vaelen_testimony" }
+        ],
+        "text": "Hung from the stair-post is a single silver chime sent down from the Archive by Prelate Vaelen."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "carries_vaelen_testimony" } ],
+        "text": "Prelate Vaelen's silver chime hangs quiet on the stair-post, its parting note already in your keeping."
+      },
+      {
+        "conditions": [
+          { "type": "flag", "flag": "silas_relieved" },
+          { "type": "notFlag", "flag": "carries_silas_testimony" }
+        ],
+        "text": "Propped beside the brazier rests an iron dispatch-tablet and company standard sent down by Commander Silas."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "carries_silas_testimony" } ],
+        "text": "Commander Silas's iron dispatch-tablet rests by the brazier, its chalked roll of names witnessed."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "tithed_at_threshold" } ],
+        "text": "In the stone alms-bowl at the parapet's edge, your funerary coin glimmers beneath a pinch of white ash."
+      },
+      {
+        "conditions": [ { "type": "flag", "flag": "wren_cradle_blessing" } ],
+        "text": "A trace of Sister Wren's moor-thyme and consecrated ash still warms your brow."
+      }
+    ],
+    "ambient": [
+      "Peat-smoke from the sanctuary brazier curls upward and vanishes into the ribs of the old aqueduct.",
+      "From across the southern causeway comes the low, metallic groan of bronze chains under immense strain.",
+      "Barrow-wright Oakhaven sorts quietly through his crates of foundation-bronze and stoppered vials.",
+      "The abyss below the parapet smells of cold mineral water and three centuries of settled salt."
+    ],
+    "exits": [
+      { "direction": "up", "target": "threshold_vestibule", "description": "Basalt steps climb the Stair of the Uncarved Skull back toward the crossroads." },
+      { "direction": "south", "target": "bell_nave", "description": "A narrow causeway of black stone spans the abyss toward the Nave of the Sundered Bell." }
+    ],
+    "features": [
+      {
+        "id": "last_watch_brazier",
+        "name": "Sanctuary Brazier of the Last Watch",
+        "aliases": ["brazier", "fire", "campfire", "sanctuary", "rest"],
+        "description": "An ancient octangular iron brazier tended by the Wayfarers of the Threshold, burning dry moor-peat and refined tallow.",
+        "interactions": [
+          {
+            "verb": "rest",
+            "label": "Rest by the Sanctuary Brazier before the final descent",
+            "text": "You sit upon the masons' stones and let the steady warmth of the brazier soak into your bones until your wounds close and your breath comes clear.",
+            "effects": [
+              { "type": "rest" },
+              { "type": "setFlag", "flag": "rested_at_cradle" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "vaelen_parting_chime",
+        "name": "Prelate Vaelen's silver chime",
+        "aliases": ["chime", "tine", "vaelen", "silver chime"],
+        "description": "A single resonant silver tine unscrewed from Lira's silent carillon in the Archive of Unkept Vows, bound to a small wax cylinder.",
+        "conditions": [ { "type": "flag", "flag": "vaelen_reconciled" } ],
+        "interactions": [
+          {
+            "verb": "listen",
+            "label": "Listen to Prelate Vaelen's recorded testimony and take the silver chime",
+            "once": true,
+            "text": "You release the catch on the small cylinder. Prelate Vaelen's voice rises from the wax—tired, cracked with thirty years of grief, yet steady at last:\n\n\"If you stand before Aurelius at the Great Brazier, {player.name}, tell the Founder that High Prelate Vaelen let her daughter finish the winter lullaby. Tell him the silence after the last note did not destroy her—it set her free. Take this tine from Lira's cradle; its pitch will shatter any wire he tries to lay upon you.\"",
+            "effects": [
+              { "type": "setFlag", "flag": "carries_vaelen_testimony" },
+              { "type": "giveItem", "item": "vaelens_silver_chime" },
+              { "type": "grantXp", "amount": 25 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "silas_parting_tablet",
+        "name": "Commander Silas's chalked dispatch",
+        "aliases": ["tablet", "dispatch", "standard", "silas"],
+        "description": "An iron dispatch-slate and folded company standard carried down from the Iron Reliquary by a runner whose helm bears a freshly chalked name.",
+        "conditions": [ { "type": "flag", "flag": "silas_relieved" } ],
+        "interactions": [
+          {
+            "verb": "read",
+            "label": "Read Commander Silas's dispatch and take the Iron Standard",
+            "once": true,
+            "text": "Chalked across the un-scoured iron slate are the names of the Reliquary garrison—beginning with Novice Tomas and signed at the bottom by Commander Silas himself:\n\n\"To Aurelius, First Architect of the Threshold: For three hundred years we burned our names to keep your stasis unbroken. Today we remember who we are, and we lay down the purge. Carry our standard to the Brazier, {player.name}. A soldier who remembers his brother does not fight the dead.\"",
+            "effects": [
+              { "type": "setFlag", "flag": "carries_silas_testimony" },
+              { "type": "giveItem", "item": "silas_iron_standard" },
+              { "type": "grantXp", "amount": 25 }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "threshold_alms_bowl",
+        "name": "Offering Bowl of the Threshold",
+        "aliases": ["bowl", "alms", "offering", "coin"],
+        "description": "A shallow basin of carved basalt set into the southern parapet where ancient builders left ferry-coin for the souls they sealed below.",
+        "interactions": [
+          {
+            "verb": "tithe",
+            "label": "Place a funerary offering into the basin to honor the forgotten masons",
+            "once": true,
+            "conditions": [ { "type": "notFlag", "flag": "tithed_at_threshold" } ],
+            "text": "You lay a handful of small coin and a pinch of ash into the basalt basin, speaking the quiet words of witness for the masons who never saw the sun again. Inside its cage, the Barrowlight's flame deepens to a clear, warm gold, and you lift a sealed vial of memory-tallow left in the niche below.",
+            "effects": [
+              { "type": "setFlag", "flag": "tithed_at_threshold" },
+              { "type": "addCounter", "counter": "lantern_resonance", "amount": 1 },
+              { "type": "giveItem", "item": "tallow_draught" }
+            ]
+          }
+        ]
+      }
+    ],
+    "npcs": [
+      {
+        "id": "wren_cradle",
+        "name": "Sister Wren",
+        "aliases": ["wren", "nun", "sister"],
+        "description": "Sister Wren stands by the southern parapet with her ash-stained habit pulled close against the draft from the abyss, holding a small iron censer of moor-thyme.",
+        "dialogue": "wren_cradle",
+        "conditions": [ { "type": "flag", "flag": "wren_joins_descent" } ]
+      },
+      {
+        "id": "oakhaven",
+        "name": "Barrow-wright Oakhaven",
+        "aliases": ["oakhaven", "wright", "quartermaster", "merchant", "trader"],
+        "description": "An ancient, half-calcified Wayfarer armorer whose leather apron is pockets-deep with stoppered vials, grave-salt censers, and salvaged foundation-armor.",
+        "dialogue": "oakhaven"
+      }
+    ]
+  }
+]
