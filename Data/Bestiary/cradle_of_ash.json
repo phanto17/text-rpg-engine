@@ -3,14 +3,14 @@
     "id": "first_architect",
     "name": "The First Architect, Aurelius",
     "description": "The undying founder of the Under-Barrow, his tall frame half-fused with green-black bronze astrolabes, silver Choir-wires, and lye-white plate. Three centuries of refusing to let his wife Caelia pass have calcified him into a living monument of grief and iron law.",
-    "hp": "5d8+3",
-    "ac": 14,
+    "hp": "6d8+6",
+    "ac": 12,
     "abilities": { "str": 15, "dex": 12, "con": 15, "int": 16, "wis": 15, "cha": 16 },
     "attacks": [
-      { "name": "Pendulum of Stasis", "toHit": 5, "damage": "1d8+2", "damageType": "slashing", "weight": 2 },
+      { "name": "Pendulum of Stasis", "toHit": 4, "damage": "1d8+2", "damageType": "slashing", "weight": 2 },
       {
         "name": "Chord of Calcification",
-        "toHit": 5,
+        "toHit": 4,
         "damage": "1d6+2",
         "damageType": "necrotic",
         "weight": 1,
