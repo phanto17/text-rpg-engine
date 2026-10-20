@@ -4,7 +4,7 @@ A narrative-driven, text-based RPG engine for the terminal, written in C# on .NE
 
 The engine is **purely data-driven**. Every room, item, monster, line of dialogue, class, and rule constant is loaded from JSON in [`Data/`](Data/), so new adventures can be written without touching C#.
 
-> **Status:** **Milestones 1, 2, and 3 are complete.** *Barrowlight* is a playable fourteen-room adventure. A three-room prologue (character creation, a branching NPC conversation with permanent consequences, a riddle-and-trap puzzle, and a boss you can fight, flee, or talk down) leads into **Act I**, a descent to the underground lantern-town of Nocturne, and **Act II**, the Memory Warrens, where two rival strongholds each guard half of the seal on the way down. Milestone 2 added four Greywater **Callings**, **Burdens** (backgrounds) that the story reacts to, **leveling**, **sanctuary rests**, and **shops**.
+> **Status:** **Version 1.0: Milestones 1 to 4 are complete.** *Barrowlight* is a complete eighteen-room adventure. A three-room prologue (character creation, a branching NPC conversation with permanent consequences, a riddle-and-trap puzzle, and a boss you can fight, flee, or talk down) leads into **Act I**, a descent to the underground lantern-town of Nocturne; **Act II**, the Memory Warrens, where two rival strongholds each guard half of the seal on the way down; and **Act III**, the Cradle of the First Architect, where the adventure ends with a choice at the Great Brazier. Milestone 2 added four Greywater **Callings**, **Burdens** (backgrounds) that the story reacts to, **leveling**, **sanctuary rests**, and **shops**.
 
 ---
 
@@ -39,7 +39,14 @@ Wren and Ser Halric notice who you are: each Calling and Burden opens its own li
 - North, in **the Archive of Unkept Vows**, the Hollow Choir binds fading spirits to wax and silver wire. Prelate Vaelen keeps her drowned daughter's voice wound inside a carillon.
 - South, in **the Iron Reliquary**, Ashen soldiers scour their own names away in boiling lye. Commander Silas has forgotten why he fights, and whom he burned.
 - Read the ledgers, sabotage or tune the Choir's loom, flush the lye cistern, and shine the lantern on each stronghold's memory echoes, and you may talk both leaders down instead of cutting through them.
-- Set both seals into the gate to end the adventure. Which of six epilogues you get depends on how you resolved Vaelen and Silas, whether Wren followed you, and the color your choices have given the lantern's flame. Every ending looks down the stair toward Act III.
+- Set both seals into the gate to open the way down.
+
+**Act III: the Cradle of the First Architect.** Beneath the gate, the oldest stair in the barrow descends to the man who built the Barrowlight:
+- Trace what was chiseled out of the frieze on **the Stair of the Uncarved Skull**.
+- Rest and spend your last coin at **the Vigil of the Last Watch**, where the allies you spared leave you their blessings: Wren's censer, Vaelen's chime, and Silas's standard.
+- Learn why the Barrowlight went dark beneath the cracked bell in **the Nave of the Sundered Bell**.
+- Face Aurelius, the First Architect, beside his wife's amber-sealed bier in **the Cradle**. Read what she wrote on the glass, and you may reach the man inside the bronze.
+- Then choose the fate of the Under-Barrow at the Great Brazier: relight the Sun's dreamless stasis, tune the Moon's endless vigil, or, if you have earned it, complete the Triad. Seven epilogues follow from that choice and from everything you did on the way down: whether you reconciled Aurelius, Vaelen, and Silas, whether Wren followed you, whether Nocturne's beacon burns, and the color of the lantern's flame.
 
 ## Architecture
 
@@ -163,13 +170,13 @@ dotnet test
 dotnet test --collect:"XPlat Code Coverage"
 ```
 
-There are about 870 tests, all deterministic:
+There are about 890 tests, all deterministic:
 - **Unit tests** for every Core system. The dice and skill-check code has 100% line and branch coverage.
 - **Content validation** of the shipped `Data/`, plus fixtures that prove each validator rule catches what it should.
-- **Scenario tests** that play the prologue, Act I, and Act II storylines through the engine with scripted dice (`FixedRandomSource`): merciful and violent runs through each act, ending at the Twin Seal gate, plus which epilogue each world state reaches.
-- **Reachability checks** that every room can be reached from the start and that only the tollbridge crossing ends the game.
-- **CLI playthroughs** that drive the real terminal UI with scripted keyboard input through Spectre.Console's `TestConsole`, including a full run from character creation to the Act I epilogue.
-- **Balance checks** that play each boss fight 2,000 times per Calling with a simple scripted player (the Barrow Heart at level 1, Prelate Vaelen and Commander Silas at levels 2 and 3) and keep each win rate inside a band.
+- **Scenario tests** that play the prologue and all three acts through the engine with scripted dice (`FixedRandomSource`): merciful and violent runs through each act, ending at the Great Brazier, plus which epilogue each world state reaches.
+- **Reachability checks** that every room can be reached from the start and that only the choice at the Great Brazier ends the game.
+- **CLI playthroughs** that drive the real terminal UI with scripted keyboard input through Spectre.Console's `TestConsole`, including a full run from character creation through all three acts to the final epilogue.
+- **Balance checks** that play each boss fight 2,000 times per Calling with a simple scripted player (the Barrow Heart at level 1, Prelate Vaelen and Commander Silas at levels 2 and 3, and the First Architect at levels 3 and 4, with and without the ally blessings) and keep each win rate inside a band.
 
 Dice fairness is checked with fixed-seed chi-square tests.
 
@@ -189,6 +196,7 @@ Dice fairness is checked with fixed-seed chi-square tests.
   - [x] 2B: sanctuary rests, leveling, and shops
   - [x] 2C: Act I, the Weeping Stair and Nocturne, ending at the Drowned Tollbridge
 - [x] **Milestone 3: the Memory Warrens** (Act II): the Archive of Unkept Vows, the Iron Reliquary, and the Gate of the Twin Seals, with level-3 abilities for every Calling
+- [x] **Milestone 4: the Cradle of the First Architect** (Act III, version 1.0): the Stair of the Uncarved Skull, the Vigil of the Last Watch, the Nave of the Sundered Bell, and the Cradle, with level-4 capstones, ally blessings, and seven final epilogues
 - [x] **Tooling:** JSON Schema export for editor autocomplete in VS Code
 - [ ] **Later:** multi-character parties, races, more dungeons, saving mid-combat
 
