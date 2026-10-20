@@ -122,10 +122,14 @@
             "verb": "tithe",
             "label": "Place a funerary offering into the basin to honor the forgotten masons",
             "once": true,
-            "conditions": [ { "type": "notFlag", "flag": "tithed_at_threshold" } ],
-            "text": "You lay a handful of small coin and a pinch of ash into the basalt basin, speaking the quiet words of witness for the masons who never saw the sun again. Inside its cage, the Barrowlight's flame deepens to a clear, warm gold, and you lift a sealed vial of memory-tallow left in the niche below.",
+            "conditions": [
+              { "type": "notFlag", "flag": "tithed_at_threshold" },
+              { "type": "gold", "min": 10 }
+            ],
+            "text": "You lay ten coins of surface silver and a pinch of ash into the basalt basin, speaking the quiet words of witness for the masons who never saw the sun again. Inside its cage, the Barrowlight's flame deepens to a clear, warm gold, and you lift a sealed vial of memory-tallow left in the niche below.",
             "effects": [
               { "type": "setFlag", "flag": "tithed_at_threshold" },
+              { "type": "spendGold", "amount": 10 },
               { "type": "addCounter", "counter": "lantern_resonance", "amount": 1 },
               { "type": "giveItem", "item": "tallow_draught" }
             ]

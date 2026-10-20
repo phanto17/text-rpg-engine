@@ -12,7 +12,7 @@ namespace RpgEngine.Tests.Balance;
 /// Vaelen's chime, Silas's standard). The blessings must always help.
 /// <para>
 /// Level 4 is where nearly every player meets the Architect (Act II's bosses and Act III's
-/// discoveries carry a hero past 900 XP), so its solo band is the fair one. Level 3 is reachable
+/// discoveries carry a hero past 750 XP), so its solo band is the fair one. Level 3 is reachable
 /// only by a hero who fought every boss and found little on the way down, so its band only rules out
 /// a fight that cannot be won at all. Measured win rates, solo then blessed (Oath-Eater, Liminal
 /// Auditor, Vesper Cantor, Remnant Vessel):

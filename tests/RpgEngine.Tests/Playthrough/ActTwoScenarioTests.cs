@@ -112,11 +112,12 @@ public sealed class ActTwoScenarioTests
             new[] { "read_vaelen_ledger", "shone_stacks_echo", "slackened_choir_loom", "shone_foundry_echo", "shone_sanctum_echo" },
             flag => Assert.True(session.State.World.HasFlag(flag), flag));
 
+        // The Archive's discoveries alone carry the hero past 750 XP, before Vaelen is faced.
+        Assert.Equal(4, session.State.Player.Level);
         Do(session, "approach carillon");
         Assert.Equal(GameMode.Combat, session.Mode);
         var vaelen = Parley(session, "Sing the missing final line of Lira's lullaby", RollMode.Advantage);
         Assert.Contains(new CombatEndedEvent(CombatOutcome.Parleyed), vaelen);
-        Assert.Contains(vaelen, e => e is LeveledUpEvent { Level: 4 });
         Assert.True(session.State.World.HasFlag("vaelen_reconciled"));
         Do(session, "take seal");
         Assert.Equal(20, session.State.World.GetQuestStage("twin_seals"));

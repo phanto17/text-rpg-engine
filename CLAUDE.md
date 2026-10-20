@@ -137,7 +137,7 @@ CLI layout:
   "rules": {
     "standardArray": [16, 14, 13, 12, 10, 8],
     "proficiencyBonusByLevel": [2, 2, 2, 2, 3],
-    "xpThresholdsByLevel": [0, 100, 300, 900, 2700],
+    "xpThresholdsByLevel": [0, 100, 300, 750, 2700],
     "naturalCritsOnChecks": true,
     "monsterHp": "average",
     "flee": { "skill": "acrobatics", "dc": 10 },

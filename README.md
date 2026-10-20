@@ -151,7 +151,7 @@ Useful flags (after `--`): `--seed <n>` for a reproducible run, `--no-anim` to s
 - **Parley** (when the foe will listen)
 - **Flee** (`[Acrobatics DC 10]`)
 
-**Leveling:** XP from victories and story moments levels you up automatically (at 100, 300, 900, and 2700 XP), with more HP, more mana for casters, and a new ability at levels 2, 3, and 4. The level-4 capstones include Unbroken Vigil, a heal that also leaves the Oath-Eater Vigilant (+2 AC and advantage on attacks). Some consumables buff you the same way for a few turns. `stats` shows how far the next level is.
+**Leveling:** XP from victories and story moments levels you up automatically (at 100, 300, 750, and 2700 XP), with more HP, more mana for casters, and a new ability at levels 2, 3, and 4. The level-4 capstones include Unbroken Vigil, a heal that also leaves the Oath-Eater Vigilant (+2 AC and advantage on attacks). Some consumables buff you the same way for a few turns. `stats` shows how far the next level is.
 
 **Rest and trade:** a sanctuary (such as a brazier) restores your HP and mana in full. Merchants open a shop where you buy with gold and sell for half an item's value; quest items and the gear you're wearing stay with you.
 

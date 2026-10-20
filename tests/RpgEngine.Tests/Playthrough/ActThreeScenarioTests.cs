@@ -81,7 +81,8 @@ public sealed class ActThreeScenarioTests
         var cantor = Create("vesper_cantor", "fever_dreamer", ["arcana", "history"], []);
 
         // The merciful run: Wren followed, Vaelen and Silas spared, the beacon relit.
-        var session = AfterActTwo(cantor, xp: 1000, gold: 75, resonance: 8, dice, "wren_joins_descent", "vaelen_reconciled", "silas_relieved", "beacon_restored");
+        // Vaelen's and Silas's purses (25 gold each) ride on top of the starting 10.
+        var session = AfterActTwo(cantor, xp: 1000, gold: 50, resonance: 8, dice, "wren_joins_descent", "vaelen_reconciled", "silas_relieved", "beacon_restored");
         Assert.Equal(4, session.State.Player.Level);
 
         var stair = Do(session, "unseal gate");
@@ -103,17 +104,18 @@ public sealed class ActThreeScenarioTests
         Do(session, "read tablet");
         Assert.All(Blessings, item => Assert.True(session.State.Player.Inventory.Contains(item), item));
         Assert.All(new[] { "wren_cradle_blessing", "carries_vaelen_testimony", "carries_silas_testimony" }, flag => Assert.True(session.State.World.HasFlag(flag), flag));
-        Do(session, "tithe bowl");
+        Assert.Contains(new GoldSpentEvent(10, 50), Do(session, "tithe bowl"));
+        Assert.False(Offers(session, "Place a funerary offering"));
         Assert.True(session.State.Player.Inventory.Contains("tallow_draught"));
 
-        // Oakhaven's crates: the last of the surface coin buys the Mantle of the Balanced Triad.
+        // Oakhaven's crates: after the tithe, the allies' purses buy the mantle, five coins short of the scale.
         Do(session, "talk to oakhaven");
         Say(session, "Barter for supplies and endgame armor.");
         Assert.Equal(GameMode.Shop, session.Mode);
         var mantle = session.ShopOffers().Single(o => o.Item.Id == "triad_ward_mantle");
-        Assert.Equal((80, (int?)1, true), (mantle.Price, mantle.Remaining, mantle.CanAfford));
+        Assert.Equal((50, (int?)1, true), (mantle.Price, mantle.Remaining, mantle.CanAfford));
         Assert.False(session.ShopOffers().Single(o => o.Item.Id == "architect_scale_mail").CanAfford);
-        Assert.Contains(new GoldSpentEvent(80, 5), session.ShopBuy("triad_ward_mantle"));
+        Assert.Contains(new GoldSpentEvent(50, 0), session.ShopBuy("triad_ward_mantle"));
         Assert.DoesNotContain(session.ShopOffers(), o => o.Item.Id == "triad_ward_mantle" && o.Remaining > 0);
         session.ShopLeave();
         Assert.Equal(GameMode.Exploration, session.Mode);
@@ -123,7 +125,7 @@ public sealed class ActThreeScenarioTests
         Do(session, "south");
         Assert.Equal(20, session.State.World.GetQuestStage("cradle_of_ash_quest"));
         Do(session, "study bell");
-        Do(session, "fit bell");
+        Do(session, "fit splinter");
         Do(session, "shine echo");
         Assert.All(new[] { "diagnosed_sundered_bell", "fitted_bell_splinter", "shone_nave_echo" }, flag => Assert.True(session.State.World.HasFlag(flag), flag));
 

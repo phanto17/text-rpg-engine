@@ -9,10 +9,11 @@
     "nodes": [
       {
         "id": "first_after_parley",
-        "text": "Prelate Vaelen kneels beside the open crystal doors of the gilded carillon. For the first time in years, her raw fingers are not turning the brass key; they rest quietly on the empty velvet cushion where her daughter's spirit lay.\n\n\"Forty-two times I re-cut the wax,\" she whispers, her voice hoarse from weeping. \"I told myself I was keeping her alive, when all I was keeping was my own refusal to say goodbye. Until you sang the last line, I had forgotten how gentle her real voice sounded.\"\n\nShe reaches into her vestments and presses a clear phial of memory-tallow into your hand, then nods toward the crescent disc gleaming in the carillon's mainspring. \"Take the Seal of the Waxing Moon, {player.name}. If you unseal the Cradle of the First Architect below, do not let him trap the world in the same cage I built for my child.\"",
+        "text": "Prelate Vaelen kneels beside the open crystal doors of the gilded carillon. For the first time in years, her raw fingers are not turning the brass key; they rest quietly on the empty velvet cushion where her daughter's spirit lay.\n\n\"Forty-two times I re-cut the wax,\" she whispers, her voice hoarse from weeping. \"I told myself I was keeping her alive, when all I was keeping was my own refusal to say goodbye. Until you sang the last line, I had forgotten how gentle her real voice sounded.\"\n\nShe reaches into her vestments and presses a clear phial of memory-tallow and a small purse of the Choir's offering-silver into your hand, then nods toward the crescent disc gleaming in the carillon's mainspring. \"Take the Seal of the Waxing Moon, {player.name}. If you unseal the Cradle of the First Architect below, do not let him trap the world in the same cage I built for my child.\"",
         "effects": [
           { "type": "setFlag", "flag": "vaelen_gift_given" },
-          { "type": "giveItem", "item": "tallow_draught" }
+          { "type": "giveItem", "item": "tallow_draught" },
+          { "type": "giveGold", "amount": 25 }
         ],
         "choices": [
           { "text": "She rested knowing she was loved, Vaelen.", "end": true },

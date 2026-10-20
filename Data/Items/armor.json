@@ -41,7 +41,7 @@
     "aliases": ["scale", "scale mail", "bronze scale", "architect scale"],
     "type": "armor",
     "description": "Overlapping scales of green-black foundation bronze riveted to ash-cured leather, forged for the wardens of the deepest threshold.",
-    "value": 90,
+    "value": 55,
     "armor": { "baseAc": 17, "maxDexBonus": 0 }
   },
   {
@@ -50,7 +50,7 @@
     "aliases": ["mantle", "cloak", "triad mantle", "ward mantle"],
     "type": "armor",
     "description": "A supple ash-grey mantle stitched with sun-bronze and moon-silver wire that turns aside blows without weighing down the wearer's step.",
-    "value": 80,
+    "value": 50,
     "armor": { "baseAc": 13 }
   }
 ]

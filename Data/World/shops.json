@@ -10,8 +10,8 @@
       { "item": "lye_salve", "price": 55, "stock": 3 },
       { "item": "holy_water", "price": 25, "stock": 4 },
       { "item": "grave_salt_bomb", "price": 35, "stock": 4 },
-      { "item": "architect_scale_mail", "price": 90, "stock": 1 },
-      { "item": "triad_ward_mantle", "price": 80, "stock": 1 }
+      { "item": "architect_scale_mail", "price": 55, "stock": 1 },
+      { "item": "triad_ward_mantle", "price": 50, "stock": 1 }
     ],
     "buybackRate": 0.5
   }

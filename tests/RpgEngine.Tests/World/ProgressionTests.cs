@@ -129,7 +129,7 @@ public sealed class ProgressionTests
         Assert.Equal(levelTwo, Assert.Single(ups[0].NewSpells).Id);
         Assert.Equal(levelThree, Assert.Single(ups[1].NewSpells).Id);
         Assert.Equal([.. starting, levelTwo, levelThree], player.SpellIds);
-        Assert.Equal(900, Progression.NextLevelXp(player, content));
+        Assert.Equal(750, Progression.NextLevelXp(player, content));
 
         // A technique starts each fight with its uses; a spell's cost fits in the caster's level-3 mana.
         var spell = content.Spells[levelThree];
@@ -143,7 +143,7 @@ public sealed class ProgressionTests
         }
 
         // Further XP short of level 4 grants nothing new; the last point grants the capstone.
-        Assert.Empty(Grant(content, player, 599).Events.OfType<LeveledUpEvent>());
+        Assert.Empty(Grant(content, player, 449).Events.OfType<LeveledUpEvent>());
         var four = Assert.Single(Grant(content, player, 1).Events.OfType<LeveledUpEvent>());
 
         Assert.Equal((4, capstone), (four.Level, Assert.Single(four.NewSpells).Id));

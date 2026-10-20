@@ -144,6 +144,41 @@ public sealed class RealDataTests
     }
 
     [Fact]
+    public void ThresholdTithe_CostsTenGold_AndHidesWithoutIt()
+    {
+        var tithe = Content.Value.Rooms["penitent_landing"].Features.Single(f => f.Id == "threshold_alms_bowl").Interactions.Single();
+
+        Assert.Equal("tithe", tithe.Verb);
+        Assert.Contains(tithe.Conditions, c => c is GoldCondition { Min: 10 });
+        Assert.Contains(tithe.Effects, e => e is SpendGoldEffect { Amount: 10 });
+    }
+
+    [Fact]
+    public void GreatVesperBell_AnswersToTheSplinterAndItsNotch()
+    {
+        var bell = Content.Value.Rooms["bell_nave"].Features.Single(f => f.Id == "sundered_vesper_bell");
+
+        Assert.Superset(new HashSet<string> { "bell", "splinter", "notch" }, bell.Aliases.ToHashSet());
+        Assert.Null(bell.Interactions.Single(i => i.Verb == "fit").Target);
+    }
+
+    [Theory]
+    [InlineData("vaelen", "vaelen_gift_given")]
+    [InlineData("silas", "silas_gift_given")]
+    public void SparedActTwoBosses_PayTowardTheEndgameArmor(string dialogueId, string giftFlag)
+    {
+        var content = Content.Value;
+        var gift = content.Dialogues[dialogueId].Nodes.Single(n => n.Effects.Any(e => e is SetFlagEffect s && s.Flag == giftFlag));
+
+        Assert.Contains(gift.Effects, e => e is GiveGoldEffect { Amount: 25 });
+
+        // Both purses together buy one piece of Oakhaven's armor, and the shop charges the item's value.
+        var shop = content.Shops["cradle_quartermaster"];
+        Assert.All(new[] { ("architect_scale_mail", 55), ("triad_ward_mantle", 50) }, x =>
+            Assert.Equal((x.Item2, x.Item2), (shop.Stock.Single(s => s.Item == x.Item1).Price, content.Items[x.Item1].Value)));
+    }
+
+    [Fact]
     public void WrensBlessing_GivesHerCenser_OnlyWhenSheFollowedYouDown()
     {
         var content = Content.Value;
@@ -227,7 +262,7 @@ public sealed class RealDataTests
     {
         var content = Content.Value;
 
-        Assert.Equal(new[] { 0, 100, 300, 900, 2700 }, content.Rules.XpThresholdsByLevel);
+        Assert.Equal(new[] { 0, 100, 300, 750, 2700 }, content.Rules.XpThresholdsByLevel);
 
         // Both ways through the Barrow Heart (100 XP for a parley, 125 for a victory) reach level 2.
         Assert.True(content.Monsters["gravebound_knight"].Xp >= content.Rules.XpThresholdsByLevel[1]);

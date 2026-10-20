@@ -1,13 +1,13 @@
 {
   "title": "Barrowlight",
-  "contentVersion": "1.0.0",
+  "contentVersion": "1.0.1",
   "startRoom": "lichgate",
   "intro": "Rain has followed you for three days across the Greywater moor. The villagers of Hollin's Rest would not say the barrow's name. They only pointed north and made the sign of the ash.\n\nSomewhere beneath that mound lies the Barrowlight, the lantern the Ashen Order kept burning so their dead would sleep. It went dark at the turn of the season. Since then, the graves of Hollin's Rest have not stayed shut.\n\nYou crest the last hill as dusk bleeds out of the sky, and the lichgate rises before you.",
   "startingGold": 10,
   "rules": {
     "standardArray": [16, 14, 13, 12, 10, 8],
     "proficiencyBonusByLevel": [2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6],
-    "xpThresholdsByLevel": [0, 100, 300, 900, 2700],
+    "xpThresholdsByLevel": [0, 100, 300, 750, 2700],
     "naturalCritsOnChecks": true,
     "monsterHp": "average",
     "flee": { "skill": "acrobatics", "dc": 10 },
