@@ -139,6 +139,7 @@ Once claimed in `inner_crypt` (`item: barrowlight`), the lantern serves as both 
   - `relight` (**The Path of the Sun — Restore the Stasis**): sets `ending_sun_stasis` and ends the game.
   - `tune` (**The Path of the Moon — The Endless Vigil**): sets `ending_moon_vigil` and ends the game.
   - `complete` (**The Path of the Complete Triad — The Rite of True Passage**): requires `lantern_resonance >= 3`, `architect_reconciled`, or all three architectural truths (`read_architect_frieze`, `diagnosed_sundered_bell`, `read_caelia_inscription`); sets `ending_triad_passage` and ends the game.
+- **Endings (`game.json`, content version 1.0.0):** the epilogue follows the choice at the Great Brazier and is shaped by the journey there. The Complete Triad has a full-witness ending (`architect_reconciled` with `wren_joins_descent`, `vaelen_reconciled`, and `silas_relieved`), a reconciled ending (`architect_reconciled`), and one after `architect_destroyed`. The Sun has a merciful reform (`architect_reconciled`, `silas_relieved`, `wren_joins_descent`, or `lantern_resonance >= 3`) and the iron wardenship of a silent tomb. The Moon has a lucid, tempered vigil (`vaelen_reconciled` or `beacon_restored`) and a salt-choked loop. An unconditional fallback comes last.
 
 ---
 

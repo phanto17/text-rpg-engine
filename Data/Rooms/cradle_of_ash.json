@@ -27,18 +27,6 @@
       {
         "conditions": [ { "type": "flag", "flag": "architect_destroyed" } ],
         "text": "The shattered bronze astrolabes and iron plate of the First Architect lie scattered across the obsidian floor below the unguarded Great Brazier."
-      },
-      {
-        "conditions": [ { "type": "flag", "flag": "ending_sun_stasis" } ],
-        "text": "Blinding white stasis-fire roars through the Great Brazier's sun-grate."
-      },
-      {
-        "conditions": [ { "type": "flag", "flag": "ending_moon_vigil" } ],
-        "text": "Silver-blue resonance hums through the Great Brazier's acoustic coils."
-      },
-      {
-        "conditions": [ { "type": "flag", "flag": "ending_triad_passage" } ],
-        "text": "Sun, Moon, and Barrowlight burn together as one warm golden beacon of passage."
       }
     ],
     "ambient": [

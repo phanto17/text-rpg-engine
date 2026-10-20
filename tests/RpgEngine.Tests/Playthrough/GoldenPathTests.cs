@@ -27,7 +27,7 @@ public sealed class GoldenPathTests
     private static readonly string[] OpenTheDoor = ["down", "press sun", "press moon", "press skull", "east"];
 
     [Fact]
-    public void PersuadeWren_ParleyWithEveryWarden_RelightsNocturne_AndUnsealsTheTwinSealGate()
+    public void PersuadeWren_ParleyWithEveryWarden_AndCompleteTheTriadAtTheGreatBrazier()
     {
         using var cli = new CliHarness();
 
@@ -42,6 +42,10 @@ public sealed class GoldenPathTests
             "5",                    // combat: Parley
             "2",                    // [Religion DC 10] (advantage) Speak the Rite of Rest
             "take lantern",         // lights the lantern and opens the stair
+            "west", "up",           // back out to the lichgate with the light
+            "talk to wren",
+            "1",                    // Then I'll meet you below, Sister.
+            "down", "east",
             "descend stair",        // Act I: the Weeping Stair
             "study relief",         // [History DC 11]
             "shine echo",
@@ -93,7 +97,27 @@ public sealed class GoldenPathTests
             "1",                    // [Persuasion DC 14] (advantage) Ask him to state his campaign objective
             "take seal",
             "east", "north", "north", // back to the gate
-            "unseal gate",
+            "unseal gate",          // Act III: the Stair of the Uncarved Skull
+            "study frieze",         // [History DC 13] (advantage)
+            "shine echo",
+            "down",                 // the Vigil of the Last Watch
+            "rest",
+            "talk to wren",
+            "1",                    // Receive Sister Wren's blessing
+            "listen chime",
+            "read tablet",
+            "tithe bowl",
+            "south",                // the Nave of the Sundered Bell
+            "study bell",           // [Arcana DC 13] (advantage)
+            "shine echo",
+            "south",                // the Cradle of the First Architect
+            "read sarcophagus",     // [Investigation DC 13] (advantage)
+            "shine echo",
+            "approach brazier",
+            "5",                    // combat: Parley
+            "4",                    // [Religion DC 10] (advantage) Deliver the combined witness of Wren, Vaelen, and Silas
+            "talk to aurelius",
+            "complete brazier",     // the Path of the Complete Triad
             "2",                    // after the epilogue: quit
         ];
 
@@ -137,7 +161,21 @@ public sealed class GoldenPathTests
         Assert.Contains("+ Seal of the Unclouded Sun", output);
         Assert.Contains("Level 4!", output);
         Assert.Contains("You set both Triad Seals into the bronze gate at the crossroads", output);
-        Assert.Contains("Moon and sun turn together in the bronze", output);
+        Assert.Contains("The Stair of the Uncarved Skull", output);
+        Assert.Contains("NONE IS WHOLE WITHOUT THE THIRD", output);
+        Assert.Contains("+ Wren's Ashen Censer", output);
+        Assert.Contains("+ Vaelen's Silver Chime", output);
+        Assert.Contains("+ Silas's Iron Standard", output);
+        Assert.Contains("The Nave of the Sundered Bell", output);
+        Assert.Contains("DO NOT BUILD A PRISON OUT OF MY NAME", output);
+        Assert.Contains("Step onto the octagonal dais to confront the First Architect", output);
+        Assert.Contains("[Religion DC 10] (advantage) Deliver the combined witness of Sister Wren, Prelate Vaelen, and Commander Silas", output);
+        Assert.Contains("The Great Brazier is yours, Tamsin.", output);
+        Assert.Contains("I will not raise my hand again.", output);
+        Assert.Contains("The Path of the Complete Triad", output);
+        Assert.Contains("At the Great Brazier in the bedrock of the Under-Barrow, you made your choice", output);
+        Assert.Contains("The Great Vesper Bell rings once above the Cradle, clear and whole", output);
+        Assert.Contains("It was Tamsin, they say, and everyone Tamsin stopped to listen to on the way down.", output);
         Assert.Contains("THE END", output);
     }
 

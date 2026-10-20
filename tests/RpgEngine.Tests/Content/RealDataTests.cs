@@ -18,6 +18,10 @@ public sealed class RealDataTests
     private static readonly string[] ActTwoRooms =
         ["warren_crossroads", "whispering_stacks", "tallow_foundry", "vow_sanctum", "scoured_cloister", "lye_cistern", "reliquary_bastion"];
 
+    private static readonly string[] ActThreeRooms = ["threshold_vestibule", "penitent_landing", "bell_nave", "cradle_of_ash"];
+
+    private static readonly string[] EndingFlags = ["ending_triad_passage", "ending_sun_stasis", "ending_moon_vigil"];
+
     [Fact]
     public void ShippedContent_LoadsWithoutErrors()
     {
@@ -30,7 +34,7 @@ public sealed class RealDataTests
     // Later acts add rooms, factions, and quests, so these check that the shipped story is present
     // rather than that nothing else is.
     [Fact]
-    public void ShippedContent_HasThePrologueAndActsOneAndTwo()
+    public void ShippedContent_HasThePrologueAndAllThreeActs()
     {
         var content = Content.Value;
 
@@ -39,22 +43,34 @@ public sealed class RealDataTests
         Assert.All(content.BackgroundList, b => Assert.Equal(ItemType.Quest, content.Items[b.KeepsakeItem].Type));
         Assert.All(content.ClassList.SelectMany(c => c.Spells), id => Assert.True(content.Spells.ContainsKey(id)));
         Assert.Equal(18, content.Skills.Count);
-        Assert.All(PrologueRooms.Concat(ActOneRooms).Concat(ActTwoRooms), id => Assert.Contains(id, content.Rooms.Keys));
+        Assert.All(PrologueRooms.Concat(ActOneRooms).Concat(ActTwoRooms).Concat(ActThreeRooms), id => Assert.Contains(id, content.Rooms.Keys));
         Assert.All(new[] { "ashen_order", "hollow_choir", "lantern_bearers" }, id => Assert.Contains(id, content.Factions.Keys));
-        Assert.All(new[] { "barrowlight", "nocturne_beacon", "twin_seals" }, id => Assert.Contains(id, content.Quests.Keys));
+        Assert.All(new[] { "barrowlight", "nocturne_beacon", "twin_seals", "cradle_of_ash_quest" }, id => Assert.Contains(id, content.Quests.Keys));
         Assert.All(
-            new[] { "wren", "orin", "maeve", "peddler", "wren_nocturne", "miriel", "garin", "caelan", "venn", "vaelen", "silas" },
+            new[]
+            {
+                "wren", "orin", "maeve", "peddler", "wren_nocturne", "miriel", "garin", "caelan", "venn", "vaelen", "silas",
+                "wren_cradle", "oakhaven", "architect_post",
+            },
             id => Assert.Contains(id, content.Dialogues.Keys));
-        Assert.All(new[] { "prelate_vaelen", "tethered_chorister", "commander_silas", "scoured_halberdier" }, id => Assert.Contains(id, content.Monsters.Keys));
         Assert.All(
-            new[] { "choir_silks", "lye_salve", "silver_tuning_blade", "scoured_halberd", "moon_triad_seal", "sun_triad_seal" },
+            new[] { "prelate_vaelen", "tethered_chorister", "commander_silas", "scoured_halberdier", "first_architect", "calcified_warden" },
+            id => Assert.Contains(id, content.Monsters.Keys));
+        Assert.All(
+            new[]
+            {
+                "choir_silks", "lye_salve", "silver_tuning_blade", "scoured_halberd", "moon_triad_seal", "sun_triad_seal",
+                "architect_scale_mail", "triad_ward_mantle", "wrens_ashen_censer", "vaelens_silver_chime", "silas_iron_standard",
+            },
             id => Assert.Contains(id, content.Items.Keys));
+        Assert.Contains("cradle_quartermaster", content.Shops.Keys);
         Assert.All(new[] { "moon_triad_seal", "sun_triad_seal" }, id => Assert.Equal(ItemType.Quest, content.Items[id].Type));
         Assert.Equal("inner_crypt", content.EncounterRooms["barrow_heart"]);
         Assert.Equal("echo_chapel", content.EncounterRooms["echo_chapel_choir"]);
         Assert.Equal("drowned_tollbridge", content.EncounterRooms["drowned_tollbridge_watch"]);
         Assert.Equal("vow_sanctum", content.EncounterRooms["archive_vaelen_boss"]);
         Assert.Equal("reliquary_bastion", content.EncounterRooms["reliquary_silas_boss"]);
+        Assert.Equal("cradle_of_ash", content.EncounterRooms["cradle_architect_boss"]);
         Assert.Equal(6, content.Encounters["barrow_heart"].Parley!.Options.Count);
         Assert.All(content.Encounters.Values, e => Assert.NotEmpty(e.Parley!.Options));
     }
@@ -78,19 +94,76 @@ public sealed class RealDataTests
     }
 
     [Fact]
-    public void OnlyUnsealingTheTwinSealGate_EndsTheGame()
+    public void OnlyTheGreatBrazier_EndsTheGame()
     {
         var content = Content.Value;
 
         var endings = content.RoomList.Where(room => RoomEffects(content, room).OfType<EndGameEffect>().Any()).Select(room => room.Id);
 
-        Assert.Equal(new[] { "warren_crossroads" }, endings);
-        var unseal = content.Rooms["warren_crossroads"].Features.Single(f => f.Id == "twin_seal_gate").Interactions.Single();
+        Assert.Equal(new[] { "cradle_of_ash" }, endings);
+
+        // Each of the three choices waits for the First Architect, sets its own ending flag, and closes the last quest.
+        var brazier = content.Rooms["cradle_of_ash"].Features.Single(f => f.Id == "great_brazier").Interactions;
+        var choices = brazier.Where(i => i.Effects.OfType<EndGameEffect>().Any()).ToList();
+        Assert.Equal(new[] { "relight", "tune", "complete" }, choices.Select(i => i.Verb));
+        Assert.Equal(new[] { "ending_sun_stasis", "ending_moon_vigil", "ending_triad_passage" }, choices.Select(i => i.Effects.OfType<SetFlagEffect>().Single().Flag));
+        Assert.All(choices, i => Assert.Contains(i.Conditions, c => c is FlagCondition { Flag: "architect_resolved" }));
+        Assert.All(choices, i => Assert.Contains(i.Effects, e => e is SetQuestStageEffect { Quest: "cradle_of_ash_quest", Stage: 100 }));
+        Assert.All(choices, i => Assert.IsType<EndGameEffect>(i.Effects[^1]));
+        Assert.Empty(content.Manifest.Epilogues[^1].Conditions);
+    }
+
+    [Fact]
+    public void UnsealingTheTwinSealGate_LeadsDownIntoActThree()
+    {
+        var crossroads = Content.Value.Rooms["warren_crossroads"];
+        var unseal = crossroads.Features.Single(f => f.Id == "twin_seal_gate").Interactions.Single();
+
         Assert.Equal("unseal", unseal.Verb);
         Assert.Contains(unseal.Conditions, c => c is HasItemCondition { Item: "moon_triad_seal" });
         Assert.Contains(unseal.Conditions, c => c is HasItemCondition { Item: "sun_triad_seal" });
         Assert.Contains(unseal.Effects, e => e is SetQuestStageEffect { Quest: "twin_seals", Stage: 100 });
-        Assert.Empty(content.Manifest.Epilogues[^1].Conditions);
+        Assert.Contains(unseal.Effects, e => e is MoveToEffect { Room: "threshold_vestibule" });
+        var down = crossroads.Exits.Single(e => e.Direction == Direction.Down);
+        Assert.Equal("threshold_vestibule", down.Target);
+        Assert.Contains(down.Conditions, c => c is FlagCondition { Flag: "unsealed_cradle_gate" });
+    }
+
+    [Theory]
+    [InlineData("vaelen_parting_chime", "vaelen_reconciled", "listen", "vaelens_silver_chime", "carries_vaelen_testimony")]
+    [InlineData("silas_parting_tablet", "silas_relieved", "read", "silas_iron_standard", "carries_silas_testimony")]
+    public void PenitentLanding_HoldsTheRelicOfEachSparedBoss(string featureId, string sparedFlag, string verb, string relic, string testimonyFlag)
+    {
+        var feature = Content.Value.Rooms["penitent_landing"].Features.Single(f => f.Id == featureId);
+        var take = feature.Interactions.Single();
+
+        Assert.Contains(feature.Conditions, c => c is FlagCondition f && f.Flag == sparedFlag);
+        Assert.Equal((verb, true), (take.Verb, take.Once));
+        Assert.Contains(take.Effects, e => e is GiveItemEffect g && g.Item == relic);
+        Assert.Contains(take.Effects, e => e is SetFlagEffect s && s.Flag == testimonyFlag);
+    }
+
+    [Fact]
+    public void WrensBlessing_GivesHerCenser_OnlyWhenSheFollowedYouDown()
+    {
+        var content = Content.Value;
+        var wren = content.Rooms["penitent_landing"].Npcs.Single(n => n.Id == "wren_cradle");
+        var blessing = content.Dialogues[wren.Dialogue].Nodes.Single(n => n.Id == "blessing_node");
+
+        Assert.Contains(wren.Conditions, c => c is FlagCondition { Flag: "wren_joins_descent" });
+        Assert.Contains(blessing.Effects, e => e is GiveItemEffect { Item: "wrens_ashen_censer" });
+        Assert.Contains(blessing.Effects, e => e is SetFlagEffect { Flag: "wren_cradle_blessing" });
+    }
+
+    [Fact]
+    public void OakhavensShop_SellsTheEndgameArmorOnce()
+    {
+        var content = Content.Value;
+        var shop = content.Shops["cradle_quartermaster"];
+
+        Assert.Contains(content.Dialogues["oakhaven"].Nodes.SelectMany(n => n.Choices).SelectMany(c => c.Effects), e => e is StartShopEffect { Shop: "cradle_quartermaster" });
+        Assert.All(new[] { "architect_scale_mail", "triad_ward_mantle" }, id => Assert.Equal(1, shop.Stock.Single(s => s.Item == id).Stock));
+        Assert.Equal((17, 0), (content.Items["architect_scale_mail"].Armor!.BaseAc, content.Items["architect_scale_mail"].Armor!.MaxDexBonus));
     }
 
     [Fact]
@@ -107,16 +180,21 @@ public sealed class RealDataTests
     }
 
     [Fact]
-    public void Epilogues_BranchOnBothActTwoBosses()
+    public void Epilogues_BranchOnTheEndingChoice_AndTheJourney()
     {
-        var flags = Content.Value.Manifest.Epilogues
-            .SelectMany(e => e.Conditions)
-            .OfType<FlagCondition>()
-            .Select(c => c.Flag)
-            .ToHashSet();
+        var epilogues = Content.Value.Manifest.Epilogues;
 
-        Assert.Superset(new HashSet<string> { "vaelen_reconciled", "vaelen_destroyed", "silas_relieved", "silas_destroyed", "wren_joins_descent" }, flags);
-        Assert.Contains(Content.Value.Manifest.Epilogues.SelectMany(e => e.Conditions), c => c is CounterCondition { Counter: "lantern_resonance" });
+        // Every epilogue but the fallback starts from exactly one choice at the Great Brazier, and each
+        // choice has a gentler variation and an unconditional one of its own.
+        var gated = epilogues.SkipLast(1).Select(e => e.Conditions.OfType<FlagCondition>().Single(c => EndingFlags.Contains(c.Flag)).Flag).ToList();
+        Assert.Equal(EndingFlags, gated.Distinct());
+        Assert.All(EndingFlags, flag => Assert.InRange(gated.Count(g => g == flag), 2, 3));
+        Assert.All(EndingFlags, flag => Assert.Single(epilogues, e => e.Conditions.Count == 1 && e.Conditions[0] is FlagCondition f && f.Flag == flag));
+
+        var flags = Flatten(epilogues.SelectMany(e => e.Conditions)).OfType<FlagCondition>().Select(c => c.Flag).ToHashSet();
+        Assert.Superset(new HashSet<string> { "architect_reconciled", "wren_joins_descent", "vaelen_reconciled", "silas_relieved", "beacon_restored" }, flags);
+        Assert.Contains(Flatten(epilogues.SelectMany(e => e.Conditions)), c => c is CounterCondition { Counter: "lantern_resonance" });
+        Assert.All(epilogues, e => Assert.Contains("{player.name}", e.Text, StringComparison.Ordinal));
     }
 
     [Theory]
@@ -124,6 +202,7 @@ public sealed class RealDataTests
     [InlineData("drowned_tollbridge", "challenged_garin", "shone_bridge_echo")]
     [InlineData("vow_sanctum", "challenged_vaelen", "shone_sanctum_echo")]
     [InlineData("reliquary_bastion", "challenged_silas", "shone_bastion_echo")]
+    [InlineData("cradle_of_ash", "challenged_architect", "shone_cradle_echo")]
     public void BossFights_WaitForTheApproach_SoTheEchoCanBeShoneFirst(string roomId, string challengeFlag, string echoFlag)
     {
         var content = Content.Value;
@@ -321,6 +400,15 @@ public sealed class RealDataTests
         ];
         return Flatten(effects);
     }
+
+    private static IEnumerable<ConditionDef> Flatten(IEnumerable<ConditionDef> conditions) =>
+        conditions.SelectMany(condition => condition switch
+        {
+            AllCondition c => Flatten(c.Conditions).Prepend(condition),
+            AnyCondition c => Flatten(c.Conditions).Prepend(condition),
+            NotCondition c => Flatten(c.Conditions).Prepend(condition),
+            _ => [condition],
+        });
 
     private static IEnumerable<EffectDef> Flatten(IEnumerable<EffectDef> effects) =>
         effects.SelectMany(effect => effect switch

@@ -16,9 +16,10 @@ namespace RpgEngine.Tests.Playthrough;
 /// Plays Act II, the Memory Warrens, through the shipped content with scripted dice. Each run starts
 /// as if loaded from a save at the Drowned Tollbridge with Act I behind the hero, crosses into the
 /// Warrens, recovers both Triad Seals (the Moon Seal from Prelate Vaelen in the north, the Sun Seal
-/// from Commander Silas in the south), and unseals the gate, which ends the adventure. Every room
-/// has ambient lines, so each room description consumes one die. <see cref="ActOneScenarioTests"/>
-/// plays the Act I runs these saves stand for.
+/// from Commander Silas in the south), and unseals the gate onto the Stair of the Uncarved Skull,
+/// where Act III begins. Every room has ambient lines, so each room description consumes one die.
+/// <see cref="ActOneScenarioTests"/> plays the Act I runs these saves stand for, and
+/// <see cref="ActThreeScenarioTests"/> plays on from the stair.
 /// </summary>
 public sealed class ActTwoScenarioTests
 {
@@ -63,7 +64,7 @@ public sealed class ActTwoScenarioTests
     }
 
     [Fact]
-    public void MercifulRun_ReleasesLira_StandsDownSilas_AndUnsealsTheGateWithWren()
+    public void MercifulRun_ReleasesLira_StandsDownSilas_AndDescendsWithWren()
     {
         var dice = new FixedRandomSource(
             0,                    // the Gate of the Twin Seals
@@ -76,7 +77,8 @@ public sealed class ActTwoScenarioTests
             0, 15,                // the Cistern of Lye and Ash | [Athletics DC 12] the sluice
             0,                    // the Bastion of the Unburdened
             15, 1, 1, 15, 3,      // Silas: initiative, then [Persuasion DC 14] with advantage
-            0, 0, 0);             // back through the cistern and the cloister to the gate
+            0, 0, 0,              // back through the cistern and the cloister to the gate
+            0);                   // the Stair of the Uncarved Skull
         var auditor = Create("liminal_auditor", "ash_deserter", ["persuasion", "insight", "stealth", "perception"], ["persuasion", "stealth"]);
 
         // The merciful Act I run: Wren trusted, taught the Rite, and followed; every warden spared; the beacon relit.
@@ -142,23 +144,24 @@ public sealed class ActTwoScenarioTests
         Do(session, "take seal");
         Assert.Equal(30, session.State.World.GetQuestStage("twin_seals"));
 
-        // Back at the gate, both seals end the adventure.
+        // Back at the gate, both seals open the way down into the Cradle.
         Do(session, "east");
         Do(session, "north");
         Do(session, "north");
-        var ending = Do(session, "unseal gate");
+        var descent = Do(session, "unseal gate");
 
-        Assert.Equal(GameMode.Ended, session.Mode);
-        Assert.IsType<EpilogueEvent>(ending[^1]);
-        Assert.StartsWith("The Seal of the Waxing Moon and the Seal of the Unclouded Sun sink into their sockets", session.Epilogue);
-        Assert.Contains("Tamsin", session.Epilogue);
+        Assert.Equal(GameMode.Exploration, session.Mode);
+        Assert.Equal("threshold_vestibule", session.State.CurrentRoomId);
+        Assert.Contains(Described(descent).Paragraphs, p => p.StartsWith("Beneath the parted bronze of the Twin-Seal Gate", StringComparison.Ordinal));
+        Assert.True(session.State.World.HasFlag("unsealed_cradle_gate"));
         Assert.Equal(100, session.State.World.GetQuestStage("twin_seals"));
+        Assert.Equal(10, session.State.World.GetQuestStage("cradle_of_ash_quest"));
         Assert.Equal(10, session.State.World.GetCounter("lantern_resonance"));
         Assert.Equal(0, dice.Remaining);
     }
 
     [Fact]
-    public void SteelRun_CutsDownBothBosses_LearnsIronPenance_AndUnsealsTheGateAlone()
+    public void SteelRun_CutsDownBothBosses_LearnsIronPenance_AndDescendsAlone()
     {
         var dice = new FixedRandomSource(
             0,                    // the Gate of the Twin Seals
@@ -175,7 +178,8 @@ public sealed class ActTwoScenarioTests
             1,                    // the halberdier rolls a natural 1
             20, 8, 8,             // a critical strike on the halberdier: 19 damage, more than its HP
             0,                    // Silas's loot roll: an alkali salve
-            0, 0, 0);             // back through the cistern and the cloister to the gate
+            0, 0, 0,              // back through the cistern and the cloister to the gate
+            0);                   // the Stair of the Uncarved Skull
         var oathEater = Create("oath_eater", "moor_bailiff", ["athletics", "intimidation"], []);
 
         // The violent Act I run: Wren driven off, Halric and Garin destroyed, the beacon left dark.
@@ -219,35 +223,10 @@ public sealed class ActTwoScenarioTests
         Do(session, "north");
         Do(session, "unseal gate");
 
-        Assert.Equal(GameMode.Ended, session.Mode);
-        Assert.StartsWith("The seals go into the bronze still marked by what it cost to take them", session.Epilogue);
+        Assert.Equal(GameMode.Exploration, session.Mode);
+        Assert.Equal("threshold_vestibule", session.State.CurrentRoomId);
         Assert.Equal(-4, session.State.World.GetCounter("lantern_resonance"));
         Assert.Equal(-35, session.State.World.GetReputation("hollow_choir") + session.State.World.GetReputation("ashen_order"));
         Assert.Equal(0, dice.Remaining);
-    }
-
-    [Theory]
-    [InlineData(true, true, true, 4, "The Seal of the Waxing Moon and the Seal of the Unclouded Sun sink into their sockets")]
-    [InlineData(true, true, true, 3, "Moon and sun turn together in the bronze")]
-    [InlineData(true, true, false, 9, "Moon and sun turn together in the bronze")]
-    [InlineData(true, false, true, 5, "The Moon Seal settles into the gate as gently as a child laid down to sleep.")]
-    [InlineData(false, true, false, 0, "You set the Sun Seal first")]
-    [InlineData(false, false, false, -1, "The seals go into the bronze still marked by what it cost to take them")]
-    [InlineData(false, false, true, 0, "Moon and sun, the Triad Seals turn in their sockets")]
-    public void Epilogue_ReflectsVaelen_Silas_Wren_AndTheLantern(bool vaelenSpared, bool silasSpared, bool wrenFollowed, int resonance, string expectedStart)
-    {
-        var world = new TestWorld(Content, Create("oath_eater", "moor_bailiff", ["athletics", "intimidation"], []));
-        world.World.SetFlag(vaelenSpared ? "vaelen_reconciled" : "vaelen_destroyed");
-        world.World.SetFlag(silasSpared ? "silas_relieved" : "silas_destroyed");
-        if (wrenFollowed)
-        {
-            world.World.SetFlag("wren_joins_descent");
-        }
-
-        world.World.SetCounter("lantern_resonance", resonance);
-
-        var epilogue = Content.Manifest.Epilogues.First(e => ConditionEvaluator.AllPass(e.Conditions, world.State));
-
-        Assert.StartsWith(expectedStart, epilogue.Text);
     }
 }
