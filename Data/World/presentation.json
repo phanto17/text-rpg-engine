@@ -1,0 +1,394 @@
+{
+  "rooms": {
+    "lichgate": {
+      "sceneStyle": "moor_gate",
+      "weather": "rain",
+      "palette": {
+        "backgroundTop": "#141923",
+        "backgroundBottom": "#242D3A",
+        "architecture": "#3B4452",
+        "accent": "#7FA4C4"
+      },
+      "backdropImage": "Assets/Rooms/lichgate.png",
+      "moodCaption": "Rain needles the iron gate and faceless stones above Greywater moor."
+    },
+    "ossuary_hall": {
+      "sceneStyle": "crypt_vault",
+      "weather": "ash_motes",
+      "palette": {
+        "backgroundTop": "#121016",
+        "backgroundBottom": "#221D26",
+        "architecture": "#3A423B",
+        "accent": "#C89B4B"
+      },
+      "backdropImage": "Assets/Rooms/ossuary_hall.png",
+      "moodCaption": "Thousands of ash-marked skulls watch the green-black bronze door."
+    },
+    "inner_crypt": {
+      "sceneStyle": "barrow_heart",
+      "weather": "ash_motes",
+      "palette": {
+        "backgroundTop": "#161215",
+        "backgroundBottom": "#2A2024",
+        "architecture": "#483C42",
+        "accent": "#E6A83E"
+      },
+      "backdropImage": "Assets/Rooms/inner_crypt.png",
+      "moodCaption": "A circle of boot-worn ash surrounds the plinth where the Barrowlight waits."
+    },
+    "weeping_stair": {
+      "sceneStyle": "spiral_stair",
+      "weather": "spores",
+      "palette": {
+        "backgroundTop": "#0E161B",
+        "backgroundBottom": "#1A2B33",
+        "architecture": "#2E444D",
+        "accent": "#5CE0C6"
+      },
+      "backdropImage": "Assets/Rooms/weeping_stair.png",
+      "moodCaption": "Bioluminescent ash-moss glimmers along the wet spiral into the Under-Barrow."
+    },
+    "nocturne_square": {
+      "sceneStyle": "lantern_market",
+      "weather": "spores",
+      "palette": {
+        "backgroundTop": "#111622",
+        "backgroundBottom": "#20293D",
+        "architecture": "#3D4861",
+        "accent": "#F0B44C"
+      },
+      "backdropImage": "Assets/Rooms/nocturne_square.png",
+      "moodCaption": "Tallow-lamps and sanctuary embers warm the sunken cathedral square of Nocturne."
+    },
+    "echo_chapel": {
+      "sceneStyle": "choir_chapel",
+      "weather": "ash_motes",
+      "palette": {
+        "backgroundTop": "#141324",
+        "backgroundBottom": "#252340",
+        "architecture": "#454266",
+        "accent": "#96B8F2"
+      },
+      "backdropImage": "Assets/Rooms/echo_chapel.png",
+      "moodCaption": "Silver Choir-wires hum between brass music boxes and tethered spirit-jars."
+    },
+    "drowned_tollbridge": {
+      "sceneStyle": "canal_bridge",
+      "weather": "rain",
+      "palette": {
+        "backgroundTop": "#0D1518",
+        "backgroundBottom": "#18282E",
+        "architecture": "#35484F",
+        "accent": "#68B0AB"
+      },
+      "backdropImage": "Assets/Rooms/drowned_tollbridge.png",
+      "moodCaption": "Black canal water laps against the floodgate chains of the Ashen quarantine line."
+    },
+    "warren_crossroads": {
+      "sceneStyle": "twin_seal_gate",
+      "weather": "ash_motes",
+      "palette": {
+        "backgroundTop": "#13141C",
+        "backgroundBottom": "#242636",
+        "architecture": "#3C4544",
+        "accent": "#D9A74A"
+      },
+      "backdropImage": "Assets/Rooms/warren_crossroads.png",
+      "moodCaption": "Two processional roads divide around the bronze floor-gate of the Twin Seals."
+    },
+    "whispering_stacks": {
+      "sceneStyle": "ledger_stacks",
+      "weather": "memory_salt",
+      "palette": {
+        "backgroundTop": "#161420",
+        "backgroundBottom": "#282438",
+        "architecture": "#4A4360",
+        "accent": "#B8C8E8"
+      },
+      "backdropImage": "Assets/Rooms/whispering_stacks.png",
+      "moodCaption": "Silver threads tether translucent hands to thousands of wax-sealed ledgers."
+    },
+    "tallow_foundry": {
+      "sceneStyle": "spindle_foundry",
+      "weather": "spores",
+      "palette": {
+        "backgroundTop": "#141A22",
+        "backgroundBottom": "#22303E",
+        "architecture": "#52606E",
+        "accent": "#62C4E6"
+      },
+      "backdropImage": "Assets/Rooms/tallow_foundry.png",
+      "moodCaption": "Simmering vats of spore-wax feed the water-driven silver spindle loom."
+    },
+    "vow_sanctum": {
+      "sceneStyle": "carillon_rotunda",
+      "weather": "memory_salt",
+      "palette": {
+        "backgroundTop": "#181426",
+        "backgroundBottom": "#2E2646",
+        "architecture": "#584C78",
+        "accent": "#D2C2F0"
+      },
+      "backdropImage": "Assets/Rooms/vow_sanctum.png",
+      "moodCaption": "Hundreds of silver plumb-lines converge upon the gilded Carillon of Lira."
+    },
+    "scoured_cloister": {
+      "sceneStyle": "whitewash_barracks",
+      "weather": "ash_motes",
+      "palette": {
+        "backgroundTop": "#1C1D21",
+        "backgroundBottom": "#32343B",
+        "architecture": "#6E727D",
+        "accent": "#B86B4B"
+      },
+      "backdropImage": "Assets/Rooms/scoured_cloister.png",
+      "moodCaption": "Identical iron helms hang in stark silence above lye-scoured stone bunks."
+    },
+    "lye_cistern": {
+      "sceneStyle": "alkali_baptistery",
+      "weather": "embers",
+      "palette": {
+        "backgroundTop": "#191C1E",
+        "backgroundBottom": "#2D3336",
+        "architecture": "#5A6469",
+        "accent": "#A8C4B8"
+      },
+      "backdropImage": "Assets/Rooms/lye_cistern.png",
+      "moodCaption": "Caustic white alkali steams in the troughs where soldiers scrub away their names."
+    },
+    "reliquary_bastion": {
+      "sceneStyle": "furnace_bastion",
+      "weather": "embers",
+      "palette": {
+        "backgroundTop": "#211514",
+        "backgroundBottom": "#3B2420",
+        "architecture": "#61453F",
+        "accent": "#F28C38"
+      },
+      "backdropImage": "Assets/Rooms/reliquary_bastion.png",
+      "moodCaption": "Melted lead memory-ingots ring the blazing grate of the Furnace of Remission."
+    },
+    "threshold_vestibule": {
+      "sceneStyle": "basalt_stair",
+      "weather": "memory_salt",
+      "palette": {
+        "backgroundTop": "#0E0F14",
+        "backgroundBottom": "#1C1E28",
+        "architecture": "#383C4C",
+        "accent": "#8C96A8"
+      },
+      "backdropImage": "Assets/Rooms/threshold_vestibule.png",
+      "moodCaption": "Vitrified basalt steps descend past Triad reliefs where every Skull is plugged with lead."
+    },
+    "penitent_landing": {
+      "sceneStyle": "sanctuary_terrace",
+      "weather": "embers",
+      "palette": {
+        "backgroundTop": "#14131A",
+        "backgroundBottom": "#262330",
+        "architecture": "#464054",
+        "accent": "#E89E46"
+      },
+      "backdropImage": "Assets/Rooms/penitent_landing.png",
+      "moodCaption": "The Sanctuary Brazier of the Last Watch burns steady above the subterranean abyss."
+    },
+    "bell_nave": {
+      "sceneStyle": "sundered_bell_nave",
+      "weather": "memory_salt",
+      "palette": {
+        "backgroundTop": "#0F1418",
+        "backgroundBottom": "#1E2830",
+        "architecture": "#364A48",
+        "accent": "#7CC6B8"
+      },
+      "backdropImage": "Assets/Rooms/bell_nave.png",
+      "moodCaption": "Split from lip to crown, the twenty-foot Great Vesper Bell hangs over a river of salt."
+    },
+    "cradle_of_ash": {
+      "sceneStyle": "great_brazier_cradle",
+      "weather": "embers",
+      "palette": {
+        "backgroundTop": "#120E16",
+        "backgroundBottom": "#281D2E",
+        "architecture": "#4A3852",
+        "accent": "#F5B841"
+      },
+      "backdropImage": "Assets/Rooms/cradle_of_ash.png",
+      "moodCaption": "At the bedrock of the Under-Barrow stand Caelia's amber bier and the Great Brazier."
+    }
+  },
+  "monsters": {
+    "gravebound_knight": {
+      "emblem": "knight_helm",
+      "primaryColor": "#8C4A3E",
+      "accentColor": "#E6A83E",
+      "spriteImage": "Assets/Monsters/gravebound_knight.png"
+    },
+    "barrow_thrall": {
+      "emblem": "thrall_skull",
+      "primaryColor": "#6E7075",
+      "accentColor": "#B8B4A8",
+      "spriteImage": "Assets/Monsters/barrow_thrall.png"
+    },
+    "choir_cantor_miriel": {
+      "emblem": "choir_cantor",
+      "primaryColor": "#4E5482",
+      "accentColor": "#96B8F2",
+      "spriteImage": "Assets/Monsters/choir_cantor_miriel.png"
+    },
+    "calcified_mournling": {
+      "emblem": "mournling",
+      "primaryColor": "#7A8496",
+      "accentColor": "#D4E0F0",
+      "spriteImage": "Assets/Monsters/calcified_mournling.png"
+    },
+    "tollbridge_warden_garin": {
+      "emblem": "toll_warden",
+      "primaryColor": "#3E565E",
+      "accentColor": "#68B0AB",
+      "spriteImage": "Assets/Monsters/tollbridge_warden_garin.png"
+    },
+    "drowned_lancer": {
+      "emblem": "drowned_lancer",
+      "primaryColor": "#2F444A",
+      "accentColor": "#7CA6A2",
+      "spriteImage": "Assets/Monsters/drowned_lancer.png"
+    },
+    "prelate_vaelen": {
+      "emblem": "prelate_carillon",
+      "primaryColor": "#634C8A",
+      "accentColor": "#D2C2F0",
+      "spriteImage": "Assets/Monsters/prelate_vaelen.png"
+    },
+    "tethered_chorister": {
+      "emblem": "chorister",
+      "primaryColor": "#525A78",
+      "accentColor": "#B8C8E8",
+      "spriteImage": "Assets/Monsters/tethered_chorister.png"
+    },
+    "commander_silas": {
+      "emblem": "scoured_commander",
+      "primaryColor": "#C8CCD4",
+      "accentColor": "#F28C38",
+      "spriteImage": "Assets/Monsters/commander_silas.png"
+    },
+    "scoured_halberdier": {
+      "emblem": "halberdier",
+      "primaryColor": "#8C929E",
+      "accentColor": "#D97B48",
+      "spriteImage": "Assets/Monsters/scoured_halberdier.png"
+    },
+    "first_architect": {
+      "emblem": "first_architect",
+      "primaryColor": "#3E5852",
+      "accentColor": "#F5B841",
+      "spriteImage": "Assets/Monsters/first_architect.png"
+    },
+    "calcified_warden": {
+      "emblem": "calcified_warden",
+      "primaryColor": "#6E7875",
+      "accentColor": "#C89B4B",
+      "spriteImage": "Assets/Monsters/calcified_warden.png"
+    }
+  },
+  "npcs": {
+    "wren": {
+      "speakerName": "Sister Wren",
+      "emblem": "lantern_nun",
+      "primaryColor": "#5E6878",
+      "accentColor": "#E6A83E",
+      "portraitImage": "Assets/Portraits/wren.png"
+    },
+    "orin": {
+      "speakerName": "Brother Orin",
+      "emblem": "blind_monk",
+      "primaryColor": "#3E565E",
+      "accentColor": "#5CE0C6",
+      "portraitImage": "Assets/Portraits/orin.png"
+    },
+    "maeve": {
+      "speakerName": "Keeper Maeve",
+      "emblem": "wayfarer_keeper",
+      "primaryColor": "#4A5670",
+      "accentColor": "#F0B44C",
+      "portraitImage": "Assets/Portraits/maeve.png"
+    },
+    "peddler": {
+      "speakerName": "Sallow the Peddler",
+      "emblem": "peddler",
+      "primaryColor": "#5C5346",
+      "accentColor": "#C89B4B",
+      "portraitImage": "Assets/Portraits/peddler.png"
+    },
+    "wren_nocturne": {
+      "speakerName": "Sister Wren",
+      "emblem": "lantern_nun",
+      "primaryColor": "#5E6878",
+      "accentColor": "#F0B44C",
+      "portraitImage": "Assets/Portraits/wren_nocturne.png"
+    },
+    "miriel": {
+      "speakerName": "Cantor Miriel",
+      "emblem": "cantor",
+      "primaryColor": "#4E5482",
+      "accentColor": "#96B8F2",
+      "portraitImage": "Assets/Portraits/miriel.png"
+    },
+    "garin": {
+      "speakerName": "Toll-Warden Garin",
+      "emblem": "warden",
+      "primaryColor": "#3E565E",
+      "accentColor": "#68B0AB",
+      "portraitImage": "Assets/Portraits/garin.png"
+    },
+    "caelan": {
+      "speakerName": "Archivist Caelan",
+      "emblem": "archivist",
+      "primaryColor": "#524A68",
+      "accentColor": "#B8C8E8",
+      "portraitImage": "Assets/Portraits/caelan.png"
+    },
+    "vaelen": {
+      "speakerName": "Prelate Vaelen",
+      "emblem": "prelate",
+      "primaryColor": "#634C8A",
+      "accentColor": "#D2C2F0",
+      "portraitImage": "Assets/Portraits/vaelen.png"
+    },
+    "venn": {
+      "speakerName": "Quartermaster Venn",
+      "emblem": "armorer",
+      "primaryColor": "#7E8490",
+      "accentColor": "#B86B4B",
+      "portraitImage": "Assets/Portraits/venn.png"
+    },
+    "silas": {
+      "speakerName": "Commander Silas",
+      "emblem": "commander",
+      "primaryColor": "#C8CCD4",
+      "accentColor": "#F28C38",
+      "portraitImage": "Assets/Portraits/silas.png"
+    },
+    "wren_cradle": {
+      "speakerName": "Sister Wren",
+      "emblem": "lantern_nun",
+      "primaryColor": "#5E6878",
+      "accentColor": "#E89E46",
+      "portraitImage": "Assets/Portraits/wren_cradle.png"
+    },
+    "oakhaven": {
+      "speakerName": "Barrow-wright Oakhaven",
+      "emblem": "barrow_wright",
+      "primaryColor": "#4E5A58",
+      "accentColor": "#C89B4B",
+      "portraitImage": "Assets/Portraits/oakhaven.png"
+    },
+    "architect_post": {
+      "speakerName": "Aurelius, the First Architect",
+      "emblem": "architect",
+      "primaryColor": "#3E5852",
+      "accentColor": "#F5B841",
+      "portraitImage": "Assets/Portraits/architect_post.png"
+    }
+  }
+}
