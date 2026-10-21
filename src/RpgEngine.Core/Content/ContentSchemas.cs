@@ -27,6 +27,7 @@ public static class ContentSchemas
         new("faction", typeof(FactionDef), IsArray: true, ["/Data/World/factions.json"]),
         new("quest", typeof(QuestDef), IsArray: true, ["/Data/World/quests.json"]),
         new("shop", typeof(ShopDef), IsArray: true, ["/Data/World/shops.json"]),
+        new("presentation", typeof(PresentationDef), IsArray: false, ["/Data/World/presentation.json"]),
         new("item", typeof(ItemDef), IsArray: true, ["/Data/Items/*.json"]),
         new("monster", typeof(MonsterDef), IsArray: true, ["/Data/Bestiary/*.json"]),
         new("room", typeof(RoomDef), IsArray: true, ["/Data/Rooms/*.json"]),

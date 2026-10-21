@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RpgEngine content: presentation manifest",
+  "allowComments": true,
+  "allowTrailingCommas": true,
+  "type": "object",
+  "properties": {
+    "rooms": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "palette": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "backgroundTop": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "backgroundBottom": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "architecture": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "accent": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "additionalProperties": false
+          },
+          "sceneStyle": {
+            "enum": [
+              "moor_gate",
+              "ossuary_vault",
+              "crypt_rotunda",
+              "spiral_stair",
+              "sunken_cathedral",
+              "echo_chapel",
+              "drowned_bridge",
+              "twin_seal_gate",
+              "archive_stacks",
+              "tallow_loom",
+              "vow_nursery",
+              "scoured_barracks",
+              "lye_cistern",
+              "iron_bastion",
+              "uncarved_stair",
+              "sanctuary_landing",
+              "sundered_bell_nave",
+              "cradle_of_ash",
+              null
+            ]
+          },
+          "weather": {
+            "enum": [
+              "none",
+              "rain",
+              "ash_motes",
+              "spores",
+              "memory_salt",
+              "embers",
+              null
+            ]
+          },
+          "backdropImage": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "monsters": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "primaryColor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "accentColor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "emblem": {
+            "enum": [
+              "knight_helm",
+              "thrall_skull",
+              "choir_mask",
+              "warden_halberd",
+              "carillon_cradle",
+              "iron_brazier",
+              "architect_astrolabe",
+              "lantern_nun",
+              "scribe",
+              "peddler",
+              "keeper",
+              "quartermaster",
+              "monk",
+              "wright",
+              "lancer",
+              "mournling",
+              "chorister",
+              "halberdier",
+              "prelate",
+              "commander",
+              "hooded",
+              null
+            ]
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "spriteImage": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "npcs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "primaryColor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "accentColor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "emblem": {
+            "enum": [
+              "knight_helm",
+              "thrall_skull",
+              "choir_mask",
+              "warden_halberd",
+              "carillon_cradle",
+              "iron_brazier",
+              "architect_astrolabe",
+              "lantern_nun",
+              "scribe",
+              "peddler",
+              "keeper",
+              "quartermaster",
+              "monk",
+              "wright",
+              "lancer",
+              "mournling",
+              "chorister",
+              "halberdier",
+              "prelate",
+              "commander",
+              "hooded",
+              null
+            ]
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "portraitImage": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

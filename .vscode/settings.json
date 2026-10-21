@@ -56,6 +56,12 @@
     },
     {
       "fileMatch": [
+        "/Data/World/presentation.json"
+      ],
+      "url": "./.vscode/schemas/presentation.schema.json"
+    },
+    {
+      "fileMatch": [
         "/Data/Items/*.json"
       ],
       "url": "./.vscode/schemas/item.schema.json"
