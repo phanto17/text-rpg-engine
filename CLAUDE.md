@@ -13,6 +13,7 @@ dotnet build                                   # must report 0 warnings, 0 error
 dotnet test                                    # must be all green
 dotnet run --project src/RpgEngine.CLI         # play
 dotnet run --project src/RpgEngine.CLI -- --seed 42 --no-anim   # deterministic run, no dice animation
+dotnet run --project src/RpgEngine.Pixel       # play in the pixel-art window (same --seed, --data, --saves; plus --crt)
 dotnet test --collect:"XPlat Code Coverage"    # Cobertura report under tests/RpgEngine.Tests/TestResults/
 dotnet run --project src/RpgEngine.CLI -- --export-schemas   # regenerate .vscode/schemas/ and .vscode/settings.json
 ```
@@ -30,7 +31,9 @@ CLI flags (Milestone 1):
 
 Exit codes: `0` normal, `1` content failed validation (every error is listed), `2` bad arguments.
 
-The SDK is pinned by `global.json` to 10.0.401 with `rollForward: latestFeature`. Package versions live only in `Directory.Packages.props` (Central Package Management). Shared build settings live in `Directory.Build.props`.
+`RpgEngine.Pixel` takes `--seed`, `--data`, `--saves`, `--help`, and `--crt` (start with the scanline overlay on) with the same meanings and defaults, so both clients find the same `Data/` and `./Saves`. Two contributor-only flags, left out of `--help`: `--screenshot <file.png>` saves the canvas (at 2x) and exits, and `--play "line;line;..."` types those lines first, one every dozen frames with the typewriter skipped, e.g. `--play "new;Tester;1;1;1;1;1;2;7;1;down"` to land in the Ossuary Hall. In the window: click a button, press `1`-`9`, or type a command; `Tab` cycles the HUD tabs, `Enter` skips the typewriter, `Esc` goes back, `F2` toggles the CRT, `F3` toggles whole-pixel scaling, `F11` toggles borderless fullscreen.
+
+The SDK is pinned by `global.json` to 10.0.401 with `rollForward: latestFeature`. Package versions live only in `Directory.Packages.props` (Central Package Management: Spectre.Console for the CLI, Raylib-cs for the pixel client). Shared build settings live in `Directory.Build.props`.
 
 ---
 
@@ -44,7 +47,8 @@ Docs/LORE.md               World, philosophy, and narrative bible. Read it befor
 .vscode/settings.json      Maps the schemas onto Data/ for VS Code (generated "json.schemas" entries).
 src/RpgEngine.Core/        Engine: models, dice, checks, world state, content loading, combat, saves.
 src/RpgEngine.CLI/         Spectre.Console UI: screens, rendering, hybrid input loop.
-tests/RpgEngine.Tests/     xUnit tests for Core, content validation, and CLI playthroughs.
+src/RpgEngine.Pixel/       Raylib-cs pixel-art UI: a headless game model and sequencer, plus the renderers.
+tests/RpgEngine.Tests/     xUnit tests for Core, content validation, CLI playthroughs, and the pixel client's logic.
 .github/workflows/ci.yml   CI: restore, Release build, and tests on ubuntu-latest and windows-latest.
 ```
 
@@ -57,12 +61,20 @@ CLI layout:
 - `Screens/`: Title, CharacterCreation (name, calling, burden, scores, skills, expertise, review), Exploration, Dialogue, Combat, Shop (buy, sell, leave), Info (sheet, inventory, journal, help), End.
 - `Input/`: `Prompter`, the line-based numbered menus. There are no arrow-key widgets, so every prompt can be scripted in tests.
 
+Pixel layout (namespace = `RpgEngine.Pixel.<Folder>`). Everything outside `Rendering/` is free of raylib types and is what the tests drive:
+- `PixelHost`, `PixelOptions`: argument parsing, content loading, error reporting.
+- `Game/`: `PixelGame`, the whole client without a window (title, `CreationFlow`, and the play loop by `GameMode`). It owns the `GameSession`, builds the contextual `ActionChoice` list the action bar shows (numbered buttons, sub-menus with Back), accepts clicks (`Pick`) and typed lines (`Submit`), runs enemy turns once the typewriter is quiet (`Update`), and feeds every `GameEvent` to the sequencer. `HudTab` names the HUD tabs.
+- `Sequencing/`: `EventNarrator` turns each `GameEvent` into `LogLine`s (toned `LogSpan`s, with a `LogLineKind` for headings, rules, and quotes) and `SequenceCue`s (d20 banner, hit flash, lunge, floating number, fell, speaker, room, combat, level-up); `EventSequencer` plays those `Beat`s in order with a typewriter reveal, a hold before a dice verdict, `Skip`, and `TakeCues` for the renderer.
+- `Presentation/`: `PresentationLoader` reads `Data/World/presentation.json` forgivingly (missing file, unknown names, wrong shapes become warnings, never errors); `PresentationDefaults` holds a look for every shipped room, monster, and NPC plus keyword guesses for new ids; `PresentationCatalog` layers the file over the defaults and resolves `RoomLook`s and `FigureLook`s. `PixelColor` is the renderer-free color; `LanternLight` maps `lantern_resonance` to the Barrowlight's color temperature.
+- `Layout/`: `PixelLayout` (the 480 by 270 canvas and its four panels), `ViewportFit` (whole-pixel or aspect-fit scaling and mouse mapping), `TextWrapper`, `ButtonFlow`, `PixelRect`.
+- `Rendering/` (raylib): `PixelApp` (window, render texture, input routing), `SceneRenderer` and `SceneProps` (one procedural scene per `SceneStyle`), `WeatherField`, `Emblems` (procedural heraldry), `CombatStage`, `PortraitBox`, `DiceBanner`, `HudRenderer`, `LogRenderer`, `ActionBarRenderer`, `CrtOverlay`, `TextureCache` (pictures under `Data/`), `Palette`, `Canvas`.
+
 ---
 
 ## Golden rules (non-negotiable)
 
 1. **No content in C#.** Story text, rooms, items, monsters, dialogue, classes, spells, status effects, and rule constants live in `Data/`. Only UI chrome (labels like "Inventory", "HP", "Attack") may be written in code.
-2. **Core is UI-agnostic.** `RpgEngine.Core` never references Spectre.Console and never writes to the console. It returns `GameEvent`s (narration, check results, dice rolls, damage, item and quest changes, mode changes), and the CLI renders them. `ArchitectureTests` enforces this.
+2. **Core is UI-agnostic.** `RpgEngine.Core` never references Spectre.Console or Raylib-cs and never writes to the console or a window. It returns `GameEvent`s (narration, check results, dice rolls, damage, item and quest changes, mode changes), and each client renders them. `ArchitectureTests` enforces this. In the pixel client, keep state, sequencing, layout, and presentation logic in classes that do not use raylib types, so they stay testable without a window.
 3. **All randomness goes through `IRandomSource`.** Never use `new Random()` or `Random.Shared` in Core. Use `Pcg32RandomSource(seed)` for gameplay and `FixedRandomSource` (scripted faces) in tests. Inject `TimeProvider` instead of reading `DateTime.Now`.
 4. **Content text is plain text.** The CLI escapes it and styles it by role. Never put Spectre markup in JSON. Check badges such as `[Persuasion DC 14]` are generated from check data and never typed into text, so each DC is defined in one place.
 5. **Fail fast on bad content.** `ContentValidator` collects *every* error (broken references, duplicate IDs, unknown properties, invalid dice) and reports them together at startup. The same validation runs as a unit test over the real `Data/`, so bad data fails `dotnet test`.
@@ -88,7 +100,7 @@ CLI layout:
 
 - xUnit with plain `Assert`. **No FluentAssertions**, because v8 changed to a commercial license.
 - Test names follow `Method_Scenario_Expected`, e.g. `Roll_WithAdvantage_KeepsHigherDie`.
-- Test folders mirror Core folders: `Dice/`, `Checks/`, `World/`, `Content/`, `Dialogue/`, `Combat/`, `Persistence/`, `Commands/`, `Playthrough/`, `Balance/`.
+- Test folders mirror Core folders: `Dice/`, `Checks/`, `World/`, `Content/`, `Dialogue/`, `Combat/`, `Persistence/`, `Commands/`, `Playthrough/`, `Balance/`; `Cli/` covers the terminal client and `Pixel/` the pixel client's headless classes.
 - Tests are fully deterministic. Use `FixedRandomSource` for exact outcomes and a fixed-seed `Pcg32RandomSource` for statistical tests, so no test can flake.
   - When scripting dice, count every draw: initiative (player first, then monsters in listed order), checks, damage, weighted attack picks (only for monsters with 2+ attacks), loot rolls, and **one ambient pick each time a room with `ambient` lines is described**.
   - `LuckyRandomSource` (every roll at maximum) keeps story-path tests robust to number tuning.
@@ -103,6 +115,7 @@ CLI layout:
   - A new boss fight gets the same treatment: add it to a balance test with bands that bracket its measured win rates.
   - After an intended tuning change, run `dotnet test --filter Balance --logger "console;verbosity=detailed"`. Read the printed table (win rate, average rounds, average HP left on wins) and move the bands in the same commit as the data change.
 - CLI tests drive the real UI through `Spectre.Console.Testing.TestConsole` with scripted input lines. The CLI exposes internals to the test assembly only.
+- Pixel tests drive `PixelGame` directly (`Pick`, `Submit`, `Update`) with the in-memory fixtures and a fast `EventSequencer`; nothing under `Rendering/` runs in tests, and no test may open a window. Rendering changes are checked by eye with `--screenshot` and `--play` (see Commands). A new `SceneStyle`, `WeatherKind`, or `Emblem` needs a branch in the renderer, a default in `PresentationDefaults` where a shipped id uses it, and a loader test that its JSON name is understood (`Parse_EverySchemaSpelling_IsUnderstood` covers every enum member).
 - Coverage target: 100% line coverage for `RpgEngine.Core.Dice` and `RpgEngine.Core.Checks`.
 - Every new condition type, effect type, or schema field needs a test, and so does every validator rule.
 
@@ -216,6 +229,18 @@ CLI layout:
 ### `Data/World/`
 - **`factions.json`**: `{ "id": "ashen_order", "name": "The Ashen Order", "description": "..." }`
 - **`quests.json`**: `{ "id": "barrowlight", "name": "...", "stages": [ { "stage": 10, "journal": "..." } ] }`. Quest stages only move forward.
+- **`presentation.json`** (optional; read only by the pixel client, never by the engine): how rooms, monsters, and NPCs look, keyed by id. Every field is optional; the client has a default look for every shipped id and guesses one from the words in a new id. Unknown names and malformed entries are reported as warnings and skipped, never errors.
+  ```json
+  { "rooms": { "lichgate": { "palette": { "backgroundTop": "#1b2230", "backgroundBottom": "#3a4a52", "architecture": "#2a2f33", "accent": "#7fa6b8" },
+                             "sceneStyle": "moor_gate", "weather": "rain", "backdropImage": "Assets/lichgate.png" } },
+    "monsters": { "gravebound_knight": { "primaryColor": "#6a6f78", "accentColor": "#c04040", "emblem": "knight_helm", "title": "Warden of the Barrow Heart", "spriteImage": "Assets/knight.png" } },
+    "npcs": { "wren": { "primaryColor": "#404858", "accentColor": "#ffd080", "emblem": "lantern_nun", "title": "Sister of the Lantern Bearers", "portraitImage": "Assets/wren.png" } } }
+  ```
+  - `sceneStyle`: `moor_gate ossuary_vault crypt_rotunda spiral_stair sunken_cathedral echo_chapel drowned_bridge twin_seal_gate archive_stacks tallow_loom vow_nursery scoured_barracks lye_cistern iron_bastion uncarved_stair sanctuary_landing sundered_bell_nave cradle_of_ash`.
+  - `weather`: `none rain ash_motes spores memory_salt embers`.
+  - `emblem`: `knight_helm thrall_skull choir_mask warden_halberd carillon_cradle iron_brazier architect_astrolabe lantern_nun scribe peddler keeper quartermaster monk wright lancer mournling chorister halberdier prelate commander hooded`.
+  - Colors are `#rgb`, `#rrggbb`, or `#rrggbbaa`. Picture paths are relative to `Data/` (for example `Assets/lichgate.png`); a missing picture falls back to the procedural scene or emblem. The sections may also be arrays of entries carrying an `id`.
+  - The records live in `Content/Defs/PresentationDef.cs` (a closed family in one file, like the conditions) so the schema export covers the file; their enum members carry `JsonStringEnumMemberName` for the snake_case spellings above.
 - **`shops.json`** (optional): merchants opened by the `startShop` effect.
   ```json
   { "id": "mote_stall", "name": "Mote's Stall", "keeper": "Dunstan Mote", "greeting": "Coin first, {player.name}.",
@@ -416,7 +441,7 @@ A save from another format version is refused with a message naming its version 
 ### Editor schemas (`.vscode/schemas/`)
 VS Code autocompletes and validates every file in `Data/` against a JSON Schema generated from the content records:
 - `ContentSchemas` (Core) runs .NET's `JsonSchemaExporter` with the loader's own `ContentJson.Options`, so each schema matches exactly what `ContentLoader` accepts: camelCase names, enum values, `required` fields, nullability, polymorphic `type` discriminators (`anyOf` branches), and `additionalProperties: false`. Cross-references (unknown IDs, unset flags) and dice syntax are still checked only by `ContentValidator`.
-- `ContentSchemas.All` lists one schema per file kind (`room.schema.json` for `Data/Rooms/*.json`, `game.schema.json` for `Data/game.json`, and so on). A new content folder or file needs an entry there.
+- `ContentSchemas.All` lists one schema per file kind (`room.schema.json` for `Data/Rooms/*.json`, `game.schema.json` for `Data/game.json`, `presentation.schema.json` for `Data/World/presentation.json`, and so on). A new content folder or file needs an entry there.
 - `--export-schemas` writes the schemas and replaces the generated `json.schemas` entries in `.vscode/settings.json`, keeping every other setting (comments in that file are not kept).
 
 **Whenever you change a record in `Content/Defs/`** (add, rename, or remove a property, change a type or enum, add a condition or effect), regenerate and commit the output in the same commit:
@@ -477,4 +502,5 @@ dotnet run --project src/RpgEngine.CLI -- --export-schemas
 - [x] **Milestone 3 (the Memory Warrens, Act II):** `warren_crossroads` and the Twin Seal gate, the Archive of Unkept Vows (Prelate Vaelen) and the Iron Reliquary (Commander Silas), level-3 abilities for every Calling, and the Act II boss balance check.
 - [x] **Milestone 4 (the Cradle of the First Architect, Act III; content version 1.0.0):** `unseal` now opens the way down to `threshold_vestibule`, `penitent_landing` (a sanctuary, Oakhaven's `cradle_quartermaster` shop, and the ally blessings), `bell_nave`, and `cradle_of_ash` (the First Architect and the Great Brazier). The `applyStatus` effect, level-4 capstones, and buff statuses. The game ends only at the Great Brazier (`relight`, `tune`, or `complete`), with seven epilogues keyed to that choice and to the First Architect, Wren, Vaelen, Silas, the Nocturne beacon, and `lantern_resonance`, plus a fallback. `CradleBalanceTests` guards the final fight.
 - [x] **Tooling:** JSON Schema export for editor autocomplete (`--export-schemas`, `.vscode/schemas/`).
+- [x] **Milestone 5 (the pixel-art client, `RpgEngine.Pixel`):** a Raylib-cs front end over the same `GameSession` and saves: a 480 by 270 canvas scaled by whole pixels with a CRT toggle, procedural scenes per `SceneStyle` with weather and the Barrowlight glow, dialogue portraits, combat sprites with flashes, lunges, and floating numbers, a typewriter log with a d20 banner, a HUD with Inventory, Quests, Stats, and Exits tabs, clickable or typed actions, and the optional `Data/World/presentation.json` with its schema.
 - [ ] **Later:** parties, races, saving mid-combat.

@@ -1,10 +1,10 @@
 # text-rpg-engine
 
-A narrative-driven, text-based RPG engine for the terminal, written in C# on .NET 10. It draws on tabletop d20 rules (the 5e SRD), the exploration of **Zork**, and the turn-based dungeon combat of **Wizardry** and **The Bard's Tale**.
+A narrative-driven, text-based RPG engine written in C# on .NET 10, with two front ends: a terminal client and a retro pixel-art desktop client. It draws on tabletop d20 rules (the 5e SRD), the exploration of **Zork**, and the turn-based dungeon combat of **Wizardry** and **The Bard's Tale**.
 
 The engine is **purely data-driven**. Every room, item, monster, line of dialogue, class, and rule constant is loaded from JSON in [`Data/`](Data/), so new adventures can be written without touching C#.
 
-> **Status:** **Version 1.0: Milestones 1 to 4 are complete.** *Barrowlight* is a complete eighteen-room adventure. A three-room prologue (character creation, a branching NPC conversation with permanent consequences, a riddle-and-trap puzzle, and a boss you can fight, flee, or talk down) leads into **Act I**, a descent to the underground lantern-town of Nocturne; **Act II**, the Memory Warrens, where two rival strongholds each guard half of the seal on the way down; and **Act III**, the Cradle of the First Architect, where the adventure ends with a choice at the Great Brazier. Milestone 2 added four Greywater **Callings**, **Burdens** (backgrounds) that the story reacts to, **leveling**, **sanctuary rests**, and **shops**.
+> **Status:** **Version 1.0: Milestones 1 to 4 are complete.** *Barrowlight* is a complete eighteen-room adventure. A three-room prologue (character creation, a branching NPC conversation with permanent consequences, a riddle-and-trap puzzle, and a boss you can fight, flee, or talk down) leads into **Act I**, a descent to the underground lantern-town of Nocturne; **Act II**, the Memory Warrens, where two rival strongholds each guard half of the seal on the way down; and **Act III**, the Cradle of the First Architect, where the adventure ends with a choice at the Great Brazier. Milestone 2 added four Greywater **Callings**, **Burdens** (backgrounds) that the story reacts to, **leveling**, **sanctuary rests**, and **shops**. **Milestone 5** adds `RpgEngine.Pixel`, a graphical client that plays the same game and shares its saves with the terminal.
 
 ---
 
@@ -18,7 +18,14 @@ The engine is **purely data-driven**. Every room, item, monster, line of dialogu
 - **Retro terminal UI** ([Spectre.Console](https://spectreconsole.net/)):
   - color-coded narration, HP/MP bars, stat tables, and animated dice rolls
   - **hybrid input**: pick numbered options or type classic commands like `look`, `inspect altar`, `press sun`
-- **Save/Load** to JSON in `Saves/`.
+- **Retro pixel-art client** ([Raylib-cs](https://github.com/raylib-cs/raylib-cs)): a 480 by 270 canvas scaled by whole pixels into a resizable window, with an optional CRT overlay (`F2`).
+  - a procedural pixel-art scene for every room (gothic arches, the three-sigil bronze door lit as you press its sigils, the cracked Vesper Bell, the Great Brazier), weather particles, and a Barrowlight glow that warms from frost to amber as `lantern_resonance` grows
+  - portraits that slide in during conversations; heraldic enemy sprites with HP bars, status chips, hit flashes, lunges, and floating damage numbers in combat
+  - a character HUD with eased HP, MP, and XP bars and Inventory, Quests, Stats, and Exits (compass) tabs
+  - a typewriter event log with colored roll badges and a d20 banner on every check, attack, and saving throw
+  - the same hybrid input: click a button, press `1`-`9`, or type the classic commands
+  - looks come from an optional `Data/World/presentation.json` (palettes, scene styles, weather, emblems, pictures), with built-in defaults for everything
+- **Save/Load** to JSON in `Saves/`, shared by both clients.
 
 ## The adventure: *Barrowlight*
 
@@ -58,6 +65,12 @@ flowchart LR
         Render["Rendering<br/>theme, HP/MP bars, tables,<br/>dice animation"]
     end
 
+    subgraph Pixel["RpgEngine.Pixel (Raylib-cs)"]
+        PixelGame["PixelGame<br/>headless state + action bar"]
+        Sequencer["EventSequencer<br/>typewriter + cues"]
+        Canvas["480x270 canvas<br/>scene, HUD, log, CRT"]
+    end
+
     subgraph Core["RpgEngine.Core (no UI dependencies)"]
         Session["GameSession"]
         Parser["CommandParser"]
@@ -77,6 +90,8 @@ flowchart LR
 
     Input --> Screens --> Session
     Session -- "GameEvents" --> Render
+    PixelGame --> Session
+    Session -- "GameEvents" --> Sequencer --> Canvas
     Session --> Parser & Explore & Dialogue & Combat
     Explore & Dialogue & Combat --> World
     Dialogue & Combat & Explore --> Checks --> Dice
@@ -86,10 +101,11 @@ flowchart LR
     Session --> Persist
     Tests -.-> Core
     Tests -.-> CLI
+    Tests -.-> PixelGame
 ```
 
 **Key principles:**
-- **Core never touches the console.** It returns `GameEvent`s, and the CLI decides how to show them.
+- **Core never touches the console or the window.** It returns `GameEvent`s, and each client decides how to show them. The pixel client keeps its own state, sequencing, layout, and presentation logic in classes that never reference raylib, so they are tested headlessly like the rest.
 - **All randomness goes through an injectable `IRandomSource`.** That makes every roll reproducible with `--seed` and exactly testable.
 - **Content is validated at startup.** Broken references, typos, and bad dice expressions are all reported at once, and the same validation runs in the test suite.
 
@@ -100,6 +116,7 @@ RpgEngine.slnx
 Data/                   Game content (JSON): Rules/, World/, Rooms/, Dialogues/, Items/, Bestiary/, game.json
 src/RpgEngine.Core/     Engine: dice, characters, checks, world state, content, combat, persistence
 src/RpgEngine.CLI/      Terminal UI and game loop
+src/RpgEngine.Pixel/    Pixel-art desktop client (raylib): headless game model, sequencer, renderers
 tests/RpgEngine.Tests/  Unit, content-validation, and playthrough tests
 .github/workflows/      CI: build and test on every push and pull request
 CLAUDE.md               Contributor guide: coding standards, JSON schemas, Git workflow
@@ -118,6 +135,14 @@ dotnet run --project src/RpgEngine.CLI
 ```
 
 Useful flags (after `--`): `--seed <n>` for a reproducible run, `--no-anim` to skip dice animations, `--data <dir>` for an alternate content folder, `--saves <dir>` for an alternate save folder, `--help` for a summary. If the content in `Data/` has problems, the game lists every one of them and exits with code 1.
+
+For the pixel-art client:
+
+```bash
+dotnet run --project src/RpgEngine.Pixel
+```
+
+It opens a resizable 1280 by 720 window (`F11` for borderless fullscreen) and takes the same `--seed`, `--data`, and `--saves` flags, plus `--crt` to start with the scanline overlay on. Click a button, press `1`-`9`, or type commands in the line at the bottom; `Tab` cycles the HUD tabs, `Enter` skips the typewriter, `Esc` goes back, `F2` toggles the CRT, and `F3` switches between whole-pixel and aspect-fit scaling. Both clients read `Data/` next to their executable and save to `./Saves`, so a game saved in one can be continued in the other.
 
 ## How to play
 
@@ -170,12 +195,13 @@ dotnet test
 dotnet test --collect:"XPlat Code Coverage"
 ```
 
-There are about 890 tests, all deterministic:
+There are about 980 tests, all deterministic:
 - **Unit tests** for every Core system. The dice and skill-check code has 100% line and branch coverage.
 - **Content validation** of the shipped `Data/`, plus fixtures that prove each validator rule catches what it should.
 - **Scenario tests** that play the prologue and all three acts through the engine with scripted dice (`FixedRandomSource`): merciful and violent runs through each act, ending at the Great Brazier, plus which epilogue each world state reaches.
 - **Reachability checks** that every room can be reached from the start and that only the choice at the Great Brazier ends the game.
 - **CLI playthroughs** that drive the real terminal UI with scripted keyboard input through Spectre.Console's `TestConsole`, including a full run from character creation through all three acts to the final epilogue.
+- **Pixel client tests** that drive the headless `PixelGame` (title, character creation, exploration, dialogue, combat with automatic enemy turns, saving and loading) without opening a window, check that `PresentationLoader` reads `presentation.json` forgivingly and that every shipped room, monster, and NPC has a fallback look, and step the `EventSequencer` through event queues, holds, cues, and skips.
 - **Balance checks** that play each boss fight 2,000 times per Calling with a simple scripted player (the Barrow Heart at level 1, Prelate Vaelen and Commander Silas at levels 2 and 3, and the First Architect at levels 3 and 4, with and without the ally blessings) and keep each win rate inside a band.
 
 Dice fairness is checked with fixed-seed chi-square tests.
@@ -198,6 +224,7 @@ Dice fairness is checked with fixed-seed chi-square tests.
 - [x] **Milestone 3: the Memory Warrens** (Act II): the Archive of Unkept Vows, the Iron Reliquary, and the Gate of the Twin Seals, with level-3 abilities for every Calling
 - [x] **Milestone 4: the Cradle of the First Architect** (Act III, version 1.0): the Stair of the Uncarved Skull, the Vigil of the Last Watch, the Nave of the Sundered Bell, and the Cradle, with level-4 capstones, ally blessings, and seven final epilogues
 - [x] **Tooling:** JSON Schema export for editor autocomplete in VS Code
+- [x] **Milestone 5: the pixel-art client** (`RpgEngine.Pixel`): a raylib desktop front end over the same engine and saves, with procedural scenes, weather, portraits, combat sprites, a typewriter log, and `Data/World/presentation.json` for per-room and per-figure looks
 - [ ] **Later:** multi-character parties, races, more dungeons, saving mid-combat
 
 ## Contributing
