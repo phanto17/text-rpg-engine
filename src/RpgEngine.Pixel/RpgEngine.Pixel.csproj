@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>RpgEngine.Pixel</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Raylib-cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RpgEngine.Core\RpgEngine.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="RpgEngine.Tests" />
+  </ItemGroup>
+
+  <!-- The same content copy as the CLI, so both clients read the same Data/ next to their executable. -->
+  <ItemGroup>
+    <None Include="..\..\Data\**\*" Exclude="..\..\Data\**\.gitkeep" LinkBase="Data" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

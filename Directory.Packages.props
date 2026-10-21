@@ -9,6 +9,10 @@
     <PackageVersion Include="Spectre.Console" Version="0.57.2" />
   </ItemGroup>
 
+  <ItemGroup Label="Pixel">
+    <PackageVersion Include="Raylib-cs" Version="8.1.0" />
+  </ItemGroup>
+
   <ItemGroup Label="Tests">
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />

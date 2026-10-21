@@ -15,5 +15,7 @@ public sealed class ArchitectureTests
 
         Assert.DoesNotContain(references, name => name.StartsWith("Spectre.Console", StringComparison.Ordinal));
         Assert.DoesNotContain(references, name => name == "RpgEngine.CLI");
+        Assert.DoesNotContain(references, name => name.StartsWith("Raylib", StringComparison.Ordinal));
+        Assert.DoesNotContain(references, name => name == "RpgEngine.Pixel");
     }
 }

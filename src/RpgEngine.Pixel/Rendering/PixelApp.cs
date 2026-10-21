@@ -1,0 +1,323 @@
+using System.Numerics;
+using Raylib_cs;
+using RpgEngine.Core.Engine;
+using RpgEngine.Pixel.Game;
+using RpgEngine.Pixel.Layout;
+using RpgEngine.Pixel.Presentation;
+using RpgEngine.Pixel.Sequencing;
+
+namespace RpgEngine.Pixel.Rendering;
+
+/// <summary>
+/// The window: a 480 by 270 render texture scaled up with point filtering into a resizable window,
+/// the four panels drawn onto it every frame, and keyboard and mouse input routed to the headless
+/// <see cref="PixelGame"/>.
+/// </summary>
+internal sealed class PixelApp : IDisposable
+{
+    private const int DefaultWidth = 1280;
+    private const int DefaultHeight = 720;
+
+    private readonly PixelGame _game;
+    private readonly PresentationCatalog _catalog;
+    private readonly TextureCache _textures;
+    private readonly SceneRenderer _scene = new(PixelLayout.Scene);
+    private readonly CombatStage _stage = new(PixelLayout.Scene);
+    private readonly PortraitBox _portrait = new();
+    private readonly DiceBanner _dice = new();
+    private readonly HudRenderer _hud = new(PixelLayout.Hud);
+    private readonly LogRenderer _log = new(PixelLayout.Log);
+    private readonly ActionBarRenderer _actions = new();
+    private readonly Queue<string> _script;
+    private readonly string? _screenshot;
+    private bool _crt;
+    private bool _integerScale = true;
+    private double _roomFade;
+    private double _time;
+    private int _frame;
+    private bool _done;
+    private RenderTexture2D _canvas;
+    private bool _open;
+
+    public PixelApp(PixelGame game, PresentationCatalog catalog, string dataDirectory, bool crt, IReadOnlyList<string>? script = null, string? screenshot = null)
+    {
+        ArgumentNullException.ThrowIfNull(game);
+        ArgumentNullException.ThrowIfNull(catalog);
+        _game = game;
+        _catalog = catalog;
+        _textures = new TextureCache(dataDirectory);
+        _crt = crt;
+        _script = new Queue<string>(script ?? []);
+        _screenshot = screenshot;
+    }
+
+    public void Run()
+    {
+        Raylib.SetTraceLogLevel(TraceLogLevel.Warning);
+        Raylib.SetConfigFlags(ConfigFlags.ResizableWindow | ConfigFlags.VSyncHint);
+        Raylib.InitWindow(DefaultWidth, DefaultHeight, _game.Content.Manifest.Title);
+        Raylib.SetWindowMinSize(PixelLayout.Width, PixelLayout.Height);
+        Raylib.SetExitKey(KeyboardKey.Null);
+        Raylib.SetTargetFPS(60);
+        _open = true;
+        _canvas = Raylib.LoadRenderTexture(PixelLayout.Width, PixelLayout.Height);
+        Raylib.SetTextureFilter(_canvas.Texture, TextureFilter.Point);
+
+        while (!Raylib.WindowShouldClose() && !_game.WantsQuit && !_done)
+        {
+            var dt = Math.Min(0.1, Raylib.GetFrameTime());
+            _time += dt;
+            _frame++;
+            PlayScript();
+            var viewport = ViewportFit.Fit(Raylib.GetScreenWidth(), Raylib.GetScreenHeight(), _integerScale);
+            var mouse = Raylib.GetMousePosition();
+            var (mx, my) = ViewportFit.ToCanvas(viewport, mouse.X, mouse.Y);
+
+            HandleInput(mx, my);
+            _game.Update(dt);
+            foreach (var cue in _game.Sequencer.TakeCues())
+            {
+                Apply(cue);
+            }
+
+            SyncVisuals(dt);
+
+            Raylib.BeginTextureMode(_canvas);
+            Raylib.ClearBackground(Palette.PanelBack);
+            DrawCanvas(dt, mx, my);
+            Raylib.EndTextureMode();
+
+            Raylib.BeginDrawing();
+            Raylib.ClearBackground(Palette.Letterbox);
+            Raylib.DrawTexturePro(
+                _canvas.Texture,
+                new Rectangle(0, 0, PixelLayout.Width, -PixelLayout.Height),
+                new Rectangle(viewport.X, viewport.Y, viewport.Width, viewport.Height),
+                Vector2.Zero,
+                0,
+                Color.White);
+            if (_crt)
+            {
+                CrtOverlay.Draw(viewport);
+            }
+
+            Raylib.EndDrawing();
+        }
+    }
+
+    // The contributor screenshot mode: type one scripted line every dozen frames with the typewriter
+    // skipped, then save the canvas (scaled twice, so it is easy to look at) and close.
+    private void PlayScript()
+    {
+        if (_screenshot is null)
+        {
+            return;
+        }
+
+        if (_frame % 12 == 0 && _script.TryDequeue(out var line))
+        {
+            _game.Sequencer.Skip();
+            _game.Submit(line);
+            return;
+        }
+
+        if (_script.Count == 0 && _frame % 12 == 0 && _game.Sequencer.IsIdle && _frame > 24)
+        {
+            var image = Raylib.LoadImageFromTexture(_canvas.Texture);
+            Raylib.ImageFlipVertical(ref image);
+            Raylib.ImageResizeNN(ref image, PixelLayout.Width * 2, PixelLayout.Height * 2);
+            Raylib.ExportImage(image, _screenshot);
+            Raylib.UnloadImage(image);
+            _done = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        if (!_open)
+        {
+            return;
+        }
+
+        _textures.Dispose();
+        Raylib.UnloadRenderTexture(_canvas);
+        Raylib.CloseWindow();
+        _open = false;
+    }
+
+    private void HandleInput(int mx, int my)
+    {
+        for (var key = Raylib.GetCharPressed(); key > 0; key = Raylib.GetCharPressed())
+        {
+            var c = (char)key;
+            if (_game.Input.Length == 0 && !_game.InputIsName && c is >= '1' and <= '9')
+            {
+                _game.Pick(c - '1');
+            }
+            else
+            {
+                _game.Type(c);
+            }
+        }
+
+        if (Raylib.IsKeyPressed(KeyboardKey.Enter) || Raylib.IsKeyPressed(KeyboardKey.KpEnter))
+        {
+            _game.SubmitInput();
+        }
+
+        if (Raylib.IsKeyPressed(KeyboardKey.Backspace) || Raylib.IsKeyPressedRepeat(KeyboardKey.Backspace))
+        {
+            _game.Backspace();
+        }
+
+        if (Raylib.IsKeyPressed(KeyboardKey.Escape))
+        {
+            if (_game.Input.Length > 0)
+            {
+                while (_game.Input.Length > 0)
+                {
+                    _game.Backspace();
+                }
+            }
+            else
+            {
+                _game.Back();
+            }
+        }
+
+        if (Raylib.IsKeyPressed(KeyboardKey.Tab))
+        {
+            _game.Tab = (HudTab)(((int)_game.Tab + 1) % 4);
+        }
+
+        if (Raylib.IsKeyPressed(KeyboardKey.F2))
+        {
+            _crt = !_crt;
+        }
+
+        if (Raylib.IsKeyPressed(KeyboardKey.F3))
+        {
+            _integerScale = !_integerScale;
+        }
+
+        if (Raylib.IsKeyPressed(KeyboardKey.F11))
+        {
+            Raylib.ToggleBorderlessWindowed();
+        }
+
+        if (Raylib.IsKeyPressed(KeyboardKey.PageUp))
+        {
+            _log.Scroll(3);
+        }
+
+        if (Raylib.IsKeyPressed(KeyboardKey.PageDown))
+        {
+            _log.Scroll(-3);
+        }
+
+        var wheel = Raylib.GetMouseWheelMove();
+        if (wheel != 0 && PixelLayout.Log.Contains(mx, my))
+        {
+            _log.Scroll(wheel > 0 ? 2 : -2);
+        }
+
+        if (Raylib.IsMouseButtonPressed(MouseButton.Left))
+        {
+            if (_actions.Hit(mx, my) is { } index)
+            {
+                _game.Pick(index);
+            }
+            else if (PixelLayout.Hud.Contains(mx, my))
+            {
+                if (_hud.Click(_game, mx, my) is { } command)
+                {
+                    _game.Submit(command);
+                }
+            }
+            else if (PixelLayout.Log.Contains(mx, my) || PixelLayout.Scene.Contains(mx, my))
+            {
+                if (!_game.Sequencer.IsIdle)
+                {
+                    _game.Sequencer.Skip();
+                }
+            }
+        }
+    }
+
+    private void Apply(SequenceCue cue)
+    {
+        switch (cue)
+        {
+            case DiceBannerCue dice:
+                _dice.Play(dice);
+                break;
+            case RoomCue:
+                _roomFade = 0.5;
+                break;
+            case SpeakerCue speaker when _game.Session is { Dialogue: { } dialogue } session:
+                var npcId = _catalog.SpeakerOf(dialogue.Dialogue.Id, session.State.CurrentRoomId);
+                _portrait.Show(speaker.Speaker, _catalog.Npc(npcId));
+                break;
+            case SpeakerCue speaker when _game.Session is { Shop: { } shop }:
+                _portrait.Show(speaker.Speaker, _catalog.Npc(shop.Shop.Id));
+                break;
+            default:
+                _stage.Apply(cue);
+                break;
+        }
+    }
+
+    private void SyncVisuals(double dt)
+    {
+        var session = _game.Session;
+        _stage.Sync(session?.Combat, _catalog);
+        if (session is null || session.Mode is not (GameMode.Dialogue or GameMode.Shop))
+        {
+            _portrait.Hide();
+        }
+
+        var roomId = session?.State.CurrentRoomId ?? _game.Content.Manifest.StartRoom;
+        _scene.Update(_catalog.Room(roomId).Weather, dt);
+        _stage.Update(dt);
+        _portrait.Update(dt);
+        _dice.Update(dt);
+        _roomFade = Math.Max(0, _roomFade - dt);
+    }
+
+    private void DrawCanvas(double dt, int mx, int my)
+    {
+        var session = _game.Session;
+        var roomId = session?.State.CurrentRoomId ?? _game.Content.Manifest.StartRoom;
+        var world = session?.State.World;
+        var frame = new SceneFrame(
+            _catalog.Room(roomId),
+            roomId,
+            _time,
+            world?.GetCounter(LanternLight.ResonanceCounter) ?? 0,
+            world?.GetCounter("sigil_seq") ?? 0,
+            session?.State.Player.Inventory.Contains("barrowlight") ?? false,
+            session?.State.Player.Inventory.Contains("sun_triad_seal") ?? false,
+            session?.State.Player.Inventory.Contains("moon_triad_seal") ?? false,
+            world?.Flags.Any(f => f.Contains("bell", StringComparison.Ordinal) && (f.Contains("fit", StringComparison.Ordinal) || f.Contains("mend", StringComparison.Ordinal) || f.Contains("tuned", StringComparison.Ordinal))) ?? false,
+            world?.Flags.Any(f => f.StartsWith("ending_", StringComparison.Ordinal)) ?? false);
+
+        _scene.Draw(frame, _textures);
+        _stage.Draw(_textures);
+        _portrait.Draw(PixelLayout.Scene, _textures);
+        if (_roomFade > 0)
+        {
+            Canvas.Fill(PixelLayout.Scene, Palette.Alpha(Color.Black, (int)(255 * Math.Min(1, _roomFade / 0.5))));
+        }
+
+        var roomName = session is not null ? session.Content.Rooms[roomId].Name : _game.Content.Manifest.Title;
+        var label = Canvas.Ellipsize(roomName, PixelLayout.Scene.Width - 12);
+        Canvas.Fill(new PixelRect(PixelLayout.Scene.X + 3, PixelLayout.Scene.Y + 3, Canvas.Width(label) + 6, 11), Palette.Alpha(Palette.PanelBack, 170));
+        Canvas.Text(PixelLayout.Scene.X + 6, PixelLayout.Scene.Y + 3, label, Palette.Title);
+        _dice.Draw(PixelLayout.Scene);
+        Canvas.Frame(PixelLayout.Scene, Palette.PanelEdge);
+
+        _hud.Draw(_game, dt, _time);
+        _log.Draw(_game.Sequencer, _time);
+        _actions.Draw(_game, mx, my, _time);
+    }
+}

@@ -2,6 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/RpgEngine.CLI/RpgEngine.CLI.csproj" />
     <Project Path="src/RpgEngine.Core/RpgEngine.Core.csproj" />
+    <Project Path="src/RpgEngine.Pixel/RpgEngine.Pixel.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/RpgEngine.Tests/RpgEngine.Tests.csproj" />

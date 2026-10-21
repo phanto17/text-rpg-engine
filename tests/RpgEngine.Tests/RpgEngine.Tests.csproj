@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\RpgEngine.Core\RpgEngine.Core.csproj" />
     <ProjectReference Include="..\..\src\RpgEngine.CLI\RpgEngine.CLI.csproj" />
+    <ProjectReference Include="..\..\src\RpgEngine.Pixel\RpgEngine.Pixel.csproj" />
   </ItemGroup>
 
   <!-- Real game content is copied in so tests can validate it. -->
