@@ -45,6 +45,7 @@ public sealed class PresentationCatalog
                 Architecture = PixelColor.TryParse(def.Palette?.Architecture) ?? look.Architecture,
                 Accent = PixelColor.TryParse(def.Palette?.Accent) ?? look.Accent,
                 BackdropImage = def.BackdropImage ?? look.BackdropImage,
+                Caption = def.MoodCaption ?? look.Caption,
             };
         }
 
@@ -76,7 +77,10 @@ public sealed class PresentationCatalog
         return _monsters[monsterId] = look;
     }
 
-    /// <summary>The look for an NPC id; a dialogue id is accepted too, for speakers met only through a conversation.</summary>
+    /// <summary>
+    /// The look for an NPC id. A dialogue id is accepted too, and a presentation entry may be keyed
+    /// by either: the NPC's own id wins, then the id of the dialogue it speaks.
+    /// </summary>
     public FigureLook Npc(string npcId)
     {
         ArgumentNullException.ThrowIfNull(npcId);
@@ -85,10 +89,10 @@ public sealed class PresentationCatalog
             return cached;
         }
 
-        var name = _content.RoomList.SelectMany(r => r.Npcs).FirstOrDefault(n => n.Id == npcId)?.Name
-            ?? (_content.Dialogues.TryGetValue(npcId, out var dialogue) ? dialogue.Speaker : npcId);
+        var npc = _content.RoomList.SelectMany(r => r.Npcs).FirstOrDefault(n => n.Id == npcId);
+        var name = npc?.Name ?? (_content.Dialogues.TryGetValue(npcId, out var dialogue) ? dialogue.Speaker : npcId);
         var look = PresentationDefaults.Npcs.TryGetValue(npcId, out var known) ? known : PresentationDefaults.GuessNpc(npcId, name);
-        if (_presentation.Npcs.TryGetValue(npcId, out var def))
+        if (_presentation.Npcs.TryGetValue(npcId, out var def) || (npc is not null && _presentation.Npcs.TryGetValue(npc.Dialogue, out def)))
         {
             look = look with
             {
@@ -97,10 +101,34 @@ public sealed class PresentationCatalog
                 Accent = PixelColor.TryParse(def.AccentColor) ?? look.Accent,
                 Title = def.Title ?? look.Title,
                 Image = def.PortraitImage ?? look.Image,
+                SpeakerName = def.SpeakerName ?? look.SpeakerName,
             };
         }
 
         return _npcs[npcId] = look;
+    }
+
+    /// <summary>
+    /// Who is speaking a line, as an NPC id: the owner of <paramref name="dialogueId"/> when the line
+    /// is part of a conversation, otherwise (a shop keeper's greeting) the NPC whose name or
+    /// presentation <c>speakerName</c> is <paramref name="speaker"/>, preferring one in
+    /// <paramref name="roomId"/>. Falls back to the dialogue id, then the speaker's name itself.
+    /// </summary>
+    public string SpeakerId(string speaker, string? dialogueId, string roomId)
+    {
+        ArgumentNullException.ThrowIfNull(speaker);
+        ArgumentNullException.ThrowIfNull(roomId);
+        if (dialogueId is not null)
+        {
+            return SpeakerOf(dialogueId, roomId);
+        }
+
+        bool Named(NpcDef npc) =>
+            string.Equals(npc.Name, speaker, StringComparison.Ordinal)
+            || string.Equals(Npc(npc.Id).SpeakerName, speaker, StringComparison.Ordinal);
+
+        var here = _content.Rooms.TryGetValue(roomId, out var room) ? room.Npcs.FirstOrDefault(Named) : null;
+        return (here ?? _content.RoomList.SelectMany(r => r.Npcs).FirstOrDefault(Named))?.Id ?? speaker;
     }
 
     /// <summary>

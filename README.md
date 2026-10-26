@@ -24,7 +24,7 @@ The engine is **purely data-driven**. Every room, item, monster, line of dialogu
   - a character HUD with eased HP, MP, and XP bars and Inventory, Quests, Stats, and Exits (compass) tabs
   - a typewriter event log with colored roll badges and a d20 banner on every check, attack, and saving throw
   - the same hybrid input: click a button, press `1`-`9`, or type the classic commands
-  - looks come from an optional `Data/World/presentation.json` (palettes, scene styles, weather, emblems, pictures), with built-in defaults for everything
+  - looks come from `Data/World/presentation.json` (palettes, scene styles, weather, emblems, mood captions, speaker names, pictures), with built-in defaults for anything it leaves out
 - **Save/Load** to JSON in `Saves/`, shared by both clients.
 
 ## The adventure: *Barrowlight*

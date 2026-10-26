@@ -7,7 +7,10 @@ namespace RpgEngine.Core.Content.Defs;
 // the engine itself never reads them, so every field is optional and a client falls back to its
 // own defaults for anything missing.
 
-/// <summary><c>Data/World/presentation.json</c>: optional looks for a graphical client, keyed by room, monster, and NPC id.</summary>
+/// <summary>
+/// <c>Data/World/presentation.json</c>: optional looks for a graphical client, keyed by room id,
+/// monster id, and NPC id (or the id of the dialogue the NPC speaks).
+/// </summary>
 public sealed record PresentationDef
 {
     public IReadOnlyDictionary<string, RoomPresentationDef> Rooms { get; init; } = new Dictionary<string, RoomPresentationDef>(StringComparer.Ordinal);
@@ -39,6 +42,9 @@ public sealed record RoomPresentationDef
 
     /// <summary>A picture to draw instead of the procedural scene, relative to <c>Data/</c> (for example <c>Assets/lichgate.png</c>).</summary>
     public string? BackdropImage { get; init; }
+
+    /// <summary>A one-line caption shown over the scene for a few seconds after the player enters.</summary>
+    public string? MoodCaption { get; init; }
 }
 
 public sealed record MonsterPresentationDef
@@ -58,6 +64,12 @@ public sealed record MonsterPresentationDef
 
 public sealed record NpcPresentationDef
 {
+    /// <summary>
+    /// The name under the portrait, and the name a speaker without a dialogue of their own (a shop
+    /// keeper) is matched by. Defaults to the NPC's name.
+    /// </summary>
+    public string? SpeakerName { get; init; }
+
     public string? PrimaryColor { get; init; }
 
     public string? AccentColor { get; init; }

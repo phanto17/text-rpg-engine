@@ -57,13 +57,14 @@ public sealed class PresentationLoaderTests
                   "sceneStyle": "moor_gate",
                   "weather": "rain",
                   "backdropImage": "Assets/lichgate.png",
+                  "moodCaption": "Rain on the moor.",
                 },
               },
               "monsters": {
                 "gravebound_knight": { "primaryColor": "#6a6f78", "accentColor": "#c04040", "emblem": "knight_helm", "title": "Warden of the Barrow Heart", "spriteImage": "Assets/knight.png" }
               },
               "npcs": {
-                "wren": { "emblem": "lantern_nun", "title": "Sister of the Lantern Bearers", "portraitImage": "Assets/wren.png" }
+                "wren": { "speakerName": "Sister Wren", "emblem": "lantern_nun", "title": "Sister of the Lantern Bearers", "portraitImage": "Assets/wren.png" }
               }
             }
             """;
@@ -72,12 +73,12 @@ public sealed class PresentationLoaderTests
 
         Assert.Empty(result.Warnings);
         var room = result.Presentation.Rooms["lichgate"];
-        Assert.Equal((SceneStyle.MoorGate, WeatherKind.Rain, "Assets/lichgate.png"), (room.SceneStyle, room.Weather, room.BackdropImage));
+        Assert.Equal((SceneStyle.MoorGate, WeatherKind.Rain, "Assets/lichgate.png", "Rain on the moor."), (room.SceneStyle, room.Weather, room.BackdropImage, room.MoodCaption));
         Assert.Equal(("#101820", "#304050", "#222", "#7fa6b8ff"), (room.Palette!.BackgroundTop, room.Palette.BackgroundBottom, room.Palette.Architecture, room.Palette.Accent));
         var knight = result.Presentation.Monsters["gravebound_knight"];
         Assert.Equal((Emblem.KnightHelm, "#6a6f78", "#c04040", "Warden of the Barrow Heart", "Assets/knight.png"), (knight.Emblem, knight.PrimaryColor, knight.AccentColor, knight.Title, knight.SpriteImage));
         var wren = result.Presentation.Npcs["wren"];
-        Assert.Equal((Emblem.LanternNun, "Sister of the Lantern Bearers", "Assets/wren.png"), (wren.Emblem, wren.Title, wren.PortraitImage));
+        Assert.Equal(("Sister Wren", Emblem.LanternNun, "Sister of the Lantern Bearers", "Assets/wren.png"), (wren.SpeakerName, wren.Emblem, wren.Title, wren.PortraitImage));
         Assert.Null(wren.PrimaryColor);
     }
 
@@ -134,6 +135,39 @@ public sealed class PresentationLoaderTests
         Assert.Contains(result.Warnings, w => w.Contains("rooms.inner_crypt.palette", StringComparison.Ordinal));
         Assert.Contains(result.Warnings, w => w.Contains("'monsters' must be an object", StringComparison.Ordinal));
         Assert.Contains(result.Warnings, w => w.Contains("npcs.wren.emblem", StringComparison.Ordinal));
+        Assert.Contains(result.Warnings, w => w.Contains("'rooms.lichgate.mood' is not a presentation property", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void Parse_ReportsUnknownProperties_AtEveryLevel()
+    {
+        const string json = """
+            {
+              "items": {},
+              "rooms": { "lichgate": { "palette": { "accent": "#fff", "glow": "#000" }, "sceneStlye": "moor_gate" } },
+              "monsters": { "rat": { "emblem": "thrall_skull", "portrait": "x.png" } },
+              "npcs": [ { "id": "wren", "speaker": "Wren" } ]
+            }
+            """;
+
+        var result = PresentationLoader.Parse(json);
+
+        string[] expected = ["items", "monsters.rat.portrait", "npcs.wren.speaker", "rooms.lichgate.palette.glow", "rooms.lichgate.sceneStlye"];
+        Assert.Equal(expected, result.Warnings.Select(PropertyIn).Order(StringComparer.Ordinal));
+        Assert.All(result.Warnings, w => Assert.EndsWith("is not a presentation property and was ignored.", w, StringComparison.Ordinal));
+
+        // The rest of each entry still loads.
+        Assert.Equal("#fff", result.Presentation.Rooms["lichgate"].Palette!.Accent);
+        Assert.Null(result.Presentation.Rooms["lichgate"].SceneStyle);
+        Assert.Equal(Emblem.ThrallSkull, result.Presentation.Monsters["rat"].Emblem);
+        Assert.True(result.Presentation.Npcs.ContainsKey("wren"));
+    }
+
+    // The quoted path in a warning: "World/presentation.json: 'rooms.x.y' is not ..." -> "rooms.x.y".
+    private static string PropertyIn(string warning)
+    {
+        var start = warning.IndexOf('\'', StringComparison.Ordinal) + 1;
+        return warning[start..warning.IndexOf('\'', start)];
     }
 
     [Theory]

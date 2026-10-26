@@ -1,6 +1,7 @@
 using RpgEngine.Core.Characters;
 using RpgEngine.Core.Content;
 using RpgEngine.Core.Content.Defs;
+using RpgEngine.Pixel.Presentation;
 
 namespace RpgEngine.Tests.Content;
 
@@ -463,5 +464,54 @@ public sealed class RealDataTests
 
         Assert.Equal(new[] { "sun", "moon", "skull" }, presses);
         Assert.Contains(door.Interactions, i => i.Effects.OfType<SetFlagEffect>().Any(e => e.Flag == "sigil_door_open"));
+    }
+
+    [Fact]
+    public void ShippedPresentation_LoadsWithoutWarnings_AndMatchesTheSchemaRecords()
+    {
+        var result = PresentationLoader.Load(DataDirectory);
+
+        Assert.True(result.FileFound);
+        Assert.Empty(result.Warnings);
+
+        // The strict content options reject unknown properties and enum names, as the schema does.
+        var json = File.ReadAllText(Path.Combine(DataDirectory, "World", "presentation.json"));
+        var strict = System.Text.Json.JsonSerializer.Deserialize<PresentationDef>(json, ContentJson.Options)!;
+        Assert.Equal(result.Presentation.Rooms.Keys.Order(), strict.Rooms.Keys.Order());
+        Assert.Equal(result.Presentation.Monsters.Keys.Order(), strict.Monsters.Keys.Order());
+        Assert.Equal(result.Presentation.Npcs.Keys.Order(), strict.Npcs.Keys.Order());
+    }
+
+    [Fact]
+    public void ShippedPresentation_CoversEveryRoomMonsterAndDialogue()
+    {
+        var content = Content.Value;
+        var presentation = PresentationLoader.Load(DataDirectory).Presentation;
+        var npcs = content.RoomList.SelectMany(room => room.Npcs).ToList();
+
+        Assert.Equal(content.Rooms.Keys.Order(), presentation.Rooms.Keys.Order());
+        Assert.Equal(content.Monsters.Keys.Order(), presentation.Monsters.Keys.Order());
+
+        // NPC entries are keyed by NPC id or by the dialogue the NPC speaks; every dialogue is covered once.
+        var dialogueOf = presentation.Npcs.Keys.ToDictionary(
+            key => key,
+            key => content.Dialogues.ContainsKey(key) ? key : npcs.FirstOrDefault(n => n.Id == key)?.Dialogue);
+        Assert.All(dialogueOf, pair => Assert.True(pair.Value is not null, $"presentation npc '{pair.Key}' is neither a dialogue nor an NPC"));
+        Assert.Equal(content.Dialogues.Keys.Order(), dialogueOf.Values.Order());
+
+        Assert.All(presentation.Rooms, pair =>
+        {
+            var room = pair.Value;
+            Assert.NotNull(room.SceneStyle);
+            Assert.NotNull(room.Weather);
+            Assert.NotNull(room.MoodCaption);
+            Assert.All(new[] { room.Palette?.BackgroundTop, room.Palette?.BackgroundBottom, room.Palette?.Architecture, room.Palette?.Accent }, Assert.NotNull);
+        });
+        Assert.Equal(presentation.Rooms.Count, presentation.Rooms.Values.Select(r => r.SceneStyle).Distinct().Count());
+        Assert.All(presentation.Monsters.Values, monster => Assert.NotNull(monster.Emblem));
+
+        // The name under a portrait matches the speaker named in the log.
+        Assert.All(dialogueOf, pair => Assert.Equal(content.Dialogues[pair.Value!].Speaker, presentation.Npcs[pair.Key].SpeakerName));
+        Assert.All(presentation.Npcs.Values, npc => Assert.NotNull(npc.Emblem));
     }
 }

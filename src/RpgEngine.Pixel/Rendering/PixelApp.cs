@@ -25,6 +25,7 @@ internal sealed class PixelApp : IDisposable
     private readonly CombatStage _stage = new(PixelLayout.Scene);
     private readonly PortraitBox _portrait = new();
     private readonly DiceBanner _dice = new();
+    private readonly MoodCaption _caption = new();
     private readonly HudRenderer _hud = new(PixelLayout.Hud);
     private readonly LogRenderer _log = new(PixelLayout.Log);
     private readonly ActionBarRenderer _actions = new();
@@ -251,15 +252,14 @@ internal sealed class PixelApp : IDisposable
             case DiceBannerCue dice:
                 _dice.Play(dice);
                 break;
-            case RoomCue:
+            case RoomCue room:
                 _roomFade = 0.5;
+                _caption.Show(_catalog.Room(room.RoomId).Caption);
                 break;
-            case SpeakerCue speaker when _game.Session is { Dialogue: { } dialogue } session:
-                var npcId = _catalog.SpeakerOf(dialogue.Dialogue.Id, session.State.CurrentRoomId);
-                _portrait.Show(speaker.Speaker, _catalog.Npc(npcId));
-                break;
-            case SpeakerCue speaker when _game.Session is { Shop: { } shop }:
-                _portrait.Show(speaker.Speaker, _catalog.Npc(shop.Shop.Id));
+            case SpeakerCue speaker when _game.Session is { } session:
+                var npcId = _catalog.SpeakerId(speaker.Speaker, session.Dialogue?.Dialogue.Id, session.State.CurrentRoomId);
+                var look = _catalog.Npc(npcId);
+                _portrait.Show(look.SpeakerName ?? speaker.Speaker, look);
                 break;
             default:
                 _stage.Apply(cue);
@@ -281,6 +281,7 @@ internal sealed class PixelApp : IDisposable
         _stage.Update(dt);
         _portrait.Update(dt);
         _dice.Update(dt);
+        _caption.Update(dt);
         _roomFade = Math.Max(0, _roomFade - dt);
     }
 
@@ -313,6 +314,11 @@ internal sealed class PixelApp : IDisposable
         var label = Canvas.Ellipsize(roomName, PixelLayout.Scene.Width - 12);
         Canvas.Fill(new PixelRect(PixelLayout.Scene.X + 3, PixelLayout.Scene.Y + 3, Canvas.Width(label) + 6, 11), Palette.Alpha(Palette.PanelBack, 170));
         Canvas.Text(PixelLayout.Scene.X + 6, PixelLayout.Scene.Y + 3, label, Palette.Title);
+        if (!_dice.Active && !_stage.Active)
+        {
+            _caption.Draw(PixelLayout.Scene, Palette.Of(_catalog.Room(roomId).Accent));
+        }
+
         _dice.Draw(PixelLayout.Scene);
         Canvas.Frame(PixelLayout.Scene, Palette.PanelEdge);
 

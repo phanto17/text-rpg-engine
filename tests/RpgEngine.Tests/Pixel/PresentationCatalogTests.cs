@@ -89,6 +89,50 @@ public sealed class PresentationCatalogTests
     }
 
     [Fact]
+    public void NpcEntries_KeyedByDialogueId_ApplyToTheNpcWhoSpeaksIt()
+    {
+        var presentation = PresentationLoader.Parse("""
+            { "npcs": { "architect_post": { "speakerName": "Aurelius", "emblem": "scribe" } },
+              "rooms": { "lichgate": { "moodCaption": "Rain." } } }
+            """).Presentation;
+        var catalog = new PresentationCatalog(Content.Value, presentation);
+
+        Assert.Equal(("Aurelius", Emblem.Scribe), (catalog.Npc("reconciled_architect").SpeakerName, catalog.Npc("reconciled_architect").Emblem));
+        Assert.Equal("Rain.", catalog.Room("lichgate").Caption);
+        Assert.Null(catalog.Room("ossuary_hall").Caption);
+        Assert.Null(catalog.Npc("wren").SpeakerName);
+    }
+
+    [Fact]
+    public void SpeakerId_UsesTheDialogue_OrMatchesTheSpeakerByName()
+    {
+        var presentation = PresentationLoader.Parse("""{ "npcs": { "peddler": { "speakerName": "Sallow" } } }""").Presentation;
+        var catalog = new PresentationCatalog(Content.Value, presentation);
+
+        Assert.Equal("wren_cradle", catalog.SpeakerId("Sister Wren", "wren_cradle", "penitent_landing"));
+
+        // A shop greeting has no dialogue: the keeper is found by name, preferring the current room.
+        Assert.Equal("oakhaven", catalog.SpeakerId("Barrow-wright Oakhaven", null, "penitent_landing"));
+        Assert.Equal("wren_nocturne", catalog.SpeakerId("Sister Wren", null, "nocturne_square"));
+        Assert.Equal("peddler", catalog.SpeakerId("Sallow", null, "lichgate"));
+        Assert.Equal("A Stranger", catalog.SpeakerId("A Stranger", null, "lichgate"));
+    }
+
+    [Fact]
+    public void ShippedPresentation_RecolorsTheDefaults()
+    {
+        var shipped = PresentationLoader.Load(RealDataTests.DataDirectory).Presentation;
+        var catalog = new PresentationCatalog(Content.Value, shipped);
+
+        var lichgate = catalog.Room("lichgate");
+        Assert.Equal(PixelColor.Parse(shipped.Rooms["lichgate"].Palette!.Accent!), lichgate.Accent);
+        Assert.NotNull(lichgate.Caption);
+        Assert.All(Content.Value.RoomList, room => Assert.Equal(shipped.Rooms[room.Id].SceneStyle, catalog.Room(room.Id).Style));
+        Assert.All(Content.Value.RoomList.SelectMany(r => r.Npcs), npc => Assert.NotNull(catalog.Npc(npc.Id).SpeakerName));
+        Assert.Equal("Aurelius, the First Architect", catalog.Npc("reconciled_architect").SpeakerName);
+    }
+
+    [Fact]
     public void SpeakerOf_FindsTheNpcWhoOwnsTheDialogue()
     {
         var catalog = new PresentationCatalog(Content.Value);

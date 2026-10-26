@@ -67,7 +67,7 @@ Pixel layout (namespace = `RpgEngine.Pixel.<Folder>`). Everything outside `Rende
 - `Sequencing/`: `EventNarrator` turns each `GameEvent` into `LogLine`s (toned `LogSpan`s, with a `LogLineKind` for headings, rules, and quotes) and `SequenceCue`s (d20 banner, hit flash, lunge, floating number, fell, speaker, room, combat, level-up); `EventSequencer` plays those `Beat`s in order with a typewriter reveal, a hold before a dice verdict, `Skip`, and `TakeCues` for the renderer.
 - `Presentation/`: `PresentationLoader` reads `Data/World/presentation.json` forgivingly (missing file, unknown names, wrong shapes become warnings, never errors); `PresentationDefaults` holds a look for every shipped room, monster, and NPC plus keyword guesses for new ids; `PresentationCatalog` layers the file over the defaults and resolves `RoomLook`s and `FigureLook`s. `PixelColor` is the renderer-free color; `LanternLight` maps `lantern_resonance` to the Barrowlight's color temperature.
 - `Layout/`: `PixelLayout` (the 480 by 270 canvas and its four panels), `ViewportFit` (whole-pixel or aspect-fit scaling and mouse mapping), `TextWrapper`, `ButtonFlow`, `PixelRect`.
-- `Rendering/` (raylib): `PixelApp` (window, render texture, input routing), `SceneRenderer` and `SceneProps` (one procedural scene per `SceneStyle`), `WeatherField`, `Emblems` (procedural heraldry), `CombatStage`, `PortraitBox`, `DiceBanner`, `HudRenderer`, `LogRenderer`, `ActionBarRenderer`, `CrtOverlay`, `TextureCache` (pictures under `Data/`), `Palette`, `Canvas`.
+- `Rendering/` (raylib): `PixelApp` (window, render texture, input routing), `SceneRenderer` and `SceneProps` (one procedural scene per `SceneStyle`), `WeatherField`, `Emblems` (procedural heraldry), `CombatStage`, `PortraitBox`, `MoodCaption`, `DiceBanner`, `HudRenderer`, `LogRenderer`, `ActionBarRenderer`, `CrtOverlay`, `TextureCache` (pictures under `Data/`), `Palette`, `Canvas`.
 
 ---
 
@@ -229,17 +229,21 @@ Pixel layout (namespace = `RpgEngine.Pixel.<Folder>`). Everything outside `Rende
 ### `Data/World/`
 - **`factions.json`**: `{ "id": "ashen_order", "name": "The Ashen Order", "description": "..." }`
 - **`quests.json`**: `{ "id": "barrowlight", "name": "...", "stages": [ { "stage": 10, "journal": "..." } ] }`. Quest stages only move forward.
-- **`presentation.json`** (optional; read only by the pixel client, never by the engine): how rooms, monsters, and NPCs look, keyed by id. Every field is optional; the client has a default look for every shipped id and guesses one from the words in a new id. Unknown names and malformed entries are reported as warnings and skipped, never errors.
+- **`presentation.json`** (optional; read only by the pixel client, never by the engine): how rooms, monsters, and NPCs look. `rooms` is keyed by room id, `monsters` by monster id, and `npcs` by NPC id or by the id of the dialogue the NPC speaks (the shipped file uses dialogue ids, so `architect_post` styles `reconciled_architect`). Every field is optional; the client has a default look for every shipped id and guesses one from the words in a new id. Unknown properties, unknown names, and malformed entries are reported as warnings and skipped, never errors.
   ```json
   { "rooms": { "lichgate": { "palette": { "backgroundTop": "#1b2230", "backgroundBottom": "#3a4a52", "architecture": "#2a2f33", "accent": "#7fa6b8" },
-                             "sceneStyle": "moor_gate", "weather": "rain", "backdropImage": "Assets/lichgate.png" } },
-    "monsters": { "gravebound_knight": { "primaryColor": "#6a6f78", "accentColor": "#c04040", "emblem": "knight_helm", "title": "Warden of the Barrow Heart", "spriteImage": "Assets/knight.png" } },
-    "npcs": { "wren": { "primaryColor": "#404858", "accentColor": "#ffd080", "emblem": "lantern_nun", "title": "Sister of the Lantern Bearers", "portraitImage": "Assets/wren.png" } } }
+                             "sceneStyle": "moor_gate", "weather": "rain", "backdropImage": "Assets/Rooms/lichgate.png",
+                             "moodCaption": "Rain needles the iron gate and faceless stones above Greywater moor." } },
+    "monsters": { "gravebound_knight": { "primaryColor": "#6a6f78", "accentColor": "#c04040", "emblem": "knight_helm", "title": "Warden of the Barrow Heart", "spriteImage": "Assets/Monsters/gravebound_knight.png" } },
+    "npcs": { "wren": { "speakerName": "Sister Wren", "primaryColor": "#404858", "accentColor": "#ffd080", "emblem": "lantern_nun", "title": "Sister of the Lantern Bearers", "portraitImage": "Assets/Portraits/wren.png" } } }
   ```
+  - `moodCaption` fades in over the bottom of the scene for a few seconds when the player enters the room.
+  - `speakerName` is the name under the portrait, and how a speaker with no dialogue of their own (a shop keeper's greeting) is matched to an NPC. Keep it equal to the dialogue's `speaker`.
   - `sceneStyle`: `moor_gate ossuary_vault crypt_rotunda spiral_stair sunken_cathedral echo_chapel drowned_bridge twin_seal_gate archive_stacks tallow_loom vow_nursery scoured_barracks lye_cistern iron_bastion uncarved_stair sanctuary_landing sundered_bell_nave cradle_of_ash`.
   - `weather`: `none rain ash_motes spores memory_salt embers`.
   - `emblem`: `knight_helm thrall_skull choir_mask warden_halberd carillon_cradle iron_brazier architect_astrolabe lantern_nun scribe peddler keeper quartermaster monk wright lancer mournling chorister halberdier prelate commander hooded`.
-  - Colors are `#rgb`, `#rrggbb`, or `#rrggbbaa`. Picture paths are relative to `Data/` (for example `Assets/lichgate.png`); a missing picture falls back to the procedural scene or emblem. The sections may also be arrays of entries carrying an `id`.
+  - Colors are `#rgb`, `#rrggbb`, or `#rrggbbaa`. Picture paths are relative to `Data/` (for example `Assets/Rooms/lichgate.png`); a missing picture falls back to the procedural scene or emblem, which is what happens today, since no pictures ship yet. The sections may also be arrays of entries carrying an `id`.
+  - `RealDataTests` requires the shipped file to load with no warnings, to deserialize under the strict content options (so it matches the schema), and to cover every room, monster, and dialogue exactly once. A new room, monster, or dialogue therefore needs an entry here too.
   - The records live in `Content/Defs/PresentationDef.cs` (a closed family in one file, like the conditions) so the schema export covers the file; their enum members carry `JsonStringEnumMemberName` for the snake_case spellings above.
 - **`shops.json`** (optional): merchants opened by the `startShop` effect.
   ```json

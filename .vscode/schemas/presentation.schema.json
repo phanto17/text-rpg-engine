@@ -82,6 +82,12 @@
               "string",
               "null"
             ]
+          },
+          "moodCaption": {
+            "type": [
+              "string",
+              "null"
+            ]
           }
         },
         "additionalProperties": false
@@ -151,6 +157,12 @@
       "additionalProperties": {
         "type": "object",
         "properties": {
+          "speakerName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "primaryColor": {
             "type": [
               "string",

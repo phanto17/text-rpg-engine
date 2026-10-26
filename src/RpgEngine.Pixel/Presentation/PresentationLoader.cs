@@ -20,6 +20,12 @@ public static class PresentationLoader
     private static readonly IReadOnlyDictionary<string, WeatherKind> Weathers = EnumNames<WeatherKind>();
     private static readonly IReadOnlyDictionary<string, Emblem> Emblems = EnumNames<Emblem>();
 
+    // The property names the schema allows; "id" is accepted for the array form of a section.
+    private static readonly string[] RoomProperties = ["id", "palette", "sceneStyle", "weather", "backdropImage", "moodCaption"];
+    private static readonly string[] PaletteProperties = ["backgroundTop", "backgroundBottom", "architecture", "accent"];
+    private static readonly string[] MonsterProperties = ["id", "primaryColor", "accentColor", "emblem", "title", "spriteImage"];
+    private static readonly string[] NpcProperties = ["id", "speakerName", "primaryColor", "accentColor", "emblem", "title", "portraitImage"];
+
     public static PresentationLoadResult Load(string dataDirectory)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(dataDirectory);
@@ -62,30 +68,45 @@ public static class PresentationLoader
             return new PresentationLoadResult(new PresentationDef(), FileFound: false, [$"{RelativePath}: the file must hold a JSON object."]);
         }
 
+        Known(top, string.Empty, ["rooms", "monsters", "npcs"], warnings);
         var presentation = new PresentationDef
         {
-            Rooms = Entries(top, "rooms", warnings, (node, where) => new RoomPresentationDef
+            Rooms = Entries(top, "rooms", warnings, (node, where) =>
             {
-                Palette = Palette(node["palette"], where, warnings),
-                SceneStyle = Enum(node, "sceneStyle", SceneStyles, where, warnings),
-                Weather = Enum(node, "weather", Weathers, where, warnings),
-                BackdropImage = Text(node, "backdropImage"),
+                Known(node, where, RoomProperties, warnings);
+                return new RoomPresentationDef
+                {
+                    Palette = Palette(node["palette"], where, warnings),
+                    SceneStyle = Enum(node, "sceneStyle", SceneStyles, where, warnings),
+                    Weather = Enum(node, "weather", Weathers, where, warnings),
+                    BackdropImage = Text(node, "backdropImage"),
+                    MoodCaption = Text(node, "moodCaption"),
+                };
             }),
-            Monsters = Entries(top, "monsters", warnings, (node, where) => new MonsterPresentationDef
+            Monsters = Entries(top, "monsters", warnings, (node, where) =>
             {
-                PrimaryColor = Color(node, "primaryColor", where, warnings),
-                AccentColor = Color(node, "accentColor", where, warnings),
-                Emblem = Enum(node, "emblem", Emblems, where, warnings),
-                Title = Text(node, "title"),
-                SpriteImage = Text(node, "spriteImage"),
+                Known(node, where, MonsterProperties, warnings);
+                return new MonsterPresentationDef
+                {
+                    PrimaryColor = Color(node, "primaryColor", where, warnings),
+                    AccentColor = Color(node, "accentColor", where, warnings),
+                    Emblem = Enum(node, "emblem", Emblems, where, warnings),
+                    Title = Text(node, "title"),
+                    SpriteImage = Text(node, "spriteImage"),
+                };
             }),
-            Npcs = Entries(top, "npcs", warnings, (node, where) => new NpcPresentationDef
+            Npcs = Entries(top, "npcs", warnings, (node, where) =>
             {
-                PrimaryColor = Color(node, "primaryColor", where, warnings),
-                AccentColor = Color(node, "accentColor", where, warnings),
-                Emblem = Enum(node, "emblem", Emblems, where, warnings),
-                Title = Text(node, "title"),
-                PortraitImage = Text(node, "portraitImage"),
+                Known(node, where, NpcProperties, warnings);
+                return new NpcPresentationDef
+                {
+                    SpeakerName = Text(node, "speakerName"),
+                    PrimaryColor = Color(node, "primaryColor", where, warnings),
+                    AccentColor = Color(node, "accentColor", where, warnings),
+                    Emblem = Enum(node, "emblem", Emblems, where, warnings),
+                    Title = Text(node, "title"),
+                    PortraitImage = Text(node, "portraitImage"),
+                };
             }),
         };
 
@@ -153,6 +174,7 @@ public static class PresentationLoader
             return null;
         }
 
+        Known(palette, where + ".palette", PaletteProperties, warnings);
         return new PalettePresentationDef
         {
             BackgroundTop = Color(palette, "backgroundTop", where + ".palette", warnings),
@@ -160,6 +182,20 @@ public static class PresentationLoader
             Architecture = Color(palette, "architecture", where + ".palette", warnings),
             Accent = Color(palette, "accent", where + ".palette", warnings),
         };
+    }
+
+    // Unknown properties are ignored, as the client cannot use them, but reported: the schema rejects
+    // them, and a warning is how a misspelled field gets noticed.
+    private static void Known(JsonObject node, string where, IReadOnlyCollection<string> allowed, List<string> warnings)
+    {
+        foreach (var (property, _) in node)
+        {
+            if (!allowed.Contains(property))
+            {
+                var path = where.Length == 0 ? property : $"{where}.{property}";
+                warnings.Add($"{RelativePath}: '{path}' is not a presentation property and was ignored.");
+            }
+        }
     }
 
     private static string? Color(JsonObject node, string property, string where, List<string> warnings)
