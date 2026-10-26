@@ -13,7 +13,7 @@
       "moodCaption": "Rain needles the iron gate and faceless stones above Greywater moor."
     },
     "ossuary_hall": {
-      "sceneStyle": "crypt_vault",
+      "sceneStyle": "ossuary_vault",
       "weather": "ash_motes",
       "palette": {
         "backgroundTop": "#121016",
@@ -25,7 +25,7 @@
       "moodCaption": "Thousands of ash-marked skulls watch the green-black bronze door."
     },
     "inner_crypt": {
-      "sceneStyle": "barrow_heart",
+      "sceneStyle": "crypt_rotunda",
       "weather": "ash_motes",
       "palette": {
         "backgroundTop": "#161215",
@@ -49,7 +49,7 @@
       "moodCaption": "Bioluminescent ash-moss glimmers along the wet spiral into the Under-Barrow."
     },
     "nocturne_square": {
-      "sceneStyle": "lantern_market",
+      "sceneStyle": "sunken_cathedral",
       "weather": "spores",
       "palette": {
         "backgroundTop": "#111622",
@@ -61,7 +61,7 @@
       "moodCaption": "Tallow-lamps and sanctuary embers warm the sunken cathedral square of Nocturne."
     },
     "echo_chapel": {
-      "sceneStyle": "choir_chapel",
+      "sceneStyle": "echo_chapel",
       "weather": "ash_motes",
       "palette": {
         "backgroundTop": "#141324",
@@ -73,7 +73,7 @@
       "moodCaption": "Silver Choir-wires hum between brass music boxes and tethered spirit-jars."
     },
     "drowned_tollbridge": {
-      "sceneStyle": "canal_bridge",
+      "sceneStyle": "drowned_bridge",
       "weather": "rain",
       "palette": {
         "backgroundTop": "#0D1518",
@@ -97,7 +97,7 @@
       "moodCaption": "Two processional roads divide around the bronze floor-gate of the Twin Seals."
     },
     "whispering_stacks": {
-      "sceneStyle": "ledger_stacks",
+      "sceneStyle": "archive_stacks",
       "weather": "memory_salt",
       "palette": {
         "backgroundTop": "#161420",
@@ -109,7 +109,7 @@
       "moodCaption": "Silver threads tether translucent hands to thousands of wax-sealed ledgers."
     },
     "tallow_foundry": {
-      "sceneStyle": "spindle_foundry",
+      "sceneStyle": "tallow_loom",
       "weather": "spores",
       "palette": {
         "backgroundTop": "#141A22",
@@ -121,7 +121,7 @@
       "moodCaption": "Simmering vats of spore-wax feed the water-driven silver spindle loom."
     },
     "vow_sanctum": {
-      "sceneStyle": "carillon_rotunda",
+      "sceneStyle": "vow_nursery",
       "weather": "memory_salt",
       "palette": {
         "backgroundTop": "#181426",
@@ -133,7 +133,7 @@
       "moodCaption": "Hundreds of silver plumb-lines converge upon the gilded Carillon of Lira."
     },
     "scoured_cloister": {
-      "sceneStyle": "whitewash_barracks",
+      "sceneStyle": "scoured_barracks",
       "weather": "ash_motes",
       "palette": {
         "backgroundTop": "#1C1D21",
@@ -145,7 +145,7 @@
       "moodCaption": "Identical iron helms hang in stark silence above lye-scoured stone bunks."
     },
     "lye_cistern": {
-      "sceneStyle": "alkali_baptistery",
+      "sceneStyle": "lye_cistern",
       "weather": "embers",
       "palette": {
         "backgroundTop": "#191C1E",
@@ -157,7 +157,7 @@
       "moodCaption": "Caustic white alkali steams in the troughs where soldiers scrub away their names."
     },
     "reliquary_bastion": {
-      "sceneStyle": "furnace_bastion",
+      "sceneStyle": "iron_bastion",
       "weather": "embers",
       "palette": {
         "backgroundTop": "#211514",
@@ -169,7 +169,7 @@
       "moodCaption": "Melted lead memory-ingots ring the blazing grate of the Furnace of Remission."
     },
     "threshold_vestibule": {
-      "sceneStyle": "basalt_stair",
+      "sceneStyle": "uncarved_stair",
       "weather": "memory_salt",
       "palette": {
         "backgroundTop": "#0E0F14",
@@ -181,7 +181,7 @@
       "moodCaption": "Vitrified basalt steps descend past Triad reliefs where every Skull is plugged with lead."
     },
     "penitent_landing": {
-      "sceneStyle": "sanctuary_terrace",
+      "sceneStyle": "sanctuary_landing",
       "weather": "embers",
       "palette": {
         "backgroundTop": "#14131A",
@@ -205,7 +205,7 @@
       "moodCaption": "Split from lip to crown, the twenty-foot Great Vesper Bell hangs over a river of salt."
     },
     "cradle_of_ash": {
-      "sceneStyle": "great_brazier_cradle",
+      "sceneStyle": "cradle_of_ash",
       "weather": "embers",
       "palette": {
         "backgroundTop": "#120E16",
@@ -231,7 +231,7 @@
       "spriteImage": "Assets/Monsters/barrow_thrall.png"
     },
     "choir_cantor_miriel": {
-      "emblem": "choir_cantor",
+      "emblem": "choir_mask",
       "primaryColor": "#4E5482",
       "accentColor": "#96B8F2",
       "spriteImage": "Assets/Monsters/choir_cantor_miriel.png"
@@ -243,19 +243,19 @@
       "spriteImage": "Assets/Monsters/calcified_mournling.png"
     },
     "tollbridge_warden_garin": {
-      "emblem": "toll_warden",
+      "emblem": "warden_halberd",
       "primaryColor": "#3E565E",
       "accentColor": "#68B0AB",
       "spriteImage": "Assets/Monsters/tollbridge_warden_garin.png"
     },
     "drowned_lancer": {
-      "emblem": "drowned_lancer",
+      "emblem": "lancer",
       "primaryColor": "#2F444A",
       "accentColor": "#7CA6A2",
       "spriteImage": "Assets/Monsters/drowned_lancer.png"
     },
     "prelate_vaelen": {
-      "emblem": "prelate_carillon",
+      "emblem": "carillon_cradle",
       "primaryColor": "#634C8A",
       "accentColor": "#D2C2F0",
       "spriteImage": "Assets/Monsters/prelate_vaelen.png"
@@ -267,7 +267,7 @@
       "spriteImage": "Assets/Monsters/tethered_chorister.png"
     },
     "commander_silas": {
-      "emblem": "scoured_commander",
+      "emblem": "commander",
       "primaryColor": "#C8CCD4",
       "accentColor": "#F28C38",
       "spriteImage": "Assets/Monsters/commander_silas.png"
@@ -279,13 +279,13 @@
       "spriteImage": "Assets/Monsters/scoured_halberdier.png"
     },
     "first_architect": {
-      "emblem": "first_architect",
+      "emblem": "architect_astrolabe",
       "primaryColor": "#3E5852",
       "accentColor": "#F5B841",
       "spriteImage": "Assets/Monsters/first_architect.png"
     },
     "calcified_warden": {
-      "emblem": "calcified_warden",
+      "emblem": "iron_brazier",
       "primaryColor": "#6E7875",
       "accentColor": "#C89B4B",
       "spriteImage": "Assets/Monsters/calcified_warden.png"
@@ -301,14 +301,14 @@
     },
     "orin": {
       "speakerName": "Brother Orin",
-      "emblem": "blind_monk",
+      "emblem": "monk",
       "primaryColor": "#3E565E",
       "accentColor": "#5CE0C6",
       "portraitImage": "Assets/Portraits/orin.png"
     },
     "maeve": {
       "speakerName": "Keeper Maeve",
-      "emblem": "wayfarer_keeper",
+      "emblem": "keeper",
       "primaryColor": "#4A5670",
       "accentColor": "#F0B44C",
       "portraitImage": "Assets/Portraits/maeve.png"
@@ -329,21 +329,21 @@
     },
     "miriel": {
       "speakerName": "Cantor Miriel",
-      "emblem": "cantor",
+      "emblem": "choir_mask",
       "primaryColor": "#4E5482",
       "accentColor": "#96B8F2",
       "portraitImage": "Assets/Portraits/miriel.png"
     },
     "garin": {
       "speakerName": "Toll-Warden Garin",
-      "emblem": "warden",
+      "emblem": "warden_halberd",
       "primaryColor": "#3E565E",
       "accentColor": "#68B0AB",
       "portraitImage": "Assets/Portraits/garin.png"
     },
     "caelan": {
       "speakerName": "Archivist Caelan",
-      "emblem": "archivist",
+      "emblem": "scribe",
       "primaryColor": "#524A68",
       "accentColor": "#B8C8E8",
       "portraitImage": "Assets/Portraits/caelan.png"
@@ -357,7 +357,7 @@
     },
     "venn": {
       "speakerName": "Quartermaster Venn",
-      "emblem": "armorer",
+      "emblem": "quartermaster",
       "primaryColor": "#7E8490",
       "accentColor": "#B86B4B",
       "portraitImage": "Assets/Portraits/venn.png"
@@ -378,14 +378,14 @@
     },
     "oakhaven": {
       "speakerName": "Barrow-wright Oakhaven",
-      "emblem": "barrow_wright",
+      "emblem": "wright",
       "primaryColor": "#4E5A58",
       "accentColor": "#C89B4B",
       "portraitImage": "Assets/Portraits/oakhaven.png"
     },
     "architect_post": {
       "speakerName": "Aurelius, the First Architect",
-      "emblem": "architect",
+      "emblem": "architect_astrolabe",
       "primaryColor": "#3E5852",
       "accentColor": "#F5B841",
       "portraitImage": "Assets/Portraits/architect_post.png"
