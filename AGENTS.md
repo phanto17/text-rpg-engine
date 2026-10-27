@@ -238,7 +238,7 @@ Pixel layout (namespace = `RpgEngine.Pixel.<Folder>`). Everything outside `Rende
     "rooms": { "lichgate": { "palette": { "backgroundTop": "#1b2230", "backgroundBottom": "#3a4a52", "architecture": "#2a2f33", "accent": "#7fa6b8" },
                              "sceneStyle": "moor_gate", "weather": "rain", "backdropImage": "Assets/Rooms/lichgate.png",
                              "moodCaption": "Rain needles the iron gate and faceless stones above Greywater moor." } },
-    "monsters": { "gravebound_knight": { "primaryColor": "#6a6f78", "accentColor": "#c04040", "emblem": "knight_helm", "title": "Warden of the Barrow Heart", "spriteImage": "Assets/Monsters/gravebound_knight.png" } },
+    "monsters": { "gravebound_knight": { "primaryColor": "#6a6f78", "accentColor": "#c04040", "emblem": "knight_helm", "title": "Warden of the Barrow Heart", "spriteImage": "Assets/Monsters/gravebound_knight_idle.png", "animation": { "frames": 4, "frameMilliseconds": 200 } } },
     "npcs": { "wren": { "speakerName": "Sister Wren", "primaryColor": "#404858", "accentColor": "#ffd080", "emblem": "lantern_nun", "title": "Sister of the Lantern Bearers", "portraitImage": "Assets/Portraits/wren.png" } } }
   ```
   - `moodCaption` fades in over the bottom of the scene on room entry, remains visible through the room-description beat, then holds for two seconds and fades out. Skipping the beat starts the same hold.
@@ -247,7 +247,8 @@ Pixel layout (namespace = `RpgEngine.Pixel.<Folder>`). Everything outside `Rende
   - `sceneStyle`: `moor_gate ossuary_vault crypt_rotunda spiral_stair sunken_cathedral echo_chapel drowned_bridge twin_seal_gate archive_stacks tallow_loom vow_nursery scoured_barracks lye_cistern iron_bastion uncarved_stair sanctuary_landing sundered_bell_nave cradle_of_ash`.
   - `weather`: `none rain ash_motes spores memory_salt embers`.
   - `emblem`: `knight_helm thrall_skull choir_mask warden_halberd carillon_cradle iron_brazier architect_astrolabe lantern_nun scribe peddler keeper quartermaster monk wright lancer mournling chorister halberdier prelate commander hooded`.
-  - Colors are `#rgb`, `#rrggbb`, or `#rrggbbaa`. Picture paths are relative to `Data/` (for example `Assets/Rooms/lichgate.png`); a missing picture falls back to the procedural scene or emblem. Three pilot PNGs currently ship. The sections may also be arrays of entries carrying an `id`.
+  - Colors are `#rgb`, `#rrggbb`, or `#rrggbbaa`. Picture paths are relative to `Data/` (for example `Assets/Rooms/lichgate.png`); a missing picture falls back to the procedural scene or emblem. The sections may also be arrays of entries carrying an `id`.
+  - A monster `animation` is optional and applies to `spriteImage` as a horizontal equal-width sheet. `frames` is 1–16, `frameMilliseconds` is 50–2000; invalid timing is ignored with a warning. A malformed sheet displays statically. Add timing and the image to the same content change.
   - `RealDataTests` requires the shipped file to load with no warnings, to deserialize under the strict content options (so it matches the schema), and to cover every room, monster, and dialogue exactly once. A new room, monster, or dialogue therefore needs an entry here too.
   - The records live in `Content/Defs/PresentationDef.cs` (a closed family in one file, like the conditions) so the schema export covers the file; their enum members carry `JsonStringEnumMemberName` for the snake_case spellings above.
 - **`shops.json`** (optional): merchants opened by the `startShop` effect.
@@ -495,7 +496,7 @@ dotnet run --project src/RpgEngine.CLI -- --export-schemas
 
 ### Art authoring and live preview
 
-`Docs/STYLE_GUIDE.md` defines the 16-color source palette, dimensions, naming, motion targets and visual QA. `Docs/ART_PIPELINE.md` covers editable PXO masters, reviewed PNG exports, Pixelorama CLI commands and rollback. The optional `Docs/PIXELORAMA_BRIDGE.md` describes the local preview protocol and its safety checks. Keep editor scripts and Python/WebSocket tooling out of `src/RpgEngine.Core` and game runtime dependencies. New preview job fields require updating `Tools/ArtPipeline/preview-job.schema.json`, the extension, producer, tests and bridge guide together. Run `python -m unittest discover -s Tools/ArtPipeline/tests -v` and `python Tools/ArtPipeline/validate_assets.py Data/Assets` alongside the .NET gates; CI runs both on Windows and Ubuntu.
+`Docs/STYLE_GUIDE.md` defines the 16-color source palette, licensed font, dimensions, naming, motion targets and visual QA. `Docs/ART_PIPELINE.md` covers editable PXO masters, deterministic recipe exports, Pixelorama CLI commands and rollback. The optional `Docs/PIXELORAMA_BRIDGE.md` describes the local preview protocol and its safety checks. Keep editor scripts and Python/WebSocket tooling out of `src/RpgEngine.Core` and game runtime dependencies. New preview job fields require updating `Tools/ArtPipeline/preview-job.schema.json`, the extension, producer, tests and bridge guide together. Run `python -m unittest discover -s Tools/ArtPipeline/tests -v`, `python Tools/ArtPipeline/validate_assets.py Data/Assets` and `python Tools/ArtPipeline/verify_reproducible.py` alongside the .NET gates; CI runs them on Windows and Ubuntu.
 
 ---
 

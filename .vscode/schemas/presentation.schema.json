@@ -195,6 +195,21 @@
               "string",
               "null"
             ]
+          },
+          "animation": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "frames": {
+                "type": "integer"
+              },
+              "frameMilliseconds": {
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false
           }
         },
         "additionalProperties": false

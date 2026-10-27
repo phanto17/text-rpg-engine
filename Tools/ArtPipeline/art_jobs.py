@@ -80,6 +80,17 @@ def render(recipe: dict) -> Image.Image:
             kind = op["type"]
             if kind == "pixel" and set(op) == {"type", "at", "color"}:
                 draw.point(_point(op["at"], width, height, "at"), fill=_color(op["color"]))
+            elif kind == "stamp" and set(op) == {"type", "at", "pixels"}:
+                left, top = _point(op["at"], width, height, "at")
+                rows = op["pixels"]
+                if not isinstance(rows, list) or not 1 <= len(rows) <= 16 or not all(isinstance(row, list) for row in rows):
+                    raise JobError("stamp needs 1..16 rows")
+                row_width = len(rows[0])
+                if not 1 <= row_width <= 16 or any(len(row) != row_width for row in rows) or left + row_width > width or top + len(rows) > height:
+                    raise JobError("stamp must be rectangular, at most 16x16, and fit the canvas")
+                for y, row in enumerate(rows):
+                    for x, color in enumerate(row):
+                        draw.point((left + x, top + y), fill=_color(color))
             elif kind in ("line", "rectangle", "ellipse") and set(op) == {"type", "from", "to", "color", "filled"}:
                 start = _point(op["from"], width, height, "from")
                 end = _point(op["to"], width, height, "to")

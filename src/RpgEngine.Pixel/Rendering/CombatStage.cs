@@ -25,6 +25,7 @@ internal sealed class CombatStage(PixelRect area)
     private IReadOnlyList<string> _slots = [];
     private double _playerFlash;
     private double _playerLunge;
+    private double _animationTime;
     private string? _playerTarget;
 
     public bool Active => _enemies.Count > 0;
@@ -40,6 +41,7 @@ internal sealed class CombatStage(PixelRect area)
                 _slots = [];
                 _figures.Clear();
                 _floating.Clear();
+                _animationTime = 0;
             }
 
             return;
@@ -91,6 +93,10 @@ internal sealed class CombatStage(PixelRect area)
 
     public void Update(double dt)
     {
+        if (Active)
+        {
+            _animationTime += dt;
+        }
         foreach (var figure in _figures.Values)
         {
             figure.Flash = Math.Max(0, figure.Flash - dt);
@@ -148,9 +154,18 @@ internal sealed class CombatStage(PixelRect area)
             Raylib.DrawEllipse(x, y + (size / 2) + 2, size / 2, 4, Palette.Rgba(0, 0, 0, alpha / 3));
             if (textures.Get(figure.Look.Image) is { } sprite)
             {
+                var frames = Math.Max(1, figure.Look.Frames);
+                var frameWidth = sprite.Width / frames;
+                // A malformed sheet remains visible as a static image.
+                if (frames < 1 || sprite.Width % frames != 0 || frameWidth < 1)
+                {
+                    frames = 1;
+                    frameWidth = sprite.Width;
+                }
+                var frame = frames == 1 ? 0 : (int)(Math.Floor(_animationTime * 1000 / Math.Max(1, figure.Look.FrameMilliseconds)) % frames);
                 var h = size + 8;
-                var w = sprite.Width * h / Math.Max(1, sprite.Height);
-                Raylib.DrawTexturePro(sprite, new Rectangle(0, 0, sprite.Width, sprite.Height), new Rectangle(x - (w / 2), y - (h / 2), w, h), Vector2.Zero, 0, Palette.Alpha(Color.White, alpha));
+                var w = frameWidth * h / Math.Max(1, sprite.Height);
+                Raylib.DrawTexturePro(sprite, new Rectangle(frame * frameWidth, 0, frameWidth, sprite.Height), new Rectangle(x - (w / 2), y - (h / 2), w, h), Vector2.Zero, 0, Palette.Alpha(Color.White, alpha));
             }
             else
             {

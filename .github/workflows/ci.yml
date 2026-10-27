@@ -61,3 +61,6 @@ jobs:
 
       - name: Validate reviewed art
         run: python Tools/ArtPipeline/validate_assets.py Data/Assets
+
+      - name: Verify reproducible art
+        run: python Tools/ArtPipeline/verify_reproducible.py

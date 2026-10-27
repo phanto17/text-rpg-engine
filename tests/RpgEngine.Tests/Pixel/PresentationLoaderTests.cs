@@ -83,6 +83,19 @@ public sealed class PresentationLoaderTests
     }
 
     [Fact]
+    public void Parse_AnimationTiming_RejectsInvalidValuesWithoutLosingSprite()
+    {
+        var valid = PresentationLoader.Parse("""{ "monsters": { "knight": { "spriteImage": "Assets/knight.png", "animation": { "frames": 4, "frameMilliseconds": 200 } } } }""");
+        var invalid = PresentationLoader.Parse("""{ "monsters": { "knight": { "spriteImage": "Assets/knight.png", "animation": { "frames": 0, "frameMilliseconds": 1 } } } }""");
+
+        Assert.Empty(valid.Warnings);
+        Assert.Equal((4, 200), (valid.Presentation.Monsters["knight"].Animation!.Frames, valid.Presentation.Monsters["knight"].Animation!.FrameMilliseconds));
+        Assert.Null(invalid.Presentation.Monsters["knight"].Animation);
+        Assert.Equal("Assets/knight.png", invalid.Presentation.Monsters["knight"].SpriteImage);
+        Assert.Single(invalid.Warnings);
+    }
+
+    [Fact]
     public void Parse_AcceptsArraysOfEntriesWithIds_AndMemberNames()
     {
         const string json = """

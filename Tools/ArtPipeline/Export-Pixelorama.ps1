@@ -14,7 +14,7 @@ $OutputDirectory = [IO.Path]::GetFullPath($OutputDirectory)
 if (Test-Path -LiteralPath $OutputDirectory) { throw 'Use a fresh output directory to prevent accidental overwrites.' }
 New-Item -ItemType Directory -Path $OutputDirectory | Out-Null
 $manifest = Get-Content (Join-Path $repo 'ArtSource/pilots.json') -Raw | ConvertFrom-Json
-foreach ($asset in $manifest.assets) {
+foreach ($asset in ($manifest.assets | Where-Object { $_.source -eq 'pixelorama' })) {
     $source = Join-Path $repo "ArtSource/Pixelorama/$($asset.category)/$($asset.id).pxo"
     if (-not (Test-Path -LiteralPath $source -PathType Leaf)) { throw "Missing master: $source" }
     $folder = Join-Path $OutputDirectory $asset.category
@@ -38,7 +38,7 @@ foreach ($asset in $manifest.assets) {
         if ($process.ExitCode -ne 0 -or -not (Test-Path -LiteralPath $output)) { throw "Export failed: $source; inspect staging logs." }
     } finally { $process.Dispose() }
 }
-& $Python (Join-Path $PSScriptRoot 'validate_assets.py') $OutputDirectory
+& $Python (Join-Path $PSScriptRoot 'validate_assets.py') $OutputDirectory --source pixelorama
 if ($LASTEXITCODE -ne 0) { throw 'Exported asset validation failed.' }
 Get-ChildItem -LiteralPath $OutputDirectory -Recurse -Filter '*.png' | Get-FileHash -Algorithm SHA256 |
     Select-Object Path,Hash | ConvertTo-Json | Set-Content (Join-Path $OutputDirectory 'hashes.json')

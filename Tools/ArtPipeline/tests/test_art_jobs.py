@@ -28,6 +28,17 @@ class ArtJobsTests(unittest.TestCase):
         self.assertEqual(result.getpixel((1, 1)), (215, 180, 106, 255))
         self.assertEqual(result.getpixel((3, 0)), (21, 25, 35, 255))
 
+    def test_stamp_is_bounded_and_uses_palette(self):
+        candidate = recipe()
+        candidate["layers"][1]["operations"] = [{"type": "stamp", "at": [2, 2], "pixels": [
+            ["#FFF1C9", "transparent"], ["#D7B46A", "#A84B45"]]}]
+        result = render(candidate)
+        self.assertEqual(result.getpixel((2, 2)), (255, 241, 201, 255))
+        self.assertEqual(result.getpixel((3, 2)), (21, 25, 35, 255))
+        candidate["layers"][1]["operations"][0]["at"] = [3, 3]
+        with self.assertRaises(JobError):
+            render(candidate)
+
     def test_bad_recipe_is_rejected(self):
         for change in (lambda r: r.update(width=1025),
                        lambda r: r["layers"][0]["operations"][0].update(color="#FFFFFF"),

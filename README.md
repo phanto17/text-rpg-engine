@@ -24,7 +24,7 @@ The engine is **purely data-driven**. Every room, item, monster, line of dialogu
   - a character HUD with eased HP, MP, and XP bars and Inventory, Quests, Stats, and Exits (compass) tabs
   - a typewriter event log with colored roll badges and a d20 banner on every check, attack, and saving throw
   - the same hybrid input: click a button, press `1`-`9`, or type the classic commands
-  - looks and story-specific visual state bindings come from `Data/World/presentation.json`; generic procedural looks fill missing entries, while three pilot PNGs demonstrate the editable Pixelorama art pipeline
+  - looks and story-specific visual state bindings come from `Data/World/presentation.json`; generic procedural looks fill missing entries, while the reviewed asset pack adds an animated knight, UI icon, crypt tile, and Silkscreen pixel font to the three Pixelorama pilot images
 - **Save/Load** to JSON in `Saves/`, shared by both clients.
 
 ## The adventure: *Barrowlight*
