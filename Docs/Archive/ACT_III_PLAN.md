@@ -1,6 +1,6 @@
 # Act III Narrative & Level Design Plan: *The Cradle of the First Architect*
 
-> **Status:** Draft for Review (Pre-JSON Implementation)  
+> **Status:** Historical design proposal; implementation has shipped. Consult [the canonical lore](../LORE.md) and current Data/ for authoritative behavior.
 > **Scope:** Act III of *Barrowlight* — The descent beneath the Gate of the Twin Seals (`warren_crossroads`) into the primordial foundation of the Under-Barrow, culminating in the confrontation with **The First Architect** and the final philosophical choice at **The Great Brazier**.
 
 ---

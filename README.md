@@ -24,7 +24,7 @@ The engine is **purely data-driven**. Every room, item, monster, line of dialogu
   - a character HUD with eased HP, MP, and XP bars and Inventory, Quests, Stats, and Exits (compass) tabs
   - a typewriter event log with colored roll badges and a d20 banner on every check, attack, and saving throw
   - the same hybrid input: click a button, press `1`-`9`, or type the classic commands
-  - looks come from `Data/World/presentation.json` (palettes, scene styles, weather, emblems, mood captions, speaker names, pictures), with built-in defaults for anything it leaves out
+  - looks and story-specific visual state bindings come from `Data/World/presentation.json`; generic procedural looks fill missing entries, while three pilot PNGs demonstrate the editable Pixelorama art pipeline
 - **Save/Load** to JSON in `Saves/`, shared by both clients.
 
 ## The adventure: *Barrowlight*
@@ -119,7 +119,7 @@ src/RpgEngine.CLI/      Terminal UI and game loop
 src/RpgEngine.Pixel/    Pixel-art desktop client (raylib): headless game model, sequencer, renderers
 tests/RpgEngine.Tests/  Unit, content-validation, and playthrough tests
 .github/workflows/      CI: build and test on every push and pull request
-CLAUDE.md               Contributor guide: coding standards, JSON schemas, Git workflow
+AGENTS.md               Contributor guide: coding standards, JSON schemas, Git workflow
 ```
 
 ## Getting started
@@ -184,7 +184,7 @@ It opens a resizable 1280 by 720 window (`F11` for borderless fullscreen) and ta
 
 Everything lives in `Data/`. To add a room, an item, or a whole dialogue tree:
 
-1. Add JSON following the schemas in [CLAUDE.md](CLAUDE.md#content-json-reference). In VS Code, the generated JSON Schemas in `.vscode/schemas/` give you autocomplete and flag unknown properties as you type.
+1. Add JSON following the schemas in [AGENTS.md](AGENTS.md#content-json-reference). In VS Code, the generated JSON Schemas in `.vscode/schemas/` give you autocomplete and flag unknown properties as you type.
 2. Run `dotnet test`. Content validation reports every broken reference or typo.
 3. Play it with `dotnet run --project src/RpgEngine.CLI -- --seed 1`.
 
@@ -201,7 +201,7 @@ There are about 980 tests, all deterministic:
 - **Scenario tests** that play the prologue and all three acts through the engine with scripted dice (`FixedRandomSource`): merciful and violent runs through each act, ending at the Great Brazier, plus which epilogue each world state reaches.
 - **Reachability checks** that every room can be reached from the start and that only the choice at the Great Brazier ends the game.
 - **CLI playthroughs** that drive the real terminal UI with scripted keyboard input through Spectre.Console's `TestConsole`, including a full run from character creation through all three acts to the final epilogue.
-- **Pixel client tests** that drive the headless `PixelGame` (title, character creation, exploration, dialogue, combat with automatic enemy turns, saving and loading) without opening a window, check that `PresentationLoader` reads `presentation.json` forgivingly and that every shipped room, monster, and NPC has a fallback look, and step the `EventSequencer` through event queues, holds, cues, and skips.
+- **Pixel client tests** that drive the headless `PixelGame` (title, character creation, exploration, dialogue, combat with automatic enemy turns, saving and loading) without opening a window, check that `PresentationLoader` reads `presentation.json` forgivingly and that every shipped room, monster, and NPC has a data-defined look, and step the `EventSequencer` through event queues, holds, cues, and skips.
 - **Balance checks** that play each boss fight 2,000 times per Calling with a simple scripted player (the Barrow Heart at level 1, Prelate Vaelen and Commander Silas at levels 2 and 3, and the First Architect at levels 3 and 4, with and without the ally blessings) and keep each win rate inside a band.
 
 Dice fairness is checked with fixed-seed chi-square tests.
@@ -229,4 +229,6 @@ Dice fairness is checked with fixed-seed chi-square tests.
 
 ## Contributing
 
-See [CLAUDE.md](CLAUDE.md) for architecture rules, coding standards, the full JSON schema reference, and the Git workflow (Conventional Commits; commit only when the build and tests are green).
+See [AGENTS.md](AGENTS.md) for architecture rules, coding standards, the full JSON schema reference, and the Git workflow (Conventional Commits; commit only when the build and tests are green).
+
+For visual direction and reproducible artwork exports, see [the style guide](Docs/STYLE_GUIDE.md) and [art pipeline](Docs/ART_PIPELINE.md). Pixelorama's supported automation and future integration options are documented in [the research note](Docs/Research/PIXELORAMA_AUTOMATION.md).

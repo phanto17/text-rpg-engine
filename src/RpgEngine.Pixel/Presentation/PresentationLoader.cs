@@ -68,9 +68,10 @@ public static class PresentationLoader
             return new PresentationLoadResult(new PresentationDef(), FileFound: false, [$"{RelativePath}: the file must hold a JSON object."]);
         }
 
-        Known(top, string.Empty, ["rooms", "monsters", "npcs"], warnings);
+        Known(top, string.Empty, ["rooms", "monsters", "npcs", "bindings"], warnings);
         var presentation = new PresentationDef
         {
+            Bindings = Bindings(top["bindings"], warnings),
             Rooms = Entries(top, "rooms", warnings, (node, where) =>
             {
                 Known(node, where, RoomProperties, warnings);
@@ -111,6 +112,56 @@ public static class PresentationLoader
         };
 
         return new PresentationLoadResult(presentation, FileFound: false, warnings);
+    }
+
+    private static SceneBindingsDef Bindings(JsonNode? node, List<string> warnings)
+    {
+        if (node is null)
+        {
+            return new();
+        }
+
+        if (node is not JsonObject value)
+        {
+            warnings.Add($"{RelativePath}: 'bindings' must be an object and was ignored.");
+            return new();
+        }
+
+        Known(value, "bindings", ["resonanceCounter", "sigilCounter", "lanternItem", "sunSealItem", "moonSealItem", "bellMendedFlags", "brazierLitFlags"], warnings);
+        string? Reference(string property)
+        {
+            var text = Text(value, property);
+            if (value[property] is not null && text is null)
+            {
+                warnings.Add($"{RelativePath}: 'bindings.{property}' must be a non-empty string and was ignored.");
+            }
+            return text;
+        }
+
+        IReadOnlyList<string> Flags(string property)
+        {
+            if (value[property] is null)
+            {
+                return [];
+            }
+            if (value[property] is JsonArray array && array.All(n => n is JsonValue v && v.TryGetValue<string>(out var text) && !string.IsNullOrWhiteSpace(text)))
+            {
+                return array.Select(n => n!.GetValue<string>()).ToArray();
+            }
+            warnings.Add($"{RelativePath}: 'bindings.{property}' must be an array of flag names and was ignored.");
+            return [];
+        }
+
+        return new SceneBindingsDef
+        {
+            ResonanceCounter = Reference("resonanceCounter"),
+            SigilCounter = Reference("sigilCounter"),
+            LanternItem = Reference("lanternItem"),
+            SunSealItem = Reference("sunSealItem"),
+            MoonSealItem = Reference("moonSealItem"),
+            BellMendedFlags = Flags("bellMendedFlags"),
+            BrazierLitFlags = Flags("brazierLitFlags"),
+        };
     }
 
     // A section is an object keyed by id, or (just as welcome) an array of objects carrying an "id".

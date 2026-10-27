@@ -6,6 +6,8 @@ namespace RpgEngine.Pixel.Sequencing;
 /// </summary>
 public sealed record Beat(IReadOnlyList<LogLine> Lines, IReadOnlyList<SequenceCue> Cues, double HoldSeconds = 0)
 {
+    public IReadOnlyList<SequenceCue> CompletionCues { get; init; } = [];
+
     public static Beat Of(params LogLine[] lines) => new(lines, []);
 
     public static Beat Of(IReadOnlyList<LogLine> lines, params SequenceCue[] cues) => new(lines, cues);

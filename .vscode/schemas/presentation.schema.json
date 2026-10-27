@@ -5,6 +5,54 @@
   "allowTrailingCommas": true,
   "type": "object",
   "properties": {
+    "bindings": {
+      "type": "object",
+      "properties": {
+        "resonanceCounter": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sigilCounter": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "lanternItem": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sunSealItem": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "moonSealItem": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "bellMendedFlags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "brazierLitFlags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "rooms": {
       "type": "object",
       "additionalProperties": {

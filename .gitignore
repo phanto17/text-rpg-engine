@@ -500,3 +500,7 @@ coverage/
 # Local, machine-specific settings (incl. Claude Code local config)
 *.local.json
 .claude/
+
+# Reproducible art staging and local authoring tools
+/ArtBuild/
+/Tools/Local/

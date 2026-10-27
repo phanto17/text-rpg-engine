@@ -254,7 +254,10 @@ internal sealed class PixelApp : IDisposable
                 break;
             case RoomCue room:
                 _roomFade = 0.5;
-                _caption.Show(_catalog.Room(room.RoomId).Caption);
+                _caption.Show(room.RoomId, _catalog.Room(room.RoomId).Caption);
+                break;
+            case RoomRevealedCue revealed:
+                _caption.Complete(revealed.RoomId);
                 break;
             case SpeakerCue speaker when _game.Session is { } session:
                 var npcId = _catalog.SpeakerId(speaker.Speaker, session.Dialogue?.Dialogue.Id, session.State.CurrentRoomId);
@@ -289,18 +292,18 @@ internal sealed class PixelApp : IDisposable
     {
         var session = _game.Session;
         var roomId = session?.State.CurrentRoomId ?? _game.Content.Manifest.StartRoom;
-        var world = session?.State.World;
+        var state = SceneState.Read(session, _catalog.Bindings);
         var frame = new SceneFrame(
             _catalog.Room(roomId),
             roomId,
             _time,
-            world?.GetCounter(LanternLight.ResonanceCounter) ?? 0,
-            world?.GetCounter("sigil_seq") ?? 0,
-            session?.State.Player.Inventory.Contains("barrowlight") ?? false,
-            session?.State.Player.Inventory.Contains("sun_triad_seal") ?? false,
-            session?.State.Player.Inventory.Contains("moon_triad_seal") ?? false,
-            world?.Flags.Any(f => f.Contains("bell", StringComparison.Ordinal) && (f.Contains("fit", StringComparison.Ordinal) || f.Contains("mend", StringComparison.Ordinal) || f.Contains("tuned", StringComparison.Ordinal))) ?? false,
-            world?.Flags.Any(f => f.StartsWith("ending_", StringComparison.Ordinal)) ?? false);
+            state.Resonance,
+            state.SigilsLit,
+            state.HasLantern,
+            state.SunSealSet,
+            state.MoonSealSet,
+            state.BellMended,
+            state.BrazierLit);
 
         _scene.Draw(frame, _textures);
         _stage.Draw(_textures);
@@ -322,7 +325,7 @@ internal sealed class PixelApp : IDisposable
         _dice.Draw(PixelLayout.Scene);
         Canvas.Frame(PixelLayout.Scene, Palette.PanelEdge);
 
-        _hud.Draw(_game, dt, _time);
+        _hud.Draw(_game, dt, _time, state.Resonance);
         _log.Draw(_game.Sequencer, _time);
         _actions.Draw(_game, mx, my, _time);
     }

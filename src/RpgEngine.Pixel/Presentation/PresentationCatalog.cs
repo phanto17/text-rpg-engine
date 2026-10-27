@@ -6,7 +6,7 @@ namespace RpgEngine.Pixel.Presentation;
 /// <summary>
 /// Answers "how does this room, monster, or NPC look?" by layering <c>presentation.json</c> over
 /// <see cref="PresentationDefaults"/>: each field the file sets wins, and every field it leaves out
-/// keeps the default for that id (or a keyword guess for an id the defaults do not know).
+/// keeps a content-independent generic default.
 /// </summary>
 public sealed class PresentationCatalog
 {
@@ -23,6 +23,8 @@ public sealed class PresentationCatalog
         _presentation = presentation ?? new PresentationDef();
     }
 
+    public SceneBindingsDef Bindings => _presentation.Bindings;
+
     public RoomLook Room(string roomId)
     {
         ArgumentNullException.ThrowIfNull(roomId);
@@ -31,8 +33,7 @@ public sealed class PresentationCatalog
             return cached;
         }
 
-        var name = _content.Rooms.TryGetValue(roomId, out var room) ? room.Name : roomId;
-        var look = PresentationDefaults.Rooms.TryGetValue(roomId, out var known) ? known : PresentationDefaults.GuessRoom(roomId, name);
+        var look = PresentationDefaults.GenericRoom;
 
         if (_presentation.Rooms.TryGetValue(roomId, out var def))
         {
@@ -60,8 +61,7 @@ public sealed class PresentationCatalog
             return cached;
         }
 
-        var name = _content.Monsters.TryGetValue(monsterId, out var monster) ? monster.Name : monsterId;
-        var look = PresentationDefaults.Monsters.TryGetValue(monsterId, out var known) ? known : PresentationDefaults.GuessMonster(monsterId, name);
+        var look = PresentationDefaults.GenericMonster;
         if (_presentation.Monsters.TryGetValue(monsterId, out var def))
         {
             look = look with
@@ -90,8 +90,7 @@ public sealed class PresentationCatalog
         }
 
         var npc = _content.RoomList.SelectMany(r => r.Npcs).FirstOrDefault(n => n.Id == npcId);
-        var name = npc?.Name ?? (_content.Dialogues.TryGetValue(npcId, out var dialogue) ? dialogue.Speaker : npcId);
-        var look = PresentationDefaults.Npcs.TryGetValue(npcId, out var known) ? known : PresentationDefaults.GuessNpc(npcId, name);
+        var look = PresentationDefaults.GenericNpc;
         if (_presentation.Npcs.TryGetValue(npcId, out var def) || (npc is not null && _presentation.Npcs.TryGetValue(npc.Dialogue, out def)))
         {
             look = look with

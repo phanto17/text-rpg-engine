@@ -11,9 +11,9 @@ public sealed class PresentationCatalogTests
     private static readonly Lazy<GameContent> Content = new(() => ContentLoader.LoadFromDirectory(RealDataTests.DataDirectory));
 
     [Fact]
-    public void EveryShippedRoom_HasADistinctDefaultLook()
+    public void EveryShippedRoom_WithPresentation_HasADistinctLook()
     {
-        var catalog = new PresentationCatalog(Content.Value);
+        var catalog = new PresentationCatalog(Content.Value, PresentationLoader.Load(RealDataTests.DataDirectory).Presentation);
 
         var looks = Content.Value.RoomList.Select(room => (room.Id, Look: catalog.Room(room.Id))).ToList();
 
@@ -25,9 +25,9 @@ public sealed class PresentationCatalogTests
     }
 
     [Fact]
-    public void EveryShippedMonsterAndNpc_HasADefaultLookWithATitle()
+    public void EveryShippedMonsterAndNpc_WithPresentation_HasALookWithATitle()
     {
-        var catalog = new PresentationCatalog(Content.Value);
+        var catalog = new PresentationCatalog(Content.Value, PresentationLoader.Load(RealDataTests.DataDirectory).Presentation);
 
         foreach (var monster in Content.Value.MonsterList)
         {
@@ -47,17 +47,12 @@ public sealed class PresentationCatalogTests
     }
 
     [Fact]
-    public void UnknownIds_GetAGuessFromTheirWords_OrTheGenericLook()
+    public void MissingPresentation_UsesGenericLooksWithoutStoryText()
     {
         var catalog = new PresentationCatalog(Content.Value);
-
-        Assert.Equal(SceneStyle.SunderedBellNave, catalog.Room("ruined_bell_tower").Style);
-        Assert.Equal(SceneStyle.DrownedBridge, catalog.Room("some_river_ford").Style);
-        Assert.Equal(PresentationDefaults.GenericRoom, catalog.Room("xyzzy"));
-        Assert.Equal(Emblem.KnightHelm, catalog.Monster("rust_knight").Emblem);
-        Assert.Equal(PresentationDefaults.GenericMonster, catalog.Monster("giant_rat"));
-        Assert.Equal(Emblem.Scribe, catalog.Npc("old_librarian").Emblem);
-        Assert.Equal(PresentationDefaults.GenericNpc, catalog.Npc("nobody"));
+        Assert.All(Content.Value.Rooms.Keys.Append("unknown"), id => Assert.Equal(PresentationDefaults.GenericRoom, catalog.Room(id)));
+        Assert.All(Content.Value.Monsters.Keys.Append("unknown"), id => Assert.Equal(PresentationDefaults.GenericMonster, catalog.Monster(id)));
+        Assert.Equal(PresentationDefaults.GenericNpc, catalog.Npc("wren"));
     }
 
     [Fact]
@@ -71,20 +66,20 @@ public sealed class PresentationCatalogTests
             }
             """).Presentation;
         var catalog = new PresentationCatalog(Content.Value, presentation);
-        var defaults = PresentationDefaults.Rooms["lichgate"];
+        var defaults = PresentationDefaults.GenericRoom;
 
         var lichgate = catalog.Room("lichgate");
-        Assert.Equal(SceneStyle.MoorGate, lichgate.Style);
+        Assert.Equal(defaults.Style, lichgate.Style);
         Assert.Equal(WeatherKind.AshMotes, lichgate.Weather);
         Assert.Equal(PixelColor.Parse("#ff0000"), lichgate.Accent);
         Assert.Equal(defaults.BackgroundTop, lichgate.BackgroundTop);
         Assert.Equal(defaults.Architecture, lichgate.Architecture);
 
         var thrall = catalog.Monster("barrow_thrall");
-        Assert.Equal(("The Risen", Emblem.Mournling, PresentationDefaults.Monsters["barrow_thrall"].Primary), (thrall.Title, thrall.Emblem, thrall.Primary));
+        Assert.Equal(("The Risen", Emblem.Mournling, PresentationDefaults.GenericMonster.Primary), (thrall.Title, thrall.Emblem, thrall.Primary));
 
         var wren = catalog.Npc("wren");
-        Assert.Equal(("Assets/wren.png", Emblem.LanternNun), (wren.Image, wren.Emblem));
+        Assert.Equal(("Assets/wren.png", Emblem.Hooded), (wren.Image, wren.Emblem));
         Assert.Same(wren, catalog.Npc("wren"));
     }
 
