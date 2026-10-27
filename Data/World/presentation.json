@@ -1,4 +1,13 @@
 {
+  "bindings": {
+    "resonanceCounter": "lantern_resonance",
+    "sigilCounter": "sigil_seq",
+    "lanternItem": "barrowlight",
+    "sunSealItem": "sun_triad_seal",
+    "moonSealItem": "moon_triad_seal",
+    "bellMendedFlags": ["fitted_bell_splinter"],
+    "brazierLitFlags": ["ending_sun_stasis", "ending_moon_vigil", "ending_triad_passage"]
+  },
   "rooms": {
     "lichgate": {
       "sceneStyle": "moor_gate",
@@ -219,72 +228,84 @@
   },
   "monsters": {
     "gravebound_knight": {
+      "title": "Warden of the Barrow Heart",
       "emblem": "knight_helm",
       "primaryColor": "#8C4A3E",
       "accentColor": "#E6A83E",
       "spriteImage": "Assets/Monsters/gravebound_knight.png"
     },
     "barrow_thrall": {
+      "title": "Bound to the Knight",
       "emblem": "thrall_skull",
       "primaryColor": "#6E7075",
       "accentColor": "#B8B4A8",
       "spriteImage": "Assets/Monsters/barrow_thrall.png"
     },
     "choir_cantor_miriel": {
+      "title": "Cantor of the Echo Chapel",
       "emblem": "choir_mask",
       "primaryColor": "#4E5482",
       "accentColor": "#96B8F2",
       "spriteImage": "Assets/Monsters/choir_cantor_miriel.png"
     },
     "calcified_mournling": {
+      "title": "Grief Turned to Stone",
       "emblem": "mournling",
       "primaryColor": "#7A8496",
       "accentColor": "#D4E0F0",
       "spriteImage": "Assets/Monsters/calcified_mournling.png"
     },
     "tollbridge_warden_garin": {
+      "title": "Toll-Warden of the Drowned Bridge",
       "emblem": "warden_halberd",
       "primaryColor": "#3E565E",
       "accentColor": "#68B0AB",
       "spriteImage": "Assets/Monsters/tollbridge_warden_garin.png"
     },
     "drowned_lancer": {
+      "title": "The Toll's Last Guard",
       "emblem": "lancer",
       "primaryColor": "#2F444A",
       "accentColor": "#7CA6A2",
       "spriteImage": "Assets/Monsters/drowned_lancer.png"
     },
     "prelate_vaelen": {
+      "title": "Prelate of Unkept Vows",
       "emblem": "carillon_cradle",
       "primaryColor": "#634C8A",
       "accentColor": "#D2C2F0",
       "spriteImage": "Assets/Monsters/prelate_vaelen.png"
     },
     "tethered_chorister": {
+      "title": "Voice on a Memory-Thread",
       "emblem": "chorister",
       "primaryColor": "#525A78",
       "accentColor": "#B8C8E8",
       "spriteImage": "Assets/Monsters/tethered_chorister.png"
     },
     "commander_silas": {
+      "title": "Commander of the Unburdened",
       "emblem": "commander",
       "primaryColor": "#C8CCD4",
       "accentColor": "#F28C38",
       "spriteImage": "Assets/Monsters/commander_silas.png"
     },
     "scoured_halberdier": {
+      "title": "Scoured of Every Memory",
       "emblem": "halberdier",
       "primaryColor": "#8C929E",
       "accentColor": "#D97B48",
       "spriteImage": "Assets/Monsters/scoured_halberdier.png"
     },
     "first_architect": {
+      "title": "Who Broke the Rite",
       "emblem": "architect_astrolabe",
       "primaryColor": "#3E5852",
       "accentColor": "#F5B841",
       "spriteImage": "Assets/Monsters/first_architect.png"
     },
     "calcified_warden": {
+      "title": "Keeper of the Cradle",
       "emblem": "iron_brazier",
       "primaryColor": "#6E7875",
       "accentColor": "#C89B4B",
@@ -293,6 +314,7 @@
   },
   "npcs": {
     "wren": {
+      "title": "Sister of the Lantern Bearers",
       "speakerName": "Sister Wren",
       "emblem": "lantern_nun",
       "primaryColor": "#5E6878",
@@ -300,6 +322,7 @@
       "portraitImage": "Assets/Portraits/wren.png"
     },
     "orin": {
+      "title": "Brother of the Weeping Stair",
       "speakerName": "Brother Orin",
       "emblem": "monk",
       "primaryColor": "#3E565E",
@@ -307,6 +330,7 @@
       "portraitImage": "Assets/Portraits/orin.png"
     },
     "maeve": {
+      "title": "Keeper of the Beacon",
       "speakerName": "Keeper Maeve",
       "emblem": "keeper",
       "primaryColor": "#4A5670",
@@ -314,6 +338,7 @@
       "portraitImage": "Assets/Portraits/maeve.png"
     },
     "peddler": {
+      "title": "Sallow, Who Sells Anything",
       "speakerName": "Sallow the Peddler",
       "emblem": "peddler",
       "primaryColor": "#5C5346",
@@ -321,6 +346,7 @@
       "portraitImage": "Assets/Portraits/peddler.png"
     },
     "wren_nocturne": {
+      "title": "Sister of the Lantern Bearers",
       "speakerName": "Sister Wren",
       "emblem": "lantern_nun",
       "primaryColor": "#5E6878",
@@ -328,6 +354,7 @@
       "portraitImage": "Assets/Portraits/wren_nocturne.png"
     },
     "miriel": {
+      "title": "Cantor of the Echo Chapel",
       "speakerName": "Cantor Miriel",
       "emblem": "choir_mask",
       "primaryColor": "#4E5482",
@@ -335,6 +362,7 @@
       "portraitImage": "Assets/Portraits/miriel.png"
     },
     "garin": {
+      "title": "Toll-Warden",
       "speakerName": "Toll-Warden Garin",
       "emblem": "warden_halberd",
       "primaryColor": "#3E565E",
@@ -342,6 +370,7 @@
       "portraitImage": "Assets/Portraits/garin.png"
     },
     "caelan": {
+      "title": "Archivist of the Whispering Stacks",
       "speakerName": "Archivist Caelan",
       "emblem": "scribe",
       "primaryColor": "#524A68",
@@ -349,6 +378,7 @@
       "portraitImage": "Assets/Portraits/caelan.png"
     },
     "vaelen": {
+      "title": "Prelate of Unkept Vows",
       "speakerName": "Prelate Vaelen",
       "emblem": "prelate",
       "primaryColor": "#634C8A",
@@ -356,6 +386,7 @@
       "portraitImage": "Assets/Portraits/vaelen.png"
     },
     "venn": {
+      "title": "Quartermaster of the Cloister",
       "speakerName": "Quartermaster Venn",
       "emblem": "quartermaster",
       "primaryColor": "#7E8490",
@@ -363,6 +394,7 @@
       "portraitImage": "Assets/Portraits/venn.png"
     },
     "silas": {
+      "title": "Commander of the Unburdened",
       "speakerName": "Commander Silas",
       "emblem": "commander",
       "primaryColor": "#C8CCD4",
@@ -370,6 +402,7 @@
       "portraitImage": "Assets/Portraits/silas.png"
     },
     "wren_cradle": {
+      "title": "Sister of the Lantern Bearers",
       "speakerName": "Sister Wren",
       "emblem": "lantern_nun",
       "primaryColor": "#5E6878",
@@ -377,6 +410,7 @@
       "portraitImage": "Assets/Portraits/wren_cradle.png"
     },
     "oakhaven": {
+      "title": "Barrow-wright",
       "speakerName": "Barrow-wright Oakhaven",
       "emblem": "wright",
       "primaryColor": "#4E5A58",
@@ -384,6 +418,7 @@
       "portraitImage": "Assets/Portraits/oakhaven.png"
     },
     "architect_post": {
+      "title": "The First Architect",
       "speakerName": "Aurelius, the First Architect",
       "emblem": "architect_astrolabe",
       "primaryColor": "#3E5852",

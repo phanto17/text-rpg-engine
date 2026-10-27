@@ -1,0 +1,23 @@
+# Pixelorama art pipeline
+
+Pixelorama is an optional authoring tool for `RpgEngine.Pixel`. Core and CLI have no Pixelorama dependency. The tested Windows baseline is Pixelorama 1.2.3; `ArtSource/pilots.json` records its archive SHA-256. Install the official Windows release locally under `Tools/Local/Pixelorama-1.2.3/Pixelorama-Windows-64bit/`, or set `PIXELORAMA_EXE` to another verified executable. `Tools/Local/` and `ArtBuild/` are ignored. The repo tracks editable `.pxo` masters and reviewed PNG exports, not the editor binary.
+
+## Reproduce and publish the pilot pack
+
+From the repository root, with Python 3.11+, PowerShell 7 and Pillow:
+
+```powershell
+python -m pip install -r Tools/ArtPipeline/requirements.txt
+python Tools/ArtPipeline/build_pilots.py ArtBuild/pilots
+pwsh -NoProfile -File Tools/ArtPipeline/Export-Pixelorama.ps1
+python Tools/ArtPipeline/validate_assets.py ArtBuild/export-<run-id> --compare ArtBuild/pilots
+pwsh -NoProfile -File Tools/ArtPipeline/Test-ArtAssets.ps1
+```
+
+`build_pilots.py` creates deterministic original raster drafts. The existing `.pxo` files were created by opening those PNGs in Pixelorama and using Save As. They are now the editable masters; rerunning the recipe does not overwrite them. `Export-Pixelorama.ps1` invokes Pixelorama's [documented CLI](https://pixelorama.org/user_manual/cli/) once per master, each with a fresh staging folder. It validates PNG format, dimensions, palette and alpha, and records hashes. The initial three exports were checked pixel-for-pixel against the recipe drafts. Review the staged art at game scale, then copy the approved PNGs to matching paths in `Data/Assets/` and run `Test-ArtAssets.ps1` again. Change `Data/World/presentation.json` image paths only when a new asset is ready.
+
+On platforms other than Windows, set `PIXELORAMA_EXE` to a tested Pixelorama desktop build and use PowerShell 7 for the wrapper. The shipped three PNGs still work without Pixelorama installed. The pipeline intentionally does not claim a remote editor API or silent live editing. The [automation feasibility report](Research/PIXELORAMA_AUTOMATION.md) describes supported CLI/export options and a possible version-tested extension path.
+
+## Recovery and rollout
+
+Keep the previous runtime PNGs until a new export passes visual and automated review. A bad asset change can be rolled back by reverting its `.pxo`, PNG and presentation entry together; the procedural fallback remains available if an image path is removed. The first rollout covers a room, monster and portrait. Next add layered room masters, one animation sheet with explicit timing metadata, UI tiles/icons, and a licensed pixel font after native-size readability checks. Audio remains a separate, data-addressed pipeline; do not add a sound dependency to Core.

@@ -1,13 +1,11 @@
 namespace RpgEngine.Pixel.Presentation;
 
 /// <summary>
-/// The Barrowlight's glow. Its color temperature warms with the <c>lantern_resonance</c> counter,
+/// The lantern glow. Its color temperature warms with the configured resonance counter,
 /// from the pale frost of a newly lit lantern to the golden amber of one that has heard every echo.
 /// </summary>
 public static class LanternLight
 {
-    public const string ResonanceCounter = "lantern_resonance";
-
     /// <summary>Resonance at and beyond which the light is fully amber.</summary>
     public const int FullResonance = 12;
 

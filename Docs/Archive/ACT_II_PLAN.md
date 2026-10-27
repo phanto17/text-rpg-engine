@@ -1,6 +1,6 @@
 # Act II Narrative & Level Design Plan: *The Memory Warrens*
 
-> **Status:** Draft for Review (Pre-JSON Implementation)  
+> **Status:** Historical design proposal; implementation has shipped. Consult [the canonical lore](../LORE.md) and current Data/ for authoritative behavior.
 > **Scope:** Act II of *Barrowlight* — The two major ideological spokes beyond the Drowned Tollbridge (`far_arch`), culminating in the recovery of the twin **Triad Seals** (**The Seal of the Waxing Moon** and **The Seal of the Unclouded Sun**) required to unseal Act III (*The Cradle of the First Architect*).
 
 ---

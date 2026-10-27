@@ -47,3 +47,6 @@ public sealed record RoomCue(string RoomId) : SequenceCue;
 public sealed record CombatCue(bool Started) : SequenceCue;
 
 public sealed record LevelUpCue(int Level) : SequenceCue;
+
+/// <summary>The room description and its details have finished revealing.</summary>
+public sealed record RoomRevealedCue(string RoomId) : SequenceCue;

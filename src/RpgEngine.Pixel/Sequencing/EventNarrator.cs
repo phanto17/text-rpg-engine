@@ -150,7 +150,7 @@ public sealed class EventNarrator
             lines.Add(line.Done());
         }
 
-        return Beat.Of(lines, new RoomCue(room.RoomId));
+        return Beat.Of(lines, new RoomCue(room.RoomId)) with { CompletionCues = [new RoomRevealedCue(room.RoomId)] };
     }
 
     // A spoken node may hold several paragraphs; the speaker's name opens the first and each is its own quote line.

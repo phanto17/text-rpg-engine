@@ -143,6 +143,7 @@ public sealed class EventSequencer
             }
             else
             {
+                _cues.AddRange(_current.CompletionCues);
                 _current = null;
             }
         }
@@ -172,6 +173,7 @@ public sealed class EventSequencer
                 RevealedCharacters = _lines[^1].Length;
             }
 
+            _cues.AddRange(_current.CompletionCues);
             _current = null;
         }
 
@@ -211,6 +213,10 @@ public sealed class EventSequencer
         _hold = beat.HoldSeconds;
         _lineIndex = -1;
         _current = beat.Lines.Count == 0 ? null : beat;
+        if (_current is null)
+        {
+            _cues.AddRange(beat.CompletionCues);
+        }
     }
 
     private void Append(LogLine line)

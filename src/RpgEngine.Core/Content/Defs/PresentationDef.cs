@@ -13,11 +13,25 @@ namespace RpgEngine.Core.Content.Defs;
 /// </summary>
 public sealed record PresentationDef
 {
+    public SceneBindingsDef Bindings { get; init; } = new();
+
     public IReadOnlyDictionary<string, RoomPresentationDef> Rooms { get; init; } = new Dictionary<string, RoomPresentationDef>(StringComparer.Ordinal);
 
     public IReadOnlyDictionary<string, MonsterPresentationDef> Monsters { get; init; } = new Dictionary<string, MonsterPresentationDef>(StringComparer.Ordinal);
 
     public IReadOnlyDictionary<string, NpcPresentationDef> Npcs { get; init; } = new Dictionary<string, NpcPresentationDef>(StringComparer.Ordinal);
+}
+
+/// <summary>Optional world-state references used only by the graphical client.</summary>
+public sealed record SceneBindingsDef
+{
+    public string? ResonanceCounter { get; init; }
+    public string? SigilCounter { get; init; }
+    public string? LanternItem { get; init; }
+    public string? SunSealItem { get; init; }
+    public string? MoonSealItem { get; init; }
+    public IReadOnlyList<string> BellMendedFlags { get; init; } = [];
+    public IReadOnlyList<string> BrazierLitFlags { get; init; } = [];
 }
 
 /// <summary>Hex colors (<c>#rrggbb</c>) for a room's backdrop gradient, its stonework, and its highlights.</summary>
@@ -40,7 +54,7 @@ public sealed record RoomPresentationDef
 
     public WeatherKind? Weather { get; init; }
 
-    /// <summary>A picture to draw instead of the procedural scene, relative to <c>Data/</c> (for example <c>Assets/lichgate.png</c>).</summary>
+    /// <summary>A picture to draw instead of the procedural scene, relative to <c>Data/</c>.</summary>
     public string? BackdropImage { get; init; }
 
     /// <summary>A one-line caption shown over the scene for a few seconds after the player enters.</summary>
@@ -55,7 +69,7 @@ public sealed record MonsterPresentationDef
 
     public Emblem? Emblem { get; init; }
 
-    /// <summary>A short epithet shown under the name, e.g. "Warden of the Barrow Heart".</summary>
+    /// <summary>A short epithet shown under the name, loaded from presentation data.</summary>
     public string? Title { get; init; }
 
     /// <summary>A sprite to draw instead of the heraldic emblem, relative to <c>Data/</c>.</summary>

@@ -50,7 +50,7 @@ internal sealed class HudRenderer(PixelRect area)
         return null;
     }
 
-    public void Draw(PixelGame game, double dt, double time)
+    public void Draw(PixelGame game, double dt, double time, int resonance)
     {
         Canvas.Panel(area, Palette.HudBack, Palette.PanelEdge);
         _tabHits.Clear();
@@ -108,7 +108,6 @@ internal sealed class HudRenderer(PixelRect area)
         Canvas.Text(right - Canvas.Width(gold), y, gold, Palette.Gold);
         y += 11;
 
-        var resonance = session.State.World.GetCounter(LanternLight.ResonanceCounter);
         var glow = Palette.Of(LanternLight.ColorFor(resonance));
         var flicker = (int)(Math.Sin(time * 6) * 1);
         Raylib.DrawRectangle(x + 2, y + 1, 6, 8, Emblems.Shade(glow, 0.5));

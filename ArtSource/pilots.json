@@ -1,0 +1,10 @@
+{
+  "pixeloramaVersion": "1.2.3",
+  "windowsArchiveSha256": "942e38288b818ef44e0c834691a00a521f811739af523a2cfdc09aae58753646",
+  "palette": ["0B0D12", "151923", "252B38", "3C4554", "697584", "AAB8C5", "E5DDC8", "FFF1C9", "2B211F", "63372E", "A84B45", "DB8552", "D7B46A", "597465", "7FA89B", "A29BC4"],
+  "assets": [
+    {"category": "Rooms", "id": "lichgate", "width": 304, "height": 140},
+    {"category": "Monsters", "id": "gravebound_knight", "width": 48, "height": 48},
+    {"category": "Portraits", "id": "wren", "width": 56, "height": 56}
+  ]
+}
