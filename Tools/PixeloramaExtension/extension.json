@@ -1,0 +1,10 @@
+{
+  "name": "barrowlight_bridge",
+  "display_name": "Barrowlight Preview",
+  "description": "Preview bounded local PNG jobs and apply to one selected pixel cel on request.",
+  "author": "Barrowlight contributors",
+  "version": 0.3,
+  "supported_api_versions": [9],
+  "license": "MIT",
+  "nodes": ["Main.tscn"]
+}

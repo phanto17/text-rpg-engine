@@ -231,4 +231,4 @@ Dice fairness is checked with fixed-seed chi-square tests.
 
 See [AGENTS.md](AGENTS.md) for architecture rules, coding standards, the full JSON schema reference, and the Git workflow (Conventional Commits; commit only when the build and tests are green).
 
-For visual direction and reproducible artwork exports, see [the style guide](Docs/STYLE_GUIDE.md) and [art pipeline](Docs/ART_PIPELINE.md). Pixelorama's supported automation and future integration options are documented in [the research note](Docs/Research/PIXELORAMA_AUTOMATION.md).
+For visual direction and reproducible artwork exports, see [the style guide](Docs/STYLE_GUIDE.md) and [art pipeline](Docs/ART_PIPELINE.md). The optional [Pixelorama preview bridge](Docs/PIXELORAMA_BRIDGE.md) provides reviewed file jobs and authenticated local live previews; the [research note](Docs/Research/PIXELORAMA_AUTOMATION.md) records the supported editor APIs and limitations.

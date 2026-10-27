@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://barrowlight.local/schemas/pixelorama-preview-job-v1.json",
+  "title": "Barrowlight Pixelorama preview job",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["protocol", "requestId", "kind", "target", "image"],
+  "properties": {
+    "protocol": { "const": 1 },
+    "requestId": { "type": "string", "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$" },
+    "kind": { "const": "preview" },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sessionId", "projectId", "frame", "layer", "width", "height", "baseHash"],
+      "properties": {
+        "sessionId": { "type": "string", "pattern": "^[0-9a-f]{32}$" },
+        "projectId": { "type": "string", "minLength": 1, "maxLength": 32 },
+        "frame": { "type": "integer", "minimum": 0 },
+        "layer": { "type": "integer", "minimum": 0 },
+        "width": { "type": "integer", "minimum": 1, "maximum": 1024 },
+        "height": { "type": "integer", "minimum": 1, "maximum": 1024 },
+        "baseHash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "sha256", "width", "height"],
+      "properties": {
+        "file": { "type": "string", "pattern": "^[0-9a-f-]{36}\\.png$" },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "width": { "type": "integer", "minimum": 1, "maximum": 1024 },
+        "height": { "type": "integer", "minimum": 1, "maximum": 1024 }
+      }
+    }
+  }
+}

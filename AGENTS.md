@@ -50,6 +50,9 @@ src/RpgEngine.CLI/         Spectre.Console UI: screens, rendering, hybrid input 
 src/RpgEngine.Pixel/       Raylib-cs pixel-art UI: a headless game model and sequencer, plus the renderers.
 tests/RpgEngine.Tests/     xUnit tests for Core, content validation, CLI playthroughs, and the pixel client's logic.
 .github/workflows/ci.yml   CI: restore, Release build, and tests on ubuntu-latest and windows-latest.
+ArtSource/                 Editable Pixelorama PXO masters and art manifest.
+Tools/ArtPipeline/         Deterministic raster recipes, PNG validation/export, and optional preview broker.
+Tools/PixeloramaExtension/ Version-pinned Pixelorama preview extension; not a game dependency.
 ```
 
 Core folders (namespace = `RpgEngine.Core.<Folder>`): `Dice`, `Characters`, `Checks`, `World`, `Content` (`Defs/` for content records), `Commands`, `Exploration`, `Dialogue`, `Combat`, `Shop`, `Persistence`, `Engine`.
@@ -489,6 +492,10 @@ dotnet run --project src/RpgEngine.CLI -- --export-schemas
 - **No AI attribution, ever.** Commit messages, tags, and PR titles and descriptions must **never** contain `Co-Authored-By:` trailers, "Generated with …" lines, AI or Claude mentions, or emoji badges. They must read as standard human-written Conventional Commits.
   - In commit messages, call this file "the contributor guide" (e.g. `docs: update contributor guide`) so a history scan for AI mentions stays clean.
   - Before pushing, check the message with `git log -1 --format=%B`.
+
+### Art authoring and live preview
+
+`Docs/STYLE_GUIDE.md` defines the 16-color source palette, dimensions, naming, motion targets and visual QA. `Docs/ART_PIPELINE.md` covers editable PXO masters, reviewed PNG exports, Pixelorama CLI commands and rollback. The optional `Docs/PIXELORAMA_BRIDGE.md` describes the local preview protocol and its safety checks. Keep editor scripts and Python/WebSocket tooling out of `src/RpgEngine.Core` and game runtime dependencies. New preview job fields require updating `Tools/ArtPipeline/preview-job.schema.json`, the extension, producer, tests and bridge guide together. Run `python -m unittest discover -s Tools/ArtPipeline/tests -v` and `python Tools/ArtPipeline/validate_assets.py Data/Assets` alongside the .NET gates; CI runs both on Windows and Ubuntu.
 
 ---
 
