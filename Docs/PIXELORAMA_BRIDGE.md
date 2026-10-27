@@ -24,7 +24,7 @@ Start `python Tools/ArtPipeline/live_broker.py <inbox> --port 8765`. It binds **
 
 The broker uses the standard WebSocket transport and a small JSON envelope, not an undocumented Pixelorama socket. Authentication limits accidental access by other local processes; another process already running under the same OS user may still read the token file. Port conflicts fail at startup. Invalid jobs return structured errors, and disconnects leave already-published previews available in the inbox for inspection. Remove stale inbox files only after inspecting their final responses.
 
-For a latency check with a connected disposable project, run `python Tools/ArtPipeline/live_demo.py <inbox> --count 10 --frequency 5`. It reports median and p95 time from controller submission to Pixelorama's preview acknowledgement. Preview jobs remain reversible until Apply. The first 150 ms poll implementation measured 123.9 ms median and 206.2 ms p95 for ten 56×56 previews at 5 Hz on Windows; the extension now polls at 40 ms and must be measured again after reinstalling the 0.3 package. These are local observations, not general performance guarantees.
+For a latency check with a connected disposable project, run `python Tools/ArtPipeline/live_demo.py <inbox> --count 20 --frequency 5`. It reports median and p95 time from controller submission to Pixelorama's preview acknowledgement. Preview jobs remain reversible until Apply. The first 150 ms poll implementation measured 123.9 ms median and 206.2 ms p95 for ten 56×56 previews at 5 Hz on Windows. Installed extension 0.3, polling at 40 ms, measured 63.4 ms median and 120.0 ms p95 for twenty 64×64 previews at 5 Hz. The p95 remains above the proposed 100 ms target; this is a local observation, not a general performance guarantee.
 
 ## Failure and recovery checks
 
@@ -34,4 +34,4 @@ For a latency check with a connected disposable project, run `python Tools/ArtPi
 - Disable or uninstall the extension; its panel must disappear and no listener should remain. Stop the broker; the editor's file inbox can still operate without it.
 - On reconnect, inspect `status.json` and `responses/` before resubmitting a request. A new Pixelorama process has a new session ID, so old jobs are rejected.
 
-Only the 1.2.3/API-9 combination has been exercised. Version checks fail closed, and another Pixelorama release needs a source/API review plus these tests before support is claimed.
+Only the 1.2.3/API-9 combination has been exercised. Extension 0.3 was installed in Pixelorama and checked with a valid preview, an off-palette rejection, an explicit Apply to a disposable cel, and Undo restoring its blank pixels. Version checks fail closed, and another Pixelorama release needs a source/API review plus these tests before support is claimed.
