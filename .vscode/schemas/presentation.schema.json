@@ -5,6 +5,24 @@
   "allowTrailingCommas": true,
   "type": "object",
   "properties": {
+    "audio": {
+      "type": "object",
+      "properties": {
+        "effects": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "ambience": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
     "bindings": {
       "type": "object",
       "properties": {

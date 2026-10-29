@@ -24,6 +24,7 @@ public sealed class PresentationCatalog
     }
 
     public SceneBindingsDef Bindings => _presentation.Bindings;
+    public AudioPresentationDef Audio => _presentation.Audio;
 
     public RoomLook Room(string roomId)
     {

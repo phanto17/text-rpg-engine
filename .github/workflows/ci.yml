@@ -64,3 +64,6 @@ jobs:
 
       - name: Verify reproducible art
         run: python Tools/ArtPipeline/verify_reproducible.py
+
+      - name: Validate reproducible audio
+        run: python Tools/AudioPipeline/validate_audio.py Data/Assets/Audio --reproduce

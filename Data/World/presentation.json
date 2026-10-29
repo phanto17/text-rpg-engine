@@ -1,4 +1,18 @@
 {
+  "audio": {
+    "effects": {
+      "select": "Assets/Audio/menu_select.wav",
+      "step": "Assets/Audio/footstep.wav",
+      "impact": "Assets/Audio/weapon_impact.wav",
+      "damage": "Assets/Audio/damage.wav",
+      "lantern": "Assets/Audio/lantern_ignite.wav"
+    },
+    "ambience": {
+      "lichgate": "Assets/Audio/moor_rain.wav",
+      "ossuary_hall": "Assets/Audio/ossuary_drips.wav",
+      "inner_crypt": "Assets/Audio/barrow_resonance.wav"
+    }
+  },
   "bindings": {
     "resonanceCounter": "lantern_resonance",
     "sigilCounter": "sigil_seq",

@@ -2,10 +2,13 @@ using RpgEngine.Core.Dice;
 
 namespace RpgEngine.Pixel.Sequencing;
 
-// Cues are the closed family of visual effects a beat asks the renderer for, kept together in one
+// Cues are the closed family of presentation effects a beat asks the client for, kept together in one
 // file like the game events they come from. The sequencer hands them out as each beat starts.
 
 public abstract record SequenceCue;
+
+/// <summary>An acquired item, for presentation bindings such as a lantern sound.</summary>
+public sealed record ItemCue(string ItemId) : SequenceCue;
 
 public enum DiceOutcome
 {

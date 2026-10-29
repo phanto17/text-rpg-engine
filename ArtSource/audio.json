@@ -1,0 +1,14 @@
+{
+  "format": "PCM S16LE mono 22050 Hz",
+  "provenance": "Original procedural synthesis in Tools/AudioPipeline/build_audio.py; no external recordings or samples.",
+  "assets": [
+    { "id": "menu_select", "milliseconds": 70, "seed": 11, "peak": 9000, "loop": false },
+    { "id": "footstep", "milliseconds": 300, "seed": 23, "peak": 12000, "loop": false },
+    { "id": "weapon_impact", "milliseconds": 280, "seed": 37, "peak": 15000, "loop": false },
+    { "id": "damage", "milliseconds": 320, "seed": 41, "peak": 14000, "loop": false },
+    { "id": "lantern_ignite", "milliseconds": 900, "seed": 53, "peak": 13000, "loop": false },
+    { "id": "moor_rain", "milliseconds": 8000, "seed": 67, "peak": 7000, "loop": true },
+    { "id": "ossuary_drips", "milliseconds": 8000, "seed": 71, "peak": 8000, "loop": true },
+    { "id": "barrow_resonance", "milliseconds": 8000, "seed": 89, "peak": 6500, "loop": true }
+  ]
+}
