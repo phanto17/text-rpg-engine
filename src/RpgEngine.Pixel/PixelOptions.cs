@@ -38,7 +38,8 @@ public sealed record PixelOptions
           --help          Show this help
 
         In the window: click a button, press 1-9, or type a command. Tab cycles the HUD tabs,
-        Enter skips the typewriter, Esc goes back, F2 toggles the CRT, F3 toggles whole-pixel
+        Enter skips the typewriter, Esc goes back, F4 mutes sound, F5 opens sound settings.
+        F2 toggles the CRT, F3 toggles whole-pixel
         scaling, F11 toggles borderless fullscreen.
         """;
 

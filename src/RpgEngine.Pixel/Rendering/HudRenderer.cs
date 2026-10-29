@@ -210,6 +210,8 @@ internal sealed class HudRenderer(PixelRect area)
             ("Esc", "goes back"),
             ("F2", "CRT scanlines"),
             ("F3", "whole-pixel scaling"),
+            ("F4", "mute sound"),
+            ("F5", "sound settings"),
             ("F11", "borderless fullscreen"),
         };
         foreach (var (key, what) in lines)

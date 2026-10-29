@@ -68,9 +68,10 @@ public static class PresentationLoader
             return new PresentationLoadResult(new PresentationDef(), FileFound: false, [$"{RelativePath}: the file must hold a JSON object."]);
         }
 
-        Known(top, string.Empty, ["rooms", "monsters", "npcs", "bindings"], warnings);
+        Known(top, string.Empty, ["rooms", "monsters", "npcs", "bindings", "audio"], warnings);
         var presentation = new PresentationDef
         {
+            Audio = AudioPresentationReader.Read(top["audio"], warnings),
             Bindings = Bindings(top["bindings"], warnings),
             Rooms = Entries(top, "rooms", warnings, (node, where) =>
             {

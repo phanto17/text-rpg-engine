@@ -57,7 +57,7 @@ public static class PixelHost
 
         var game = new PixelGame(content, new SaveService(options.SavesDirectory, TimeProvider.System), seed: options.Seed);
         var catalog = new PresentationCatalog(content, presentation.Presentation);
-        using var app = new PixelApp(game, catalog, options.DataDirectory, options.Crt, options.Script, options.Screenshot, options.RecordingDirectory);
+        using var app = new PixelApp(game, catalog, options.DataDirectory, new AudioPreferencesStore(options.SavesDirectory), options.Crt, options.Script, options.Screenshot, options.RecordingDirectory);
         app.Run();
         return ExitOk;
     }

@@ -30,7 +30,7 @@ public sealed class EventNarrator
             DialogueLineEvent e => [Beat.Of(Quote(e.Speaker, e.Text), new SpeakerCue(e.Speaker))],
             CheckRolledEvent e => [Check(e.Result)],
             DiceRolledEvent e => [Beat.Of(Dice(e.Label, e.Roll))],
-            ItemGainedEvent e => [Beat.Of(LogLine.Of($"+ {e.Item.Name}{Count(e.Count)}", LogTone.Success))],
+            ItemGainedEvent e => [Beat.Of([LogLine.Of($"+ {e.Item.Name}{Count(e.Count)}", LogTone.Success)], new ItemCue(e.Item.Id))],
             ItemLostEvent e => [Beat.Of(LogLine.Of($"- {e.Item.Name}{Count(e.Count)}", LogTone.Muted))],
             GoldGainedEvent e => [Beat.Of(LogLine.Build().Add($"+{e.Amount} gold", LogTone.Gold).Add($" ({e.Total} total)", LogTone.Muted).Done())],
             GoldSpentEvent e => [Beat.Of(LogLine.Build().Add($"-{e.Amount} gold", LogTone.Gold).Add($" ({e.Total} left)", LogTone.Muted).Done())],

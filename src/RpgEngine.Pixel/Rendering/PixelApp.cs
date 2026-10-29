@@ -21,6 +21,9 @@ internal sealed class PixelApp : IDisposable
     private readonly PixelGame _game;
     private readonly PresentationCatalog _catalog;
     private readonly TextureCache _textures;
+    private readonly AudioDirector _audioDirector;
+    private readonly AudioPlayer _audio;
+    private readonly AudioPanel _audioPanel;
     private readonly SceneRenderer _scene = new(PixelLayout.Scene);
     private readonly CombatStage _stage = new(PixelLayout.Scene);
     private readonly PortraitBox _portrait = new();
@@ -41,13 +44,16 @@ internal sealed class PixelApp : IDisposable
     private RenderTexture2D _canvas;
     private bool _open;
 
-    public PixelApp(PixelGame game, PresentationCatalog catalog, string dataDirectory, bool crt, IReadOnlyList<string>? script = null, string? screenshot = null, string? recordingDirectory = null)
+    public PixelApp(PixelGame game, PresentationCatalog catalog, string dataDirectory, AudioPreferencesStore preferencesStore, bool crt, IReadOnlyList<string>? script = null, string? screenshot = null, string? recordingDirectory = null)
     {
         ArgumentNullException.ThrowIfNull(game);
         ArgumentNullException.ThrowIfNull(catalog);
         _game = game;
         _catalog = catalog;
         _textures = new TextureCache(dataDirectory);
+        _audioDirector = new AudioDirector(catalog.Audio, catalog.Bindings.LanternItem) { Preferences = preferencesStore.Load() };
+        _audio = new AudioPlayer(dataDirectory);
+        _audioPanel = new AudioPanel(_audioDirector, preferencesStore, _audio);
         _crt = crt;
         _script = new Queue<string>(script ?? []);
         _screenshot = screenshot;
@@ -68,6 +74,7 @@ internal sealed class PixelApp : IDisposable
         Raylib.SetExitKey(KeyboardKey.Null);
         Raylib.SetTargetFPS(60);
         _open = true;
+        _audio.Open();
         _canvas = Raylib.LoadRenderTexture(PixelLayout.Width, PixelLayout.Height);
         Raylib.SetTextureFilter(_canvas.Texture, TextureFilter.Point);
 
@@ -75,6 +82,7 @@ internal sealed class PixelApp : IDisposable
         {
             var dt = _recordingDirectory is null ? Math.Min(0.1, Raylib.GetFrameTime()) : 1.0 / 60;
             _time += dt;
+            _audioDirector.Advance(dt);
             _frame++;
             PlayScript();
             var viewport = ViewportFit.Fit(Raylib.GetScreenWidth(), Raylib.GetScreenHeight(), _integerScale);
@@ -82,13 +90,15 @@ internal sealed class PixelApp : IDisposable
             var (mx, my) = ViewportFit.ToCanvas(viewport, mouse.X, mouse.Y);
 
             HandleInput(mx, my);
-            _game.Update(dt);
+            if (!_audioPanel.Visible) _game.Update(dt);
             foreach (var cue in _game.Sequencer.TakeCues())
             {
                 Apply(cue);
             }
 
-            SyncVisuals(dt);
+            SyncVisuals(_audioPanel.Visible ? 0 : dt);
+            var audioRoom = _game.Session?.State.CurrentRoomId ?? _game.Content.Manifest.StartRoom;
+            _audio.Update(_audioDirector.Ambience(audioRoom), dt, _audioDirector.Preferences);
 
             Raylib.BeginTextureMode(_canvas);
             Raylib.ClearBackground(Palette.PanelBack);
@@ -120,6 +130,7 @@ internal sealed class PixelApp : IDisposable
     // Screenshots skip narration; recordings wait for it and preserve every presentation hold.
     private void PlayScript()
     {
+        if (_audioPanel.Visible) return;
         if (_screenshot is null && _recordingDirectory is null)
         {
             return;
@@ -134,6 +145,7 @@ internal sealed class PixelApp : IDisposable
         {
             if (_recordingDirectory is null) _game.Sequencer.Skip();
             _game.Submit(line);
+            _audio.Play(_audioDirector.Effect("select"), _audioDirector.Preferences);
             return;
         }
 
@@ -171,6 +183,7 @@ internal sealed class PixelApp : IDisposable
         }
 
         _textures.Dispose();
+        _audio.Dispose();
         Raylib.UnloadRenderTexture(_canvas);
         Raylib.CloseWindow();
         _open = false;
@@ -178,12 +191,14 @@ internal sealed class PixelApp : IDisposable
 
     private void HandleInput(int mx, int my)
     {
+        if (_audioPanel.HandleInput(mx, my)) return;
         for (var key = Raylib.GetCharPressed(); key > 0; key = Raylib.GetCharPressed())
         {
             var c = (char)key;
             if (_game.Input.Length == 0 && !_game.InputIsName && c is >= '1' and <= '9')
             {
                 _game.Pick(c - '1');
+                _audio.Play(_audioDirector.Effect("select"), _audioDirector.Preferences);
             }
             else
             {
@@ -194,6 +209,7 @@ internal sealed class PixelApp : IDisposable
         if (Raylib.IsKeyPressed(KeyboardKey.Enter) || Raylib.IsKeyPressed(KeyboardKey.KpEnter))
         {
             _game.SubmitInput();
+            _audio.Play(_audioDirector.Effect("select"), _audioDirector.Preferences);
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.Backspace) || Raylib.IsKeyPressedRepeat(KeyboardKey.Backspace))
@@ -257,6 +273,7 @@ internal sealed class PixelApp : IDisposable
             if (_actions.Hit(mx, my) is { } index)
             {
                 _game.Pick(index);
+                _audio.Play(_audioDirector.Effect("select"), _audioDirector.Preferences);
             }
             else if (PixelLayout.Hud.Contains(mx, my))
             {
@@ -277,6 +294,7 @@ internal sealed class PixelApp : IDisposable
 
     private void Apply(SequenceCue cue)
     {
+        _audio.Play(_audioDirector.Resolve(cue), _audioDirector.Preferences);
         switch (cue)
         {
             case DiceBannerCue dice:
@@ -345,7 +363,7 @@ internal sealed class PixelApp : IDisposable
         }
 
         var roomName = session is not null ? session.Content.Rooms[roomId].Name : _game.Content.Manifest.Title;
-        var label = Canvas.Ellipsize(roomName, PixelLayout.Scene.Width - 12);
+        var label = Canvas.Ellipsize(roomName, PixelLayout.Scene.Width - 76);
         Canvas.Fill(new PixelRect(PixelLayout.Scene.X + 3, PixelLayout.Scene.Y + 3, Canvas.Width(label) + 6, 11), Palette.Alpha(Palette.PanelBack, 170));
         Canvas.Text(PixelLayout.Scene.X + 6, PixelLayout.Scene.Y + 3, label, Palette.Title);
         if (!_dice.Active && !_stage.Active)
@@ -359,5 +377,6 @@ internal sealed class PixelApp : IDisposable
         _hud.Draw(_game, dt, _time, state.Resonance);
         _log.Draw(_game.Sequencer, _time);
         _actions.Draw(_game, mx, my, _time);
+        _audioPanel.Draw();
     }
 }

@@ -13,6 +13,8 @@ namespace RpgEngine.Core.Content.Defs;
 /// </summary>
 public sealed record PresentationDef
 {
+    public AudioPresentationDef Audio { get; init; } = new();
+
     public SceneBindingsDef Bindings { get; init; } = new();
 
     public IReadOnlyDictionary<string, RoomPresentationDef> Rooms { get; init; } = new Dictionary<string, RoomPresentationDef>(StringComparer.Ordinal);
