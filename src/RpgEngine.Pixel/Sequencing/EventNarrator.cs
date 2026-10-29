@@ -4,6 +4,7 @@ using RpgEngine.Core.Content.Defs;
 using RpgEngine.Core.Dice;
 using RpgEngine.Core.Events;
 using RpgEngine.Core.Views;
+using RpgEngine.Pixel.Presentation;
 
 namespace RpgEngine.Pixel.Sequencing;
 
@@ -53,7 +54,7 @@ public sealed class EventNarrator
             TurnStartedEvent e => [Beat.Of(e.IsPlayer
                 ? LogLine.Of($"Round {e.Round}: your turn", LogTone.Muted, LogLineKind.Rule)
                 : LogLine.Of($"{e.Name}'s turn", LogTone.Muted))],
-            AttackRolledEvent e => [Attack(e)],
+            AttackRolledEvent e => Attack(e),
             SpellCastEvent e => [Beat.Of(LogLine.Build().Add(Who(e.Caster), LogTone.Accent)
                 .Add($" {(e.Kind == SpellKind.Spell ? "cast" : "use")}{(IsPlayer(e.Caster) ? string.Empty : "s")} ").Add(e.SpellName, LogTone.Mana).Add(".").Done())],
             StatusAppliedEvent e => [Beat.Of(
@@ -189,24 +190,24 @@ public sealed class EventNarrator
         return Beat.Of([line.Done()], new DiceBannerCue(result.Label, result.Roll, bonus, result.Total, $"DC {result.Dc}", outcome)).Holding(DiceHoldSeconds);
     }
 
-    private Beat Attack(AttackRolledEvent e)
+    private IReadOnlyList<Beat> Attack(AttackRolledEvent e)
     {
         var outcome = e.Critical ? DiceOutcome.CriticalSuccess : e.Roll.IsNatural1 ? DiceOutcome.CriticalFailure : e.Hit ? DiceOutcome.Success : DiceOutcome.Failure;
         var line = LogLine.Build().Add(Who(e.Attacker), LogTone.Accent).Add(IsPlayer(e.Attacker) ? " attack " : " attacks ").Add(Whom(e.Target), LogTone.Title)
             .Add(" with ").Add(e.AttackName, LogTone.Accent).Add(": ").Add(D20(e.Roll)).Add($" {Signed(e.Bonus)}", LogTone.Muted).Add($" = {e.Total}")
             .Add($" vs AC {e.TargetArmorClass}  ", LogTone.Muted).Add(e.Critical ? "CRITICAL HIT" : e.Hit ? "HIT" : "MISS", VerdictTone(outcome));
 
-        var cues = new List<SequenceCue>
+        var beats = new List<Beat>
         {
-            new DiceBannerCue(e.AttackName, e.Roll, e.Bonus, e.Total, $"AC {e.TargetArmorClass}", outcome),
-            new LungeCue(e.Attacker, IsPlayer(e.Attacker), e.Target),
+            new([line.Done()], [new DiceBannerCue(e.AttackName, e.Roll, e.Bonus, e.Total, $"AC {e.TargetArmorClass}", outcome)], DiceHoldSeconds),
+            new([], [new LungeCue(e.Attacker, IsPlayer(e.Attacker), e.Target)], AttackMotion.ImpactSeconds),
         };
         if (!e.Hit)
         {
-            cues.Add(new FloatingNumberCue(e.Target, IsPlayer(e.Target), "MISS", FloatingKind.Miss));
+            beats.Add(new Beat([], [new FloatingNumberCue(e.Target, IsPlayer(e.Target), "MISS", FloatingKind.Miss)], AttackMotion.Duration - AttackMotion.ImpactSeconds));
         }
 
-        return new Beat([line.Done()], cues, DiceHoldSeconds);
+        return beats;
     }
 
     private Beat Damage(DamageTakenEvent e)

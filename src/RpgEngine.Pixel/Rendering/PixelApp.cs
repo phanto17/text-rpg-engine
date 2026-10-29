@@ -31,6 +31,7 @@ internal sealed class PixelApp : IDisposable
     private readonly ActionBarRenderer _actions = new();
     private readonly Queue<string> _script;
     private readonly string? _screenshot;
+    private readonly string? _recordingDirectory;
     private bool _crt;
     private bool _integerScale = true;
     private double _roomFade;
@@ -40,7 +41,7 @@ internal sealed class PixelApp : IDisposable
     private RenderTexture2D _canvas;
     private bool _open;
 
-    public PixelApp(PixelGame game, PresentationCatalog catalog, string dataDirectory, bool crt, IReadOnlyList<string>? script = null, string? screenshot = null)
+    public PixelApp(PixelGame game, PresentationCatalog catalog, string dataDirectory, bool crt, IReadOnlyList<string>? script = null, string? screenshot = null, string? recordingDirectory = null)
     {
         ArgumentNullException.ThrowIfNull(game);
         ArgumentNullException.ThrowIfNull(catalog);
@@ -50,10 +51,16 @@ internal sealed class PixelApp : IDisposable
         _crt = crt;
         _script = new Queue<string>(script ?? []);
         _screenshot = screenshot;
+        _recordingDirectory = recordingDirectory;
     }
 
     public void Run()
     {
+        if (_recordingDirectory is not null)
+        {
+            if (Directory.Exists(_recordingDirectory)) throw new IOException("Recording requires a fresh directory.");
+            Directory.CreateDirectory(_recordingDirectory);
+        }
         Raylib.SetTraceLogLevel(TraceLogLevel.Warning);
         Raylib.SetConfigFlags(ConfigFlags.ResizableWindow | ConfigFlags.VSyncHint);
         Raylib.InitWindow(DefaultWidth, DefaultHeight, _game.Content.Manifest.Title);
@@ -66,7 +73,7 @@ internal sealed class PixelApp : IDisposable
 
         while (!Raylib.WindowShouldClose() && !_game.WantsQuit && !_done)
         {
-            var dt = Math.Min(0.1, Raylib.GetFrameTime());
+            var dt = _recordingDirectory is null ? Math.Min(0.1, Raylib.GetFrameTime()) : 1.0 / 60;
             _time += dt;
             _frame++;
             PlayScript();
@@ -87,6 +94,10 @@ internal sealed class PixelApp : IDisposable
             Raylib.ClearBackground(Palette.PanelBack);
             DrawCanvas(dt, mx, my);
             Raylib.EndTextureMode();
+            if (_recordingDirectory is not null && _frame % 5 == 0)
+            {
+                SaveCanvas(Path.Combine(_recordingDirectory, $"frame_{_frame:D6}.png"), scale: 1);
+            }
 
             Raylib.BeginDrawing();
             Raylib.ClearBackground(Palette.Letterbox);
@@ -106,31 +117,50 @@ internal sealed class PixelApp : IDisposable
         }
     }
 
-    // The contributor screenshot mode: type one scripted line every dozen frames with the typewriter
-    // skipped, then save the canvas (scaled twice, so it is easy to look at) and close.
+    // Screenshots skip narration; recordings wait for it and preserve every presentation hold.
     private void PlayScript()
     {
-        if (_screenshot is null)
+        if (_screenshot is null && _recordingDirectory is null)
         {
             return;
         }
 
-        if (_frame % 12 == 0 && _script.TryDequeue(out var line))
+        if (_recordingDirectory is not null && _frame >= 7200)
         {
-            _game.Sequencer.Skip();
+            throw new TimeoutException("Recording exceeded two minutes; check the scripted inputs.");
+        }
+
+        if (_frame % 12 == 0 && (_recordingDirectory is null || _game.Sequencer.IsIdle) && _script.TryDequeue(out var line))
+        {
+            if (_recordingDirectory is null) _game.Sequencer.Skip();
             _game.Submit(line);
             return;
         }
 
         if (_script.Count == 0 && _frame % 12 == 0 && _game.Sequencer.IsIdle && _frame > 24)
         {
-            var image = Raylib.LoadImageFromTexture(_canvas.Texture);
-            Raylib.ImageFlipVertical(ref image);
-            Raylib.ImageResizeNN(ref image, PixelLayout.Width * 2, PixelLayout.Height * 2);
-            Raylib.ExportImage(image, _screenshot);
-            Raylib.UnloadImage(image);
+            if (_screenshot is not null) SaveCanvas(_screenshot, scale: 2);
             _done = true;
         }
+    }
+
+    private void SaveCanvas(string path, int scale)
+    {
+        var output = Raylib.LoadRenderTexture(PixelLayout.Width * scale, PixelLayout.Height * scale);
+        Raylib.SetTextureFilter(output.Texture, TextureFilter.Point);
+        Raylib.BeginTextureMode(output);
+        Raylib.ClearBackground(Palette.Letterbox);
+        var viewport = new PixelRect(0, 0, PixelLayout.Width * scale, PixelLayout.Height * scale);
+        Raylib.DrawTexturePro(_canvas.Texture, new Rectangle(0, 0, PixelLayout.Width, -PixelLayout.Height),
+            new Rectangle(0, 0, viewport.Width, viewport.Height), Vector2.Zero, 0, Color.White);
+        if (_crt) CrtOverlay.Draw(viewport);
+        Raylib.EndTextureMode();
+        var image = Raylib.LoadImageFromTexture(output.Texture);
+        Raylib.ImageFlipVertical(ref image);
+        var saved = Raylib.ExportImage(image, path);
+        Raylib.UnloadImage(image);
+        Raylib.UnloadRenderTexture(output);
+        if (!saved) throw new IOException($"Could not save canvas to {path}.");
     }
 
     public void Dispose()
@@ -303,7 +333,8 @@ internal sealed class PixelApp : IDisposable
             state.SunSealSet,
             state.MoonSealSet,
             state.BellMended,
-            state.BrazierLit);
+            state.BrazierLit,
+            state.SigilDoorOpen);
 
         _scene.Draw(frame, _textures);
         _stage.Draw(_textures);

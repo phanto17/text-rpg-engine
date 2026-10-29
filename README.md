@@ -122,6 +122,8 @@ tests/RpgEngine.Tests/  Unit, content-validation, and playthrough tests
 AGENTS.md               Contributor guide: coding standards, JSON schemas, Git workflow
 ```
 
+The [prologue visual slice](Docs/PROLOGUE_VISUAL_SLICE.md) supplies artwork for all three opening rooms and both enemies, preserves the live sigil puzzle over painted scenes, and adds stepped combat motion with reproducible review captures.
+
 ## Getting started
 
 **Prerequisites:** the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0); `global.json` pins 10.0.401 or a later feature band. A modern terminal (Windows Terminal, iTerm2, any recent Linux terminal) gives the best colors and Unicode bars.

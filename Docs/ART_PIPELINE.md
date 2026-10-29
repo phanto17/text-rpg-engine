@@ -22,4 +22,6 @@ On platforms other than Windows, set `PIXELORAMA_EXE` to a tested Pixelorama des
 
 ## Recovery and rollout
 
+The [prologue visual slice](PROLOGUE_VISUAL_SLICE.md) extends the pack with Ossuary Hall, Barrow Heart and the barrow thrall. `build_prologue.py` produces their staged PNGs; the door, sigil highlights, braziers and plinth lantern remain runtime overlays. That guide also documents the recording-to-GIF review workflow and typography checks.
+
 Keep the previous runtime PNGs until a new export passes visual and automated review. A bad asset change can be rolled back by reverting its `.pxo` or recipe, PNG and presentation entry together; the procedural fallback remains available if an image path is removed. The pack now includes a room, monster, portrait, animated knight sheet, UI icon, stone tile and licensed font. Additional motion and audio can follow the same data-addressed pattern; Core does not need an art or sound dependency.

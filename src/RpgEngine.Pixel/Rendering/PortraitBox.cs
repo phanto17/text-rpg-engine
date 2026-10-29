@@ -72,6 +72,10 @@ internal sealed class PortraitBox
             for (var i = 0; i < rows.Count && i < 2; i++)
             {
                 var text = string.Concat(rows[i].Select(s => s.Text));
+                if (i == 1 && rows.Count > 2)
+                {
+                    text = Canvas.Ellipsize(text.TrimEnd() + "..", BoxWidth - 8);
+                }
                 Canvas.Text(box.X + ((BoxWidth - Canvas.Width(text)) / 2), box.Y + 77 + (i * 10), text, Palette.Muted);
             }
         }

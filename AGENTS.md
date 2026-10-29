@@ -242,7 +242,7 @@ Pixel layout (namespace = `RpgEngine.Pixel.<Folder>`). Everything outside `Rende
     "npcs": { "wren": { "speakerName": "Sister Wren", "primaryColor": "#404858", "accentColor": "#ffd080", "emblem": "lantern_nun", "title": "Sister of the Lantern Bearers", "portraitImage": "Assets/Portraits/wren.png" } } }
   ```
   - `moodCaption` fades in over the bottom of the scene on room entry, remains visible through the room-description beat, then holds for two seconds and fades out. Skipping the beat starts the same hold.
-  - `bindings` maps visual state to data-defined counter, item, and flag IDs. Missing references resolve to zero/false. Keep story-specific IDs here, never in pixel renderer code.
+  - `bindings` maps visual state to data-defined counter, item, and flag IDs. `sigilDoorOpenFlag` optionally names the flag opening the rendered sigil door, independently of `sigilCounter`. Missing references resolve to zero/false. Keep story-specific IDs here, never in pixel renderer code. Stateful scene details render over both PNG backdrops and procedural fallbacks.
   - `speakerName` is the name under the portrait, and how a speaker with no dialogue of their own (a shop keeper's greeting) is matched to an NPC. Keep it equal to the dialogue's `speaker`.
   - `sceneStyle`: `moor_gate ossuary_vault crypt_rotunda spiral_stair sunken_cathedral echo_chapel drowned_bridge twin_seal_gate archive_stacks tallow_loom vow_nursery scoured_barracks lye_cistern iron_bastion uncarved_stair sanctuary_landing sundered_bell_nave cradle_of_ash`.
   - `weather`: `none rain ash_motes spores memory_salt embers`.
@@ -495,6 +495,10 @@ dotnet run --project src/RpgEngine.CLI -- --export-schemas
   - Before pushing, check the message with `git log -1 --format=%B`.
 
 ### Art authoring and live preview
+
+For motion QA, `RpgEngine.Pixel --record <fresh-directory> --play "line;line;..."` writes 480×270 PNG frames at 12 fps using a fixed 60 Hz presentation clock, waits for narration between inputs, and exits when the script settles (two-minute cap). It is a contributor flag, omitted from help; it cannot be combined with `--screenshot`. Use explicit typed combat targets, e.g. `attack Ser Halric`, or menu picks `1;1` to open Attack then choose its target. Compile frames with `python Tools/ArtPipeline/make_preview.py <directory> <fresh.gif> --last-seconds 20`. Screenshot and recording captures include CRT when enabled. Keep captures in ignored `ArtBuild/`. Never open a window from unit tests.
+
+`Presentation/AttackMotion` defines a 600 ms stepped strike with damage cues at 240 ms. Keep motion sampling free of raylib and test its phases. Attack narration and dice finish before the lunge begins; damage follows its anticipation hold. Silkscreen draws once for headings; doubling its tiny glyphs closes their counters. Fit long input tails and labels using `Layout/TextFit` with the same metrics used to draw them.
 
 `Docs/STYLE_GUIDE.md` defines the 16-color source palette, licensed font, dimensions, naming, motion targets and visual QA. `Docs/ART_PIPELINE.md` covers editable PXO masters, deterministic recipe exports, Pixelorama CLI commands and rollback. The optional `Docs/PIXELORAMA_BRIDGE.md` describes the local preview protocol and its safety checks. Keep editor scripts and Python/WebSocket tooling out of `src/RpgEngine.Core` and game runtime dependencies. New preview job fields require updating `Tools/ArtPipeline/preview-job.schema.json`, the extension, producer, tests and bridge guide together. Run `python -m unittest discover -s Tools/ArtPipeline/tests -v`, `python Tools/ArtPipeline/validate_assets.py Data/Assets` and `python Tools/ArtPipeline/verify_reproducible.py` alongside the .NET gates; CI runs them on Windows and Ubuntu.
 

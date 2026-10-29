@@ -15,7 +15,7 @@ namespace RpgEngine.Pixel.Rendering;
 internal sealed class CombatStage(PixelRect area)
 {
     private const double FlashSeconds = 0.18;
-    private const double LungeSeconds = 0.22;
+    private const double LungeSeconds = AttackMotion.Duration;
     private const double FallSeconds = 0.7;
     private const double FloatSeconds = 0.9;
 
@@ -141,7 +141,7 @@ internal sealed class CombatStage(PixelRect area)
 
             var (cx, cy) = Slot(i);
             var size = _enemies.Count > 2 ? 32 : 40;
-            var lunge = figure.Lunge > 0 ? (int)Math.Round(Math.Sin(figure.Lunge / LungeSeconds * Math.PI) * 8) : 0;
+            var lunge = AttackMotion.Offset(figure.Lunge);
             var dx = (int)Math.Round((area.CenterX - cx) / (double)Math.Max(1, Math.Abs(area.CenterX - cx)) * lunge * 0.5);
             var alpha = figure.Falling > 0 ? (int)(255 * figure.Falling / FallSeconds) : 255;
             var drop = figure.Falling > 0 && !figure.Fled ? (int)((1 - figure.Falling / FallSeconds) * 14) : 0;
@@ -194,12 +194,12 @@ internal sealed class CombatStage(PixelRect area)
         if (_playerLunge > 0 && _playerTarget is not null)
         {
             var (tx, ty) = Anchor(_playerTarget);
-            var k = 1 - (_playerLunge / LungeSeconds);
+            var reach = Math.Max(0, AttackMotion.Offset(_playerLunge)) / 8f;
             var from = new Vector2(area.CenterX, area.Bottom - 4);
             var to = new Vector2(tx, ty);
-            var tip = Vector2.Lerp(from, to, (float)Math.Min(1, k * 1.4));
-            var tail = Vector2.Lerp(from, to, (float)Math.Max(0, (k * 1.4) - 0.35));
-            Raylib.DrawLineEx(tail, tip, 2, Palette.Alpha(Color.White, (int)(220 * (1 - k))));
+            var tip = Vector2.Lerp(from, to, reach);
+            var tail = Vector2.Lerp(from, to, Math.Max(0, reach - 0.35f));
+            Raylib.DrawLineEx(tail, tip, 2, Palette.Alpha(Color.White, (int)(220 * reach)));
             Raylib.DrawLineEx(tail, tip, 1, Palette.Alpha(Palette.Accent, 200));
         }
 

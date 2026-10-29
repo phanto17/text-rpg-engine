@@ -2,6 +2,7 @@
   "bindings": {
     "resonanceCounter": "lantern_resonance",
     "sigilCounter": "sigil_seq",
+    "sigilDoorOpenFlag": "sigil_door_open",
     "lanternItem": "barrowlight",
     "sunSealItem": "sun_triad_seal",
     "moonSealItem": "moon_triad_seal",
@@ -240,7 +241,8 @@
       "emblem": "thrall_skull",
       "primaryColor": "#6E7075",
       "accentColor": "#B8B4A8",
-      "spriteImage": "Assets/Monsters/barrow_thrall.png"
+      "spriteImage": "Assets/Monsters/barrow_thrall_idle.png",
+      "animation": { "frames": 4, "frameMilliseconds": 250 }
     },
     "choir_cantor_miriel": {
       "title": "Cantor of the Echo Chapel",
