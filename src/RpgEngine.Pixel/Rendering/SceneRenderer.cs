@@ -37,6 +37,7 @@ internal sealed class SceneRenderer(PixelRect area)
             DrawArchitecture(frame);
         }
 
+        DrawInteractiveDetails(frame);
         _weather.Draw(frame.Time);
         Lantern(frame);
         SceneProps.Vignette(area);
@@ -47,12 +48,46 @@ internal sealed class SceneRenderer(PixelRect area)
     {
         var color = Palette.Of(LanternLight.ColorFor(frame.Resonance));
         var radius = LanternLight.RadiusFor(frame.Resonance) * (frame.HasLantern ? 1f : 0.6f);
-        var flicker = (float)(Math.Sin(frame.Time * 7) * 1.5 + Math.Sin(frame.Time * 13) * 1);
+        var steppedTime = Math.Floor(frame.Time * 4) / 4;
+        var flicker = (float)Math.Round(Math.Sin(steppedTime * 7) * 1.5 + Math.Sin(steppedTime * 13));
         var center = new Vector2(area.CenterX, area.Bottom - 6);
         Raylib.BeginBlendMode(BlendMode.Additive);
         Raylib.DrawCircleGradient(center, radius + flicker, Palette.Alpha(color, frame.HasLantern ? 95 : 55), Palette.Alpha(color, 0));
         Raylib.DrawCircleGradient(center, (radius / 3) + flicker, Palette.Alpha(color, 70), Palette.Alpha(color, 0));
         Raylib.EndBlendMode();
+    }
+
+    // Stateful details sit above both painted backdrops and procedural fallbacks.
+    private void DrawInteractiveDetails(SceneFrame frame)
+    {
+        var cx = area.CenterX;
+        var horizon = area.Y + 104;
+        var accent = Palette.Of(frame.Look.Accent);
+        var stone = Palette.Of(frame.Look.Architecture);
+        if (frame.Look.Style == SceneStyle.OssuaryVault)
+        {
+            if (frame.SigilDoorOpen)
+            {
+                Raylib.DrawRectangle(cx - 26, area.Y + 40, 52, 64, Palette.Ink);
+                Raylib.DrawRectangle(cx - 26, area.Y + 40, 5, 64, Emblems.Shade(accent, 0.5));
+                Raylib.DrawRectangle(cx + 21, area.Y + 40, 5, 64, Emblems.Shade(accent, 0.5));
+                Raylib.DrawRectangle(cx - 25, horizon - 2, 50, 2, Emblems.Shade(accent, 0.8));
+            }
+            else
+            {
+                SceneProps.SigilDoor(cx - 26, area.Y + 40, 52, 64, Emblems.Shade(accent, 0.6), accent, frame.SigilsLit);
+            }
+            var time = Math.Floor(frame.Time * 4) / 4;
+            SceneProps.Brazier(cx - 60, horizon, 12, time, 1, stone, accent);
+            SceneProps.Brazier(cx + 60, horizon, 12, time, 2, stone, accent);
+        }
+        else if (frame.Look.Style == SceneStyle.CryptRotunda && !frame.HasLantern)
+        {
+            Raylib.DrawRectangleLines(cx - 3, horizon - 42, 7, 6, Palette.Muted);
+            Raylib.DrawRectangle(cx - 5, horizon - 36, 11, 14, Palette.PanelEdgeLight);
+            Raylib.DrawRectangle(cx - 3, horizon - 34, 7, 9, Palette.Ink);
+            Raylib.DrawRectangle(cx - 5, horizon - 24, 11, 2, Palette.Muted);
+        }
     }
 
     private void DrawArchitecture(SceneFrame frame)
@@ -99,9 +134,6 @@ internal sealed class SceneRenderer(PixelRect area)
                 SceneProps.SkullNiches(x + 10, area.Y + 20, 7, 5, stone, Emblems.Shade(accent, 0.9));
                 SceneProps.SkullNiches(area.Right - 96, area.Y + 20, 7, 5, stone, Emblems.Shade(accent, 0.9));
                 SceneProps.Arch(cx - 38, area.Y + 14, 76, horizon - area.Y - 14, stone, deep);
-                SceneProps.SigilDoor(cx - 26, area.Y + 40, 52, horizon - area.Y - 40, Emblems.Shade(accent, 0.6), accent, frame.SigilsLit);
-                SceneProps.Brazier(cx - 60, horizon, 12, t, 1, dark, accent);
-                SceneProps.Brazier(cx + 60, horizon, 12, t, 2, dark, accent);
                 break;
 
             case SceneStyle.CryptRotunda:
@@ -116,11 +148,6 @@ internal sealed class SceneRenderer(PixelRect area)
                 Raylib.DrawRectangle(cx - 34, horizon - 22, 68, 22, stone);
                 Raylib.DrawRectangle(cx - 38, horizon - 26, 76, 6, Emblems.Shade(stone, 1.2));
                 Raylib.DrawRectangle(cx - 30, horizon - 24, 60, 2, accent);
-                Raylib.DrawRectangle(cx - 2, horizon - 46, 4, 20, Emblems.Shade(accent, 0.8));
-                Raylib.DrawCircle(cx, horizon - 50, 5, accent);
-                Raylib.BeginBlendMode(BlendMode.Additive);
-                Raylib.DrawCircleGradient(new Vector2(cx, horizon - 50), 22, Palette.Alpha(accent, 70), Palette.Alpha(accent, 0));
-                Raylib.EndBlendMode();
                 break;
 
             case SceneStyle.SpiralStair:

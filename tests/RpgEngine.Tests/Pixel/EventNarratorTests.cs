@@ -38,19 +38,21 @@ public sealed class EventNarratorTests
         var hit = new AttackRolledEvent("Tester", "Rat", "Sword", new D20Roll(RollMode.Advantage, 17, [17, 4]), 5, 22, 12, true, false);
         var miss = new AttackRolledEvent("Rat", "Tester", "Bite", new D20Roll(RollMode.Normal, 3, [3]), 4, 7, 15, false, false);
 
-        var hitBeat = Assert.Single(_narrator.Narrate(hit));
-        var missBeat = Assert.Single(_narrator.Narrate(miss));
+        var hitBeats = _narrator.Narrate(hit);
+        var missBeats = _narrator.Narrate(miss);
+        var hitBeat = hitBeats[0];
+        var missBeat = missBeats[0];
 
         Assert.Equal("You attack Rat with Sword: d20 17 (adv 17/4) +5 = 22 vs AC 12  HIT", hitBeat.Lines[0].Text);
         Assert.Equal(EventNarrator.DiceHoldSeconds, hitBeat.HoldSeconds);
-        Assert.Contains(new LungeCue("Tester", true, "Rat"), hitBeat.Cues);
+        Assert.Contains(new LungeCue("Tester", true, "Rat"), hitBeats[1].Cues);
         Assert.DoesNotContain(hitBeat.Cues, c => c is FloatingNumberCue);
         var banner = Assert.Single(hitBeat.Cues.OfType<DiceBannerCue>());
         Assert.Equal(("Sword", "AC 12", DiceOutcome.Success), (banner.Label, banner.Versus, banner.Outcome));
 
         Assert.Equal("Rat attacks you with Bite: d20 3 +4 = 7 vs AC 15  MISS", missBeat.Lines[0].Text);
-        Assert.Contains(new FloatingNumberCue("Tester", true, "MISS", FloatingKind.Miss), missBeat.Cues);
-        Assert.Contains(new LungeCue("Rat", false, "Tester"), missBeat.Cues);
+        Assert.Contains(new FloatingNumberCue("Tester", true, "MISS", FloatingKind.Miss), missBeats[2].Cues);
+        Assert.Contains(new LungeCue("Rat", false, "Tester"), missBeats[1].Cues);
     }
 
     [Fact]

@@ -83,7 +83,7 @@ internal sealed class LogRenderer(PixelRect area)
 
         if (line.Kind == LogLineKind.Rule)
         {
-            var text = line.Text;
+            var text = Canvas.Ellipsize(line.Text, width - 8);
             var visible = text[..Math.Min(text.Length, revealed)];
             var textWidth = Canvas.Width(text);
             var left = x + ((width - textWidth) / 2);

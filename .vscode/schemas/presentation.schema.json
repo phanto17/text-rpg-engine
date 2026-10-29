@@ -20,6 +20,12 @@
             "null"
           ]
         },
+        "sigilDoorOpenFlag": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "lanternItem": {
           "type": [
             "string",

@@ -12,6 +12,8 @@ public sealed class PixelHostTests
     [InlineData(new[] { "--saves", "--crt" }, "--saves needs a folder path.")]
     [InlineData(new[] { "--screenshot" }, "--screenshot needs a file path.")]
     [InlineData(new[] { "--play" }, "--play needs a semicolon-separated list of lines.")]
+    [InlineData(new[] { "--record" }, "--record needs a fresh directory path.")]
+    [InlineData(new[] { "--record", "frames", "--screenshot", "shot.png" }, "Use either --screenshot or --record.")]
     public void Parse_InvalidArguments_ReportErrors(string[] args, string expected)
     {
         Assert.Null(PixelOptions.Parse(args, out var error));
@@ -40,6 +42,15 @@ public sealed class PixelHostTests
         Assert.False(options.Crt);
         Assert.Null(options.Screenshot);
         Assert.Throws<ArgumentNullException>(() => PixelOptions.Parse(null!, out _));
+    }
+
+    [Fact]
+    public void Parse_Recording_UsesNominatedDirectoryAndScript()
+    {
+        var options = PixelOptions.Parse(["--record", "frames", "--play", "new;Tester"], out var error)!;
+        Assert.Null(error);
+        Assert.Equal("frames", options.RecordingDirectory);
+        Assert.Equal(["new", "Tester"], options.Script);
     }
 
     [Fact]

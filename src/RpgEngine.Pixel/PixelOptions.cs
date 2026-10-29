@@ -22,6 +22,9 @@ public sealed record PixelOptions
     /// <summary>Contributor tool: write the canvas to this PNG once the script has played, then exit.</summary>
     public string? Screenshot { get; init; }
 
+    /// <summary>Contributor tool: write native canvas frames at 12 fps to a fresh directory.</summary>
+    public string? RecordingDirectory { get; init; }
+
     /// <summary>Contributor tool: lines typed into the game one after another before the screenshot.</summary>
     public IReadOnlyList<string> Script { get; init; } = [];
 
@@ -98,6 +101,14 @@ public sealed record PixelOptions
 
                     options = options with { Script = script.Split(';', StringSplitOptions.TrimEntries) };
                     break;
+                case "--record":
+                    if (!TryValue(args, ref i, out var recording))
+                    {
+                        error = "--record needs a fresh directory path.";
+                        return null;
+                    }
+                    options = options with { RecordingDirectory = recording };
+                    break;
                 case "--help" or "-h" or "-?":
                     options = options with { ShowHelp = true };
                     break;
@@ -107,6 +118,11 @@ public sealed record PixelOptions
             }
         }
 
+        if (options.Screenshot is not null && options.RecordingDirectory is not null)
+        {
+            error = "Use either --screenshot or --record.";
+            return null;
+        }
         return options;
     }
 

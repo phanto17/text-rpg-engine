@@ -6,6 +6,7 @@ from tempfile import TemporaryDirectory
 
 from build_pilots import room, knight, portrait
 from build_production import knight_idle, lantern_icon, crypt_stone
+from build_prologue import ossuary, crypt, thrall, thrall_idle
 from build_extension import build as build_extension
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -17,6 +18,10 @@ GENERATORS = {
     "gravebound_knight_idle": knight_idle,
     "lantern_icon": lantern_icon,
     "crypt_stone": crypt_stone,
+    "ossuary_hall": ossuary,
+    "inner_crypt": crypt,
+    "barrow_thrall": thrall,
+    "barrow_thrall_idle": thrall_idle,
 }
 
 

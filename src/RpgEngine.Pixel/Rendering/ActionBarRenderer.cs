@@ -61,8 +61,9 @@ internal sealed class ActionBarRenderer
 
         var input = PixelLayout.Input;
         Canvas.Fill(new PixelRect(input.X, input.Y - 1, input.Width, input.Height + 2), Palette.InputBack);
+        Canvas.Clip(input);
         Canvas.Text(input.X + 2, input.Y, ">", Palette.Accent);
-        var text = game.Input;
+        var text = TextFit.Tail(game.Input, input.Width - 18, Canvas.Width);
         if (text.Length == 0)
         {
             var placeholder = game.InputIsName ? "type your name and press Enter" : "type a command (help) or a number";
@@ -77,5 +78,6 @@ internal sealed class ActionBarRenderer
         {
             Raylib.DrawRectangle(input.X + 10 + Canvas.Width(text) + 1, input.Y + 1, 4, 8, Palette.Accent);
         }
+        Canvas.Unclip();
     }
 }

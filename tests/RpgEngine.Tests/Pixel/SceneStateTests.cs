@@ -32,6 +32,19 @@ public sealed class SceneStateTests
     }
 
     [Fact]
+    public void Read_DoorOpenBinding_TracksDataFlagIndependentlyOfCounter()
+    {
+        var session = SessionFixture.NewSession();
+        var parsed = PresentationLoader.Parse("""{"bindings":{"sigilDoorOpenFlag":"door_released"}}""");
+        Assert.Empty(parsed.Warnings);
+        Assert.False(SceneState.Read(session, parsed.Presentation.Bindings).SigilDoorOpen);
+        session.State.World.SetFlag("door_released");
+        var state = SceneState.Read(session, parsed.Presentation.Bindings);
+        Assert.True(state.SigilDoorOpen);
+        Assert.Equal(0, state.SigilsLit);
+    }
+
+    [Fact]
     public void Read_MissingSessionOrBindings_ReturnsNeutralState()
     {
         var neutral = new SceneState(0, 0, false, false, false, false, false);

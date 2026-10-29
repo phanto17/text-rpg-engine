@@ -8,6 +8,10 @@
     {"category": "Portraits", "id": "wren", "width": 56, "height": 56, "source": "pixelorama"},
     {"category": "Monsters", "id": "gravebound_knight_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 200, "source": "recipe"},
     {"category": "UI", "id": "lantern_icon", "width": 16, "height": 16, "source": "recipe"},
-    {"category": "Tiles", "id": "crypt_stone", "width": 16, "height": 16, "source": "recipe"}
+    {"category": "Tiles", "id": "crypt_stone", "width": 16, "height": 16, "source": "recipe"},
+    {"category": "Rooms", "id": "ossuary_hall", "width": 304, "height": 140, "source": "recipe"},
+    {"category": "Rooms", "id": "inner_crypt", "width": 304, "height": 140, "source": "recipe"},
+    {"category": "Monsters", "id": "barrow_thrall", "width": 48, "height": 48, "source": "recipe"},
+    {"category": "Monsters", "id": "barrow_thrall_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 250, "source": "recipe"}
   ]
 }

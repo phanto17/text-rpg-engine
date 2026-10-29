@@ -41,11 +41,11 @@ internal static class Canvas
         }
     }
 
-    /// <summary>Text drawn twice, one pixel apart, for a heavier weight.</summary>
+    /// <summary>The pixel face already has a heavy stroke; only the fallback needs faux bold.</summary>
     public static void BoldText(int x, int y, string text, Color color)
     {
         var clean = Clean(text);
-        Draw(x + 1, y, clean, color);
+        if (UiFont.Value is null) Draw(x + 1, y, clean, color);
         Draw(x, y, clean, color);
     }
 
@@ -83,20 +83,7 @@ internal static class Canvas
 
     /// <summary>Shortens text with an ellipsis so it fits <paramref name="maxWidth"/>.</summary>
     public static string Ellipsize(string text, int maxWidth)
-    {
-        if (Width(text) <= maxWidth)
-        {
-            return text;
-        }
-
-        var cut = text.Length;
-        while (cut > 1 && Width(text[..cut] + "..") > maxWidth)
-        {
-            cut--;
-        }
-
-        return text[..cut].TrimEnd() + "..";
-    }
+        => TextFit.Ellipsize(text, maxWidth, Width);
 
     // The default font covers ASCII, so typographic punctuation is folded onto its plain cousins,
     // and line breaks become spaces because the log wraps text itself.
