@@ -71,6 +71,8 @@ public sealed class PresentationCatalog
                 Accent = PixelColor.TryParse(def.AccentColor) ?? look.Accent,
                 Title = def.Title ?? look.Title,
                 Image = def.SpriteImage ?? look.Image,
+                Frames = def.Animation?.Frames ?? look.Frames,
+                FrameMilliseconds = def.Animation?.FrameMilliseconds ?? look.FrameMilliseconds,
             };
         }
 

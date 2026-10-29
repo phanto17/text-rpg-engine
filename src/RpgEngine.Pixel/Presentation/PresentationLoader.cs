@@ -23,7 +23,7 @@ public static class PresentationLoader
     // The property names the schema allows; "id" is accepted for the array form of a section.
     private static readonly string[] RoomProperties = ["id", "palette", "sceneStyle", "weather", "backdropImage", "moodCaption"];
     private static readonly string[] PaletteProperties = ["backgroundTop", "backgroundBottom", "architecture", "accent"];
-    private static readonly string[] MonsterProperties = ["id", "primaryColor", "accentColor", "emblem", "title", "spriteImage"];
+    private static readonly string[] MonsterProperties = ["id", "primaryColor", "accentColor", "emblem", "title", "spriteImage", "animation"];
     private static readonly string[] NpcProperties = ["id", "speakerName", "primaryColor", "accentColor", "emblem", "title", "portraitImage"];
 
     public static PresentationLoadResult Load(string dataDirectory)
@@ -94,6 +94,7 @@ public static class PresentationLoader
                     Emblem = Enum(node, "emblem", Emblems, where, warnings),
                     Title = Text(node, "title"),
                     SpriteImage = Text(node, "spriteImage"),
+                    Animation = Animation(node["animation"], where, warnings),
                 };
             }),
             Npcs = Entries(top, "npcs", warnings, (node, where) =>
@@ -233,6 +234,31 @@ public static class PresentationLoader
             Architecture = Color(palette, "architecture", where + ".palette", warnings),
             Accent = Color(palette, "accent", where + ".palette", warnings),
         };
+    }
+
+    private static SpriteAnimationDef? Animation(JsonNode? node, string where, List<string> warnings)
+    {
+        if (node is null)
+        {
+            return null;
+        }
+
+        if (node is not JsonObject animation)
+        {
+            warnings.Add($"{RelativePath}: '{where}.animation' must be an object and was ignored.");
+            return null;
+        }
+
+        Known(animation, where + ".animation", ["frames", "frameMilliseconds"], warnings);
+        if (animation["frames"] is not JsonValue framesNode || !framesNode.TryGetValue<int>(out var frames)
+            || animation["frameMilliseconds"] is not JsonValue durationNode || !durationNode.TryGetValue<int>(out var duration)
+            || frames is < 1 or > 16 || duration is < 50 or > 2000)
+        {
+            warnings.Add($"{RelativePath}: '{where}.animation' needs 1..16 frames and 50..2000 frameMilliseconds and was ignored.");
+            return null;
+        }
+
+        return new SpriteAnimationDef { Frames = frames, FrameMilliseconds = duration };
     }
 
     // Unknown properties are ignored, as the client cannot use them, but reported: the schema rejects

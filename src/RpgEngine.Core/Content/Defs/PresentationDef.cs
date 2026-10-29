@@ -74,6 +74,16 @@ public sealed record MonsterPresentationDef
 
     /// <summary>A sprite to draw instead of the heraldic emblem, relative to <c>Data/</c>.</summary>
     public string? SpriteImage { get; init; }
+
+    /// <summary>Optional horizontal sprite sheet timing. Omit for a static image.</summary>
+    public SpriteAnimationDef? Animation { get; init; }
+}
+
+public sealed record SpriteAnimationDef
+{
+    public int Frames { get; init; }
+
+    public int FrameMilliseconds { get; init; }
 }
 
 public sealed record NpcPresentationDef

@@ -24,7 +24,7 @@ The engine is **purely data-driven**. Every room, item, monster, line of dialogu
   - a character HUD with eased HP, MP, and XP bars and Inventory, Quests, Stats, and Exits (compass) tabs
   - a typewriter event log with colored roll badges and a d20 banner on every check, attack, and saving throw
   - the same hybrid input: click a button, press `1`-`9`, or type the classic commands
-  - looks and story-specific visual state bindings come from `Data/World/presentation.json`; generic procedural looks fill missing entries, while three pilot PNGs demonstrate the editable Pixelorama art pipeline
+  - looks and story-specific visual state bindings come from `Data/World/presentation.json`; generic procedural looks fill missing entries, while the reviewed asset pack adds an animated knight, UI icon, crypt tile, and Silkscreen pixel font to the three Pixelorama pilot images
 - **Save/Load** to JSON in `Saves/`, shared by both clients.
 
 ## The adventure: *Barrowlight*
@@ -231,4 +231,4 @@ Dice fairness is checked with fixed-seed chi-square tests.
 
 See [AGENTS.md](AGENTS.md) for architecture rules, coding standards, the full JSON schema reference, and the Git workflow (Conventional Commits; commit only when the build and tests are green).
 
-For visual direction and reproducible artwork exports, see [the style guide](Docs/STYLE_GUIDE.md) and [art pipeline](Docs/ART_PIPELINE.md). Pixelorama's supported automation and future integration options are documented in [the research note](Docs/Research/PIXELORAMA_AUTOMATION.md).
+For visual direction and reproducible artwork exports, see [the style guide](Docs/STYLE_GUIDE.md) and [art pipeline](Docs/ART_PIPELINE.md). The optional [Pixelorama preview bridge](Docs/PIXELORAMA_BRIDGE.md) provides reviewed file jobs and authenticated local live previews; the [research note](Docs/Research/PIXELORAMA_AUTOMATION.md) records the supported editor APIs and limitations.

@@ -1,4 +1,5 @@
 using System.Text;
+using System.Numerics;
 using Raylib_cs;
 using RpgEngine.Pixel.Layout;
 
@@ -7,18 +8,50 @@ namespace RpgEngine.Pixel.Rendering;
 /// <summary>Small drawing helpers over raylib for the virtual canvas: pixel text, frames, and bars.</summary>
 internal static class Canvas
 {
+    private static readonly Lazy<Font?> UiFont = new(() =>
+    {
+        var path = Path.Combine(AppContext.BaseDirectory, "Data", "Assets", "Fonts", "Silkscreen-Regular.ttf");
+        if (!File.Exists(path))
+        {
+            return null;
+        }
+
+        var loaded = Raylib.LoadFontEx(path, PixelLayout.FontSize, null!, 0);
+        if (!Raylib.IsFontValid(loaded))
+        {
+            return null;
+        }
+
+        Raylib.SetTextureFilter(loaded.Texture, TextureFilter.Point);
+        return loaded;
+    });
+
     public static void Text(int x, int y, string text, Color color) =>
-        Raylib.DrawText(Clean(text), x, y, PixelLayout.FontSize, color);
+        Draw(x, y, Clean(text), color);
+
+    private static void Draw(int x, int y, string clean, Color color)
+    {
+        if (UiFont.Value is { } font)
+        {
+            Raylib.DrawTextEx(font, clean, new Vector2(x, y), PixelLayout.FontSize, 0, color);
+        }
+        else
+        {
+            Raylib.DrawText(clean, x, y, PixelLayout.FontSize, color);
+        }
+    }
 
     /// <summary>Text drawn twice, one pixel apart, for a heavier weight.</summary>
     public static void BoldText(int x, int y, string text, Color color)
     {
         var clean = Clean(text);
-        Raylib.DrawText(clean, x + 1, y, PixelLayout.FontSize, color);
-        Raylib.DrawText(clean, x, y, PixelLayout.FontSize, color);
+        Draw(x + 1, y, clean, color);
+        Draw(x, y, clean, color);
     }
 
-    public static int Width(string text) => Raylib.MeasureText(Clean(text), PixelLayout.FontSize);
+    public static int Width(string text) => UiFont.Value is { } font
+        ? (int)Math.Ceiling(Raylib.MeasureTextEx(font, Clean(text), PixelLayout.FontSize, 0).X)
+        : Raylib.MeasureText(Clean(text), PixelLayout.FontSize);
 
     public static void Fill(PixelRect rect, Color color) => Raylib.DrawRectangle(rect.X, rect.Y, rect.Width, rect.Height, color);
 

@@ -47,3 +47,20 @@ jobs:
 
       - name: Test
         run: dotnet test RpgEngine.slnx -c Release --no-build
+
+      - name: Set up Python art tooling
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Install art tooling
+        run: python -m pip install -r Tools/ArtPipeline/requirements.txt
+
+      - name: Test art tooling
+        run: python -m unittest discover -s Tools/ArtPipeline/tests -v
+
+      - name: Validate reviewed art
+        run: python Tools/ArtPipeline/validate_assets.py Data/Assets
+
+      - name: Verify reproducible art
+        run: python Tools/ArtPipeline/verify_reproducible.py

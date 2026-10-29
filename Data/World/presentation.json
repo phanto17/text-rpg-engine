@@ -232,7 +232,8 @@
       "emblem": "knight_helm",
       "primaryColor": "#8C4A3E",
       "accentColor": "#E6A83E",
-      "spriteImage": "Assets/Monsters/gravebound_knight.png"
+      "spriteImage": "Assets/Monsters/gravebound_knight_idle.png",
+      "animation": { "frames": 4, "frameMilliseconds": 200 }
     },
     "barrow_thrall": {
       "title": "Bound to the Knight",

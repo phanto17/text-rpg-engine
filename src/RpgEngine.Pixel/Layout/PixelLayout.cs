@@ -9,7 +9,7 @@ public static class PixelLayout
     public const int Width = 480;
     public const int Height = 270;
 
-    /// <summary>The pixel font's size; raylib's default font renders crisply at exactly this size.</summary>
+    /// <summary>Silkscreen's raster size on the virtual canvas; output scales by whole pixels.</summary>
     public const int FontSize = 10;
     public const int LineHeight = 11;
 
