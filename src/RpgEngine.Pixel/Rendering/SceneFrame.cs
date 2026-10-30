@@ -18,4 +18,5 @@ internal sealed record SceneFrame(
     bool BeaconLit = false,
     bool SpiritsReleased = false,
     bool PassageOpen = false,
-    bool ThresholdOpen = false);
+    bool ThresholdOpen = false,
+    ArchiveState? Archive = null);

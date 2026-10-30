@@ -129,7 +129,7 @@ public static class PresentationLoader
             return new();
         }
 
-        Known(value, "bindings", ["resonanceCounter", "sigilCounter", "sigilDoorOpenFlag", "beaconLitFlag", "thresholdOpenFlag", "releasedSpiritsFlag", "passageVisitedRoom", "lanternItem", "sunSealItem", "moonSealItem", "bellMendedFlags", "brazierLitFlags"], warnings);
+        Known(value, "bindings", ["resonanceCounter", "sigilCounter", "sigilDoorOpenFlag", "beaconLitFlag", "thresholdOpenFlag", "loomSlackFlag", "carillonStoppedFlag", "carillonReleasedFlag", "releasedSpiritsFlag", "passageVisitedRoom", "lanternItem", "sunSealItem", "moonSealItem", "bellMendedFlags", "brazierLitFlags"], warnings);
         string? Reference(string property)
         {
             var text = Text(value, property);
@@ -161,6 +161,9 @@ public static class PresentationLoader
             SigilDoorOpenFlag = Reference("sigilDoorOpenFlag"),
             BeaconLitFlag = Reference("beaconLitFlag"),
             ThresholdOpenFlag = Reference("thresholdOpenFlag"),
+            LoomSlackFlag = Reference("loomSlackFlag"),
+            CarillonStoppedFlag = Reference("carillonStoppedFlag"),
+            CarillonReleasedFlag = Reference("carillonReleasedFlag"),
             ReleasedSpiritsFlag = Reference("releasedSpiritsFlag"),
             PassageVisitedRoom = Reference("passageVisitedRoom"),
             LanternItem = Reference("lanternItem"),

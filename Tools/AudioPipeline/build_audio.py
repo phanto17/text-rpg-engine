@@ -93,6 +93,19 @@ def render(asset):
             swell = 700 + SINE[(i * 32 // count) % 32] * 90 // 32768
             sample = (tone(i, 82) + tone(i, 123)) * swell // 4096
             sample += sum(random[(i - k) % count] for k in range(32)) // 192
+        elif kind == "archive_ticks":
+            sample = sum(random[(i - k) % count] for k in range(24)) // 144
+            for onset in (RATE // 2, RATE * 2, RATE * 37 // 10, RATE * 53 // 10, RATE * 7):
+                local = (i - onset) % count
+                length = RATE // 12
+                if local < length:
+                    sample += tone(local, 720) * envelope(local, length, 15) // 4096
+        elif kind == "tallow_simmer":
+            swell = 600 + SINE[(i * 32 // count) % 32] * 100 // 32768
+            sample = sum(random[(i - k) % count] for k in range(20)) * swell // (20 * 1024)
+        elif kind == "sanctum_air":
+            sample = (tone(i, 98) + tone(i, 147)) // 12
+            sample += sum(random[(i - k) % count] for k in range(48)) // 192
         else:
             raise ValueError(f"unknown recipe {kind}")
         samples.append(sample)

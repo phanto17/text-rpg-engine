@@ -356,7 +356,8 @@ internal sealed class PixelApp : IDisposable
             state.BeaconLit,
             state.SpiritsReleased,
             state.PassageOpen,
-            state.ThresholdOpen);
+            state.ThresholdOpen,
+            state.Archive);
 
         _scene.Draw(frame, _textures);
         _stage.Draw(_textures);

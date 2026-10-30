@@ -40,6 +40,7 @@ internal sealed class SceneRenderer(PixelRect area)
         DrawInteractiveDetails(frame);
         SpokeDetails.Draw(area, frame);
         ThresholdDetails.Draw(area, frame);
+        ArchiveDetails.Draw(area, frame);
         _weather.Draw(frame.Time);
         Lantern(frame);
         SceneProps.Vignette(area);
@@ -276,13 +277,6 @@ internal sealed class SceneRenderer(PixelRect area)
                 SceneProps.Shelves(cx + 24, area.Y + 30, 46, horizon - area.Y - 30, Emblems.Shade(stone, 0.8), Emblems.Shade(accent, 0.8));
                 Raylib.DrawRectangle(cx - 16, horizon - 30, 32, 30, Emblems.Shade(stone, 1.1));
                 Raylib.DrawRectangle(cx - 12, horizon - 34, 24, 4, accent);
-                for (var i = 0; i < 6; i++)
-                {
-                    var sx = cx - 60 + (i * 24);
-                    var sy = area.Y + 14 + (int)(Math.Sin(t * 0.6 + i * 1.3) * 3);
-                    Raylib.DrawRectangle(sx, sy, 5, 7, Palette.Alpha(Emblems.Shade(accent, 1.2), 130));
-                }
-
                 break;
 
             case SceneStyle.TallowLoom:
@@ -290,20 +284,11 @@ internal sealed class SceneRenderer(PixelRect area)
                 Raylib.DrawRectangle(cx - 60, area.Y + 16, 6, horizon - area.Y - 16, stone);
                 Raylib.DrawRectangle(cx + 54, area.Y + 16, 6, horizon - area.Y - 16, stone);
                 Raylib.DrawRectangle(cx - 62, area.Y + 14, 124, 5, Emblems.Shade(stone, 1.2));
-                for (var i = 0; i < 20; i++)
-                {
-                    var lx = cx - 52 + (i * 5);
-                    var wave = (int)(Math.Sin(t * 2 + i * 0.5) * 2);
-                    Raylib.DrawLine(lx, area.Y + 19, lx + wave, horizon - 10, Palette.Alpha(accent, (byte)(90 + (i % 3) * 40)));
-                }
-
                 Raylib.DrawRectangle(cx - 56, horizon - 36, 112, 4, Emblems.Shade(stone, 1.1));
                 Raylib.DrawEllipse(cx - 90, horizon - 6, 24, 8, dark);
                 Raylib.DrawEllipse(cx - 90, horizon - 8, 20, 5, Emblems.Shade(accent, 0.8));
                 Raylib.DrawEllipse(cx + 90, horizon - 6, 24, 8, dark);
                 Raylib.DrawEllipse(cx + 90, horizon - 8, 20, 5, Emblems.Shade(accent, 0.8));
-                SceneProps.Flame(cx - 90, horizon - 10, 10, t, 6, accent, new Color(255, 240, 200, 255));
-                SceneProps.Flame(cx + 90, horizon - 10, 10, t, 7, accent, new Color(255, 240, 200, 255));
                 break;
 
             case SceneStyle.VowNursery:
@@ -319,13 +304,6 @@ internal sealed class SceneRenderer(PixelRect area)
                         Raylib.DrawLine(rx, area.Y, rx, ry - 14, dark);
                         Raylib.DrawRectangle(rx - 6, ry - 11, 12, 10, Palette.Alpha(accent, 50));
                     }
-                }
-
-                Raylib.DrawRectangle(cx - 20, area.Y + 10, 40, 50, Emblems.Shade(stone, 1.2));
-                Raylib.DrawRectangle(cx - 16, area.Y + 14, 32, 42, deep);
-                for (var i = 0; i < 6; i++)
-                {
-                    Raylib.DrawRectangle(cx - 14 + (i * 5), area.Y + 20 + (int)(Math.Abs(Math.Sin(t * 1.3 + i)) * 20), 3, 3, accent);
                 }
 
                 break;
