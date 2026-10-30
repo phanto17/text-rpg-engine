@@ -88,6 +88,53 @@ internal sealed class SceneRenderer(PixelRect area)
             Raylib.DrawRectangle(cx - 3, horizon - 34, 7, 9, Palette.Ink);
             Raylib.DrawRectangle(cx - 5, horizon - 24, 11, 2, Palette.Muted);
         }
+        else if (frame.Look.Style == SceneStyle.SpiralStair)
+        {
+            var time = Math.Floor(frame.Time * 4) / 4;
+            for (var i = 0; i < 6; i++)
+            {
+                var dx = area.X + 20 + (i * 48);
+                Raylib.DrawLine(dx, area.Y + 8, dx + 1, area.Y + 30 + (int)(Math.Sin(time * 2 + i) * 6), Palette.Alpha(accent, 120));
+            }
+        }
+        else if (frame.Look.Style == SceneStyle.SunkenCathedral)
+        {
+            DrawMarketLights(frame);
+        }
+    }
+
+    private void DrawMarketLights(SceneFrame frame)
+    {
+        var cx = area.CenterX;
+        var horizon = area.Y + 104;
+        var stone = Palette.Of(frame.Look.Architecture);
+        var accent = Palette.Of(frame.Look.Accent);
+        var dark = Emblems.Shade(stone, 0.55);
+        var time = Math.Floor(frame.Time * 4) / 4;
+        for (var i = -3; i <= 3; i++)
+        {
+            var lx = cx + (i * 40) + 8;
+            var ly = area.Y + 30 + (int)(Math.Sin(time + i) * 2);
+            Raylib.DrawLine(lx, area.Y, lx, ly, dark);
+            Raylib.DrawRectangle(lx - 3, ly, 6, 8, dark);
+            Raylib.DrawRectangle(lx - 2, ly + 1, 4, 6, accent);
+            Raylib.BeginBlendMode(BlendMode.Additive);
+            Raylib.DrawCircleGradient(new Vector2(lx, ly + 4), 16, Palette.Alpha(accent, 60), Palette.Alpha(accent, 0));
+            Raylib.EndBlendMode();
+        }
+
+        // The housing stays dark until the data-bound repair flag is set.
+        Raylib.DrawRectangle(cx - 4, horizon - 20, 8, 20, stone);
+        Raylib.DrawRectangle(cx - 10, horizon - 60, 3, 40, stone);
+        Raylib.DrawRectangle(cx + 7, horizon - 60, 3, 40, stone);
+        Raylib.DrawRectangle(cx - 12, horizon - 64, 24, 4, Emblems.Shade(stone, 1.2));
+        Raylib.DrawRectangle(cx - 12, horizon - 23, 24, 4, stone);
+        if (frame.BeaconLit)
+        {
+            Raylib.DrawRectangleLines(cx - 6, horizon - 54, 12, 25, accent);
+            SceneProps.Flame(cx, horizon - 34, 16, time, 5, accent, new Color(255, 240, 200, 255));
+        }
+        SceneProps.Brazier(cx - 22, horizon + 14, 8, time, 6, dark, accent);
     }
 
     private void DrawArchitecture(SceneFrame frame)
@@ -162,12 +209,6 @@ internal sealed class SceneRenderer(PixelRect area)
                     Raylib.DrawRectangle(sx - 18, sy, 36, 1, Emblems.Shade(stone, 1.4));
                 }
 
-                for (var i = 0; i < 6; i++)
-                {
-                    var dx = x + 20 + (i * 48);
-                    Raylib.DrawLine(dx, area.Y + 8, dx + 1, area.Y + 30 + (int)(Math.Sin(t * 2 + i) * 6), Palette.Alpha(accent, 120));
-                }
-
                 break;
 
             case SceneStyle.SunkenCathedral:
@@ -178,21 +219,6 @@ internal sealed class SceneRenderer(PixelRect area)
                     SceneProps.Arch(ax - 16, area.Y + 10, 32, horizon - area.Y - 10, stone, deep);
                 }
 
-                for (var i = -3; i <= 3; i++)
-                {
-                    var lx = cx + (i * 40) + 8;
-                    var ly = area.Y + 30 + (int)(Math.Sin(t + i) * 2);
-                    Raylib.DrawLine(lx, area.Y, lx, ly, dark);
-                    Raylib.DrawRectangle(lx - 3, ly, 6, 8, dark);
-                    Raylib.DrawRectangle(lx - 2, ly + 1, 4, 6, accent);
-                    Raylib.BeginBlendMode(BlendMode.Additive);
-                    Raylib.DrawCircleGradient(new Vector2(lx, ly + 4), 16, Palette.Alpha(accent, 60), Palette.Alpha(accent, 0));
-                    Raylib.EndBlendMode();
-                }
-
-                Raylib.DrawRectangle(cx - 6, horizon - 60, 12, 60, stone);
-                Raylib.DrawRectangle(cx - 10, horizon - 66, 20, 8, Emblems.Shade(stone, 1.2));
-                SceneProps.Flame(cx, horizon - 66, 14, t, 5, accent, new Color(255, 240, 200, 255));
                 Raylib.DrawRectangle(x + 20, horizon - 14, 50, 14, dark);
                 Raylib.DrawRectangle(x + 18, horizon - 16, 54, 3, Emblems.Shade(accent, 0.7));
                 Raylib.DrawRectangle(area.Right - 70, horizon - 14, 50, 14, dark);

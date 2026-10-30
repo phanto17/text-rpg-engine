@@ -44,6 +44,12 @@
             "null"
           ]
         },
+        "beaconLitFlag": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "lanternItem": {
           "type": [
             "string",

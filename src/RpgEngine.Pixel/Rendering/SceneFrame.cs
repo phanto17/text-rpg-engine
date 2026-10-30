@@ -14,4 +14,5 @@ internal sealed record SceneFrame(
     bool MoonSealSet,
     bool BellMended,
     bool BrazierLit,
-    bool SigilDoorOpen = false);
+    bool SigilDoorOpen = false,
+    bool BeaconLit = false);

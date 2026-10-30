@@ -124,9 +124,11 @@ AGENTS.md               Contributor guide: coding standards, JSON schemas, Git w
 
 The [prologue visual slice](Docs/PROLOGUE_VISUAL_SLICE.md) supplies artwork for all three opening rooms and both enemies, preserves the live sigil puzzle over painted scenes, and adds stepped combat motion with reproducible review captures.
 
+The [first Act I visual slice](Docs/ACT_ONE_VISUAL_SLICE.md) adds the Weeping Stair and Nocturne paintings, three NPC portraits and room ambience. The beacon follows its restoration flag above both painted and procedural scenes.
+
 ## Getting started
 
-The Pixel client includes optional prologue ambience and original sound effects. Click **F5 Sound** or press F5 for separate ambience/effects volumes; F4 mutes. Preferences persist under the save folder. See [the audio guide](Docs/AUDIO_PIPELINE.md) for bindings and reproducible sound exports.
+The Pixel client includes optional prologue and early Act I ambience and original sound effects. Click **F5 Sound** or press F5 for separate ambience/effects volumes; F4 mutes. Preferences persist under the save folder. See [the audio guide](Docs/AUDIO_PIPELINE.md) for bindings and reproducible sound exports.
 
 **Prerequisites:** the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0); `global.json` pins 10.0.401 or a later feature band. A modern terminal (Windows Terminal, iTerm2, any recent Linux terminal) gives the best colors and Unicode bars.
 

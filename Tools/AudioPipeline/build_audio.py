@@ -66,6 +66,18 @@ def render(asset):
         elif kind == "barrow_resonance":
             swell = 700 + SINE[(i * 32 // count) % 32] * 160 // 32768
             sample = (tone(i, 55) + tone(i, 83)) * swell // 2048
+        elif kind == "stair_seepage":
+            sample = sum(random[(i - k) % count] for k in range(32)) // 64
+            for onset in (RATE // 2, RATE * 23 // 10, RATE * 47 // 10, RATE * 63 // 10):
+                local = (i - onset) % count
+                length = RATE // 3
+                if local < length:
+                    sample += (tone(local, 520) + tone(local, 780)) * envelope(local, length, 35) // 4096
+        elif kind == "nocturne_hush":
+            # Integer-Hz harmonics complete whole cycles across the eight-second loop.
+            swell = 600 + SINE[(i * 32 // count) % 32] * 120 // 32768
+            sample = (tone(i, 110) + tone(i, 165) + tone(i, 220)) * swell // 4096
+            sample += sum(random[(i - k) % count] for k in range(32)) // 128
         else:
             raise ValueError(f"unknown recipe {kind}")
         samples.append(sample)
