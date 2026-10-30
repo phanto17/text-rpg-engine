@@ -17,6 +17,14 @@
     {"category": "Rooms", "id": "nocturne_square", "width": 304, "height": 140, "source": "recipe"},
     {"category": "Portraits", "id": "orin", "width": 56, "height": 56, "source": "recipe"},
     {"category": "Portraits", "id": "maeve", "width": 56, "height": 56, "source": "recipe"},
-    {"category": "Portraits", "id": "peddler", "width": 56, "height": 56, "source": "recipe"}
+    {"category": "Portraits", "id": "peddler", "width": 56, "height": 56, "source": "recipe"},
+    {"category": "Rooms", "id": "echo_chapel", "width": 304, "height": 140, "source": "recipe"},
+    {"category": "Rooms", "id": "drowned_tollbridge", "width": 304, "height": 140, "source": "recipe"},
+    {"category": "Portraits", "id": "miriel", "width": 56, "height": 56, "source": "recipe"},
+    {"category": "Portraits", "id": "garin", "width": 56, "height": 56, "source": "recipe"},
+    {"category": "Monsters", "id": "choir_cantor_miriel_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 250, "source": "recipe"},
+    {"category": "Monsters", "id": "calcified_mournling_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 300, "source": "recipe"},
+    {"category": "Monsters", "id": "tollbridge_warden_garin_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 250, "source": "recipe"},
+    {"category": "Monsters", "id": "drowned_lancer_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 300, "source": "recipe"}
   ]
 }

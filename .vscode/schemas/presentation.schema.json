@@ -50,6 +50,18 @@
             "null"
           ]
         },
+        "releasedSpiritsFlag": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "passageVisitedRoom": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "lanternItem": {
           "type": [
             "string",

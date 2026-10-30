@@ -38,6 +38,7 @@ internal sealed class SceneRenderer(PixelRect area)
         }
 
         DrawInteractiveDetails(frame);
+        SpokeDetails.Draw(area, frame);
         _weather.Draw(frame.Time);
         Lantern(frame);
         SceneProps.Vignette(area);
@@ -236,19 +237,9 @@ internal sealed class SceneRenderer(PixelRect area)
 
                 Raylib.DrawRectangle(cx - 48, horizon - 22, 96, 22, stone);
                 Raylib.DrawRectangle(cx - 44, horizon - 18, 88, 2, accent);
-                for (var i = 0; i < 5; i++)
-                {
-                    var bx = x + 24 + (i * 60);
-                    var by = area.Y + 20 + (i % 2) * 10 + (int)(Math.Sin(t * 1.5 + i) * 2);
-                    Raylib.DrawLine(bx, area.Y, bx, by, dark);
-                    Raylib.DrawRectangle(bx - 4, by, 8, 6, Emblems.Shade(accent, 0.6));
-                    Raylib.DrawRectangle(bx - 3, by + 1, 6, 4, accent);
-                }
-
                 break;
 
             case SceneStyle.DrownedBridge:
-                SceneProps.Water(new PixelRect(x, horizon - 20, w, area.Bottom - horizon + 20), Emblems.Shade(Palette.Of(look.BackgroundBottom), 0.8), t);
                 Raylib.DrawRectangle(x, horizon - 14, w, 10, stone);
                 Raylib.DrawRectangle(x, horizon - 14, w, 1, Emblems.Shade(stone, 1.4));
                 for (var px = x + 8; px < area.Right; px += 24)

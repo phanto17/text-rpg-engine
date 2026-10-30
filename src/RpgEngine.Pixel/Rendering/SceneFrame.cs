@@ -15,4 +15,6 @@ internal sealed record SceneFrame(
     bool BellMended,
     bool BrazierLit,
     bool SigilDoorOpen = false,
-    bool BeaconLit = false);
+    bool BeaconLit = false,
+    bool SpiritsReleased = false,
+    bool PassageOpen = false);

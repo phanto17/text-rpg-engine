@@ -78,6 +78,17 @@ def render(asset):
             swell = 600 + SINE[(i * 32 // count) % 32] * 120 // 32768
             sample = (tone(i, 110) + tone(i, 165) + tone(i, 220)) * swell // 4096
             sample += sum(random[(i - k) % count] for k in range(32)) // 128
+        elif kind == "chapel_glass":
+            sample = (tone(i, 110) + tone(i, 147)) // 20
+            for onset in (RATE, RATE * 3, RATE * 5):
+                local = (i - onset) % count
+                length = RATE * 2
+                if local < length:
+                    sample += (tone(local, 440) + tone(local, 660)) * envelope(local, length, 100) // 4096
+        elif kind == "canal_current":
+            swell = 600 + SINE[(i * 32 // count) % 32] * 180 // 32768
+            sample = sum(random[(i - k) % count] for k in range(48)) * swell // (48 * 1024)
+            sample += tone(i, 55) // 12
         else:
             raise ValueError(f"unknown recipe {kind}")
         samples.append(sample)
