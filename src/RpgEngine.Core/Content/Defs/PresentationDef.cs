@@ -30,6 +30,7 @@ public sealed record SceneBindingsDef
     public string? ResonanceCounter { get; init; }
     public string? SigilCounter { get; init; }
     public string? SigilDoorOpenFlag { get; init; }
+    public string? BeaconLitFlag { get; init; }
     public string? LanternItem { get; init; }
     public string? SunSealItem { get; init; }
     public string? MoonSealItem { get; init; }

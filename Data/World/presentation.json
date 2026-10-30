@@ -10,13 +10,16 @@
     "ambience": {
       "lichgate": "Assets/Audio/moor_rain.wav",
       "ossuary_hall": "Assets/Audio/ossuary_drips.wav",
-      "inner_crypt": "Assets/Audio/barrow_resonance.wav"
+      "inner_crypt": "Assets/Audio/barrow_resonance.wav",
+      "weeping_stair": "Assets/Audio/stair_seepage.wav",
+      "nocturne_square": "Assets/Audio/nocturne_hush.wav"
     }
   },
   "bindings": {
     "resonanceCounter": "lantern_resonance",
     "sigilCounter": "sigil_seq",
     "sigilDoorOpenFlag": "sigil_door_open",
+    "beaconLitFlag": "beacon_restored",
     "lanternItem": "barrowlight",
     "sunSealItem": "sun_triad_seal",
     "moonSealItem": "moon_triad_seal",
@@ -368,7 +371,7 @@
       "emblem": "lantern_nun",
       "primaryColor": "#5E6878",
       "accentColor": "#F0B44C",
-      "portraitImage": "Assets/Portraits/wren_nocturne.png"
+      "portraitImage": "Assets/Portraits/wren.png"
     },
     "miriel": {
       "title": "Cantor of the Echo Chapel",

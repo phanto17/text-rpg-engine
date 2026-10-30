@@ -129,7 +129,7 @@ public static class PresentationLoader
             return new();
         }
 
-        Known(value, "bindings", ["resonanceCounter", "sigilCounter", "sigilDoorOpenFlag", "lanternItem", "sunSealItem", "moonSealItem", "bellMendedFlags", "brazierLitFlags"], warnings);
+        Known(value, "bindings", ["resonanceCounter", "sigilCounter", "sigilDoorOpenFlag", "beaconLitFlag", "lanternItem", "sunSealItem", "moonSealItem", "bellMendedFlags", "brazierLitFlags"], warnings);
         string? Reference(string property)
         {
             var text = Text(value, property);
@@ -159,6 +159,7 @@ public static class PresentationLoader
             ResonanceCounter = Reference("resonanceCounter"),
             SigilCounter = Reference("sigilCounter"),
             SigilDoorOpenFlag = Reference("sigilDoorOpenFlag"),
+            BeaconLitFlag = Reference("beaconLitFlag"),
             LanternItem = Reference("lanternItem"),
             SunSealItem = Reference("sunSealItem"),
             MoonSealItem = Reference("moonSealItem"),

@@ -12,6 +12,11 @@
     {"category": "Rooms", "id": "ossuary_hall", "width": 304, "height": 140, "source": "recipe"},
     {"category": "Rooms", "id": "inner_crypt", "width": 304, "height": 140, "source": "recipe"},
     {"category": "Monsters", "id": "barrow_thrall", "width": 48, "height": 48, "source": "recipe"},
-    {"category": "Monsters", "id": "barrow_thrall_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 250, "source": "recipe"}
+    {"category": "Monsters", "id": "barrow_thrall_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 250, "source": "recipe"},
+    {"category": "Rooms", "id": "weeping_stair", "width": 304, "height": 140, "source": "recipe"},
+    {"category": "Rooms", "id": "nocturne_square", "width": 304, "height": 140, "source": "recipe"},
+    {"category": "Portraits", "id": "orin", "width": 56, "height": 56, "source": "recipe"},
+    {"category": "Portraits", "id": "maeve", "width": 56, "height": 56, "source": "recipe"},
+    {"category": "Portraits", "id": "peddler", "width": 56, "height": 56, "source": "recipe"}
   ]
 }

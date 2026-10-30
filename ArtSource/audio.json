@@ -9,6 +9,8 @@
     { "id": "lantern_ignite", "milliseconds": 900, "seed": 53, "peak": 13000, "loop": false },
     { "id": "moor_rain", "milliseconds": 8000, "seed": 67, "peak": 7000, "loop": true },
     { "id": "ossuary_drips", "milliseconds": 8000, "seed": 71, "peak": 8000, "loop": true },
-    { "id": "barrow_resonance", "milliseconds": 8000, "seed": 89, "peak": 6500, "loop": true }
+    { "id": "barrow_resonance", "milliseconds": 8000, "seed": 89, "peak": 6500, "loop": true },
+    { "id": "stair_seepage", "milliseconds": 8000, "seed": 97, "peak": 6500, "loop": true },
+    { "id": "nocturne_hush", "milliseconds": 8000, "seed": 101, "peak": 5500, "loop": true }
   ]
 }

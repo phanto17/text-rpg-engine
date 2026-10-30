@@ -54,7 +54,7 @@ Use `snake_case` identifiers matching `Data/` IDs. The three original PXO master
 
 ## Provenance and licenses
 
-All ten PNG assets are original procedural drawings from `build_pilots.py`, `build_production.py` or `build_prologue.py`. They have no third-party asset dependency. Silkscreen Regular is by Jason Kottke, distributed in [Google Fonts](https://github.com/google/fonts/tree/main/ofl/silkscreen) under the SIL Open Font License 1.1; the license is copied to `Data/Assets/Fonts/OFL.txt`. The checked-in TTF SHA-256 is `C845473330B94C2079CE9AF01C51AC8BA2D99C24F4D14C039843BBB8E642EBD8`. The reference games above are visual study only; no assets are copied from them.
+All fifteen PNG assets are original procedural drawings from `build_pilots.py`, `build_production.py`, `build_prologue.py` or `build_act_one.py`. They have no third-party asset dependency. Silkscreen Regular is by Jason Kottke, distributed in [Google Fonts](https://github.com/google/fonts/tree/main/ofl/silkscreen) under the SIL Open Font License 1.1; the license is copied to `Data/Assets/Fonts/OFL.txt`. The checked-in TTF SHA-256 is `C845473330B94C2079CE9AF01C51AC8BA2D99C24F4D14C039843BBB8E642EBD8`. The reference games above are visual study only; no assets are copied from them.
 
 ## Review checklist
 

@@ -45,6 +45,24 @@ public sealed class SceneStateTests
     }
 
     [Fact]
+    public void Read_BeaconBinding_TracksOnlyConfiguredFlag()
+    {
+        var session = SessionFixture.NewSession();
+        var loaded = PresentationLoader.Parse("""{"bindings":{"beaconLitFlag":"lamp_repaired"}}""");
+        Assert.Empty(loaded.Warnings);
+        Assert.False(SceneState.Read(session, loaded.Presentation.Bindings).BeaconLit);
+        session.State.World.SetFlag("unrelated");
+        Assert.False(SceneState.Read(session, loaded.Presentation.Bindings).BeaconLit);
+        session.State.World.SetFlag("lamp_repaired");
+        Assert.True(SceneState.Read(session, loaded.Presentation.Bindings).BeaconLit);
+        Assert.False(SceneState.Read(null, loaded.Presentation.Bindings).BeaconLit);
+        Assert.False(SceneState.Read(session, new()).BeaconLit);
+        var invalid = PresentationLoader.Parse("""{"bindings":{"beaconLitFlag":42}}""");
+        Assert.Single(invalid.Warnings);
+        Assert.Null(invalid.Presentation.Bindings.BeaconLitFlag);
+    }
+
+    [Fact]
     public void Read_MissingSessionOrBindings_ReturnsNeutralState()
     {
         var neutral = new SceneState(0, 0, false, false, false, false, false);
