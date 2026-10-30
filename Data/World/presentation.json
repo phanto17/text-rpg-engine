@@ -18,7 +18,10 @@
       "warren_crossroads": "Assets/Audio/threshold_hush.wav",
       "whispering_stacks": "Assets/Audio/archive_ticks.wav",
       "tallow_foundry": "Assets/Audio/tallow_simmer.wav",
-      "vow_sanctum": "Assets/Audio/sanctum_air.wav"
+      "vow_sanctum": "Assets/Audio/sanctum_air.wav",
+      "scoured_cloister": "Assets/Audio/cloister_air.wav",
+      "lye_cistern": "Assets/Audio/cistern_flow.wav",
+      "reliquary_bastion": "Assets/Audio/furnace_draft.wav"
     }
   },
   "bindings": {
@@ -27,6 +30,8 @@
     "sigilDoorOpenFlag": "sigil_door_open",
     "beaconLitFlag": "beacon_restored",
     "thresholdOpenFlag": "unsealed_cradle_gate",
+    "cisternQuenchedFlag": "quenched_lye_cistern",
+    "furnaceOpenFlag": "silas_resolved",
     "loomSlackFlag": "slackened_choir_loom",
     "carillonStoppedFlag": "vaelen_resolved",
     "carillonReleasedFlag": "vaelen_reconciled",
@@ -185,7 +190,7 @@
     },
     "lye_cistern": {
       "sceneStyle": "lye_cistern",
-      "weather": "embers",
+      "weather": "none",
       "palette": {
         "backgroundTop": "#191C1E",
         "backgroundBottom": "#2D3336",
@@ -193,7 +198,7 @@
         "accent": "#A8C4B8"
       },
       "backdropImage": "Assets/Rooms/lye_cistern.png",
-      "moodCaption": "Caustic white alkali steams in the troughs where soldiers scrub away their names."
+      "moodCaption": "White alkali crusts the troughs beneath the lead-sheathed baptistery vault."
     },
     "reliquary_bastion": {
       "sceneStyle": "iron_bastion",
@@ -326,14 +331,16 @@
       "emblem": "commander",
       "primaryColor": "#C8CCD4",
       "accentColor": "#F28C38",
-      "spriteImage": "Assets/Monsters/commander_silas.png"
+      "spriteImage": "Assets/Monsters/commander_silas_idle.png",
+      "animation": { "frames": 4, "frameMilliseconds": 250 }
     },
     "scoured_halberdier": {
       "title": "Scoured of Every Memory",
       "emblem": "halberdier",
       "primaryColor": "#8C929E",
       "accentColor": "#D97B48",
-      "spriteImage": "Assets/Monsters/scoured_halberdier.png"
+      "spriteImage": "Assets/Monsters/scoured_halberdier_idle.png",
+      "animation": { "frames": 4, "frameMilliseconds": 300 }
     },
     "first_architect": {
       "title": "Who Broke the Rite",

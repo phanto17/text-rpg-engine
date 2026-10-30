@@ -19,4 +19,5 @@ internal sealed record SceneFrame(
     bool SpiritsReleased = false,
     bool PassageOpen = false,
     bool ThresholdOpen = false,
-    ArchiveState? Archive = null);
+    ArchiveState? Archive = null,
+    ReliquaryState? Reliquary = null);

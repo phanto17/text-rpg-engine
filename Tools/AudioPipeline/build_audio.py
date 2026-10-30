@@ -106,6 +106,16 @@ def render(asset):
         elif kind == "sanctum_air":
             sample = (tone(i, 98) + tone(i, 147)) // 12
             sample += sum(random[(i - k) % count] for k in range(48)) // 192
+        elif kind == "cloister_air":
+            sample = sum(random[(i - k) % count] for k in range(48)) // 96
+            sample += tone(i, 66) // 32
+        elif kind == "cistern_flow":
+            swell = 650 + SINE[(i * 32 // count) % 32] * 110 // 32768
+            sample = sum(random[(i - k) % count] for k in range(16)) * swell // (16 * 1024)
+        elif kind == "furnace_draft":
+            swell = 700 + SINE[(i * 32 // count) % 32] * 120 // 32768
+            sample = (tone(i, 55) + tone(i, 110)) * swell // 4096
+            sample += sum(random[(i - k) % count] for k in range(12)) // 16
         else:
             raise ValueError(f"unknown recipe {kind}")
         samples.append(sample)
