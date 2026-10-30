@@ -63,6 +63,29 @@ public sealed class SceneStateTests
     }
 
     [Fact]
+    public void Read_SpiritAndPassageBindings_TrackIndependentWorldState()
+    {
+        var session = SessionFixture.NewSession();
+        var loaded = PresentationLoader.Parse("""{"bindings":{"releasedSpiritsFlag":"released","passageVisitedRoom":"beyond"}}""");
+        Assert.Empty(loaded.Warnings);
+        var initial = SceneState.Read(session, loaded.Presentation.Bindings);
+        Assert.False(initial.SpiritsReleased);
+        Assert.False(initial.PassageOpen);
+        session.State.World.SetFlag("released");
+        Assert.True(SceneState.Read(session, loaded.Presentation.Bindings).SpiritsReleased);
+        Assert.False(SceneState.Read(session, loaded.Presentation.Bindings).PassageOpen);
+        session.State.World.MarkVisited("beyond");
+        Assert.True(SceneState.Read(session, loaded.Presentation.Bindings).PassageOpen);
+        Assert.False(SceneState.Read(session, new()).PassageOpen);
+        Assert.False(SceneState.Read(null, loaded.Presentation.Bindings).SpiritsReleased);
+        Assert.False(SceneState.Read(null, loaded.Presentation.Bindings).PassageOpen);
+        var invalid = PresentationLoader.Parse("""{"bindings":{"releasedSpiritsFlag":42,"passageVisitedRoom":[]}}""");
+        Assert.Equal(2, invalid.Warnings.Count);
+        Assert.Null(invalid.Presentation.Bindings.ReleasedSpiritsFlag);
+        Assert.Null(invalid.Presentation.Bindings.PassageVisitedRoom);
+    }
+
+    [Fact]
     public void Read_MissingSessionOrBindings_ReturnsNeutralState()
     {
         var neutral = new SceneState(0, 0, false, false, false, false, false);

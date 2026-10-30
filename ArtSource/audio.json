@@ -11,6 +11,8 @@
     { "id": "ossuary_drips", "milliseconds": 8000, "seed": 71, "peak": 8000, "loop": true },
     { "id": "barrow_resonance", "milliseconds": 8000, "seed": 89, "peak": 6500, "loop": true },
     { "id": "stair_seepage", "milliseconds": 8000, "seed": 97, "peak": 6500, "loop": true },
-    { "id": "nocturne_hush", "milliseconds": 8000, "seed": 101, "peak": 5500, "loop": true }
+    { "id": "nocturne_hush", "milliseconds": 8000, "seed": 101, "peak": 5500, "loop": true },
+    {"id": "chapel_glass", "milliseconds": 8000, "seed": 107, "peak": 5500, "loop": true},
+    {"id": "canal_current", "milliseconds": 8000, "seed": 109, "peak": 6500, "loop": true}
   ]
 }

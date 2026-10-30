@@ -12,7 +12,9 @@
       "ossuary_hall": "Assets/Audio/ossuary_drips.wav",
       "inner_crypt": "Assets/Audio/barrow_resonance.wav",
       "weeping_stair": "Assets/Audio/stair_seepage.wav",
-      "nocturne_square": "Assets/Audio/nocturne_hush.wav"
+      "nocturne_square": "Assets/Audio/nocturne_hush.wav",
+      "echo_chapel": "Assets/Audio/chapel_glass.wav",
+      "drowned_tollbridge": "Assets/Audio/canal_current.wav"
     }
   },
   "bindings": {
@@ -20,6 +22,8 @@
     "sigilCounter": "sigil_seq",
     "sigilDoorOpenFlag": "sigil_door_open",
     "beaconLitFlag": "beacon_restored",
+    "releasedSpiritsFlag": "released_choir_jars",
+    "passageVisitedRoom": "warren_crossroads",
     "lanternItem": "barrowlight",
     "sunSealItem": "sun_triad_seal",
     "moonSealItem": "moon_triad_seal",
@@ -266,28 +270,32 @@
       "emblem": "choir_mask",
       "primaryColor": "#4E5482",
       "accentColor": "#96B8F2",
-      "spriteImage": "Assets/Monsters/choir_cantor_miriel.png"
+      "spriteImage": "Assets/Monsters/choir_cantor_miriel_idle.png",
+      "animation": { "frames": 4, "frameMilliseconds": 250 }
     },
     "calcified_mournling": {
       "title": "Grief Turned to Stone",
       "emblem": "mournling",
       "primaryColor": "#7A8496",
       "accentColor": "#D4E0F0",
-      "spriteImage": "Assets/Monsters/calcified_mournling.png"
+      "spriteImage": "Assets/Monsters/calcified_mournling_idle.png",
+      "animation": { "frames": 4, "frameMilliseconds": 300 }
     },
     "tollbridge_warden_garin": {
       "title": "Toll-Warden of the Drowned Bridge",
       "emblem": "warden_halberd",
       "primaryColor": "#3E565E",
       "accentColor": "#68B0AB",
-      "spriteImage": "Assets/Monsters/tollbridge_warden_garin.png"
+      "spriteImage": "Assets/Monsters/tollbridge_warden_garin_idle.png",
+      "animation": { "frames": 4, "frameMilliseconds": 250 }
     },
     "drowned_lancer": {
       "title": "The Toll's Last Guard",
       "emblem": "lancer",
       "primaryColor": "#2F444A",
       "accentColor": "#7CA6A2",
-      "spriteImage": "Assets/Monsters/drowned_lancer.png"
+      "spriteImage": "Assets/Monsters/drowned_lancer_idle.png",
+      "animation": { "frames": 4, "frameMilliseconds": 300 }
     },
     "prelate_vaelen": {
       "title": "Prelate of Unkept Vows",

@@ -179,7 +179,9 @@ internal sealed class CombatStage(PixelRect area)
 
             if (figure.Falling == 0)
             {
-                var label = Canvas.Ellipsize(enemy.Name, _enemies.Count > 2 ? 64 : 96);
+                var labelWidth = _enemies.Count == 1 ? area.Width - 16
+                    : Math.Min(90, (area.Width - 60) / _enemies.Count) - 8;
+                var label = Canvas.Ellipsize(enemy.Name, labelWidth);
                 Canvas.Text(x - (Canvas.Width(label) / 2), y + (size / 2) + 6, label, enemy.IsActive ? Palette.Title : Palette.Muted);
                 Canvas.Bar(new PixelRect(x - 20, y + (size / 2) + 17, 40, 5), enemy.Hp / (double)Math.Max(1, enemy.MaxHp), Palette.HpFill, Palette.HpBack);
                 for (var s = 0; s < enemy.Statuses.Count && s < 4; s++)
