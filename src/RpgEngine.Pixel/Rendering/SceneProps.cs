@@ -205,37 +205,6 @@ internal static class SceneProps
         }
     }
 
-    /// <summary>A twin door with a sun seal on the left leaf and a moon seal on the right; set ones glow.</summary>
-    public static void TwinGate(int cx, int top, int width, int height, Color stone, Color sunGlow, Color moonGlow, bool sunSet, bool moonSet)
-    {
-        var half = width / 2;
-        Raylib.DrawRectangle(cx - half - 4, top - 4, width + 8, height + 4, Emblems.Shade(stone, 0.6));
-        Raylib.DrawRectangle(cx - half, top, half - 1, height, stone);
-        Raylib.DrawRectangle(cx + 1, top, half - 1, height, stone);
-        var cy = top + (height / 2);
-        var sun = sunSet ? sunGlow : Emblems.Shade(stone, 1.3);
-        var moon = moonSet ? moonGlow : Emblems.Shade(stone, 1.3);
-        Raylib.DrawCircle(cx - (half / 2), cy, 6, sun);
-        Raylib.DrawCircleLines(cx - (half / 2), cy, 8, sun);
-        Raylib.DrawCircle(cx + (half / 2), cy, 6, moon);
-        Raylib.DrawCircle(cx + (half / 2) + 3, cy - 2, 5, stone);
-        if (sunSet || moonSet)
-        {
-            Raylib.BeginBlendMode(BlendMode.Additive);
-            if (sunSet)
-            {
-                Raylib.DrawCircleGradient(new Vector2(cx - (half / 2), cy), 16, Palette.Alpha(sunGlow, 70), Palette.Alpha(sunGlow, 0));
-            }
-
-            if (moonSet)
-            {
-                Raylib.DrawCircleGradient(new Vector2(cx + (half / 2), cy), 16, Palette.Alpha(moonGlow, 70), Palette.Alpha(moonGlow, 0));
-            }
-
-            Raylib.EndBlendMode();
-        }
-    }
-
     /// <summary>Battlements along the top of a wall.</summary>
     public static void Crenellations(int x, int y, int width, Color stone)
     {

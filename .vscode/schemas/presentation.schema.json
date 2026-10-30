@@ -50,6 +50,12 @@
             "null"
           ]
         },
+        "thresholdOpenFlag": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "releasedSpiritsFlag": {
           "type": [
             "string",

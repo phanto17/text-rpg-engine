@@ -20,7 +20,8 @@ The Pixel client plays optional audio from `Data/World/presentation.json`. Click
     "weeping_stair": "Assets/Audio/stair_seepage.wav",
     "nocturne_square": "Assets/Audio/nocturne_hush.wav",
     "echo_chapel": "Assets/Audio/chapel_glass.wav",
-    "drowned_tollbridge": "Assets/Audio/canal_current.wav"
+    "drowned_tollbridge": "Assets/Audio/canal_current.wav",
+    "warren_crossroads": "Assets/Audio/threshold_hush.wav"
   }
 }
 ```
@@ -31,7 +32,7 @@ These maps are optional. Effects use the fixed client roles above; ambience keys
 
 ## Sources and format
 
-All twelve WAVs are original synthesis from `Tools/AudioPipeline/build_audio.py`; there are no outside recordings, samples or music. The editable masters are the checked-in integer synthesis recipes plus `ArtSource/audio.json`, which records duration, seed, peak ceiling and loop intent. Fixed integer oscillators, envelopes and noise make PCM output reproducible across Windows and Linux. The pack uses canonical RIFF PCM, mono, signed 16-bit little-endian, 22050 Hz. Rain, drips, low resonance, stair seepage, Nocturne's low harmonic hush, distant chapel glass tones and canal current are eight-second loops; the five effects are 70–900 ms long. Their peak ceilings leave headroom before the user's volume settings.
+All thirteen WAVs are original synthesis from `Tools/AudioPipeline/build_audio.py`; there are no outside recordings, samples or music. The editable masters are the checked-in integer synthesis recipes plus `ArtSource/audio.json`, which records duration, seed, peak ceiling and loop intent. Fixed integer oscillators, envelopes and noise make PCM output reproducible across Windows and Linux. The pack uses canonical RIFF PCM, mono, signed 16-bit little-endian, 22050 Hz. Rain, drips, low resonance, stair seepage, Nocturne's low harmonic hush, distant chapel glass tones, canal current and the Twin-Seal sanctuary hush are eight-second loops; the five effects are 70–900 ms long. Their peak ceilings leave headroom before the user's volume settings.
 
 Only relative `Assets/Audio/*.wav` paths are accepted. Before native decoding, `PcmWave` rejects missing or malformed files, unsupported headers, files over 8 MiB, traversal and reparse points. Invalid optional bindings warn at content load; missing or corrupt files remain silent at playback. An unavailable audio device leaves the game playable and is shown in Sound settings. Failed preference writes leave controls usable and show a save warning. Unsupported or corrupt preference files fall back to defaults.
 

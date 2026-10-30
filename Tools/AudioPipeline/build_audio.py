@@ -89,6 +89,10 @@ def render(asset):
             swell = 600 + SINE[(i * 32 // count) % 32] * 180 // 32768
             sample = sum(random[(i - k) % count] for k in range(48)) * swell // (48 * 1024)
             sample += tone(i, 55) // 12
+        elif kind == "threshold_hush":
+            swell = 700 + SINE[(i * 32 // count) % 32] * 90 // 32768
+            sample = (tone(i, 82) + tone(i, 123)) * swell // 4096
+            sample += sum(random[(i - k) % count] for k in range(32)) // 192
         else:
             raise ValueError(f"unknown recipe {kind}")
         samples.append(sample)
