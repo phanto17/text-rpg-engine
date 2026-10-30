@@ -17,4 +17,5 @@ internal sealed record SceneFrame(
     bool SigilDoorOpen = false,
     bool BeaconLit = false,
     bool SpiritsReleased = false,
-    bool PassageOpen = false);
+    bool PassageOpen = false,
+    bool ThresholdOpen = false);

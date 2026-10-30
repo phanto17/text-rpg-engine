@@ -14,7 +14,8 @@
       "weeping_stair": "Assets/Audio/stair_seepage.wav",
       "nocturne_square": "Assets/Audio/nocturne_hush.wav",
       "echo_chapel": "Assets/Audio/chapel_glass.wav",
-      "drowned_tollbridge": "Assets/Audio/canal_current.wav"
+      "drowned_tollbridge": "Assets/Audio/canal_current.wav",
+      "warren_crossroads": "Assets/Audio/threshold_hush.wav"
     }
   },
   "bindings": {
@@ -22,6 +23,7 @@
     "sigilCounter": "sigil_seq",
     "sigilDoorOpenFlag": "sigil_door_open",
     "beaconLitFlag": "beacon_restored",
+    "thresholdOpenFlag": "unsealed_cradle_gate",
     "releasedSpiritsFlag": "released_choir_jars",
     "passageVisitedRoom": "warren_crossroads",
     "lanternItem": "barrowlight",

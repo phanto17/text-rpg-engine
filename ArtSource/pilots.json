@@ -25,6 +25,7 @@
     {"category": "Monsters", "id": "choir_cantor_miriel_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 250, "source": "recipe"},
     {"category": "Monsters", "id": "calcified_mournling_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 300, "source": "recipe"},
     {"category": "Monsters", "id": "tollbridge_warden_garin_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 250, "source": "recipe"},
-    {"category": "Monsters", "id": "drowned_lancer_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 300, "source": "recipe"}
+    {"category": "Monsters", "id": "drowned_lancer_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 300, "source": "recipe"},
+    {"category": "Rooms", "id": "warren_crossroads", "width": 304, "height": 140, "source": "recipe"}
   ]
 }

@@ -9,6 +9,7 @@ from build_production import knight_idle, lantern_icon, crypt_stone
 from build_prologue import ossuary, crypt, thrall, thrall_idle
 from build_act_one import ASSETS as ACT_ONE_ASSETS
 from build_act_one_spokes import ASSETS as SPOKE_ASSETS
+from build_act_two import crossroads
 from build_extension import build as build_extension
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -16,6 +17,7 @@ FONT_SHA256 = "c845473330b94c2079ce9af01c51ac8ba2d99c24f4d14c039843bbb8e642ebd8"
 GENERATORS = {
     **{name: create for (_, name), create in ACT_ONE_ASSETS.items()},
     **{name: create for (_, name), create in SPOKE_ASSETS.items()},
+    "warren_crossroads": crossroads,
     "lichgate": room,
     "gravebound_knight": knight,
     "wren": portrait,

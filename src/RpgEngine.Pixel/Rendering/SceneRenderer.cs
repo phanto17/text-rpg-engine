@@ -39,6 +39,7 @@ internal sealed class SceneRenderer(PixelRect area)
 
         DrawInteractiveDetails(frame);
         SpokeDetails.Draw(area, frame);
+        ThresholdDetails.Draw(area, frame);
         _weather.Draw(frame.Time);
         Lantern(frame);
         SceneProps.Vignette(area);
@@ -265,9 +266,6 @@ internal sealed class SceneRenderer(PixelRect area)
                 Raylib.DrawRectangle(x, area.Y + 20, w, 2, dark);
                 SceneProps.Pillar(cx - 70, area.Y + 12, 12, horizon - area.Y - 12, stone);
                 SceneProps.Pillar(cx + 58, area.Y + 12, 12, horizon - area.Y - 12, stone);
-                SceneProps.TwinGate(cx, area.Y + 22, 100, horizon - area.Y - 22, Emblems.Shade(stone, 1.1), accent, new Color(170, 200, 255, 255), frame.SunSealSet, frame.MoonSealSet);
-                SceneProps.Brazier(cx - 100, horizon, 11, t, 3, dark, accent);
-                SceneProps.Brazier(cx + 100, horizon, 11, t, 4, dark, accent);
                 break;
 
             case SceneStyle.ArchiveStacks:

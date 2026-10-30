@@ -6,7 +6,7 @@ namespace RpgEngine.Pixel.Presentation;
 /// <summary>Resolves data-defined bindings without coupling the renderer to a particular story.</summary>
 public sealed record SceneState(int Resonance, int SigilsLit, bool HasLantern, bool SunSealSet,
     bool MoonSealSet, bool BellMended, bool BrazierLit, bool SigilDoorOpen = false, bool BeaconLit = false,
-    bool SpiritsReleased = false, bool PassageOpen = false)
+    bool SpiritsReleased = false, bool PassageOpen = false, bool ThresholdOpen = false)
 {
     public static SceneState Read(GameSession? session, SceneBindingsDef bindings)
     {
@@ -19,6 +19,7 @@ public sealed record SceneState(int Resonance, int SigilsLit, bool HasLantern, b
             bindings.SigilDoorOpenFlag is { } door && (session?.State.World.Flags.Contains(door) ?? false),
             bindings.BeaconLitFlag is { } beacon && (session?.State.World.Flags.Contains(beacon) ?? false),
             bindings.ReleasedSpiritsFlag is { } spirits && (session?.State.World.Flags.Contains(spirits) ?? false),
-            bindings.PassageVisitedRoom is { } room && (session?.State.World.VisitedRooms.Contains(room) ?? false));
+            bindings.PassageVisitedRoom is { } room && (session?.State.World.VisitedRooms.Contains(room) ?? false),
+            bindings.ThresholdOpenFlag is { } threshold && (session?.State.World.Flags.Contains(threshold) ?? false));
     }
 }

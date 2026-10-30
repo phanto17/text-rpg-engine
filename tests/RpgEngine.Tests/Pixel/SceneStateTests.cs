@@ -86,6 +86,27 @@ public sealed class SceneStateTests
     }
 
     [Fact]
+    public void Read_ThresholdBinding_RequiresOpeningFlagEvenWithBothSeals()
+    {
+        var session = SessionFixture.NewSession();
+        var loaded = PresentationLoader.Parse("""{"bindings":{"thresholdOpenFlag":"opened","sunSealItem":"sun","moonSealItem":"moon"}}""");
+        Assert.Empty(loaded.Warnings);
+        session.State.Player.Inventory.Add("sun");
+        session.State.Player.Inventory.Add("moon");
+        var closed = SceneState.Read(session, loaded.Presentation.Bindings);
+        Assert.True(closed.SunSealSet);
+        Assert.True(closed.MoonSealSet);
+        Assert.False(closed.ThresholdOpen);
+        session.State.World.SetFlag("opened");
+        Assert.True(SceneState.Read(session, loaded.Presentation.Bindings).ThresholdOpen);
+        Assert.False(SceneState.Read(session, new()).ThresholdOpen);
+        Assert.False(SceneState.Read(null, loaded.Presentation.Bindings).ThresholdOpen);
+        var invalid = PresentationLoader.Parse("""{"bindings":{"thresholdOpenFlag":false}}""");
+        Assert.Single(invalid.Warnings);
+        Assert.Null(invalid.Presentation.Bindings.ThresholdOpenFlag);
+    }
+
+    [Fact]
     public void Read_MissingSessionOrBindings_ReturnsNeutralState()
     {
         var neutral = new SceneState(0, 0, false, false, false, false, false);
