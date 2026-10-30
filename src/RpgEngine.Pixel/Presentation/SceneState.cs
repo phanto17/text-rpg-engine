@@ -9,6 +9,7 @@ public sealed record SceneState(int Resonance, int SigilsLit, bool HasLantern, b
     bool SpiritsReleased = false, bool PassageOpen = false, bool ThresholdOpen = false)
 {
     public ArchiveState Archive { get; init; } = new();
+    public ReliquaryState Reliquary { get; init; } = new();
 
     public static SceneState Read(GameSession? session, SceneBindingsDef bindings)
     {
@@ -25,6 +26,7 @@ public sealed record SceneState(int Resonance, int SigilsLit, bool HasLantern, b
             bindings.ThresholdOpenFlag is { } threshold && (session?.State.World.Flags.Contains(threshold) ?? false))
         {
             Archive = ArchiveState.Read(session, bindings),
+            Reliquary = ReliquaryState.Read(session, bindings),
         };
     }
 }
