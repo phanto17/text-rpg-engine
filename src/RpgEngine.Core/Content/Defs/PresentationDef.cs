@@ -32,6 +32,9 @@ public sealed record SceneBindingsDef
     public string? SigilDoorOpenFlag { get; init; }
     public string? BeaconLitFlag { get; init; }
     public string? ThresholdOpenFlag { get; init; }
+    public string? LoomSlackFlag { get; init; }
+    public string? CarillonStoppedFlag { get; init; }
+    public string? CarillonReleasedFlag { get; init; }
     public string? ReleasedSpiritsFlag { get; init; }
     /// <summary>A visited room indicating that the floodgate has been crossed.</summary>
     public string? PassageVisitedRoom { get; init; }

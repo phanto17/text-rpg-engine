@@ -14,6 +14,9 @@
     { "id": "nocturne_hush", "milliseconds": 8000, "seed": 101, "peak": 5500, "loop": true },
     {"id": "chapel_glass", "milliseconds": 8000, "seed": 107, "peak": 5500, "loop": true},
     {"id": "canal_current", "milliseconds": 8000, "seed": 109, "peak": 6500, "loop": true},
-    {"id": "threshold_hush", "milliseconds": 8000, "seed": 127, "peak": 5000, "loop": true}
+    {"id": "threshold_hush", "milliseconds": 8000, "seed": 127, "peak": 5000, "loop": true},
+    {"id": "archive_ticks", "milliseconds": 8000, "seed": 131, "peak": 4500, "loop": true},
+    {"id": "tallow_simmer", "milliseconds": 8000, "seed": 137, "peak": 5000, "loop": true},
+    {"id": "sanctum_air", "milliseconds": 8000, "seed": 139, "peak": 4500, "loop": true}
   ]
 }

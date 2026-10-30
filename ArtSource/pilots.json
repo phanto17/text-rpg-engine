@@ -26,6 +26,13 @@
     {"category": "Monsters", "id": "calcified_mournling_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 300, "source": "recipe"},
     {"category": "Monsters", "id": "tollbridge_warden_garin_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 250, "source": "recipe"},
     {"category": "Monsters", "id": "drowned_lancer_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 300, "source": "recipe"},
-    {"category": "Rooms", "id": "warren_crossroads", "width": 304, "height": 140, "source": "recipe"}
+    {"category": "Rooms", "id": "warren_crossroads", "width": 304, "height": 140, "source": "recipe"},
+    {"category": "Rooms", "id": "whispering_stacks", "width": 304, "height": 140, "source": "recipe"},
+    {"category": "Rooms", "id": "tallow_foundry", "width": 304, "height": 140, "source": "recipe"},
+    {"category": "Rooms", "id": "vow_sanctum", "width": 304, "height": 140, "source": "recipe"},
+    {"category": "Portraits", "id": "caelan", "width": 56, "height": 56, "source": "recipe"},
+    {"category": "Portraits", "id": "vaelen", "width": 56, "height": 56, "source": "recipe"},
+    {"category": "Monsters", "id": "prelate_vaelen_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 250, "source": "recipe"},
+    {"category": "Monsters", "id": "tethered_chorister_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 300, "source": "recipe"}
   ]
 }

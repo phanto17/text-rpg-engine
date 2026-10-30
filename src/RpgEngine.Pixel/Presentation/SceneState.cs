@@ -8,6 +8,8 @@ public sealed record SceneState(int Resonance, int SigilsLit, bool HasLantern, b
     bool MoonSealSet, bool BellMended, bool BrazierLit, bool SigilDoorOpen = false, bool BeaconLit = false,
     bool SpiritsReleased = false, bool PassageOpen = false, bool ThresholdOpen = false)
 {
+    public ArchiveState Archive { get; init; } = new();
+
     public static SceneState Read(GameSession? session, SceneBindingsDef bindings)
     {
         ArgumentNullException.ThrowIfNull(bindings);
@@ -20,6 +22,9 @@ public sealed record SceneState(int Resonance, int SigilsLit, bool HasLantern, b
             bindings.BeaconLitFlag is { } beacon && (session?.State.World.Flags.Contains(beacon) ?? false),
             bindings.ReleasedSpiritsFlag is { } spirits && (session?.State.World.Flags.Contains(spirits) ?? false),
             bindings.PassageVisitedRoom is { } room && (session?.State.World.VisitedRooms.Contains(room) ?? false),
-            bindings.ThresholdOpenFlag is { } threshold && (session?.State.World.Flags.Contains(threshold) ?? false));
+            bindings.ThresholdOpenFlag is { } threshold && (session?.State.World.Flags.Contains(threshold) ?? false))
+        {
+            Archive = ArchiveState.Read(session, bindings),
+        };
     }
 }
