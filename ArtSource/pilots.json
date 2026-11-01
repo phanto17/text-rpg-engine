@@ -33,6 +33,13 @@
     {"category": "Portraits", "id": "caelan", "width": 56, "height": 56, "source": "recipe"},
     {"category": "Portraits", "id": "vaelen", "width": 56, "height": 56, "source": "recipe"},
     {"category": "Monsters", "id": "prelate_vaelen_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 250, "source": "recipe"},
-    {"category": "Monsters", "id": "tethered_chorister_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 300, "source": "recipe"}
+    {"category": "Monsters", "id": "tethered_chorister_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 300, "source": "recipe"},
+    {"category": "Rooms", "id": "scoured_cloister", "width": 304, "height": 140, "source": "recipe"},
+    {"category": "Rooms", "id": "lye_cistern", "width": 304, "height": 140, "source": "recipe"},
+    {"category": "Rooms", "id": "reliquary_bastion", "width": 304, "height": 140, "source": "recipe"},
+    {"category": "Portraits", "id": "venn", "width": 56, "height": 56, "source": "recipe"},
+    {"category": "Portraits", "id": "silas", "width": 56, "height": 56, "source": "recipe"},
+    {"category": "Monsters", "id": "commander_silas_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 250, "source": "recipe"},
+    {"category": "Monsters", "id": "scoured_halberdier_idle", "width": 192, "height": 48, "frames": 4, "frameMilliseconds": 300, "source": "recipe"}
   ]
 }

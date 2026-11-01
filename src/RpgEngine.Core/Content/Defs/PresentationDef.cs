@@ -32,6 +32,8 @@ public sealed record SceneBindingsDef
     public string? SigilDoorOpenFlag { get; init; }
     public string? BeaconLitFlag { get; init; }
     public string? ThresholdOpenFlag { get; init; }
+    public string? CisternQuenchedFlag { get; init; }
+    public string? FurnaceOpenFlag { get; init; }
     public string? LoomSlackFlag { get; init; }
     public string? CarillonStoppedFlag { get; init; }
     public string? CarillonReleasedFlag { get; init; }

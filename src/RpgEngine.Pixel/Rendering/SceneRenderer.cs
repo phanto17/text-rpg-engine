@@ -41,6 +41,7 @@ internal sealed class SceneRenderer(PixelRect area)
         SpokeDetails.Draw(area, frame);
         ThresholdDetails.Draw(area, frame);
         ArchiveDetails.Draw(area, frame);
+        ReliquaryDetails.Draw(area, frame);
         _weather.Draw(frame.Time);
         Lantern(frame);
         SceneProps.Vignette(area);
@@ -337,14 +338,11 @@ internal sealed class SceneRenderer(PixelRect area)
                     SceneProps.Arch(x + 10 + (i * 76), area.Y + 8, 56, horizon - area.Y - 8, stone, deep);
                 }
 
-                SceneProps.Water(new PixelRect(x, horizon - 16, w, area.Bottom - horizon + 16), Emblems.Shade(accent, 0.35), t);
                 for (var i = 0; i < 5; i++)
                 {
                     var px = x + 30 + (i * 62);
                     Raylib.DrawRectangle(px, area.Y, 6, horizon - 16 - area.Y, dark);
                     Raylib.DrawRectangle(px - 2, horizon - 30, 10, 4, Emblems.Shade(stone, 1.2));
-                    var drip = (int)((t * 30 + i * 17) % 40);
-                    Raylib.DrawPixel(px + 3, horizon - 26 + drip, Palette.Alpha(accent, 180));
                 }
 
                 Raylib.DrawRectangle(cx - 30, horizon - 20, 60, 6, stone);
@@ -356,10 +354,6 @@ internal sealed class SceneRenderer(PixelRect area)
                 SceneProps.Crenellations(x, area.Y + 30, w, stone);
                 SceneProps.Pillar(x + 30, area.Y + 20, 14, horizon - area.Y - 20, stone);
                 SceneProps.Pillar(area.Right - 44, area.Y + 20, 14, horizon - area.Y - 20, stone);
-                Raylib.DrawRectangle(cx - 30, horizon - 46, 60, 46, dark);
-                Raylib.DrawRectangle(cx - 26, horizon - 42, 52, 36, Emblems.Shade(accent, 0.3));
-                Raylib.DrawRectangle(cx - 22, horizon - 30, 44, 20, Emblems.Shade(accent, 0.5));
-                SceneProps.Flame(cx, horizon - 12, 18, t, 8, accent, new Color(255, 230, 170, 255));
                 for (var i = 0; i < 6; i++)
                 {
                     Raylib.DrawRectangle(x + 60 + (i * 34), area.Y + 44, 10, 14, Palette.Alpha(accent, 60));
