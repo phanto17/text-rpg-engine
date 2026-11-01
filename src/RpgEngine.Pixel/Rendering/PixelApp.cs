@@ -195,10 +195,18 @@ internal sealed class PixelApp : IDisposable
         for (var key = Raylib.GetCharPressed(); key > 0; key = Raylib.GetCharPressed())
         {
             var c = (char)key;
-            if (_game.Input.Length == 0 && !_game.InputIsName && c is >= '1' and <= '9')
+            if (_game.Input.Length == 0 && !_game.InputIsName && c is '[' or ']')
             {
-                _game.Pick(c - '1');
+                _actions.TurnPage(c == '[' ? -1 : 1);
                 _audio.Play(_audioDirector.Effect("select"), _audioDirector.Preferences);
+            }
+            else if (_game.Input.Length == 0 && !_game.InputIsName && c is >= '1' and <= '9')
+            {
+                if (_actions.Shortcut(c - '0') is { } action)
+                {
+                    _game.Pick(action);
+                    _audio.Play(_audioDirector.Effect("select"), _audioDirector.Preferences);
+                }
             }
             else
             {
@@ -270,7 +278,11 @@ internal sealed class PixelApp : IDisposable
 
         if (Raylib.IsMouseButtonPressed(MouseButton.Left))
         {
-            if (_actions.Hit(mx, my) is { } index)
+            if (_actions.ClickNavigation(mx, my))
+            {
+                _audio.Play(_audioDirector.Effect("select"), _audioDirector.Preferences);
+            }
+            else if (_actions.Hit(mx, my) is { } index)
             {
                 _game.Pick(index);
                 _audio.Play(_audioDirector.Effect("select"), _audioDirector.Preferences);

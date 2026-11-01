@@ -24,7 +24,8 @@ public sealed class PixelGame
 
     private static readonly string[] HelpRows =
     [
-        "1, 2, 3 ... or click    choose an action",
+        "1-9 or click            choose a visible action",
+        "[ / ] or Prev / Next    change action page",
         "look, l                 describe the room again",
         "go north, n s e w u d   move",
         "inspect <thing>         examine something or someone",

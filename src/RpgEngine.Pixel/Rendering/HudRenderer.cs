@@ -204,6 +204,7 @@ internal sealed class HudRenderer(PixelRect area)
         var lines = new[]
         {
             ("Click", "a button or press 1-9"),
+            ("[ / ]", "action pages"),
             ("Type", "classic commands: look, go north"),
             ("Enter", "skips the typewriter"),
             ("Tab", "cycles the HUD tabs"),

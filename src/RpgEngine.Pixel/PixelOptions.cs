@@ -37,7 +37,8 @@ public sealed record PixelOptions
           --crt           Start with the CRT scanline overlay on (F2 toggles it)
           --help          Show this help
 
-        In the window: click a button, press 1-9, or type a command. Tab cycles the HUD tabs,
+        In the window: click a button or press 1-9 for a visible action. Use [ / ] or Prev / Next
+        for more actions. Type commands in the input line. Tab cycles the HUD tabs,
         Enter skips the typewriter, Esc goes back, F4 mutes sound, F5 opens sound settings.
         F2 toggles the CRT, F3 toggles whole-pixel
         scaling, F11 toggles borderless fullscreen.

@@ -59,3 +59,5 @@ All forty-six PNG assets are original procedural drawings from `build_pilots.py`
 ## Review checklist
 
 Inspect each asset at native size and 2× integer scale, check palette/dimensions/alpha using `Test-ArtAssets.ps1`, run `verify_reproducible.py`, confirm Pixelorama export parity for PXO masters, and capture a `--play` plus `--screenshot` scene. Verify characters and labels against both darkest and brightest backgrounds. Keep animation independent of Core game logic. Indexed/tilemap editor mutation remains unsupported by the bridge; edit tile PNGs as ordinary pixel art and import them explicitly when needed.
+
+For whole-game consistency, use the [presentation review](PRESENTATION_REVIEW.md) and `review_pack.py` to compare room captures and complete figure sheets at native resolution. Keep every action reachable through visible pages; shortcuts 1-9 select the current page.
