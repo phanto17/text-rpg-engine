@@ -20,6 +20,8 @@
     {"id": "sanctum_air", "milliseconds": 8000, "seed": 139, "peak": 4500, "loop": true},
     {"id": "cloister_air", "milliseconds": 8000, "seed": 149, "peak": 4500, "loop": true},
     {"id": "cistern_flow", "milliseconds": 8000, "seed": 151, "peak": 5000, "loop": true},
-    {"id": "furnace_draft", "milliseconds": 8000, "seed": 157, "peak": 5000, "loop": true}
+    {"id": "furnace_draft", "milliseconds": 8000, "seed": 157, "peak": 5000, "loop": true},
+    {"id": "uncarved_depths", "milliseconds": 8000, "seed": 163, "peak": 4000, "loop": true},
+    {"id": "last_watch_embers", "milliseconds": 8000, "seed": 167, "peak": 4500, "loop": true}
   ]
 }

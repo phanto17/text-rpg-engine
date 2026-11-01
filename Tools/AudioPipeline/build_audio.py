@@ -116,6 +116,13 @@ def render(asset):
             swell = 700 + SINE[(i * 32 // count) % 32] * 120 // 32768
             sample = (tone(i, 55) + tone(i, 110)) * swell // 4096
             sample += sum(random[(i - k) % count] for k in range(12)) // 16
+        elif kind == "uncarved_depths":
+            sample = (tone(i, 41) + tone(i, 82)) // 12
+            sample += sum(random[(i - k) % count] for k in range(48)) // 192
+        elif kind == "last_watch_embers":
+            swell = 700 + SINE[(i * 32 // count) % 32] * 80 // 32768
+            sample = (tone(i, 110) + tone(i, 165)) * swell // 8192
+            sample += sum(random[(i - k) % count] for k in range(12)) // 32
         else:
             raise ValueError(f"unknown recipe {kind}")
         samples.append(sample)

@@ -56,6 +56,30 @@
             "null"
           ]
         },
+        "friezeReadFlag": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sanctuaryChimeFlag": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sanctuaryDispatchFlag": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sanctuaryOfferingFlag": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "cisternQuenchedFlag": {
           "type": [
             "string",
