@@ -21,7 +21,9 @@
       "vow_sanctum": "Assets/Audio/sanctum_air.wav",
       "scoured_cloister": "Assets/Audio/cloister_air.wav",
       "lye_cistern": "Assets/Audio/cistern_flow.wav",
-      "reliquary_bastion": "Assets/Audio/furnace_draft.wav"
+      "reliquary_bastion": "Assets/Audio/furnace_draft.wav",
+      "threshold_vestibule": "Assets/Audio/uncarved_depths.wav",
+      "penitent_landing": "Assets/Audio/last_watch_embers.wav"
     }
   },
   "bindings": {
@@ -30,6 +32,10 @@
     "sigilDoorOpenFlag": "sigil_door_open",
     "beaconLitFlag": "beacon_restored",
     "thresholdOpenFlag": "unsealed_cradle_gate",
+    "friezeReadFlag": "read_architect_frieze",
+    "sanctuaryChimeFlag": "vaelen_reconciled",
+    "sanctuaryDispatchFlag": "silas_relieved",
+    "sanctuaryOfferingFlag": "tithed_at_threshold",
     "cisternQuenchedFlag": "quenched_lye_cistern",
     "furnaceOpenFlag": "silas_resolved",
     "loomSlackFlag": "slackened_choir_loom",
@@ -452,7 +458,7 @@
       "emblem": "lantern_nun",
       "primaryColor": "#5E6878",
       "accentColor": "#E89E46",
-      "portraitImage": "Assets/Portraits/wren_cradle.png"
+      "portraitImage": "Assets/Portraits/wren.png"
     },
     "oakhaven": {
       "title": "Barrow-wright",

@@ -12,6 +12,7 @@ from build_act_one_spokes import ASSETS as SPOKE_ASSETS
 from build_act_two import crossroads
 from build_archive import ASSETS as ARCHIVE_ASSETS
 from build_reliquary import ASSETS as RELIQUARY_ASSETS
+from build_sanctuary import ASSETS as SANCTUARY_ASSETS
 from build_extension import build as build_extension
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -22,6 +23,7 @@ GENERATORS = {
     "warren_crossroads": crossroads,
     **{name: create for (_, name), create in ARCHIVE_ASSETS.items()},
     **{name: create for (_, name), create in RELIQUARY_ASSETS.items()},
+    **{name: create for (_, name), create in SANCTUARY_ASSETS.items()},
     "lichgate": room,
     "gravebound_knight": knight,
     "wren": portrait,

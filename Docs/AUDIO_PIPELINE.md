@@ -27,7 +27,9 @@ The Pixel client plays optional audio from `Data/World/presentation.json`. Click
     "vow_sanctum": "Assets/Audio/sanctum_air.wav",
     "scoured_cloister": "Assets/Audio/cloister_air.wav",
     "lye_cistern": "Assets/Audio/cistern_flow.wav",
-    "reliquary_bastion": "Assets/Audio/furnace_draft.wav"
+    "reliquary_bastion": "Assets/Audio/furnace_draft.wav",
+    "threshold_vestibule": "Assets/Audio/uncarved_depths.wav",
+    "penitent_landing": "Assets/Audio/last_watch_embers.wav"
   }
 }
 ```
@@ -38,7 +40,7 @@ These maps are optional. Effects use the fixed client roles above; ambience keys
 
 ## Sources and format
 
-All nineteen WAVs are original synthesis from `Tools/AudioPipeline/build_audio.py`; there are no outside recordings, samples or music. The editable masters are the checked-in integer synthesis recipes plus `ArtSource/audio.json`, which records duration, seed, peak ceiling and loop intent. Fixed integer oscillators, envelopes and noise make PCM output reproducible across Windows and Linux. The pack uses canonical RIFF PCM, mono, signed 16-bit little-endian, 22050 Hz. All room ambience clips are eight-second loops; the five effects are 70-900 ms long. Their peak ceilings leave headroom before the user's volume settings.
+All twenty-one WAVs are original synthesis from `Tools/AudioPipeline/build_audio.py`; there are no outside recordings, samples or music. The editable masters are the checked-in integer synthesis recipes plus `ArtSource/audio.json`, which records duration, seed, peak ceiling and loop intent. Fixed integer oscillators, envelopes and noise make PCM output reproducible across Windows and Linux. The pack uses canonical RIFF PCM, mono, signed 16-bit little-endian, 22050 Hz. All room ambience clips are eight-second loops; the five effects are 70-900 ms long. Their peak ceilings leave headroom before the user's volume settings.
 
 Only relative `Assets/Audio/*.wav` paths are accepted. Before native decoding, `PcmWave` rejects missing or malformed files, unsupported headers, files over 8 MiB, traversal and reparse points. Invalid optional bindings warn at content load; missing or corrupt files remain silent at playback. An unavailable audio device leaves the game playable and is shown in Sound settings. Failed preference writes leave controls usable and show a save warning. Unsupported or corrupt preference files fall back to defaults.
 

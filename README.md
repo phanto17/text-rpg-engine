@@ -132,9 +132,11 @@ The [Archive visual slice](Docs/ARCHIVE_VISUAL_SLICE.md) adds three paintings, C
 
 The [Iron Reliquary visual slice](Docs/RELIQUARY_VISUAL_SLICE.md) adds three paintings, Venn and Silas portraits, two enemy idle sheets and room ambience. Its cistern, sluice and furnace grate follow world state above both backdrop paths.
 
+The [Act III sanctuary slice](Docs/SANCTUARY_VISUAL_SLICE.md) adds the basalt stair, Last Watch terrace, Oakhaven portrait and two ambience loops. Live relief and ally tokens follow existing story flags; Wren reuses her established artwork.
+
 ## Getting started
 
-The Pixel client includes optional prologue, Act I and Act II ambience and original sound effects. Click **F5 Sound** or press F5 for separate ambience/effects volumes; F4 mutes. Preferences persist under the save folder. See [the audio guide](Docs/AUDIO_PIPELINE.md) for bindings and reproducible sound exports.
+The Pixel client includes optional prologue, Act I, Act II and early Act III ambience and original sound effects. Click **F5 Sound** or press F5 for separate ambience/effects volumes; F4 mutes. Preferences persist under the save folder. See [the audio guide](Docs/AUDIO_PIPELINE.md) for bindings and reproducible sound exports.
 
 **Prerequisites:** the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0); `global.json` pins 10.0.401 or a later feature band. A modern terminal (Windows Terminal, iTerm2, any recent Linux terminal) gives the best colors and Unicode bars.
 

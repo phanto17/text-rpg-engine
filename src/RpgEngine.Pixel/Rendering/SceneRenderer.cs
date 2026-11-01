@@ -42,6 +42,7 @@ internal sealed class SceneRenderer(PixelRect area)
         ThresholdDetails.Draw(area, frame);
         ArchiveDetails.Draw(area, frame);
         ReliquaryDetails.Draw(area, frame);
+        SanctuaryDetails.Draw(area, frame);
         _weather.Draw(frame.Time);
         Lantern(frame);
         SceneProps.Vignette(area);
@@ -366,15 +367,6 @@ internal sealed class SceneRenderer(PixelRect area)
                 SceneProps.Stairs(cx - 60, area.Y + 24, 10, 12, 9, stone, rightward: true);
                 Raylib.DrawRectangle(x, area.Y, 60, area.Height, Emblems.Shade(stone, 0.45));
                 Raylib.DrawRectangle(area.Right - 60, area.Y, 60, area.Height, Emblems.Shade(stone, 0.45));
-                Raylib.DrawCircle(x + 44, area.Y + 50, 22, Emblems.Shade(stone, 0.9));
-                Raylib.DrawRectangle(x + 30, area.Y + 60, 28, 20, Emblems.Shade(stone, 0.9));
-                Raylib.DrawCircle(x + 36, area.Y + 46, 5, deep);
-                Raylib.DrawCircle(x + 52, area.Y + 46, 5, deep);
-                for (var i = 0; i < 4; i++)
-                {
-                    Raylib.DrawRectangle(x + 34 + (i * 6), area.Y + 70, 3, 8, deep);
-                }
-
                 Raylib.DrawRectangle(area.Right - 50, area.Y + 20, 30, 4, dark);
                 Raylib.DrawRectangle(area.Right - 46, area.Y + 60, 22, 3, dark);
                 break;
@@ -384,7 +376,6 @@ internal sealed class SceneRenderer(PixelRect area)
                 Raylib.DrawRectangle(x, area.Y, w, horizon - area.Y, Emblems.Shade(stone, 0.6));
                 SceneProps.Arch(x + 16, area.Y + 20, 44, horizon - area.Y - 20, stone, deep);
                 SceneProps.Arch(area.Right - 60, area.Y + 20, 44, horizon - area.Y - 20, stone, deep);
-                SceneProps.Brazier(cx, horizon, 22, t, 9, dark, accent);
                 for (var i = 0; i < 5; i++)
                 {
                     var bx = cx - 70 + (i * 35);

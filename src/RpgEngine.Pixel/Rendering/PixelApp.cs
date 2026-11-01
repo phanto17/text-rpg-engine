@@ -358,7 +358,8 @@ internal sealed class PixelApp : IDisposable
             state.PassageOpen,
             state.ThresholdOpen,
             state.Archive,
-            state.Reliquary);
+            state.Reliquary,
+            state.Sanctuary);
 
         _scene.Draw(frame, _textures);
         _stage.Draw(_textures);
@@ -372,7 +373,7 @@ internal sealed class PixelApp : IDisposable
         var label = Canvas.Ellipsize(roomName, PixelLayout.Scene.Width - 76);
         Canvas.Fill(new PixelRect(PixelLayout.Scene.X + 3, PixelLayout.Scene.Y + 3, Canvas.Width(label) + 6, 11), Palette.Alpha(Palette.PanelBack, 170));
         Canvas.Text(PixelLayout.Scene.X + 6, PixelLayout.Scene.Y + 3, label, Palette.Title);
-        if (!_dice.Active && !_stage.Active)
+        if (!_dice.Active && !_stage.Active && !_portrait.Visible)
         {
             _caption.Draw(PixelLayout.Scene, Palette.Of(_catalog.Room(roomId).Accent));
         }
