@@ -21,4 +21,5 @@ internal sealed record SceneFrame(
     bool ThresholdOpen = false,
     ArchiveState? Archive = null,
     ReliquaryState? Reliquary = null,
-    SanctuaryState? Sanctuary = null);
+    SanctuaryState? Sanctuary = null,
+    FinaleState? Finale = null);

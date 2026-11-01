@@ -29,7 +29,9 @@ The Pixel client plays optional audio from `Data/World/presentation.json`. Click
     "lye_cistern": "Assets/Audio/cistern_flow.wav",
     "reliquary_bastion": "Assets/Audio/furnace_draft.wav",
     "threshold_vestibule": "Assets/Audio/uncarved_depths.wav",
-    "penitent_landing": "Assets/Audio/last_watch_embers.wav"
+    "penitent_landing": "Assets/Audio/last_watch_embers.wav",
+    "bell_nave": "Assets/Audio/sundered_overtones.wav",
+    "cradle_of_ash": "Assets/Audio/cradle_breath.wav"
   }
 }
 ```
@@ -40,7 +42,7 @@ These maps are optional. Effects use the fixed client roles above; ambience keys
 
 ## Sources and format
 
-All twenty-one WAVs are original synthesis from `Tools/AudioPipeline/build_audio.py`; there are no outside recordings, samples or music. The editable masters are the checked-in integer synthesis recipes plus `ArtSource/audio.json`, which records duration, seed, peak ceiling and loop intent. Fixed integer oscillators, envelopes and noise make PCM output reproducible across Windows and Linux. The pack uses canonical RIFF PCM, mono, signed 16-bit little-endian, 22050 Hz. All room ambience clips are eight-second loops; the five effects are 70-900 ms long. Their peak ceilings leave headroom before the user's volume settings.
+All twenty-three WAVs are original synthesis from `Tools/AudioPipeline/build_audio.py`; there are no outside recordings, samples or music. The editable masters are the checked-in integer synthesis recipes plus `ArtSource/audio.json`, which records duration, seed, peak ceiling and loop intent. Fixed integer oscillators, envelopes and noise make PCM output reproducible across Windows and Linux. The pack uses canonical RIFF PCM, mono, signed 16-bit little-endian, 22050 Hz. All room ambience clips are eight-second loops; the five effects are 70-900 ms long. Their peak ceilings leave headroom before the user's volume settings.
 
 Only relative `Assets/Audio/*.wav` paths are accepted. Before native decoding, `PcmWave` rejects missing or malformed files, unsupported headers, files over 8 MiB, traversal and reparse points. Invalid optional bindings warn at content load; missing or corrupt files remain silent at playback. An unavailable audio device leaves the game playable and is shown in Sound settings. Failed preference writes leave controls usable and show a save warning. Unsupported or corrupt preference files fall back to defaults.
 
@@ -63,4 +65,4 @@ For a manual check, run `dotnet run --project src/RpgEngine.Pixel -- --saves Art
 
 ## Rollback
 
-Remove the optional `audio` section to silence content playback, or revert the WAVs, recipes and manifest together. Remove `.pixel/audio.json` to reset local preferences. No game save migration is needed. Acts I–III can receive additional ambience through data after their sound direction is reviewed.
+Remove the optional `audio` section to silence content playback, or revert the WAVs, recipes and manifest together. Remove `.pixel/audio.json` to reset local preferences. No game save migration is needed. All eighteen rooms now have ambience bindings; subjective listening and mix review remain before release.

@@ -43,6 +43,7 @@ internal sealed class SceneRenderer(PixelRect area)
         ArchiveDetails.Draw(area, frame);
         ReliquaryDetails.Draw(area, frame);
         SanctuaryDetails.Draw(area, frame);
+        FinaleDetails.Draw(area, frame);
         _weather.Draw(frame.Time);
         Lantern(frame);
         SceneProps.Vignette(area);
@@ -402,7 +403,6 @@ internal sealed class SceneRenderer(PixelRect area)
                 }
 
                 SceneProps.Arch(cx - 40, area.Y - 20, 80, horizon - area.Y + 20, stone, deep);
-                SceneProps.Bell(cx, area.Y + 26, 22, area.Y, Emblems.Shade(accent, 0.75), Palette.Alpha(Color.Black, 200), frame.BellMended, t);
                 Raylib.DrawRectangle(cx - 30, horizon - 6, 60, 6, Emblems.Shade(stone, 1.1));
                 Raylib.DrawRectangle(cx + 34, horizon - 4, 10, 4, Emblems.Shade(accent, 0.6));
                 break;
@@ -416,30 +416,6 @@ internal sealed class SceneRenderer(PixelRect area)
                     SceneProps.Pillar(cx + (i * 44) - 4, area.Y + 30, 8, horizon - area.Y - 30, Emblems.Shade(stone, 0.9));
                 }
 
-                Raylib.DrawEllipse(cx, horizon - 8, 46, 12, dark);
-                Raylib.DrawEllipse(cx, horizon - 12, 40, 8, Emblems.Shade(dark, 0.7));
-                Raylib.DrawRectangle(cx - 46, horizon - 8, 92, 8, dark);
-                Raylib.DrawRectangle(cx - 20, horizon - 2, 40, 2, Emblems.Shade(accent, 0.6));
-                if (frame.BrazierLit)
-                {
-                    SceneProps.Flame(cx, horizon - 12, 40, t, 10, accent, new Color(255, 245, 210, 255));
-                    SceneProps.Flame(cx - 16, horizon - 12, 24, t, 11, accent, new Color(255, 240, 200, 255));
-                    SceneProps.Flame(cx + 16, horizon - 12, 24, t, 12, accent, new Color(255, 240, 200, 255));
-                }
-                else
-                {
-                    for (var i = 0; i < 7; i++)
-                    {
-                        var ex = cx - 30 + (i * 10);
-                        var pulse = (int)(120 + (100 * Math.Abs(Math.Sin(t * 1.5 + i))));
-                        Raylib.DrawRectangle(ex, horizon - 14, 3, 2, Palette.Rgba(255, 120, 40, pulse));
-                    }
-                }
-
-                Raylib.DrawCircle(cx - 100, horizon - 24, 8, accent);
-                Raylib.DrawCircleLines(cx - 100, horizon - 24, 11, accent);
-                Raylib.DrawCircle(cx + 100, horizon - 24, 8, new Color(170, 200, 255, 255));
-                Raylib.DrawCircle(cx + 104, horizon - 26, 7, Palette.Of(look.BackgroundBottom));
                 break;
         }
     }

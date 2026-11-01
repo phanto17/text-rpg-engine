@@ -12,6 +12,37 @@ public sealed class EventSequencerTests
         new(new EventNarrator { PlayerName = "Tester" }, charactersPerSecond);
 
     [Fact]
+    public void IsSpeaking_SpokenBeatFollowedByNarration_OnlyTracksSpeech()
+    {
+        var sequencer = NewSequencer();
+        sequencer.Enqueue([new DialogueLineEvent("Speaker", "A long farewell."),
+            new NarrationEvent(TextStyle.Narration, "The doorway stands empty.")]);
+        Assert.False(sequencer.IsSpeaking);
+        sequencer.Advance(0.1);
+        Assert.True(sequencer.IsSpeaking);
+        sequencer.TakeCues();
+        Assert.True(sequencer.IsSpeaking);
+        sequencer.Advance(2.5);
+        Assert.False(sequencer.IsSpeaking);
+        Assert.False(sequencer.IsIdle);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void IsSpeaking_SkipOrClear_EndsSpeech(bool clear)
+    {
+        var sequencer = NewSequencer();
+        sequencer.Enqueue([new DialogueLineEvent("Speaker", "A long farewell.")]);
+        sequencer.Advance(0.1);
+        Assert.True(sequencer.IsSpeaking);
+        if (clear) sequencer.Clear();
+        else sequencer.Skip();
+        Assert.False(sequencer.IsSpeaking);
+        Assert.True(sequencer.IsIdle);
+    }
+
+    [Fact]
     public void Advance_RevealsCharactersAtTheConfiguredRate()
     {
         var sequencer = NewSequencer(charactersPerSecond: 10);

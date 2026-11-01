@@ -133,6 +133,7 @@ public static class PresentationLoader
         [
             "resonanceCounter", "sigilCounter", "sigilDoorOpenFlag", "beaconLitFlag",
             "thresholdOpenFlag", "friezeReadFlag", "sanctuaryChimeFlag", "sanctuaryDispatchFlag",
+            "sunEndingFlag", "moonEndingFlag", "triadEndingFlag",
             "sanctuaryOfferingFlag", "cisternQuenchedFlag", "furnaceOpenFlag", "loomSlackFlag",
             "carillonStoppedFlag", "carillonReleasedFlag", "releasedSpiritsFlag", "passageVisitedRoom",
             "lanternItem", "sunSealItem", "moonSealItem", "bellMendedFlags",
@@ -173,6 +174,9 @@ public static class PresentationLoader
             SanctuaryChimeFlag = Reference("sanctuaryChimeFlag"),
             SanctuaryDispatchFlag = Reference("sanctuaryDispatchFlag"),
             SanctuaryOfferingFlag = Reference("sanctuaryOfferingFlag"),
+            SunEndingFlag = Reference("sunEndingFlag"),
+            MoonEndingFlag = Reference("moonEndingFlag"),
+            TriadEndingFlag = Reference("triadEndingFlag"),
             CisternQuenchedFlag = Reference("cisternQuenchedFlag"),
             FurnaceOpenFlag = Reference("furnaceOpenFlag"),
             LoomSlackFlag = Reference("loomSlackFlag"),

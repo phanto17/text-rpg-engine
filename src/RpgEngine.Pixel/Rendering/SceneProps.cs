@@ -111,31 +111,6 @@ internal static class SceneProps
         }
     }
 
-    /// <summary>A hanging bell, cracked unless <paramref name="mended"/>, with its chains up to <paramref name="chainTop"/>.</summary>
-    public static void Bell(int cx, int top, int radius, int chainTop, Color metal, Color crackColor, bool mended, double time)
-    {
-        var sway = (int)Math.Round(Math.Sin(time * 0.7) * 1.5);
-        cx += sway;
-        for (var y = chainTop; y < top; y += 3)
-        {
-            Raylib.DrawPixel(cx - 4, y, Emblems.Shade(metal, 0.7));
-            Raylib.DrawPixel(cx + 4, y, Emblems.Shade(metal, 0.7));
-        }
-
-        Raylib.DrawCircle(cx, top + radius, radius, metal);
-        Raylib.DrawRectangle(cx - radius, top + radius, radius * 2, radius + 4, metal);
-        Raylib.DrawRectangle(cx - radius - 3, top + (radius * 2) + 2, (radius * 2) + 6, 4, Emblems.Shade(metal, 1.2));
-        Raylib.DrawRectangle(cx - radius + 2, top + 4, 2, radius * 2 - 2, Emblems.Shade(metal, 1.4));
-        Raylib.DrawCircle(cx, top + (radius * 2) + 7, 3, Emblems.Shade(metal, 0.5));
-        if (!mended)
-        {
-            Raylib.DrawLine(cx + 3, top + 6, cx + 1, top + radius + 2, crackColor);
-            Raylib.DrawLine(cx + 1, top + radius + 2, cx + 5, top + (radius * 2) - 2, crackColor);
-            Raylib.DrawLine(cx + 5, top + (radius * 2) - 2, cx + 2, top + (radius * 2) + 5, crackColor);
-            Raylib.DrawLine(cx + 1, top + radius + 2, cx - 3, top + radius + 6, crackColor);
-        }
-    }
-
     /// <summary>Steps descending to the right (<paramref name="rightward"/>) or left.</summary>
     public static void Stairs(int x, int y, int count, int stepWidth, int stepHeight, Color stone, bool rightward)
     {
