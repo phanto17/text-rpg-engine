@@ -36,6 +36,9 @@ public sealed record SceneBindingsDef
     public string? SanctuaryChimeFlag { get; init; }
     public string? SanctuaryDispatchFlag { get; init; }
     public string? SanctuaryOfferingFlag { get; init; }
+    public string? SunEndingFlag { get; init; }
+    public string? MoonEndingFlag { get; init; }
+    public string? TriadEndingFlag { get; init; }
     public string? CisternQuenchedFlag { get; init; }
     public string? FurnaceOpenFlag { get; init; }
     public string? LoomSlackFlag { get; init; }

@@ -134,6 +134,8 @@ The [Iron Reliquary visual slice](Docs/RELIQUARY_VISUAL_SLICE.md) adds three pai
 
 The [Act III sanctuary slice](Docs/SANCTUARY_VISUAL_SLICE.md) adds the basalt stair, Last Watch terrace, Oakhaven portrait and two ambience loops. Live relief and ally tokens follow existing story flags; Wren reuses her established artwork.
 
+The [finale slice](Docs/FINALE_VISUAL_SLICE.md) completes paintings for all eighteen rooms, all twelve enemy sheets, and portraits for every shipped dialogue. The bell nave and final cradle retain live notch, bier and ending-fire states. The full pack contains 46 PNGs and 23 WAVs, with an existing-file check for every shipped look.
+
 ## Getting started
 
 The Pixel client includes optional prologue, Act I, Act II and early Act III ambience and original sound effects. Click **F5 Sound** or press F5 for separate ambience/effects volumes; F4 mutes. Preferences persist under the save folder. See [the audio guide](Docs/AUDIO_PIPELINE.md) for bindings and reproducible sound exports.

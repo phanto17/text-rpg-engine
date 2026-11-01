@@ -80,6 +80,24 @@
             "null"
           ]
         },
+        "sunEndingFlag": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "moonEndingFlag": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "triadEndingFlag": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "cisternQuenchedFlag": {
           "type": [
             "string",

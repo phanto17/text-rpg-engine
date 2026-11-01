@@ -123,6 +123,13 @@ def render(asset):
             swell = 700 + SINE[(i * 32 // count) % 32] * 80 // 32768
             sample = (tone(i, 110) + tone(i, 165)) * swell // 8192
             sample += sum(random[(i - k) % count] for k in range(12)) // 32
+        elif kind == "sundered_overtones":
+            swell = 650 + SINE[(i * 32 // count) % 32] * 100 // 32768
+            sample = (tone(i, 73) + tone(i, 110) + tone(i, 151)) * swell // 8192
+        elif kind == "cradle_breath":
+            swell = 650 + SINE[(i * 32 // count) % 32] * 120 // 32768
+            sample = (tone(i, 49) + tone(i, 98)) * swell // 8192
+            sample += sum(random[(i - k) % count] for k in range(32)) // 128
         else:
             raise ValueError(f"unknown recipe {kind}")
         samples.append(sample)

@@ -23,7 +23,9 @@
       "lye_cistern": "Assets/Audio/cistern_flow.wav",
       "reliquary_bastion": "Assets/Audio/furnace_draft.wav",
       "threshold_vestibule": "Assets/Audio/uncarved_depths.wav",
-      "penitent_landing": "Assets/Audio/last_watch_embers.wav"
+      "penitent_landing": "Assets/Audio/last_watch_embers.wav",
+      "bell_nave": "Assets/Audio/sundered_overtones.wav",
+      "cradle_of_ash": "Assets/Audio/cradle_breath.wav"
     }
   },
   "bindings": {
@@ -36,6 +38,9 @@
     "sanctuaryChimeFlag": "vaelen_reconciled",
     "sanctuaryDispatchFlag": "silas_relieved",
     "sanctuaryOfferingFlag": "tithed_at_threshold",
+    "sunEndingFlag": "ending_sun_stasis",
+    "moonEndingFlag": "ending_moon_vigil",
+    "triadEndingFlag": "ending_triad_passage",
     "cisternQuenchedFlag": "quenched_lye_cistern",
     "furnaceOpenFlag": "silas_resolved",
     "loomSlackFlag": "slackened_choir_loom",
@@ -353,14 +358,16 @@
       "emblem": "architect_astrolabe",
       "primaryColor": "#3E5852",
       "accentColor": "#F5B841",
-      "spriteImage": "Assets/Monsters/first_architect.png"
+      "spriteImage": "Assets/Monsters/first_architect_idle.png",
+      "animation": { "frames": 4, "frameMilliseconds": 250 }
     },
     "calcified_warden": {
       "title": "Keeper of the Cradle",
       "emblem": "iron_brazier",
       "primaryColor": "#6E7875",
       "accentColor": "#C89B4B",
-      "spriteImage": "Assets/Monsters/calcified_warden.png"
+      "spriteImage": "Assets/Monsters/calcified_warden_idle.png",
+      "animation": { "frames": 4, "frameMilliseconds": 300 }
     }
   },
   "npcs": {

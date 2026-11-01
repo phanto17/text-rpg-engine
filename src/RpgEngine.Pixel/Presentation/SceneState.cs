@@ -11,6 +11,7 @@ public sealed record SceneState(int Resonance, int SigilsLit, bool HasLantern, b
     public ArchiveState Archive { get; init; } = new();
     public ReliquaryState Reliquary { get; init; } = new();
     public SanctuaryState Sanctuary { get; init; } = new();
+    public FinaleState Finale { get; init; } = new();
 
     public static SceneState Read(GameSession? session, SceneBindingsDef bindings)
     {
@@ -29,6 +30,7 @@ public sealed record SceneState(int Resonance, int SigilsLit, bool HasLantern, b
             Archive = ArchiveState.Read(session, bindings),
             Reliquary = ReliquaryState.Read(session, bindings),
             Sanctuary = SanctuaryState.Read(session, bindings),
+            Finale = FinaleState.Read(session, bindings),
         };
     }
 }

@@ -42,6 +42,9 @@ public sealed class EventSequencer
     /// <summary>Nothing is queued, holding, or still being typed.</summary>
     public bool IsIdle => _current is null && _pending.Count == 0 && _hold <= 0;
 
+    /// <summary>A spoken beat is still revealing, even if its dialogue already ended in Core.</summary>
+    public bool IsSpeaking => _current?.Cues.Any(cue => cue is SpeakerCue) ?? false;
+
     /// <summary>Increments whenever the visible text changes, so a view can scroll to the newest line.</summary>
     public int Version { get; private set; }
 

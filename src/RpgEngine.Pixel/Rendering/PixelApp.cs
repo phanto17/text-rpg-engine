@@ -322,7 +322,7 @@ internal sealed class PixelApp : IDisposable
     {
         var session = _game.Session;
         _stage.Sync(session?.Combat, _catalog);
-        if (session is null || session.Mode is not (GameMode.Dialogue or GameMode.Shop))
+        if (session is null || (session.Mode is not (GameMode.Dialogue or GameMode.Shop) && !_game.Sequencer.IsSpeaking))
         {
             _portrait.Hide();
         }
@@ -359,7 +359,8 @@ internal sealed class PixelApp : IDisposable
             state.ThresholdOpen,
             state.Archive,
             state.Reliquary,
-            state.Sanctuary);
+            state.Sanctuary,
+            state.Finale);
 
         _scene.Draw(frame, _textures);
         _stage.Draw(_textures);
