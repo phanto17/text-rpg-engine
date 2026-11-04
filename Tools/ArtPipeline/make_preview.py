@@ -4,6 +4,11 @@ from pathlib import Path
 from PIL import Image
 
 
+def frame_durations(count):
+    """Distribute GIF's ten-millisecond ticks without accumulating 12 fps timing drift."""
+    return [round((i + 1) * 100 / 12) * 10 - round(i * 100 / 12) * 10 for i in range(count)]
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("directory", type=Path)
@@ -24,7 +29,7 @@ def main():
             if image.format != "PNG" or image.size != (480, 270):
                 parser.error(f"unexpected recorded image: {path}")
             frames.append(image.convert("RGB").quantize(colors=128))
-    durations = [round((i + 1) * 100 / 12) * 10 - round(i * 100 / 12) * 10 for i in range(len(frames))]
+    durations = frame_durations(len(frames))
     frames[0].save(args.output, save_all=True, append_images=frames[1:],
                    duration=durations, loop=0, disposal=2, optimize=False)
     print(f"{args.output}: {len(frames)} frames at 12 fps")

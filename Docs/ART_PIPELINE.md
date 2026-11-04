@@ -29,3 +29,5 @@ Keep the previous runtime PNGs until a new export passes visual and automated re
 The [finale slice](FINALE_VISUAL_SLICE.md) completes the shipped room, monster and dialogue image coverage. Reproduce its two room paintings, two idle sheets and portrait with `python Tools/ArtPipeline/build_finale.py ArtBuild/finale-drafts`. The 46-PNG pack is checked against its recipes; `PresentationAssetsTests` separately requires every shipped presentation image to exist. Optional custom content retains procedural fallbacks.
 
 Build an offline review gallery with `python Tools/ArtPipeline/review_pack.py Data ArtBuild/review-pack --captures ArtBuild/review-shots`. The output directory must be fresh. Without captures it explicitly marks source-only views; it does not launch the game or claim native review. See [whole-game review](PRESENTATION_REVIEW.md).
+
+For a multi-scene silent teaser, use `capture_pack.py` and the reviewed shot-manifest example. The [release-readiness guide](RELEASE_READINESS.md) documents frame selection, fixture fingerprints, spoiler exclusion, bounds and rollback. This assembler reuses the single-recording preview timing helper.

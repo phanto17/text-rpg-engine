@@ -78,3 +78,5 @@ The local Release build reports zero warnings/errors and all 1,053 tests pass. A
 MVP is the action-accessibility fix and reproducible review pack. Follow with the recorded listening review and any justified mix adjustments. Release capture work then selects a short sequence of room, dialogue, combat and ending clips for a trailer; final high-DPI, fullscreen and native Linux window checks remain separate release tasks. No trailer or all-platform visual sign-off is claimed by this review.
 
 Rollback the action-page files and control/help documentation together to restore the previous action bar. Remove the offline assembler, its tests and guide links independently if no longer needed. Game saves, content, asset manifests and generated schemas need no migration or regeneration.
+
+The subsequent [release capture pack](RELEASE_READINESS.md) assembles six selected native clips, with the final brazier excluded from its 25-second teaser. It retains source/fixture fingerprints and explicitly leaves unconfirmed display, Linux-native and subjective listening gates pending.

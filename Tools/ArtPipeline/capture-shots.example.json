@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "baselineCommit": "9109e78b3a979d3683f5b65b33a701af3310166e",
+  "contentVersion": "1.0.1",
+  "seed": 42,
+  "shots": [
+    {
+      "id": "moor",
+      "label": "The Lichgate",
+      "recording": "frames/moor",
+      "start": 14,
+      "stop": 74,
+      "spoiler": false,
+      "fixture": "title",
+      "script": ";;;;;;;;;;;;;;;;;;;;;;;;;"
+    },
+    {
+      "id": "wren_retry",
+      "label": "Sister Wren",
+      "recording": "frames/wren_retry",
+      "start": 192,
+      "stop": 252,
+      "spoiler": false,
+      "fixture": "prepared-save",
+      "script": "load quicksave;talk wren;;;;;;;;;;;;;;;;;;;;;;;;;",
+      "save": "saves/wren/quicksave.json"
+    },
+    {
+      "id": "combat",
+      "label": "The Barrow Heart",
+      "recording": "frames/combat",
+      "start": 300,
+      "stop": 360,
+      "spoiler": false,
+      "fixture": "prepared-save",
+      "script": "load quicksave;east;attack Ser Halric;defend",
+      "save": "saves/combat/quicksave.json"
+    },
+    {
+      "id": "nocturne",
+      "label": "Nocturne",
+      "recording": "frames/nocturne",
+      "start": 223,
+      "stop": 283,
+      "spoiler": false,
+      "fixture": "prepared-save",
+      "script": "load quicksave;;;;;;;;;;;;;;;;;;;;;;;;;",
+      "save": "saves/nocturne/quicksave.json"
+    },
+    {
+      "id": "loom_retry",
+      "label": "The loom responds",
+      "recording": "frames/loom_retry",
+      "start": 140,
+      "stop": 200,
+      "spoiler": false,
+      "fixture": "prepared-save",
+      "script": "load quicksave;sabotage loom;;;;;;;;;;;;;;;;;;;;;;;;;",
+      "save": "saves/loom/quicksave.json"
+    },
+    {
+      "id": "ending",
+      "label": "Final brazier",
+      "recording": "frames/ending",
+      "start": 516,
+      "stop": 576,
+      "spoiler": true,
+      "fixture": "prepared-save",
+      "script": "load quicksave;complete brazier",
+      "save": "saves/ending/quicksave.json"
+    }
+  ]
+}
