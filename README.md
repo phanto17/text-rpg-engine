@@ -136,9 +136,11 @@ The [Act III sanctuary slice](Docs/SANCTUARY_VISUAL_SLICE.md) adds the basalt st
 
 The [finale slice](Docs/FINALE_VISUAL_SLICE.md) completes paintings for all eighteen rooms, all twelve enemy sheets, and portraits for every shipped dialogue. The bell nave and final cradle retain live notch, bier and ending-fire states. The full pack contains 46 PNGs and 23 WAVs, with an existing-file check for every shipped look.
 
+The [whole-game presentation review](Docs/PRESENTATION_REVIEW.md) includes an offline room/figure gallery and default-gain audio previews. Action pages make every room choice visible and reachable by mouse or keyboard.
+
 ## Getting started
 
-The Pixel client includes optional prologue, Act I, Act II and early Act III ambience and original sound effects. Click **F5 Sound** or press F5 for separate ambience/effects volumes; F4 mutes. Preferences persist under the save folder. See [the audio guide](Docs/AUDIO_PIPELINE.md) for bindings and reproducible sound exports.
+The Pixel client includes optional ambience for all eighteen rooms and original sound effects. Click **F5 Sound** or press F5 for separate ambience/effects volumes; F4 mutes. Preferences persist under the save folder. See [the audio guide](Docs/AUDIO_PIPELINE.md) for bindings and reproducible sound exports.
 
 **Prerequisites:** the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0); `global.json` pins 10.0.401 or a later feature band. A modern terminal (Windows Terminal, iTerm2, any recent Linux terminal) gives the best colors and Unicode bars.
 
@@ -158,7 +160,7 @@ For the pixel-art client:
 dotnet run --project src/RpgEngine.Pixel
 ```
 
-It opens a resizable 1280 by 720 window (`F11` for borderless fullscreen) and takes the same `--seed`, `--data`, and `--saves` flags, plus `--crt` to start with the scanline overlay on. Click a button, press `1`-`9`, or type commands in the line at the bottom; `Tab` cycles the HUD tabs, `Enter` skips the typewriter, `Esc` goes back, `F2` toggles the CRT, and `F3` switches between whole-pixel and aspect-fit scaling. Both clients read `Data/` next to their executable and save to `./Saves`, so a game saved in one can be continued in the other.
+It opens a resizable 1280 by 720 window (`F11` for borderless fullscreen) and takes the same `--seed`, `--data`, and `--saves` flags, plus `--crt` to start with the scanline overlay on. Click a button or press `1`-`9` for a visible action. Use `Prev`/`Next` or `[`/`]` for more actions, or type commands in the line at the bottom; `Tab` cycles the HUD tabs, `Enter` skips the typewriter, `Esc` goes back, `F2` toggles the CRT, and `F3` switches between whole-pixel and aspect-fit scaling. Both clients read `Data/` next to their executable and save to `./Saves`, so a game saved in one can be continued in the other.
 
 ## How to play
 

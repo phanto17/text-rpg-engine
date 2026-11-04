@@ -31,7 +31,7 @@ CLI flags (Milestone 1):
 
 Exit codes: `0` normal, `1` content failed validation (every error is listed), `2` bad arguments.
 
-`RpgEngine.Pixel` takes `--seed`, `--data`, `--saves`, `--help`, and `--crt` (start with the scanline overlay on) with the same meanings and defaults, so both clients find the same `Data/` and `./Saves`. Two contributor-only flags, left out of `--help`: `--screenshot <file.png>` saves the canvas (at 2x) and exits, and `--play "line;line;..."` types those lines first, one every dozen frames with the typewriter skipped, e.g. `--play "new;Tester;1;1;1;1;1;2;7;1;down"` to land in the Ossuary Hall. In the window: click a button, press `1`-`9`, or type a command; `Tab` cycles the HUD tabs, `Enter` skips the typewriter, `Esc` goes back, `F2` toggles the CRT, `F3` toggles whole-pixel scaling, `F11` toggles borderless fullscreen.
+`RpgEngine.Pixel` takes `--seed`, `--data`, `--saves`, `--help`, and `--crt` (start with the scanline overlay on) with the same meanings and defaults, so both clients find the same `Data/` and `./Saves`. Two contributor-only flags, left out of `--help`: `--screenshot <file.png>` saves the canvas (at 2x) and exits, and `--play "line;line;..."` types those lines first, one every dozen frames with the typewriter skipped, e.g. `--play "new;Tester;1;1;1;1;1;2;7;1;down"` to land in the Ossuary Hall. In the window: click a button or press `1`-`9` to choose a visible action. `Prev`/`Next` and `[`/`]` change action pages; type commands in the input line; `Tab` cycles the HUD tabs, `Enter` skips the typewriter, `Esc` goes back, `F2` toggles the CRT, `F3` toggles whole-pixel scaling, `F11` toggles borderless fullscreen.
 
 The SDK is pinned by `global.json` to 10.0.401 with `rollForward: latestFeature`. Package versions live only in `Directory.Packages.props` (Central Package Management: Spectre.Console for the CLI, Raylib-cs for the pixel client). Shared build settings live in `Directory.Build.props`.
 
@@ -514,6 +514,10 @@ The Act III entrance and sanctuary use `Tools/ArtPipeline/build_sanctuary.py`: t
 For conversations without choices, Core may leave Dialogue mode before the spoken beat plays. Keep the portrait visible while `EventSequencer.IsSpeaking`; hiding it solely from the current game mode drops these portraits. Skip and completion end the spoken lifetime.
 
 The finale uses `Tools/ArtPipeline/build_finale.py` for two rooms, Aurelius's portrait and the last two idle sheets. `FinaleDetails` keeps the fractured bell, notch, bier and three ending fires live over both art paths. See [Finale visual QA](Docs/FINALE_VISUAL_SLICE.md).
+
+Action pages use renderer-free `ButtonFlow.Pages` and `ButtonPage`: every choice must appear exactly once, inside the button area, with at most nine shortcuts per page. Number keys select the visible page; `PixelGame.Pick` and contributor `--play` numeric lines retain full-list indices. Reset the page when labels change and clear stale click rectangles on a page turn. Keep these mappings covered by headless tests.
+
+`Tools/ArtPipeline/review_pack.py Data ArtBuild/<fresh-review> [--captures <directory>]` builds an offline contact sheet, measured inventory and default-gain listening gallery without opening a device. Native captures are named after room backdrop PNGs and must be 480x270 or 960x540. Missing captures are explicitly source-only; measured peak/RMS must never be reported as subjective listening approval. See [presentation review](Docs/PRESENTATION_REVIEW.md).
 
 `Presentation/AttackMotion` defines a 600 ms stepped strike with damage cues at 240 ms. Keep motion sampling free of raylib and test its phases. Attack narration and dice finish before the lunge begins; damage follows its anticipation hold. Silkscreen draws once for headings; doubling its tiny glyphs closes their counters. Fit long input tails and labels using `Layout/TextFit` with the same metrics used to draw them.
 

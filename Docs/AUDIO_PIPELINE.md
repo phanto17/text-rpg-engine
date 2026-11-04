@@ -66,3 +66,5 @@ For a manual check, run `dotnet run --project src/RpgEngine.Pixel -- --saves Art
 ## Rollback
 
 Remove the optional `audio` section to silence content playback, or revert the WAVs, recipes and manifest together. Remove `.pixel/audio.json` to reset local preferences. No game save migration is needed. All eighteen rooms now have ambience bindings; subjective listening and mix review remain before release.
+
+The offline [presentation review pack](PRESENTATION_REVIEW.md) supplies individually loopable room clips at 20% gain and effects at 45%, alongside source peak/RMS and loop endpoint steps. It never normalizes loudness or changes runtime WAVs. Measurements remain separate from subjective headphones/speaker review, which is explicitly pending in each new pack.
