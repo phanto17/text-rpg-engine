@@ -138,6 +138,8 @@ The [finale slice](Docs/FINALE_VISUAL_SLICE.md) completes paintings for all eigh
 
 The [whole-game presentation review](Docs/PRESENTATION_REVIEW.md) includes an offline room/figure gallery and default-gain audio previews. Action pages make every room choice visible and reachable by mouse or keyboard.
 
+The [release capture workflow](Docs/RELEASE_READINESS.md) assembles reviewed native recordings into a silent teaser with separate spoiler clips and source fingerprints. The guide records completed checks and the remaining display, platform and listening gates.
+
 ## Getting started
 
 The Pixel client includes optional ambience for all eighteen rooms and original sound effects. Click **F5 Sound** or press F5 for separate ambience/effects volumes; F4 mutes. Preferences persist under the save folder. See [the audio guide](Docs/AUDIO_PIPELINE.md) for bindings and reproducible sound exports.
