@@ -12,8 +12,8 @@ Baseline: PR #17 merged at `9109e78b3a979d3683f5b65b33a701af3310166e`, content v
 | Native capture selection | Six current-build recordings, selected frame ranges inspected | Passed locally |
 | Capture provenance | Selected PNG hashes, input-save fingerprints, script/seed and baseline recorded | Passed locally |
 | Teaser assembly | 25 seconds / 300 selected frames; ending exported separately | Passed locally |
-| Fullscreen and aspect-fit input mapping | Interactive automation encountered another application's foreground window; mode transitions were not confirmed | Pending |
-| Display scaling and multiple monitors | A 2560x1392 window surface was observed; physical DPI settings were not independently verified | Pending |
+| Fullscreen and aspect-fit input mapping | F2, F3 and F11 verified in the Windows client. Mouse actions mapped in both scaling modes and Nocturne page two survived the fullscreen round trip. | Passed on the tested display |
+| Display scaling and multiple monitors | Observed a 1282x752 window surface and 2560x1440 borderless output. Physical DPI settings and other monitors remain unverified. | Pending |
 | Native Linux window/audio behavior | Requires a graphical Linux session; headless CI is a separate check | Pending |
 | Subjective headphones/speaker mix | Follow the existing presentation-review checklist | Pending |
 
@@ -72,7 +72,9 @@ When changing this manifest contract, update the assembler, example, tests and t
 
 ## Remaining release checks
 
-On a free Windows desktop, repeat the title, creation, long dialogue, shop, combat, sound settings and ending views. Test F2, F3 and F11, returning to the original display mode after each change. Click mapped controls at both whole-pixel and aspect-fit sizes, traverse action pages and confirm the session survives. Record actual client/window dimensions and the display scaling used; do not infer physical DPI from image size alone.
+Brief automated taps of F2, F3 and F11 left the display unchanged on the PR #18 baseline. The renderer now reads these shortcuts from Raylib’s press queue. On the rebuilt Windows client, F3 filled the window, F2 drew visible scanlines, and F11 entered borderless fullscreen. Clicking Continue and Next worked in aspect-fit mode. After toggling back, the same Nocturne session and page two remained visible. Clicking the first exit in whole-pixel mode reached the Weeping Stair and reset the action page. The Sound panel also opened by mouse in the baseline session and displayed the default 45% effects and 20% ambience settings.
+
+Repeat representative UI checks across display scaling settings and monitors. Record the dimensions and OS scaling used. Creation, shop and audio preference persistence were outside this display check.
 
 Repeat representative checks in a native Linux graphical session. CI does not open a window or audio device. Retain the audio listening checklist in `PRESENTATION_REVIEW.md`, including two loop repeats, room crossfades, effects against ambience, and mute/preference recovery on headphones and speakers. Keep the current mix until recorded listening findings justify a change.
 

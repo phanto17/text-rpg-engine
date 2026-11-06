@@ -191,7 +191,25 @@ internal sealed class PixelApp : IDisposable
 
     private void HandleInput(int mx, int my)
     {
-        if (_audioPanel.HandleInput(mx, my)) return;
+        var audioHandled = _audioPanel.HandleInput(mx, my);
+        // A short tap can start and end between polls. The queue retains the press.
+        for (var key = Raylib.GetKeyPressed(); key != 0; key = Raylib.GetKeyPressed())
+        {
+            if (audioHandled) continue;
+            switch ((KeyboardKey)key)
+            {
+                case KeyboardKey.F2:
+                    _crt = !_crt;
+                    break;
+                case KeyboardKey.F3:
+                    _integerScale = !_integerScale;
+                    break;
+                case KeyboardKey.F11:
+                    Raylib.ToggleBorderlessWindowed();
+                    break;
+            }
+        }
+        if (audioHandled) return;
         for (var key = Raylib.GetCharPressed(); key > 0; key = Raylib.GetCharPressed())
         {
             var c = (char)key;
@@ -243,21 +261,6 @@ internal sealed class PixelApp : IDisposable
         if (Raylib.IsKeyPressed(KeyboardKey.Tab))
         {
             _game.Tab = (HudTab)(((int)_game.Tab + 1) % 4);
-        }
-
-        if (Raylib.IsKeyPressed(KeyboardKey.F2))
-        {
-            _crt = !_crt;
-        }
-
-        if (Raylib.IsKeyPressed(KeyboardKey.F3))
-        {
-            _integerScale = !_integerScale;
-        }
-
-        if (Raylib.IsKeyPressed(KeyboardKey.F11))
-        {
-            Raylib.ToggleBorderlessWindowed();
         }
 
         if (Raylib.IsKeyPressed(KeyboardKey.PageUp))
